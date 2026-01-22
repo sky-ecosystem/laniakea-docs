@@ -48,15 +48,15 @@ NFATS solves a different problem than LCTS:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                              HALO                                        │
-│                                                                          │
-│   Operates one or more NFAT Facilities                                   │
-│   Each Facility = separate smart contract with its own buybox            │
-│                                                                          │
+│                              HALO                                       │
+│                                                                         │
+│   Operates one or more NFAT Facilities                                  │
+│   Each Facility = separate smart contract with its own buybox           │
+│                                                                         │
 └────────────────────────────────────┬────────────────────────────────────┘
                                      │
             ┌────────────────────────┼────────────────────────┐
-            ▼                        ▼                        ▼
+           ▼                        ▼                        ▼
 ┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐
 │  NFAT Facility A    │  │  NFAT Facility B    │  │  NFAT Facility C    │
 │  (Senior Secured)   │  │  (Mezzanine)        │  │  (Structured)       │

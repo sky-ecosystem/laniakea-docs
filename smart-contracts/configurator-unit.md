@@ -38,22 +38,22 @@ The Configurator Unit is a governance layer that controls rate limits and static
           │                │                │
           ▼                ▼                ▼
    ┌─────────────────────────────────────────────────┐
-   │           CONFIGURATOR UNIT                      │
-   │                                                  │
-   │  ┌─────────────┐                                 │
-   │  │BEAMTimeLock │◄── schedule/execute additions   │
-   │  └──────┬──────┘                                 │
-   │         │                                        │
-   │         ▼                                        │
-   │  ┌─────────────┐                                 │
-   │  │ BEAMState   │◄── inits + accordant mappings   │
-   │  └──────┬──────┘                                 │
-   │         │                                        │
-   │         ▼                                        │
-   │  ┌─────────────┐                                 │
-   │  │Configurator │◄── cBEAMs operate here          │
-   │  └──────┬──────┘                                 │
-   └─────────┼────────────────────────────────────────┘
+   │           CONFIGURATOR UNIT                     │
+   │                                                 │
+   │  ┌─────────────┐                                │
+   │  │BEAMTimeLock │◄── schedule/execute additions  │
+   │  └──────┬──────┘                                │
+   │         │                                       │
+   │         ▼                                       │
+   │  ┌─────────────┐                                │
+   │  │ BEAMState   │◄── inits + accordant mappings  │
+   │  └──────┬──────┘                                │
+   │         │                                       │
+   │         ▼                                       │
+   │  ┌─────────────┐                                │
+   │  │Configurator │◄── cBEAMs operate here         │
+   │  └──────┬──────┘                                │
+   └─────────┼───────────────────────────────────────┘
              │
 ┌────────────┼────────────────────────────────────────┐
 │  cBEAMs    │  (held by GovOps teams)                │
@@ -64,21 +64,21 @@ The Configurator Unit is a governance layer that controls rate limits and static
              │
              ▼
    ┌─────────────────────────────────────────────────┐
-   │           PARALLELIZED ALLOCATION UNIT           │
-   │                                                  │
-   │  ┌─────────────┐                                 │
-   │  │ RateLimits  │◄── configured by Configurator   │
-   │  └──────┬──────┘                                 │
-   │         │                                        │
-   │         ▼                                        │
-   │  ┌─────────────┐                                 │
-   │  │ Controller  │◄── static params set here       │
-   │  └──────┬──────┘                                 │
-   │         │                                        │
-   │         ▼                                        │
-   │  ┌─────────────┐                                 │
-   │  │  ALMProxy   │◄── holds custody of funds       │
-   │  └─────────────┘                                 │
+   │           PARALLELIZED ALLOCATION UNIT          │
+   │                                                 │
+   │  ┌─────────────┐                                │
+   │  │ RateLimits  │◄── configured by Configurator  │
+   │  └──────┬──────┘                                │
+   │         │                                       │
+   │         ▼                                       │
+   │  ┌─────────────┐                                │
+   │  │ Controller  │◄── static params set here      │
+   │  └──────┬──────┘                                │
+   │         │                                       │
+   │         ▼                                       │
+   │  ┌─────────────┐                                │
+   │  │  ALMProxy   │◄── holds custody of funds      │
+   │  └─────────────┘                                │
    └─────────────────────────────────────────────────┘
 ```
 

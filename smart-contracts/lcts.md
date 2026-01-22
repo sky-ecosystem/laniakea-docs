@@ -189,8 +189,8 @@ All generations receive proportional capacity based on their current underlying 
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    LCTS-pBEAM (Sentinel)                         │
-│         Determines capacity each epoch, calls settle()           │
+│                    LCTS-pBEAM (Sentinel)                        │
+│         Determines capacity each epoch, calls settle()          │
 └─────────────────────────────┬───────────────────────────────────┘
                               │
               ┌───────────────┴───────────────┐
