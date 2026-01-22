@@ -67,6 +67,7 @@ Laniakea smart contract architecture built on the **PAU pattern** (Parallelized 
 | architecture-overview.md | Four-layer capital flow (Generator → Prime → Halo → RWA), PAU pattern, modular design |
 | configurator-unit.md | Governance layer: BEAM hierarchy (aBEAM/cBEAM/pBEAM), rate limits, SORL |
 | lcts.md | Liquidity Constrained Token Standard — queue-based tokens for fair capacity distribution |
+| nfats.md | Non-Fungible Allocation Token Standard — bespoke capital deployment deals with individual terms |
 
 ### governance-operations/
 Governance structure and autonomous operational infrastructure.
