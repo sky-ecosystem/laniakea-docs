@@ -56,7 +56,7 @@ NFATS solves a different problem than LCTS:
 └────────────────────────────────────┬────────────────────────────────────┘
                                      │
             ┌────────────────────────┼────────────────────────┐
-           ▼                        ▼                        ▼
+            ▼                        ▼                        ▼
 ┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐
 │  NFAT Facility A    │  │  NFAT Facility B    │  │  NFAT Facility C    │
 │  (Senior Secured)   │  │  (Mezzanine)        │  │  (Structured)       │
@@ -76,14 +76,14 @@ NFATS solves a different problem than LCTS:
            │                        │                        │
            ▼                        ▼                        ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           MINTED NFATs                                   │
-│                                                                          │
+│                           MINTED NFATs                                  │
+│                                                                         │
 │   NFAT #1: 25M, Prime X, Facility A  →  Halo Unit (bankruptcy remote)   │
 │   NFAT #2: 15M, Prime Y, Facility A  →  Halo Unit (bankruptcy remote)   │
 │   NFAT #3: 20M, Prime Y, Facility B  →  Halo Unit (bankruptcy remote)   │
-│                                                                          │
-│   Terms stored in Synome (APY, maturity date, payment schedule)          │
-│                                                                          │
+│                                                                         │
+│   Terms stored in Synome (APY, maturity date, payment schedule)         │
+│                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
