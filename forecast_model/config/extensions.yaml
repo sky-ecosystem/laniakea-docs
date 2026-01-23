@@ -1,0 +1,108 @@
+# Extensions configuration for Sky Forecast Model
+# These are temporary/transitional mechanisms that can be disabled
+
+psm_exposure:
+  enabled: true
+  pct: "0.40"             # 40% of base USDS supply
+  spread: "-0.0030"       # -30bps vs SOFR
+
+subsidized_borrow:
+  enabled: true
+  total_amount: 2000000000    # $2B total (1B Spark + 1B Grove)
+  start_month: 1              # Jan 2026
+  duration_months: 24         # 2 years
+
+srusds_cost:
+  enabled: true
+  annual_cost: 5000000           # $5M/year (constant)
+
+token_farming:
+  enabled: true
+  distribution_rate: "0.175"     # 17.5% per year (25% × 0.7)
+  farm_yield_spread: "0.0010"    # 10bps above SSR
+  duration_months: 24            # 2 years
+  stars:
+    spark:
+      market_cap: 230000000
+      ownership: "0.65"
+      launch_month: 1
+    grove:
+      market_cap_pct: "0.60"    # 60% of Spark MC
+      ownership: "0.70"
+      launch_month: 5
+    keel:
+      market_cap_pct: "0.25"    # 25% of Spark MC
+      ownership: "0.70"
+      launch_month: 9
+    star4:
+      market_cap_pct: "0.25"    # 25% of Spark MC
+      ownership: "0.32"
+      launch_month: 8
+    star5:
+      market_cap_pct: "0.25"    # 25% of Spark MC
+      ownership: "0.80"
+      launch_month: 10
+
+genesis_capital:
+  enabled: true
+  core_buffer: 50000000           # $50M core buffer
+  min_backstop_threshold: 50000000
+  base_phaseout_per_star: 1000000
+  phaseout_per_10m_above: 1000000
+  stars:
+    spark:
+      genesis_capital: 25000000   # 25M
+      token_launch: 1
+      has_volume: true
+    grove:
+      genesis_capital: 25000000   # 25M
+      token_launch: 5
+      has_volume: true
+    keel:
+      genesis_capital: 20000000   # 20M
+      token_launch: 9
+      has_volume: true
+    star4:
+      genesis_capital: 25000000   # 25M
+      token_launch: 8
+      has_volume: true
+    star5:
+      genesis_capital: 25000000   # 25M (total: 120M)
+      token_launch: 10
+      has_volume: true
+
+usdt_subsidy:
+  enabled: true
+  amount: 150000000      # $150M foregone PSM income
+  psm_spread: "-0.0030"  # Same as PSM spread
+
+genesis_prime:
+  enabled: true
+  sell_rate: "0.175"       # 17.5% per year (25% × 0.7)
+  primes:
+    obex:
+      market_cap_pct: "0.60"  # 60% of Spark MC
+      ownership: "0.50"
+      launch_month: 11
+
+genesis_capital_spending:
+  enabled: true
+  start_month: 2           # M1 is 0, spending starts M2
+  end_month: 12            # Linear trajectory ends at M12
+  total_outflow: 35000000  # $35M total outflow by M12
+
+core_vaults:
+  enabled: true
+  debt: 500000000          # $500M fixed debt
+  rate: "0.08"             # 8% fixed rate (higher than GRR)
+
+agent_creation_fee:
+  enabled: true
+  sell_rate_annual: "0.01"   # 1% of market cap per year
+  agents:
+    large_agent_1:
+      type: large            # 150M market cap
+      launch_month: 12
+    small_agent_1:
+      type: small            # 50M market cap
+      launch_month: 12

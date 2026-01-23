@@ -1,0 +1,3 @@
+# Model constants
+farm_emission_rate: "0.25"
+backstop_rate: "0.25"

@@ -1,0 +1,121 @@
+BASE 2026
+Conservative baseline projection for 2026
+
+================================================================================
+SCENARIO INPUTS
+================================================================================
+
+BASE MODEL
+----------------------------------------
+  base_usds: 9.7B
+  sofr: 0.0364
+  savings_rate_spread: 0.0030
+  gross_revenue_rate_spread: 0.0030
+  security_rate: 0.21
+  tier2_ratio: 0.10
+  tier3_ratio: 0.10
+  tier4_ratio: 0.10
+
+TRAJECTORIES
+----------------------------------------
+  base_usds: M1: 9.7B → M12: 14.0B (linear)
+
+SCHEDULED CHANGES
+----------------------------------------
+  M4: psm_pct = 0.30
+  M4: spark_market_cap = 300M
+  M6: sofr = 0.0339
+  M7: psm_pct = 0.25
+  M7: spark_market_cap = 360M
+  M9: sofr = 0.0314
+  M10: psm_pct = 0.15
+  M10: spark_market_cap = 420M
+
+EXTENSIONS
+----------------------------------------
+  PSM Exposure:
+    pct: 40% of total USDS
+    spread: -0.0030
+  USDT Subsidy:
+    amount: 150M
+  Subsidized Borrow:
+    total_amount: 2.0B
+    duration: 24 months
+  srUSDS Cost:
+    annual_cost: 5M
+  Core Vaults:
+    debt: 500M
+    rate: 8.0%
+  Token Farming:
+    distribution_rate: 0.175
+    farm_yield_spread: 0.0010
+    spark: 230M @ 0.65 (M1)
+    grove: 60% of Spark @ 0.70 (M5)
+    keel: 25% of Spark @ 0.70 (M9)
+    star4: 25% of Spark @ 0.32 (M8)
+    star5: 25% of Spark @ 0.80 (M10)
+  Genesis Capital:
+    core_buffer: 50M
+    min_threshold: 50M
+    spark: 25M
+    grove: 25M
+    keel: 20M
+    star4: 25M
+    star5: 25M
+  Genesis Prime:
+    sell_rate: 0.175
+    obex: 60% of Spark @ 0.50 (M11)
+
+================================================================================
+FORECAST RESULTS
+================================================================================
+
+COLUMN DEFINITIONS
+SSR: Sky Savings Rate (annualized)
+USDS: Total USDS supply
+Gross Rev: Total revenue before savings rate expenses
+Net Rev: Revenue after savings rate expenses
+Security: Security operational expenses
+Profit: Net profit after operational expenses
+Staking: Funds distributed to SKY stakers as staking rewards
+
+Q1
+-----------------------------------------------------------------------------------
+Month         SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
+Jan         3.94%     $10.3B     $34.9M     $10.6M      $2.2M      $8.4M      $6.3M
+Feb         3.94%     $10.7B     $36.1M     $10.6M      $2.2M      $8.4M      $6.3M
+Mar         3.94%     $11.1B     $37.4M     $10.6M      $2.2M      $8.4M      $6.3M
+Q1          3.94%     $11.1B    $108.4M     $31.8M      $6.7M     $25.1M     $18.8M
+
+Q2
+-----------------------------------------------------------------------------------
+Month         SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
+Apr         3.94%     $12.7B     $43.5M     $14.7M      $3.1M     $11.6M      $8.7M
+May         3.94%     $14.6B     $49.8M     $17.9M      $3.8M     $14.2M     $10.6M
+Jun         3.69%     $15.2B     $48.8M     $17.3M      $3.6M     $13.7M     $10.3M
+Q2          3.69%     $15.2B    $142.1M     $50.0M     $10.5M     $39.5M     $29.6M
+
+Q3
+-----------------------------------------------------------------------------------
+Month         SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
+Jul         3.69%     $16.3B     $52.8M     $19.2M      $4.0M     $15.2M     $11.4M
+Aug         3.69%     $17.1B     $55.2M     $20.0M      $4.2M     $15.8M     $11.9M
+Sep         3.44%     $18.3B     $55.3M     $19.9M      $4.2M     $15.7M     $11.8M
+Q3          3.44%     $18.3B    $163.4M     $59.2M     $12.4M     $46.7M     $35.1M
+
+Q4
+-----------------------------------------------------------------------------------
+Month         SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
+Oct         3.44%     $20.4B     $63.2M     $24.3M      $5.1M     $19.2M     $14.4M
+Nov         3.44%     $20.8B     $66.2M     $26.2M      $5.5M     $20.7M     $15.5M
+Dec         3.44%     $21.2B     $67.5M     $26.4M      $5.5M     $20.9M     $15.7M
+Q4          3.44%     $21.2B    $196.9M     $76.9M     $16.1M     $60.7M     $45.6M
+
+ANNUAL SUMMARY
+-----------------------------------------------------------------------------------
+Quarter       SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
+Q1          3.94%     $11.1B    $108.4M     $31.8M      $6.7M     $25.1M     $18.8M
+Q2          3.69%     $15.2B    $142.1M     $50.0M     $10.5M     $39.5M     $29.6M
+Q3          3.44%     $18.3B    $163.4M     $59.2M     $12.4M     $46.7M     $35.1M
+Q4          3.44%     $21.2B    $196.9M     $76.9M     $16.1M     $60.7M     $45.6M
+Year        3.44%     $21.2B    $610.8M    $217.8M     $45.7M    $172.1M    $129.0M

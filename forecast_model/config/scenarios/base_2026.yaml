@@ -1,0 +1,50 @@
+name: "Base 2026"
+description: "Conservative baseline projection for 2026"
+months: 12
+
+# Agent launches (month number or period name)
+agent_launches:
+  spark: 1
+  grove: 5
+  keel: 9
+  star4: 8
+  star5: 10
+
+# Default values for all months
+baseline:
+  base_usds: 9650000000
+  unrewarded_usds_user: 3600000000
+  sofr: "0.0364"
+  savings_rate_spread: "0.0030"
+  gross_revenue_rate_spread: "0.0030"
+  farm_yield_spread: "0.0040"
+  sell_token_rate: "0.25"
+  security_rate: "0.21"     # Genesis phase: 21%
+  # Distribution reward tier ratios (tier1 = remainder)
+  tier2_ratio: "0.10"  # 10% unbranded complex (10 bps)
+  tier3_ratio: "0.10"  # 10% branded (20 bps)
+  tier4_ratio: "0.10"  # 10% direct + branding (50 bps)
+
+# Values that change over time (interpolated)
+trajectories:
+  base_usds:
+    points:
+      1: 9650000000
+      12: 14000000000
+    mode: linear
+
+# Discrete level changes (persist until next change)
+changes:
+  4:
+    psm_pct: "0.30"               # 30% of base USDS
+    spark_market_cap: 300000000   # 300M for Q2
+  6:
+    sofr: "0.0339"                # Jun 18 CME SOFRWATCH
+  h2:
+    psm_pct: "0.25"               # 25% of base USDS
+    spark_market_cap: 360000000   # 360M for Q3
+  9:
+    sofr: "0.0314"                # Sep 17 CME SOFRWATCH
+  10:
+    psm_pct: "0.15"               # 15% of base USDS
+    spark_market_cap: 420000000   # 420M for Q4

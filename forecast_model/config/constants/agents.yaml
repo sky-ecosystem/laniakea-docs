@@ -1,0 +1,55 @@
+# Agent definitions
+# type: FARM (contributes to farmable tokens) or SELL (contributes to sellable tokens)
+# ownership_ratio: Sky's ownership stake
+# market_cap_ratio: Agent's market cap relative to Spark (null for Spark itself)
+
+agents:
+  - name: spark
+    type: FARM
+    ownership_ratio: "0.578"
+    market_cap_ratio: null
+
+  - name: grove
+    type: FARM
+    ownership_ratio: "0.70"
+    market_cap_ratio: "0.80"
+
+  - name: keel
+    type: FARM
+    ownership_ratio: "0.30"
+    market_cap_ratio: "0.25"
+
+  - name: star4
+    type: FARM
+    ownership_ratio: "0.22"
+    market_cap_ratio: "0.50"
+
+  - name: star5
+    type: FARM
+    ownership_ratio: "0.80"
+    market_cap_ratio: "0.20"
+
+  - name: astraius
+    type: FARM
+    ownership_ratio: "0.33"
+    market_cap_ratio: "0.10"
+
+  - name: oea1
+    type: FARM
+    ownership_ratio: "0.33"
+    market_cap_ratio: "0.10"
+
+  - name: oea2
+    type: FARM
+    ownership_ratio: "0.33"
+    market_cap_ratio: "0.10"
+
+  - name: obex
+    type: SELL
+    ownership_ratio: "0.50"
+    market_cap_ratio: "0.80"
+
+  - name: iprime2
+    type: SELL
+    ownership_ratio: "0.05"
+    market_cap_ratio: "0.25"
