@@ -18,18 +18,17 @@ BASE MODEL
 
 TRAJECTORIES
 ----------------------------------------
-  base_usds: M1: 9.7B → M12: 14.0B (linear)
+  base_usds: M1: 9.7B → M12: 16.0B (linear)
 
 SCHEDULED CHANGES
 ----------------------------------------
   M4: psm_pct = 0.30
-  M4: spark_market_cap = 300M
+  M4: spark_market_cap = 250M
   M6: sofr = 0.0339
   M7: psm_pct = 0.25
-  M7: spark_market_cap = 360M
+  M7: spark_market_cap = 270M
   M9: sofr = 0.0314
   M10: psm_pct = 0.15
-  M10: spark_market_cap = 420M
 
 EXTENSIONS
 ----------------------------------------
@@ -38,6 +37,7 @@ EXTENSIONS
     spread: -0.0030
   USDT Subsidy:
     amount: 150M
+    rate: 50% of SSR
   Subsidized Borrow:
     total_amount: 2.0B
     duration: 24 months
@@ -50,7 +50,7 @@ EXTENSIONS
     distribution_rate: 0.175
     farm_yield_spread: 0.0010
     spark: 230M @ 0.65 (M1)
-    grove: 60% of Spark @ 0.70 (M5)
+    grove: 60% of Spark @ 0.70 (M4)
     keel: 25% of Spark @ 0.70 (M9)
     star4: 25% of Spark @ 0.32 (M8)
     star5: 25% of Spark @ 0.80 (M10)
@@ -82,40 +82,40 @@ Staking: Funds distributed to SKY stakers as staking rewards
 Q1
 -----------------------------------------------------------------------------------
 Month         SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
-Jan         3.94%     $10.3B     $34.9M     $10.6M      $2.2M      $8.4M      $6.3M
-Feb         3.94%     $10.7B     $36.1M     $10.6M      $2.2M      $8.4M      $6.3M
-Mar         3.94%     $11.1B     $37.4M     $10.6M      $2.2M      $8.4M      $6.3M
-Q1          3.94%     $11.1B    $108.4M     $31.8M      $6.7M     $25.1M     $18.8M
+Jan         3.94%     $10.3B     $34.9M     $10.8M      $2.3M      $8.6M      $6.4M
+Feb         3.94%     $10.9B     $36.7M     $10.8M      $2.3M      $8.5M      $6.4M
+Mar         3.94%     $11.5B     $38.6M     $10.8M      $2.3M      $8.5M      $6.4M
+Q1          3.94%     $11.5B    $110.2M     $32.4M      $6.8M     $25.6M     $19.2M
 
 Q2
 -----------------------------------------------------------------------------------
 Month         SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
-Apr         3.94%     $12.7B     $43.5M     $14.7M      $3.1M     $11.6M      $8.7M
-May         3.94%     $14.6B     $49.8M     $17.9M      $3.8M     $14.2M     $10.6M
-Jun         3.69%     $15.2B     $48.8M     $17.3M      $3.6M     $13.7M     $10.3M
-Q2          3.69%     $15.2B    $142.1M     $50.0M     $10.5M     $39.5M     $29.6M
+Apr         3.94%     $14.2B     $48.5M     $17.1M      $3.6M     $13.5M     $10.1M
+May         3.94%     $14.8B     $50.4M     $17.1M      $3.6M     $13.5M     $10.1M
+Jun         3.69%     $15.5B     $49.8M     $16.4M      $3.5M     $13.0M      $9.7M
+Q2          3.69%     $15.5B    $148.6M     $50.6M     $10.6M     $40.0M     $30.0M
 
 Q3
 -----------------------------------------------------------------------------------
 Month         SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
-Jul         3.69%     $16.3B     $52.8M     $19.2M      $4.0M     $15.2M     $11.4M
-Aug         3.69%     $17.1B     $55.2M     $20.0M      $4.2M     $15.8M     $11.9M
-Sep         3.44%     $18.3B     $55.3M     $19.9M      $4.2M     $15.7M     $11.8M
-Q3          3.44%     $18.3B    $163.4M     $59.2M     $12.4M     $46.7M     $35.1M
+Jul         3.69%     $16.3B     $52.9M     $17.5M      $3.7M     $13.8M     $10.4M
+Aug         3.69%     $17.2B     $55.6M     $18.1M      $3.8M     $14.3M     $10.7M
+Sep         3.44%     $18.4B     $55.6M     $17.9M      $3.7M     $14.1M     $10.6M
+Q3          3.44%     $18.4B    $164.0M     $53.4M     $11.2M     $42.2M     $31.7M
 
 Q4
 -----------------------------------------------------------------------------------
 Month         SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
-Oct         3.44%     $20.4B     $63.2M     $24.3M      $5.1M     $19.2M     $14.4M
-Nov         3.44%     $20.8B     $66.2M     $26.2M      $5.5M     $20.7M     $15.5M
-Dec         3.44%     $21.2B     $67.5M     $26.4M      $5.5M     $20.9M     $15.7M
-Q4          3.44%     $21.2B    $196.9M     $76.9M     $16.1M     $60.7M     $45.6M
+Oct         3.44%     $19.5B     $60.3M     $20.2M      $4.2M     $15.9M     $12.0M
+Nov         3.44%     $20.1B     $63.2M     $21.4M      $4.5M     $16.9M     $12.7M
+Dec         3.44%     $20.6B     $65.1M     $21.7M      $4.6M     $17.1M     $12.9M
+Q4          3.44%     $20.6B    $188.7M     $63.3M     $13.3M     $50.0M     $37.5M
 
 ANNUAL SUMMARY
 -----------------------------------------------------------------------------------
 Quarter       SSR       USDS  Gross Rev    Net Rev   Security     Profit    Staking
-Q1          3.94%     $11.1B    $108.4M     $31.8M      $6.7M     $25.1M     $18.8M
-Q2          3.69%     $15.2B    $142.1M     $50.0M     $10.5M     $39.5M     $29.6M
-Q3          3.44%     $18.3B    $163.4M     $59.2M     $12.4M     $46.7M     $35.1M
-Q4          3.44%     $21.2B    $196.9M     $76.9M     $16.1M     $60.7M     $45.6M
-Year        3.44%     $21.2B    $610.8M    $217.8M     $45.7M    $172.1M    $129.0M
+Q1          3.94%     $11.5B    $110.2M     $32.4M      $6.8M     $25.6M     $19.2M
+Q2          3.69%     $15.5B    $148.6M     $50.6M     $10.6M     $40.0M     $30.0M
+Q3          3.44%     $18.4B    $164.0M     $53.4M     $11.2M     $42.2M     $31.7M
+Q4          3.44%     $20.6B    $188.7M     $63.3M     $13.3M     $50.0M     $37.5M
+Year        3.44%     $20.6B    $611.5M    $199.8M     $42.0M    $157.8M    $118.4M

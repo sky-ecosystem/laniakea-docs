@@ -100,6 +100,8 @@ def format_inputs_section(
     if usdt:
         lines.append("  USDT Subsidy:")
         lines.append(f"    amount: {fmt_num(usdt.get('amount', 0))}")
+        rate_factor = usdt.get('rate_factor', '0.50')
+        lines.append(f"    rate: {float(rate_factor)*100:.0f}% of SSR")
 
     # Subsidized Borrow
     sub = extensions.get("subsidized_borrow", {})

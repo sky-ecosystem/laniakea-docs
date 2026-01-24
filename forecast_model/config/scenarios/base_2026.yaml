@@ -5,7 +5,7 @@ months: 12
 # Agent launches (month number or period name)
 agent_launches:
   spark: 1
-  grove: 5
+  grove: 4
   keel: 9
   star4: 8
   star5: 10
@@ -30,21 +30,20 @@ trajectories:
   base_usds:
     points:
       1: 9650000000
-      12: 14000000000
+      12: 16000000000
     mode: linear
 
 # Discrete level changes (persist until next change)
 changes:
   4:
     psm_pct: "0.30"               # 30% of base USDS
-    spark_market_cap: 300000000   # 300M for Q2
+    spark_market_cap: 250000000   # 250M for Q2
   6:
     sofr: "0.0339"                # Jun 18 CME SOFRWATCH
   h2:
     psm_pct: "0.25"               # 25% of base USDS
-    spark_market_cap: 360000000   # 360M for Q3
+    spark_market_cap: 270000000   # 270M for Q3
   9:
     sofr: "0.0314"                # Sep 17 CME SOFRWATCH
   10:
     psm_pct: "0.15"               # 15% of base USDS
-    spark_market_cap: 420000000   # 420M for Q4

@@ -29,7 +29,7 @@ token_farming:
     grove:
       market_cap_pct: "0.60"    # 60% of Spark MC
       ownership: "0.70"
-      launch_month: 5
+      launch_month: 4
     keel:
       market_cap_pct: "0.25"    # 25% of Spark MC
       ownership: "0.70"
@@ -56,7 +56,7 @@ genesis_capital:
       has_volume: true
     grove:
       genesis_capital: 25000000   # 25M
-      token_launch: 5
+      token_launch: 4
       has_volume: true
     keel:
       genesis_capital: 20000000   # 20M
@@ -73,8 +73,9 @@ genesis_capital:
 
 usdt_subsidy:
   enabled: true
-  amount: 150000000      # $150M foregone PSM income
+  amount: 150000000      # $150M USDT exposure
   psm_spread: "-0.0030"  # Same as PSM spread
+  rate_factor: "0.50"    # USDT earns 50% of SSR
 
 genesis_prime:
   enabled: true
