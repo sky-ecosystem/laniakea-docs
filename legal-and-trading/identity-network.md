@@ -229,18 +229,18 @@ Token Configuration (set by issuer):
 Each Identity Network controls a legal entity that performs actual KYC:
 
 ```
-┌─────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────┐
 │                  Identity Network Halo                   │
 │                   (On-chain governance)                  │
 │                                                          │
-│  ┌────────────────────────────────────────────────────┐ │
+│  ┌─────────────────────────────────────────────────────┐ │
 │  │              Identity Registry                      │ │
 │  │         (On-chain: simple address list)             │ │
-│  └────────────────────────────────────────────────────┘ │
+│  └─────────────────────────────────────────────────────┘ │
 │                          │                               │
 │                    controls                              │
 │                          ▼                               │
-│  ┌────────────────────────────────────────────────────┐ │
+│  ┌─────────────────────────────────────────────────────┐ │
 │  │              Legal Entity                           │ │
 │  │  (Foundation, LLC, or regulated entity)             │ │
 │  │                                                     │ │
@@ -249,9 +249,9 @@ Each Identity Network controls a legal entity that performs actual KYC:
 │  │  - Stores records (off-chain)                       │ │
 │  │  - Updates Synome → stl-identity syncs to chain     │ │
 │  │  - Handles disputes, appeals, revocations           │ │
-│  └────────────────────────────────────────────────────┘ │
+│  └─────────────────────────────────────────────────────┘ │
 │                                                          │
-└─────────────────────────────────────────────────────────┘
+└──────────────────────────────────────────────────────────┘
 ```
 
 ### KYC Processing Flow

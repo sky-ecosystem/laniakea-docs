@@ -48,11 +48,11 @@ NFATS solves a different problem than LCTS:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                              HALO                                        │
-│                                                                          │
-│   Operates one or more NFAT Facilities                                   │
-│   Each Facility = separate smart contract with its own buybox            │
-│                                                                          │
+│                              HALO                                       │
+│                                                                         │
+│   Operates one or more NFAT Facilities                                  │
+│   Each Facility = separate smart contract with its own buybox           │
+│                                                                         │
 └────────────────────────────────────┬────────────────────────────────────┘
                                      │
             ┌────────────────────────┼────────────────────────┐
@@ -76,14 +76,14 @@ NFATS solves a different problem than LCTS:
            │                        │                        │
            ▼                        ▼                        ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           MINTED NFATs                                   │
-│                                                                          │
+│                           MINTED NFATs                                  │
+│                                                                         │
 │   NFAT #1: 25M, Prime X, Facility A  →  Halo Unit (bankruptcy remote)   │
 │   NFAT #2: 15M, Prime Y, Facility A  →  Halo Unit (bankruptcy remote)   │
 │   NFAT #3: 20M, Prime Y, Facility B  →  Halo Unit (bankruptcy remote)   │
-│                                                                          │
-│   Terms stored in Synome (APY, maturity date, payment schedule)          │
-│                                                                          │
+│                                                                         │
+│   Terms stored in Synome (APY, maturity date, payment schedule)         │
+│                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 

@@ -298,23 +298,23 @@ Multiple Exchange Halos can operate simultaneously:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           stl-exchange                                    │
-│                                                                          │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────────┐  │
-│  │   Order Gateway  │  │  Matching Engine │  │  Settlement Builder  │  │
-│  │                  │  │                  │  │                      │  │
-│  │  - Receive orders│  │  - Price-time    │  │  - Create batches    │  │
-│  │  - Validate      │  │    priority      │  │  - Submit on-chain   │  │
-│  │  - Rate limit    │  │  - Fair matching │  │  - Handle failures   │  │
-│  └──────────────────┘  └──────────────────┘  └──────────────────────┘  │
+│                           stl-exchange                                  │
+│                                                                         │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌───────────────────────┐  │
+│  │   Order Gateway  │  │  Matching Engine │  │  Settlement Builder   │  │
+│  │                  │  │                  │  │                       │  │
+│  │  - Receive orders│  │  - Price-time    │  │  - Create batches     │  │
+│  │  - Validate      │  │    priority      │  │  - Submit on-chain    │  │
+│  │  - Rate limit    │  │  - Fair matching │  │  - Handle failures    │  │
+│  └──────────────────┘  └──────────────────┘  └───────────────────────┘  │
 │           │                    │                       │                │
 │           └────────────────────┴───────────────────────┘                │
-│                                │                                         │
+│                                │                                        │
 │                         ┌──────┴──────┐                                 │
 │                         │  Orderbook  │                                 │
 │                         │  Database   │                                 │
 │                         └─────────────┘                                 │
-│                                                                          │
+│                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 

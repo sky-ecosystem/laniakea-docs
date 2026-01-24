@@ -167,51 +167,51 @@ The existing Atlas hierarchy already hints at the split:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                            SYNOME                                    │
-│  (Graph database - all operational data)                             │
-│                                                                      │
+│                            SYNOME                                   │
+│  (Graph database - all operational data)                            │
+│                                                                     │
 │  ┌───────────────────────────────────────────────────────────────┐  │
-│  │                         ATLAS                                  │  │
-│  │  (Root node - human-readable constitution)                     │  │
-│  │                                                                │  │
-│  │  A.0 Spirit of the Atlas                                       │  │
-│  │  A.1 Governance (who decides, how)                             │  │
-│  │  A.2 Primitives (what building blocks exist)                   │  │
-│  │  A.3 Risk Framework (seniority, encumbrance principles)        │  │
-│  │  A.4 Protocol (tokens, rewards, BEAM pattern)                  │  │
-│  │  A.5 Accessibility (compliance philosophy)                     │  │
+│  │                         ATLAS                                 │  │
+│  │  (Root node - human-readable constitution)                    │  │
+│  │                                                               │  │
+│  │  A.0 Spirit of the Atlas                                      │  │
+│  │  A.1 Governance (who decides, how)                            │  │
+│  │  A.2 Primitives (what building blocks exist)                  │  │
+│  │  A.3 Risk Framework (seniority, encumbrance principles)       │  │
+│  │  A.4 Protocol (tokens, rewards, BEAM pattern)                 │  │
+│  │  A.5 Accessibility (compliance philosophy)                    │  │
 │  │  A.6 Agent Types (what Primes and Executors are)              │  │
 │  └───────────────────────────────────────────────────────────────┘  │
-│                              │                                       │
+│                              │                                      │
 │           ┌──────────────────┼──────────────────┐                   │
 │           ▼                  ▼                  ▼                   │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐            │
-│  │ Spark Agent  │   │ Grove Agent  │   │ Keel Agent   │  ...       │
-│  │   Artifact   │   │   Artifact   │   │   Artifact   │            │
-│  ├──────────────┤   ├──────────────┤   ├──────────────┤            │
-│  │ SubProxy     │   │ SubProxy     │   │ SubProxy     │            │
-│  │ Rate Limits  │   │ Rate Limits  │   │ Rate Limits  │            │
-│  │ Instances[]  │   │ Instances[]  │   │ Instances[]  │            │
-│  │ ICDs[]       │   │ ICDs[]       │   │ ICDs[]       │            │
-│  └──────────────┘   └──────────────┘   └──────────────┘            │
+│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐             │
+│  │ Spark Agent  │   │ Grove Agent  │   │ Keel Agent   │  ...        │
+│  │   Artifact   │   │   Artifact   │   │   Artifact   │             │
+│  ├──────────────┤   ├──────────────┤   ├──────────────┤             │
+│  │ SubProxy     │   │ SubProxy     │   │ SubProxy     │             │
+│  │ Rate Limits  │   │ Rate Limits  │   │ Rate Limits  │             │
+│  │ Instances[]  │   │ Instances[]  │   │ Instances[]  │             │
+│  │ ICDs[]       │   │ ICDs[]       │   │ ICDs[]       │             │
+│  └──────────────┘   └──────────────┘   └──────────────┘             │
 │           │                  │                  │                   │
 │           ▼                  ▼                  ▼                   │
-│  ┌──────────────────────────────────────────────────────────────┐  │
+│  ┌───────────────────────────────────────────────────────────────┐  │
 │  │                    Instance Nodes                             │  │
-│  │  Morpho USDS, Aave USDC, Curve USDS-USDC, Treasury Bills...  │  │
-│  │  Each with: addresses, rate limits, operational procedures   │  │
-│  └──────────────────────────────────────────────────────────────┘  │
-│                                                                      │
-│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │  Morpho USDS, Aave USDC, Curve USDS-USDC, Treasury Bills...   │  │
+│  │  Each with: addresses, rate limits, operational procedures    │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                                                                     │
+│  ┌───────────────────────────────────────────────────────────────┐  │
 │  │                    Config Nodes                               │  │
 │  │  BEAM parameters, Penalty schedules, Settlement formulas      │  │
-│  └──────────────────────────────────────────────────────────────┘  │
-│                                                                      │
-│  ┌──────────────────────────────────────────────────────────────┐  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                                                                     │
+│  ┌───────────────────────────────────────────────────────────────┐  │
 │  │                   Transaction Logs                            │  │
 │  │  All Sentinel actions, settlements, state changes, precedents │  │
-│  └──────────────────────────────────────────────────────────────┘  │
-│                                                                      │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 

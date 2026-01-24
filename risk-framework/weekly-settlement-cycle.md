@@ -147,18 +147,18 @@ A new Sentinel type that runs sealed-bid auctions for OSRC and SPTP capacity.
 **Components:**
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    stl-auction                               │
-│                                                              │
+┌────────────────────────────────────────────────────────────┐
+│                    stl-auction                             │
+│                                                            │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
 │  │ Bid Database │  │ Auction      │  │ Settlement       │  │
 │  │ (Private)    │  │ Engine       │  │ Coordinator      │  │
 │  └──────────────┘  └──────────────┘  └──────────────────┘  │
-│                                                              │
-│  Receives signed bids from stl-base instances               │
-│  Runs matching algorithm at settlement time                  │
-│  Coordinates with stl-erc for LCTS settlement               │
-└─────────────────────────────────────────────────────────────┘
+│                                                            │
+│  Receives signed bids from stl-base instances              │
+│  Runs matching algorithm at settlement time                │
+│  Coordinates with stl-erc for LCTS settlement              │
+└────────────────────────────────────────────────────────────┘
 ```
 
 ### Bid Submission

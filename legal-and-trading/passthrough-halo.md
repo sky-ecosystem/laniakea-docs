@@ -74,8 +74,8 @@ This creates a flywheel where established Passthrough Halos become increasingly 
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                         SKY PROTOCOL                                 │
-│                                                                      │
+│                         SKY PROTOCOL                                │
+│                                                                     │
 │   ┌─────────────┐                                                   │
 │   │   Primes    │  Capital allocation entities within Sky           │
 │   └──────┬──────┘                                                   │
@@ -83,8 +83,8 @@ This creates a flywheel where established Passthrough Halos become increasingly 
 │          │  Deploy capital via standardized vaults                  │
 │          ▼                                                          │
 │   ┌─────────────────────────────────────────────────────────────┐   │
-│   │                    PASSTHROUGH HALO                          │   │
-│   │                                                              │   │
+│   │                    PASSTHROUGH HALO                         │   │
+│   │                                                             │   │
 │   │   ┌───────────────┐   ┌───────────────┐   ┌───────────────┐ │   │
 │   │   │  Halo Unit A  │   │  Halo Unit B  │   │  Halo Unit C  │ │   │
 │   │   │  (e.g., CLO)  │   │ (e.g., T-Bill)│   │ (e.g., MMF)   │ │   │
@@ -96,9 +96,9 @@ This creates a flywheel where established Passthrough Halos become increasingly 
                 │                   │                   │
                 ▼                   ▼                   ▼
         ┌───────────────────────────────────────────────────────┐
-        │              ASSET MANAGEMENT PARTNERS                 │
-        │                                                        │
-        │   CLO Manager    T-Bill Provider    Money Market Fund  │
+        │              ASSET MANAGEMENT PARTNERS                │
+        │                                                       │
+        │   CLO Manager    T-Bill Provider    Money Market Fund │
         └───────────────────────────────────────────────────────┘
 ```
 
@@ -241,7 +241,7 @@ This isn't a gradual ramp-up. It's immediate, coordinated capital deployment acr
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  2. PREPARATION                                                      │
+│  2. PREPARATION                                                     │
 │     • Asset manager confirms readiness and terms                    │
 │     • Unit Sentinel configured for asset-specific requirements      │
 │     • Smart contracts prepared via Laniakea Factory                 │
@@ -250,7 +250,7 @@ This isn't a gradual ramp-up. It's immediate, coordinated capital deployment acr
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  3. GOVERNANCE APPROVAL                                              │
+│  3. GOVERNANCE APPROVAL                                             │
 │     • Halo Artifact Edit proposed with Unit specifications          │
 │     • Standard approval process (typically days, not weeks)         │
 │     • Smart contracts deployed from factory                         │
@@ -258,7 +258,7 @@ This isn't a gradual ramp-up. It's immediate, coordinated capital deployment acr
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  4. LIVE — IMMEDIATE CAPITAL DEPLOYMENT                              │
+│  4. LIVE — IMMEDIATE CAPITAL DEPLOYMENT                             │
 │     • All Primes automatically rebalance into new Unit              │
 │     • Potential for hundreds of millions in Day 1 inflows           │
 │     • Unit Sentinel processes deposits and manages positions        │
