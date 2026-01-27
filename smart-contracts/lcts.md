@@ -1,7 +1,7 @@
 # Liquidity Constrained Token Standard (LCTS) — Business Requirements
 
 **Status:** Draft
-**Last Updated:** 2025-12-27
+**Last Updated:** 2026-01-27
 
 ---
 
@@ -77,13 +77,20 @@ LCTS eliminates this by pooling all users in a generation and distributing capac
 1. **Generation Isolation**: Each generation is independent; finalized generations are immutable
 2. **Gas Efficiency**: All operations are O(1) regardless of user count
 3. **Minimal Trust**: Only the LCTS-pBEAM can allocate capacity; all other logic is deterministic
-4. **Weekly Cycle Integration**: Generation lifecycle is synchronized with the weekly settlement cycle
+4. **Settlement Cycle Integration**: Generation lifecycle is synchronized with a configurable settlement cycle
 
 ---
 
-## Weekly Settlement Integration
+## Settlement Cycle Configuration
 
-LCTS integrates with the weekly settlement cycle (see `weekly-settlement-cycle.md`). Generation states are synchronized with the Tuesday–Wednesday processing cycle.
+LCTS supports **configurable settlement cycles** to accommodate different Halo Class requirements. Each LCTS deployment specifies its cycle mode at initialization.
+
+### Cycle Modes
+
+| Mode | Lock Period | Settlement Frequency | Use Case |
+|------|-------------|---------------------|----------|
+| **Weekly** (default) | Tue 12:00 → Wed 12:00 UTC (24h) | Once per week | Standard srUSDS, large capacity pools |
+| **Weekday** | Mon-Fri 12:00 → 15:00 UTC (3h) | Daily (weekdays only) | Higher velocity products, institutional flows |
 
 ### Generation States
 
@@ -94,32 +101,30 @@ LCTS integrates with the weekly settlement cycle (see `weekly-settlement-cycle.m
 | **Processing** | Being settled at Moment of Settlement | None (system processing) |
 | **Finalized** | Fully converted | Claim final rewards only |
 
+---
+
+## Weekly Cycle (Default)
+
+The weekly cycle follows the protocol-wide settlement schedule (see `weekly-settlement-cycle.md`).
+
 ### Weekly Timeline
 
 ```
 Week N:
 ├── Before Tue noon: Gen 1 is ACTIVE (deposits, withdrawals allowed)
-├── Tue noon (Processing Period starts):
+├── Tue 12:00 UTC (Lock):
 │     Gen 1 → LOCKED (no new deposits, no withdrawals)
 │     Gen 2 → ACTIVE (new deposits go here)
-├── Wed noon (Moment of Settlement):
+├── Wed 12:00 UTC (Settlement):
 │     Gen 1 → PROCESSING → proportional settlement
 │     Gen 1 → unlocks (users can claim, may have remaining balance)
 │     Gen 2 remains ACTIVE
 │
 Week N+1:
 ├── Before Tue noon: Gen 2 is ACTIVE
-├── Tue noon: Gen 2 → LOCKED, Gen 3 → ACTIVE
-├── Wed noon: Gen 2 processed, etc.
+├── Tue 12:00 UTC: Gen 2 → LOCKED, Gen 3 → ACTIVE
+├── Wed 12:00 UTC: Gen 2 processed, etc.
 ```
-
-### Why Lock Generations?
-
-The lock period serves critical functions:
-
-1. **Auction accuracy** — OSRC auction bids are based on known SubscribeQueue demand; if users could withdraw during processing, auction matching would be invalidated
-2. **Settlement certainty** — The Sentinel needs fixed quantities to calculate proportional distributions
-3. **Rate integrity** — Clearing rates depend on stable supply/demand during processing
 
 ### Multi-Week Generations
 
@@ -131,11 +136,68 @@ Week 2: Gen 1 still has $70M, $25M converted → $45M remains
 Week 3: Gen 1 still has $45M, $45M converted → Gen 1 finalizes
 ```
 
-Each week, the generation:
-1. Locks at Tuesday noon
-2. Receives proportional capacity at Wednesday noon settlement
+Each cycle, the generation:
+1. Locks at configured lock time (e.g., Tuesday 12:00 UTC for weekly mode)
+2. Receives proportional capacity at settlement
 3. Unlocks after settlement (users can claim rewards)
 4. Returns to ACTIVE (if remaining underlying > 0) or becomes FINALIZED (if fully converted)
+
+---
+
+## Weekday Cycle
+
+The weekday cycle enables daily settlements with a shorter lock period, suitable for higher-velocity products.
+
+### Weekday Timeline
+
+```
+Monday:
+├── Before 12:00 UTC: Gen 1 is ACTIVE
+├── 12:00 UTC (Lock): Gen 1 → LOCKED, Gen 2 → ACTIVE
+├── 15:00 UTC (Settlement): Gen 1 processed, unlocks
+│
+Tuesday:
+├── Before 12:00 UTC: Gen 2 is ACTIVE (Gen 1 may still have remaining)
+├── 12:00 UTC (Lock): Gen 2 → LOCKED, Gen 3 → ACTIVE
+├── 15:00 UTC (Settlement): Gen 2 processed, unlocks
+│
+... (Wed, Thu, Fri follow same pattern) ...
+│
+Saturday-Sunday:
+├── No locks, no settlements
+├── Active generations remain ACTIVE
+├── Users can deposit/withdraw freely
+```
+
+### Weekday Cycle Parameters
+
+| Parameter | Value |
+|-----------|-------|
+| **Lock time** | 12:00 UTC (weekdays only) |
+| **Settlement time** | 15:00 UTC (weekdays only) |
+| **Lock duration** | 3 hours |
+| **Operating days** | Monday–Friday |
+| **Weekend behavior** | No processing; generations remain ACTIVE |
+
+### Multi-Day Generations (Weekday)
+
+Similar to weekly, a generation may span multiple days:
+
+```
+Monday: Gen 1 created with $50M, $15M converted → $35M remains
+Tuesday: Gen 1 still has $35M, $20M converted → $15M remains
+Wednesday: Gen 1 still has $15M, $15M converted → Gen 1 finalizes
+```
+
+---
+
+## Why Lock Generations?
+
+The lock period serves critical functions regardless of cycle mode:
+
+1. **Auction accuracy** — OSRC auction bids are based on known SubscribeQueue demand; if users could withdraw during processing, auction matching would be invalidated
+2. **Settlement certainty** — The Sentinel needs fixed quantities to calculate proportional distributions
+3. **Rate integrity** — Clearing rates depend on stable supply/demand during processing
 
 **Key insight:** All locked generations receive proportional capacity based on their current underlying amounts — no age-based priority. Older generations' only advantage is that they received settlements in earlier weeks; they get no favorable treatment in future processing periods.
 
@@ -220,9 +282,9 @@ All generations receive proportional capacity based on their current underlying 
 | **Shares** | Internal accounting units representing a user's proportional claim on a generation; non-transferable |
 | **Underlying** | The asset deposited into the queue (sUSDS for subscribes, srUSDS for redeems) |
 | **Reward** | The asset received from conversion (srUSDS for subscribes, sUSDS for redeems) |
-| **Settlement Cycle** | Weekly Tuesday noon → Wednesday noon cycle during which generations are processed |
-| **Processing Period** | The 24-hour period (Tue noon → Wed noon) when locked generations await settlement |
-| **Moment of Settlement** | Wednesday noon UTC when all locked generations are proportionally processed |
+| **Settlement Cycle** | Configurable cycle during which generations are processed. Weekly (default): Tue noon → Wed noon. Weekday: daily Mon-Fri 12:00 → 15:00 UTC |
+| **Processing Period** | The lock period when generations await settlement. Weekly: 24h. Weekday: 3h |
+| **Moment of Settlement** | The time when all locked generations are proportionally processed. Weekly: Wed 12:00 UTC. Weekday: 15:00 UTC |
 | **Capacity** | The amount of underlying that can be converted in a single settlement |
 | **Net Flow Netting** | Subscribe and redeem queues canceling each other out, reducing net conversion needs |
 | **rewardPerToken** | Cumulative rewards distributed per share (accumulator pattern) |
@@ -259,9 +321,11 @@ ACTIVE → LOCKED → (settlement) → ACTIVE or FINALIZED
 ```
 
 1. **ACTIVE**: Generation is accepting new deposits; users can withdraw
-2. **LOCKED**: Tuesday noon triggers lock; no deposits or withdrawals during processing period
-3. **Settlement**: Wednesday noon processes all locked generations proportionally
+2. **LOCKED**: Lock time triggers lock; no deposits or withdrawals during processing period
+3. **Settlement**: Settlement time processes all locked generations proportionally
 4. **Post-settlement**: If totalUnderlying > 0, generation returns to ACTIVE; if totalUnderlying = 0, generation becomes FINALIZED
+
+*Lock and settlement times depend on cycle mode (weekly or weekday). See Settlement Cycle Configuration above.*
 
 ### User Position State
 
@@ -290,7 +354,7 @@ Each user has one position:
 
 - If the user has shares in a locked generation:
   - User CANNOT subscribe to a new generation until their locked position is settled
-  - Must wait for Wednesday noon settlement
+  - Must wait for settlement at configured settlement time
 
 - If the user has shares in the active generation:
   - Claim any pending rewards first (see Claiming Rewards below)
@@ -313,7 +377,7 @@ Each user has one position:
 
 **Preconditions:**
 - Caller is the LCTS-pBEAM (held by Sentinel)
-- Called at Tuesday noon UTC
+- Called at lock time (Weekly: Tue 12:00 UTC; Weekday: Mon-Fri 12:00 UTC)
 
 **Behavior:**
 
@@ -327,8 +391,8 @@ This ensures new deposits go to the new active generation while the locked gener
 
 **Preconditions:**
 - Caller is the LCTS-pBEAM (held by Sentinel)
-- Called at Wednesday noon UTC (Moment of Settlement)
-- subscribeCapacity is the total amount of sUSDS that can convert this week
+- Called at settlement time (Weekly: Wed 12:00 UTC; Weekday: Mon-Fri 15:00 UTC)
+- subscribeCapacity is the total amount of sUSDS that can convert this cycle
 
 **Behavior:**
 
@@ -411,7 +475,7 @@ User receives both assets and fully exits the queue.
 **Behavior — Claim and Exit:**
 
 - **NOT ALLOWED** during locked period
-- User must wait for Wednesday noon settlement
+- User must wait for settlement at configured settlement time
 - After settlement, generation returns to ACTIVE (if not finalized) and user can exit
 
 ### Settling (Finalized Generation)
@@ -506,11 +570,11 @@ On settlement, srUSDS is burned and sUSDS is transferred from the Holding System
 13. **Reward conservation**: Total rewards distributed equals total rewards received from converter
     - rewardPerToken accumulator ensures exact accounting
 
-### Weekly Cycle Integrity
+### Cycle Integrity
 
-14. **Lock happens exactly at Tuesday noon UTC**: All active generations lock simultaneously at processing period start
+14. **Lock happens exactly at configured lock time**: All active generations lock simultaneously at processing period start (e.g., Tuesday 12:00 UTC for weekly mode, 12:00 UTC each weekday for weekday mode)
 
-15. **Settlement happens exactly at Wednesday noon UTC**: All locked generations are processed at Moment of Settlement
+15. **Settlement happens exactly at configured settlement time**: All locked generations are processed at Moment of Settlement (e.g., Wednesday 12:00 UTC for weekly mode, 15:00 UTC same day for weekday mode)
 
 16. **New active generation created at lock time**: Users can always deposit, even during processing period (into new generation)
 
@@ -658,66 +722,68 @@ On settlement, srUSDS is burned and sUSDS is transferred from the Holding System
 
 ---
 
-### Story 6: Weekly Cycle with Lock Period
+### Story 6: Settlement Cycle with Lock Period
 
 **As** a user,
-**I want to** understand how my position is affected by the weekly settlement cycle,
+**I want to** understand how my position is affected by the settlement cycle,
 **So that** I can plan my deposits and withdrawals.
 
-**Flow:**
+**Flow (Weekly Mode Example):**
 
 1. **Monday:** User subscribes $10,000 sUSDS into Gen 1
    - Gen 1 is ACTIVE
    - User can withdraw at any time
 
-2. **Tuesday 11:59 UTC:** User decides to stay
+2. **Before lock time:** User decides to stay
    - Still can withdraw if desired
 
-3. **Tuesday 12:00 UTC:** Processing Period begins
+3. **Lock time (Tue 12:00 UTC):** Processing Period begins
    - Gen 1 → LOCKED (user cannot withdraw)
    - Gen 2 → ACTIVE (new deposits go here)
    - User's friend deposits $5,000 into Gen 2
 
-4. **Tuesday 12:01 UTC:** User tries to withdraw
+4. **During lock period:** User tries to withdraw
    - **Rejected** — Gen 1 is locked
    - User can claim accrued rewards but cannot exit
 
-5. **Wednesday 12:00 UTC:** Moment of Settlement
+5. **Settlement time (Wed 12:00 UTC):** Moment of Settlement
    - Settlement capacity: $6,000
    - Gen 1 ($10,000) receives $6,000 proportionally
    - User receives $6,000 worth of srUSDS, $4,000 sUSDS remains
    - Gen 1 → ACTIVE (unlocked)
 
-6. **Wednesday 12:01 UTC:** User can now withdraw
+6. **After settlement:** User can now withdraw
    - User exits with remaining $4,000 sUSDS + any srUSDS rewards
-   - Or user can stay for next week's settlement
+   - Or user can stay for next settlement cycle
+
+**Note:** In weekday mode, the same pattern applies daily (Mon-Fri) with a 3-hour lock period (12:00-15:00 UTC).
 
 ---
 
-### Story 7: Multi-Week Generation Spanning
+### Story 7: Multi-Cycle Generation Spanning
 
 **As** a user,
-**I want to** understand what happens when demand exceeds capacity for multiple weeks,
+**I want to** understand what happens when demand exceeds capacity for multiple cycles,
 **So that** I know how long I might wait.
 
-**Flow:**
+**Flow (Weekly Mode Example):**
 
-1. **Week 1:** User subscribes $100,000 sUSDS
+1. **Cycle 1:** User subscribes $100,000 sUSDS
    - High demand, low capacity
-   - Week 1 settlement: $20,000 converted (capacity limited)
+   - Cycle 1 settlement: $20,000 converted (capacity limited)
    - User has $80,000 remaining in Gen 1
 
-2. **Week 2:** Gen 1 locks again with $80,000
+2. **Cycle 2:** Gen 1 locks again with $80,000
    - Settlement capacity: $25,000
    - User receives $25,000 more srUSDS
    - $55,000 remaining
 
-3. **Week 3:** Gen 1 locks again with $55,000
+3. **Cycle 3:** Gen 1 locks again with $55,000
    - Settlement capacity: $55,000+
    - Gen 1 fully drains → FINALIZED
    - User claims final srUSDS
 
-**Note:** Throughout this process, the user's position was locked each Tuesday noon and unlocked each Wednesday noon. They could have exited after any settlement (while ACTIVE) if they chose.
+**Note:** Throughout this process, the user's position was locked at each lock time and unlocked at each settlement time. They could have exited after any settlement (while ACTIVE) if they chose. In weekday mode, this same pattern occurs daily.
 
 ---
 
@@ -840,14 +906,14 @@ On settlement, srUSDS is burned and sUSDS is transferred from the Holding System
 
 **Scenario:** User has position in locked generation and urgently needs to withdraw.
 
-- User deposited Monday, generation locked Tuesday noon
-- User realizes Wednesday morning they need the funds
+- User deposited before lock time, generation locked at processing period start
+- User realizes during lock period they need the funds
 
 **Handling:**
-- User CANNOT withdraw during lock period (Tuesday noon → Wednesday noon)
-- User must wait until after settlement (Wednesday noon)
+- User CANNOT withdraw during lock period (lock time → settlement time)
+- User must wait until after settlement
 - After settlement, if generation is not finalized, user can exit with remaining underlying
-- This 24-hour lock is a known trade-off for auction/settlement integrity
+- The lock period duration (24 hours for weekly mode, 3 hours for weekday mode) is a known trade-off for auction/settlement integrity
 
 ---
 
@@ -855,9 +921,9 @@ On settlement, srUSDS is burned and sUSDS is transferred from the Holding System
 
 **Scenario:** Two or more generations are locked simultaneously.
 
-- Gen 1 from 2 weeks ago: $40M remaining
-- Gen 2 from last week: $60M remaining
-- Both locked this Tuesday
+- Gen 1 from prior cycles: $40M remaining
+- Gen 2 from last cycle: $60M remaining
+- Both locked at current lock time
 
 **Handling:**
 - Both generations are processed proportionally in same settlement
@@ -899,23 +965,23 @@ On settlement, srUSDS is burned and sUSDS is transferred from the Holding System
 
 ### Interface
 
-The LCTS-pBEAM (held by stl-erc Sentinel) calls queue management functions:
+The LCTS-pBEAM (held by lpha-lcts Sentinel) calls queue management functions:
 
-- **SubscribeQueue.lock()**: Lock the active generation at Tuesday noon UTC
-- **RedeemQueue.lock()**: Lock the active generation at Tuesday noon UTC
-- **SubscribeQueue.settle(uint256 subscribeCapacity)**: Process all locked generations at Wednesday noon UTC
-- **RedeemQueue.settle(uint256 redeemCapacity)**: Process all locked generations at Wednesday noon UTC
+- **SubscribeQueue.lock()**: Lock the active generation at configured lock time
+- **RedeemQueue.lock()**: Lock the active generation at configured lock time
+- **SubscribeQueue.settle(uint256 subscribeCapacity)**: Process all locked generations at settlement time
+- **RedeemQueue.settle(uint256 redeemCapacity)**: Process all locked generations at settlement time
 
-### Weekly Cycle Operations
+### Settlement Cycle Operations
 
-| Day/Time | Operation | Function Called |
-|----------|-----------|-----------------|
-| **Tuesday 12:00 UTC** | Lock active generations | `lock()` on both queues |
-| **Wednesday 12:00 UTC** | Settle all locked generations | `settle()` on both queues |
+| Cycle Mode | Lock Time | Settlement Time | Function Called |
+|------------|-----------|-----------------|-----------------|
+| **Weekly** | Tuesday 12:00 UTC | Wednesday 12:00 UTC | `lock()` then `settle()` on both queues |
+| **Weekday** | Mon-Fri 12:00 UTC | Mon-Fri 15:00 UTC | `lock()` then `settle()` on both queues |
 
 ### Capacity Determination
 
-The Sentinel (stl-erc) determines capacity based on:
+The Sentinel (lpha-lcts) determines capacity based on:
 
 1. **Net flow netting** — Subscribe and redeem queues cancel each other out first
 2. **OSRC auction results** — New srUSDS capacity from auction (for subscribes)

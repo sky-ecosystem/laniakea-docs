@@ -12,7 +12,7 @@ Sky Agents are created directly as their permanent type. Each agent type has spe
 
 | Type | Role | Examples |
 |------|------|----------|
-| **Prime** | Capital-deploying agents operating at scale | Spark, Grove, Keel, Obex |
+| **Prime** | Capital-deploying agents operating at scale | 5 Stars (Spark, Grove, Keel, Star4, Star5) + 1 Institutional (Obex) |
 | **Halo** | Lighter investment products under Prime umbrella | CLO tranches, yield vaults |
 | **Generator** | Issue Sky Generated Assets (new currencies) | USDS Generator (current), future SGA Generators |
 | **Executor** | Operate systems with collateral backing | Core Executors, Operational Executors |
@@ -65,6 +65,47 @@ Agent Artifact
     ├── Ecosystem Accords
     └── Infrastructure Management
 ```
+
+---
+
+### Mini-Atlas
+
+Human-readable summary document that explains an Agent Artifact to its stakeholders.
+
+| Property | Value |
+|----------|-------|
+| Purpose | Make complex Agent Artifacts accessible to token holders and users |
+| Audience | Prime token holders, Halo investors, service users |
+| Derivation | Summarizes key parameters and governance from the Agent Artifact |
+| Requirement | Each Prime and externally-facing Halo should maintain a Mini-Atlas |
+
+**Prime Mini-Atlas Contents:**
+- Strategic overview (what the Prime does)
+- Key parameters in plain language
+- Risk disclosures (without full Risk Framework formulas)
+- Governance processes (Root Edit configuration)
+- How to participate (staking, using services)
+
+**Halo Mini-Atlas Contents (for Halos with external participants):**
+- Investment strategy and expected returns
+- Risk factors in compliance-suitable language
+- Legal structure and regulatory status
+- Reporting cadence and metrics
+
+**The Fractal Pattern:**
+
+Every level of the governance hierarchy with human stakeholders has a corresponding human-readable summary:
+
+```
+Sky Atlas                    → Describes Sky Core
+  ├─ Spark Mini-Atlas        → Describes Spark Agent Artifact
+  │    └─ Halo docs          → Describes Spark's Halos
+  ├─ Grove Mini-Atlas        → Describes Grove Agent Artifact
+  │    └─ Halo docs          → Describes Grove's Halos
+  └─ ...
+```
+
+For full Mini-Atlas specification, see `synomics/atlas-synome-separation.md`.
 
 ---
 
@@ -217,14 +258,23 @@ Prime Agents are the highest tier of capital-deploying agents in Sky Ecosystem. 
 
 ### Current Prime Agents
 
-Prime SubProxy addresses live in Appendix E (`appendix-e-infrastructure.md`).
+Prime SubProxy addresses live in Appendix G (`appendix-g-infrastructure.md`).
+
+**Star Primes (5):**
 
 | Prime | Focus |
 |-------|-------|
 | **Spark** | DeFi lending/liquidity |
 | **Grove** | Institutional credit, RWAs |
 | **Keel** | Solana ecosystem expansion |
-| **Obex** | Agent incubator |
+| **Star4** | TBD |
+| **Star5** | TBD |
+
+**Institutional Primes (1):**
+
+| Prime | Focus |
+|-------|-------|
+| **Obex** | Agent incubator, Prime + Halo development |
 
 ---
 
@@ -360,33 +410,52 @@ Tokenized isolated senior risk capital per Prime.
 
 ---
 
-#### Prime Loss Absorption Waterfall
+#### Loss Absorption Waterfall
 
-When a Prime experiences losses, capital is consumed in strict order:
+When losses occur, capital is consumed in strict order across three tiers:
 
-| Order | Capital Layer | Mechanism |
-|-------|---------------|-----------|
-| **1** | First Loss Capital (10% from IJRC) | First loss — absorbed entirely before moving to next layer |
-| **2** | Remaining IJRC + EJRC | Split proportionally between Internal and External JRC |
-| **3** | Agent Token | Inflated (potentially to infinity) to cover remaining losses |
-| **4** | TISRC | Isolated senior risk capital for this Prime |
-| **5** | Global SRC (srUSDS) | Shared senior risk capital pool across all Primes |
+| Order | Capital Layer | Tier | Mechanism |
+|-------|---------------|------|-----------|
+| **1** | First Loss Capital (10% from IJRC) | Prime | First loss — absorbed entirely before moving to next layer |
+| **2** | Remaining IJRC + EJRC | Prime | Split proportionally between Internal and External JRC |
+| **3** | Agent Token Inflation | Prime | Dilute Prime token holders (potentially to infinity) |
+| **4** | TISRC | Prime | Isolated senior risk capital for this Prime |
+| **5** | Global SRC (srUSDS) | System | Shared senior risk capital pool across all Primes |
+| **6** | SKY Token Inflation | System | Dilute protocol token holders |
+| **7** | Genesis Capital Haircut | Nuclear | Protocol reserves |
+| **8** | USDS Peg Adjustment | Nuclear | Final backstop — affects all USDS holders |
 
 ```
 Loss Event
     ↓
-┌─────────────────────────────────────┐
-│  1. First Loss Capital (10%)        │  ← Absolute first loss
-├─────────────────────────────────────┤
-│  2. IJRC + EJRC (pro-rata)          │  ← Remaining junior capital
-├─────────────────────────────────────┤
-│  3. Agent Token Inflation           │  ← Dilute token holders to cover
-├─────────────────────────────────────┤
-│  4. TISRC                           │  ← Prime-isolated senior capital
-├─────────────────────────────────────┤
-│  5. Global SRC (srUSDS)             │  ← System-wide senior capital
-└─────────────────────────────────────┘
+┌─── PRIME-LEVEL (per-Prime) ─────────────────────────────────────┐
+│  1. First Loss Capital (10%)        │  ← Absolute first loss    │
+├─────────────────────────────────────┤                           │
+│  2. IJRC + EJRC (pro-rata)          │  ← Remaining junior       │
+├─────────────────────────────────────┤                           │
+│  3. Agent Token Inflation           │  ← Dilute Prime token     │
+├─────────────────────────────────────┤                           │
+│  4. TISRC                           │  ← Prime-isolated SRC     │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─── SYSTEM-LEVEL (shared across all Primes) ─────────────────────┐
+│  5. Global SRC (srUSDS)             │  ← System-wide SRC        │
+├─────────────────────────────────────┤                           │
+│  6. SKY Token Inflation             │  ← Dilute SKY holders     │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─── NUCLEAR OPTIONS (protocol reserves / peg) ───────────────────┐
+│  7. Genesis Capital Haircut         │  ← Protocol reserves      │
+├─────────────────────────────────────┤                           │
+│  8. USDS Peg Adjustment             │  ← Final backstop         │
+└─────────────────────────────────────────────────────────────────┘
 ```
+
+**Prime-Level (Steps 1-4):** Losses are first absorbed by the specific Prime's capital stack. Agent Token inflation at step 3 can theoretically cover unlimited losses through dilution of Prime token holders.
+
+**System-Level (Steps 5-6):** If Prime-level capital is exhausted, losses flow to system-wide pools. Global SRC is shared across all Primes; SKY inflation dilutes protocol token holders.
+
+**Nuclear Options (Steps 7-8):** Genesis Capital and peg adjustment are last-resort mechanisms that should never be reached under normal conditions. These affect the entire protocol and all USDS holders.
 
 ---
 
@@ -455,7 +524,7 @@ Tagging associates a USDS/sUSDS balance with a Star for Distribution Reward purp
 
 #### Liability Duration Rewards
 
-Rewards for Primes that source tagged USDS demand feeding into the SPTP (Stablecoin Principal Term Profile) system.
+Rewards for Primes that source tagged USDS demand feeding into the SPTP (Stressed Pull-to-Par) system.
 
 | Property | Value |
 |----------|-------|
@@ -555,7 +624,7 @@ The Pioneer System enables Stars to gain exclusive advantages when expanding USD
 
 | Property | Value |
 |----------|-------|
-| Availability | Genesis Stars only (Spark, Grove, Keel, Obex, Launch) |
+| Availability | Genesis Stars only (Spark, Grove, Keel, Star4, Star5) |
 | Purpose | Incentivize cross-chain expansion with first-mover advantages |
 | Duration | 3-year Pioneer Phase per Pioneer Chain |
 | Exclusivity | One Pioneer Star per chain; Stars can have multiple Pioneer Chains |
@@ -648,11 +717,42 @@ Halo Agents are investment products created by Primes. They wrap specific strate
 
 ---
 
+### Halo Class Structure
+
+A **Halo Class** is a grouping of Halo Units that share the same smart contract infrastructure (PAU, sentinel formation) and legal framework (buybox, agreements). The Halo Class defines the operational bounds; individual Halo Units vary within those bounds.
+
+**Hierarchy:**
+```
+Halo (Synomic Agent)
+└── Halo Class (shared SC + legal infra)
+    └── Halo Unit (specific instance)
+```
+
+**Examples:**
+
+| Halo Type | Halo Class Example | Halo Units Within |
+|-----------|-------------------|-------------------|
+| **Passthrough** | Tranched CLO structure | Senior tranche, Junior tranche (same PAU, same lpha-lcts) |
+| **Structuring** | NFAT Facility with buybox | Multiple NFAT deals (varying duration, size within buybox) |
+
+**What a Halo Class shares:**
+- PAU (Controller + ALMProxy + RateLimits)
+- Sentinel formation (lpha-lcts or lpha-nfat)
+- Legal framework (buybox constraints, counterparty agreements)
+- Factory template (audited, reusable deployment)
+
+**What Halo Units can vary:**
+- Tranche seniority (for Passthrough)
+- Duration, size, specific terms (for NFAT)
+- Risk/return profile within class constraints
+
+---
+
 ### Halo Unit Structure
 
-A **Halo Unit** is a governance-level construct — not a smart contract — representing a bankruptcy-remote capital deployment within a Halo. Similar to a serialized LLC, each Halo Unit is legally and operationally isolated from other units within the same Halo. If one unit suffers losses, other units are protected.
+A **Halo Unit** is a governance-level construct — not a smart contract — representing a bankruptcy-remote capital deployment within a Halo Class. Similar to a serialized LLC, each Halo Unit is legally and operationally isolated from other units within the same Halo. If one unit suffers losses, other units are protected.
 
-A single Halo can contain multiple Halo Units, each independently managed and isolated.
+A single Halo Class can contain multiple Halo Units, each with specific parameters within the class's bounds.
 
 **Token Standards:** The choice of token standard determines how claims on a Halo Unit are represented — analogous to choosing between bonds, ETFs, or stocks to represent value:
 
@@ -661,7 +761,7 @@ A single Halo can contain multiple Halo Units, each independently managed and is
 | **LCTS** | Pooled, fungible shares | Many users, same terms, shared capacity (ETF-like) |
 | **NFATS** | Individual, non-fungible tokens | Bespoke deals, named counterparties (bond-like) |
 
-The underlying smart contract infrastructure (PAU + Sentinel) remains consistent; the token standard determines the user-facing mechanics for subscribing, redeeming, and transferring positions.
+The underlying smart contract infrastructure (PAU + Sentinel) remains consistent across a Halo Class; the token standard determines the user-facing mechanics for subscribing, redeeming, and transferring positions.
 
 ---
 

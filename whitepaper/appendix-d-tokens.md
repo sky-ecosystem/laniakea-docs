@@ -41,7 +41,7 @@ Complete reference of all tokens in the Sky ecosystem.
 
 | Token | Type | Scope | Description |
 |-------|------|-------|-------------|
-| **srUSDS** | Senior Risk | Global | Senior risk capital for all of USDS; LCTS-only |
+| **srUSDS** (Planned) | Senior Risk | Global | Senior risk capital for all of USDS; LCTS-only |
 | **TEJRC** | Junior Risk | Per-Prime | Tokenized external junior risk capital; LCTS-only |
 | **TISRC** | Senior Risk | Per-Prime | Tokenized isolated senior risk capital; LCTS-only |
 | **TESRC** | Senior Risk | Per-Prime | Tokenized external senior risk capital |
@@ -50,8 +50,16 @@ Complete reference of all tokens in the Sky ecosystem.
 
 | Token | Type | Description |
 |-------|------|-------------|
-| **LCTS Shares** | Position | Non-transferable internal accounting for queue positions |
+| **LCTS Shares** | Position | Non-transferable internal accounting for queue positions (Passthrough Halos) |
+| **NFAT** | Position | Non-Fungible Allocation Token — transferable claim on individual Structuring Halo deals |
 | **Halo Unit Shares** | Ownership | Pro-rata claim on Halo Unit assets |
+
+### Token Standards
+
+| Standard | Token Type | Characteristics |
+|----------|------------|-----------------|
+| **LCTS** | Fungible | Liquidity Constrained Token Standard — queue-based entry/exit, pooled positions, uniform terms |
+| **NFATS** | Non-fungible | Non-Fungible Allocation Token Standard — individual deals, bespoke terms, transferable |
 
 ---
 
@@ -96,8 +104,20 @@ Complete reference of all tokens in the Sky ecosystem.
 - Increases from yield, decreases from haircuts
 - Global senior risk capital for USDS
 
+### NFAT
+- ERC-721 representing claim on Structuring Halo deal
+- Each NFAT has individual terms (duration, size, yield) within buybox
+- Transferable — can be sold or used as collateral
+- Burned on redemption when funds are claimed
+
+### LCTS
+- Queue-based entry and exit
+- Weekly settlement processing
+- Pooled positions with uniform terms
+- Non-transferable queue positions; shares may be transferable depending on implementation
+
 ---
 
 ## Token Addresses
 
-See [Appendix E: Deployed Infrastructure](appendix-e-infrastructure.md) for contract addresses.
+See [Appendix G: Deployed Infrastructure](appendix-g-infrastructure.md) for contract addresses.

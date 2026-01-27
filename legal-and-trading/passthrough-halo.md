@@ -36,7 +36,7 @@ Understanding why Passthrough Halos deliver immediate capital at scale requires 
 
 ### Sentinel-Driven Allocation
 
-Every Prime in the Sky ecosystem is managed by a **Prime Sentinel** — an automated system that continuously optimizes capital allocation across available deployment targets. When a new Halo Unit becomes available, the Sentinel:
+Every Prime in the Sky ecosystem is operated by a **sentinel formation** (stl-base + stl-stream + stl-warden) — an automated system that continuously optimizes capital allocation across available deployment targets. When a new Halo Unit becomes available, the sentinel formation:
 
 1. **Detects the new Unit** via the Halo Artifact and governance registry
 2. **Validates proper onboarding** — factory deployment, Sentinel integration, artifact reporting
@@ -113,9 +113,69 @@ This creates a flywheel where established Passthrough Halos become increasingly 
 
 ---
 
+## Halo Class Structure
+
+Passthrough Halos are organized into **Halo Classes** — groupings of Halo Units that share the same smart contract infrastructure (PAU, sentinel) and legal framework.
+
+### Why Halo Classes Matter
+
+A Halo Class enables **tranched structures** where multiple Halo Units share operational infrastructure while offering different risk/return profiles:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    HALO CLASS: CLO Tranched                  │
+│              (Shared PAU + lpha-lcts + Legal Buybox)         │
+│                                                              │
+│   ┌─────────────────┐        ┌─────────────────┐           │
+│   │  Halo Unit:     │        │  Halo Unit:     │           │
+│   │  Senior Tranche │        │  Junior Tranche │           │
+│   │  (Lower yield,  │        │  (Higher yield, │           │
+│   │   first claim)  │        │   second claim) │           │
+│   └────────┬────────┘        └────────┬────────┘           │
+│            │                          │                     │
+│            └──────────┬───────────────┘                     │
+│                       │                                      │
+│              ┌────────▼────────┐                            │
+│              │  Shared PAU     │                            │
+│              │  + lpha-lcts     │                            │
+│              └────────┬────────┘                            │
+│                       │                                      │
+└───────────────────────┼──────────────────────────────────────┘
+                        │
+                        ▼
+              ┌─────────────────┐
+              │  Underlying     │
+              │  CLO Assets     │
+              └─────────────────┘
+```
+
+### What a Halo Class Shares
+
+| Component | Description |
+|-----------|-------------|
+| **PAU** | Single Controller + ALMProxy + RateLimits for all Units in the class |
+| **LPHA Beacon** | lpha-lcts manages all Units |
+| **Legal Framework** | Shared buybox, counterparty agreements, recourse mechanisms |
+| **Factory Template** | All Units deployed from same audited template |
+
+> **Note:** lpha-lcts is an **LPHA beacon** (Low Power, High Authority) — a deterministic rule executor, not a sentinel. Sentinels (stl-base, stl-stream, stl-warden) have continuous real-time control and proprietary intelligence. LPHA beacons like lpha-lcts apply rules exactly as written without judgment. See `beacon-framework.md` for the full taxonomy.
+
+### What Halo Units Can Vary
+
+| Parameter | Example Variation |
+|-----------|-------------------|
+| **Seniority** | Senior vs Junior tranche claims |
+| **Yield** | Different return profiles based on risk |
+| **Capacity** | Different allocation limits per tranche |
+| **LCTS Parameters** | Queue configuration, generation timing |
+
+This structure enables efficient capital deployment: one sentinel formation, one legal structure, multiple investment products with different risk/return characteristics.
+
+---
+
 ## How Halo Units Work
 
-Each Halo Unit represents a specific investment product and consists of:
+Each Halo Unit represents a specific investment product within a Halo Class and consists of:
 
 ### 1. Vault Interface (LCTS)
 
@@ -206,7 +266,7 @@ This isn't a gradual ramp-up. It's immediate, coordinated capital deployment acr
 
 1. **Standardized risk framework**: Once a Unit is onboarded through an established Passthrough Halo, Primes don't need individual due diligence — the Halo's governance and Sentinel infrastructure provides the assurance layer
 
-2. **Automated rebalancing**: Prime Sentinels continuously optimize allocations across available Halo Units. A newly available, properly-onboarded Unit triggers rebalancing across the entire Prime layer
+2. **Automated rebalancing**: Sentinel formations continuously optimize allocations across available Halo Units. A newly available, properly-onboarded Unit triggers rebalancing across the entire Prime layer
 
 3. **Pre-approved integration**: Primes have pre-signed agreements with established Passthrough Halos, eliminating per-Unit legal negotiation
 
@@ -350,4 +410,4 @@ Interested asset managers should contact Sky to discuss:
 ---
 
 *Document Version: 0.1*  
-*Last Updated: December 2025*
+*Last Updated: January 2026*

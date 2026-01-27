@@ -1,7 +1,7 @@
 # Weekly Settlement Cycle
 
 **Status:** Draft
-**Last Updated:** 2025-12-27 (updated with LCTS multi-generation model)
+**Last Updated:** 2026-01-27
 
 ---
 
@@ -95,17 +95,17 @@ Where:
 
 Generators distribute rewards to Primes that have "tagged" addresses — addresses that have opted into receiving distributions.
 
-**Calculation (stl-gen):**
+**Calculation:**
 
 1. Generator accumulates yield from various sources (SSR spread, fees, etc.) during Measurement Period
-2. stl-gen calculates distribution amounts based on tagged balances
+2. Distribution amounts calculated based on tagged balances
 3. Distribution flows to tagged Prime addresses proportional to their tagged balances
 
 **Process:**
 
 1. **Tuesday noon:** Measurement Period ends
-2. **During Processing Period:** stl-gen calculates distributions
-3. **Before Wednesday noon:** stl-gen submits distribution transactions
+2. **During Processing Period:** Distribution calculations performed
+3. **Before Wednesday noon:** Distribution transactions submitted
 4. **Wednesday noon:** Distributions must be complete
 
 **Tagged Addresses:**
@@ -135,20 +135,20 @@ Where:
 
 ---
 
-## Part 2: stl-auction (Auction Sentinel)
+## Part 2: lpha-auction (Auction Sentinel)
 
 A new Sentinel type that runs sealed-bid auctions for OSRC and SPTP capacity.
 
 ### Architecture
 
-**Level:** Generator (one stl-auction per Generator)
+**Level:** Generator (one lpha-auction per Generator)
 **Operator:** Accordant GovOps
 
 **Components:**
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    stl-auction                               │
+│                    lpha-auction                               │
 │                                                              │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
 │  │ Bid Database │  │ Auction      │  │ Settlement       │  │
@@ -157,15 +157,15 @@ A new Sentinel type that runs sealed-bid auctions for OSRC and SPTP capacity.
 │                                                              │
 │  Receives signed bids from stl-base instances               │
 │  Runs matching algorithm at settlement time                  │
-│  Coordinates with stl-erc for LCTS settlement               │
+│  Coordinates with lpha-lcts for LCTS settlement               │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### Bid Submission
 
-1. Each Prime's stl-base connects to stl-auction
+1. Each Prime's stl-base connects to lpha-auction
 2. stl-base submits bid messages signed with its private key
-3. Bids are stored in stl-auction's private database (sealed)
+3. Bids are stored in lpha-auction's private database (sealed)
 4. Bids are not revealed until settlement
 
 **Bid Message Format:**
@@ -204,11 +204,11 @@ Allocate srUSDS capacity to Primes. Primes that win OSRC auction capacity can us
 **Process:**
 
 1. **Bid Collection** (before settlement)
-   - Each Prime's stl-base submits sealed bids to stl-auction
+   - Each Prime's stl-base submits sealed bids to lpha-auction
    - Bid specifies: amount of OSRC wanted, maximum rate willing to pay
 
 2. **Capacity Determination**
-   - stl-auction queries stl-erc for available srUSDS capacity
+   - lpha-auction queries lpha-lcts for available srUSDS capacity
    - Available capacity = current srUSDS supply + pending SubscribeQueue conversions - pending RedeemQueue conversions
 
 3. **Matching Algorithm**
@@ -234,9 +234,9 @@ Allocate srUSDS capacity to Primes. Primes that win OSRC auction capacity can us
    ```
 
 4. **Settlement**
-   - stl-auction publishes results (who won, clearing rate)
-   - stl-erc updates srUSDS exchange rate based on clearing rate
-   - stl-erc settles LCTS queues (converts sUSDS ↔ srUSDS)
+   - lpha-auction publishes results (who won, clearing rate)
+   - lpha-lcts updates srUSDS exchange rate based on clearing rate
+   - lpha-lcts settles LCTS queues (converts sUSDS ↔ srUSDS)
 
 ### Uniform Price Rationale
 
@@ -297,7 +297,7 @@ Weekly auctions provide:
 ### OSRC Usage
 
 Primes that win OSRC capacity:
-- Can count the SRC toward their capital requirements (per GRF)
+- Can count the SRC toward their capital requirements (per Risk Framework)
 - Must pay the clearing rate weekly until they stop using SRC
 - Can reduce usage at any time (no lock-in on the Prime side)
 
@@ -353,7 +353,7 @@ The SPTP auction follows a specific sequence where tug-of-war happens FIRST, the
 **Process:**
 
 1. **Bid Collection** (before close)
-   - Each Prime's stl-base submits sealed bids to stl-auction
+   - Each Prime's stl-base submits sealed bids to lpha-auction
    - Bid specifies: bucket number, amount, maximum price, duration (weeks)
 
 2. **Tug-of-War First**
@@ -375,7 +375,7 @@ The SPTP auction follows a specific sequence where tug-of-war happens FIRST, the
 
 5. **Reservation Grant**
    - Winners receive reservations for specified duration
-   - Reservations tracked in stl-auction database
+   - Reservations tracked in lpha-auction database
    - Published to Synome
 
 ### Multi-Week Reservations
@@ -406,7 +406,7 @@ Reservation holders can trade their reservations:
 
 ## Part 5: LCTS Settlement
 
-LCTS (Liquidity Constrained Token Standard) uses a multi-generation model synchronized with the weekly settlement cycle. See `active/smart-contracts/lcts.md` for the specification.
+LCTS (Liquidity Constrained Token Standard) uses a multi-generation model synchronized with the weekly settlement cycle. See `smart-contracts/lcts.md` for the specification.
 
 ### LCTS Weekly Cycle
 
@@ -429,17 +429,17 @@ This creates concurrent generations:
 
 ### srUSDS Settlement Flow
 
-1. **Tuesday 12:00:** stl-erc locks active generations
+1. **Tuesday 12:00:** lpha-lcts locks active generations
    - SubscribeQueue generation → LOCKED
    - RedeemQueue generation → LOCKED
    - New active generations created for both queues
 
 2. **During Processing Period:**
-   - stl-auction completes OSRC auction
+   - lpha-auction completes OSRC auction
    - Determines clearing rate and matched amounts
    - Publishes results
 
-3. **Wednesday 12:00:** stl-erc settles all locked generations
+3. **Wednesday 12:00:** lpha-lcts settles all locked generations
    - Updates exchange rate based on clearing rate yield
    - Calculates settlement capacity (see below)
    - Calls settle() on SubscribeQueue and RedeemQueue
@@ -573,7 +573,7 @@ Tug-of-war runs as part of the SPTP auction sequence, BEFORE the auction matches
    - This excess goes to the SPTP auction (Part 4)
 
 5. **Capital Calculation** (after auction completes)
-   - Apply GRF formulas based on final allocation
+   - Apply Risk Framework formulas based on final allocation
    - Matched portions get risk-weight treatment
    - Unmatched portions get FRTB treatment
 
@@ -605,25 +605,25 @@ All times are **UTC**.
 | Day/Time | Event | Actor |
 |----------|-------|-------|
 | **Tuesday 12:00** | Measurement Period ends | — |
-| | Bid window closes (OSRC + SPTP) | stl-auction |
-| | **LCTS generations LOCKED** | stl-erc |
-| | New active generation opens | stl-erc |
+| | Bid window closes (OSRC + SPTP) | lpha-auction |
+| | **LCTS generations LOCKED** | lpha-lcts |
+| | New active generation opens | lpha-lcts |
 | | Processing Period begins | — |
-| **Tuesday 12:00-14:00** | Auctions revealed and matched | stl-auction |
-| **Tuesday 14:00-16:00** | Lindy measurement snapshot | stl-gen |
-| **Tuesday 16:00-18:00** | Tug-of-war allocation | stl-auction |
-| **Tuesday 18:00-20:00** | SPTP excess auction matching | stl-auction |
+| **Tuesday 12:00-14:00** | Auctions revealed and matched | lpha-auction |
+| **Tuesday 14:00-16:00** | Lindy measurement snapshot | lpla-checker |
+| **Tuesday 16:00-18:00** | Tug-of-war allocation | lpha-auction |
+| **Tuesday 18:00-20:00** | SPTP excess auction matching | lpha-auction |
 | **Tuesday 20:00-22:00** | Interest calculations finalized | stl-base (each Prime) |
-| **Tuesday 22:00-24:00** | Distribution calculations finalized | stl-gen |
-| **Wednesday 00:00-08:00** | Prepayments submitted | stl-base, stl-gen |
-| **Wednesday 08:00-12:00** | Verification and compliance checks | stk-verify |
+| **Tuesday 22:00-24:00** | Distribution calculations finalized | lpla-checker |
+| **Wednesday 00:00-08:00** | Prepayments submitted | stl-base |
+| **Wednesday 08:00-12:00** | Verification and compliance checks | lpla-checker |
 | **Wednesday 12:00** | **Moment of Settlement** | — |
-| | New OSRC allocations take effect | stl-auction |
-| | New SPTP capacity published to Synome | stl-auction |
-| | srUSDS exchange rate updated | stl-erc |
-| | **LCTS locked generations settle** | stl-erc |
-| | Locked generations unlock (ACTIVE or FINALIZED) | stl-erc |
-| | Capital calculations apply | stk-verify |
+| | New OSRC allocations take effect | lpha-auction |
+| | New SPTP capacity published to Synome | lpha-auction |
+| | srUSDS exchange rate updated | lpha-lcts |
+| | **LCTS locked generations settle** | lpha-lcts |
+| | Locked generations unlock (ACTIVE or FINALIZED) | lpha-lcts |
+| | Capital calculations apply | lpla-checker |
 | | Penalties begin for non-compliant actors | — |
 | **Wednesday 12:00+** | Next Measurement Period begins | — |
 
@@ -719,8 +719,8 @@ Wed 12:00: Everything takes effect simultaneously
 |----------|--------------|
 | `README.md` | Risk framework index and entry point |
 | `tugofwar.md` | Tug-of-war algorithm is part of this weekly cycle |
-| `active/smart-contracts/lcts.md` | LCTS settlement is triggered by this cycle |
-| `sentinel-network.md` | Defines stl-auction, stl-erc, stl-base roles |
+| `smart-contracts/lcts.md` | LCTS settlement is triggered by this cycle |
+| `sentinel-network.md` | Defines lpha-auction, lpha-lcts, stl-base roles |
 
 ---
 

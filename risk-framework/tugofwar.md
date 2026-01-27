@@ -1,7 +1,7 @@
 # SPTP Capacity Tug-of-War Mechanism
 
 **Status:** Draft
-**Last Updated:** 2025-12-26
+**Last Updated:** 2026-01-27
 
 ---
 
@@ -454,7 +454,7 @@ Together, these guarantee that dust amounts get cleaned up in bounded iterations
 
 ---
 
-## Connection to GRF
+## Connection to Risk Framework
 
 The Tug-of-War mechanism is part of the weekly SPTP capacity allocation process:
 
@@ -462,7 +462,7 @@ The Tug-of-War mechanism is part of the weekly SPTP capacity allocation process:
 2. **Structural Caps** — Apply governance caps per bucket
 3. **Tug-of-War** — All Primes tug for capacity, including their own bucket (Phase 1)
 4. **Trading** — Upgrade capacity mix, cascade excess downward (Phase 2)
-5. **Capital Calculation** — Apply GRF formulas based on final allocation
+5. **Capital Calculation** — Apply Risk Framework formulas based on final allocation
 
 See `README.md` for the broader capital requirement framework.
 

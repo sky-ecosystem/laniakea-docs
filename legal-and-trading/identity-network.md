@@ -2,7 +2,7 @@
 
 **Status:** Draft
 **Pillar:** 7
-**Last Updated:** 2026-01-02
+**Last Updated:** 2026-01-27
 
 ---
 
@@ -64,7 +64,7 @@ Identity Networks are a **restricted Halo type** with significant limitations co
 | **Revenue source** | Investment returns | Membership/verification fees |
 | **Capital deployment** | Yes (that's the point) | No (prohibited) |
 | **Asset custody** | Holds assets via PAU | Minimal (operating capital only) |
-| **Risk capital** | Required per GRF | Minimal (operational risk only) |
+| **Risk capital** | Required per Risk Framework | Minimal (operational risk only) |
 | **Oversight** | Standard Halo governance | Elevated — compliance-critical |
 
 ### Permitted Activities
@@ -103,14 +103,14 @@ Fees are set by the Identity Network's governance. Competition between networks 
 
 ### Simple Address List
 
-The on-chain component is intentionally minimal — just a list of addresses managed by stl-identity:
+The on-chain component is intentionally minimal — just a list of addresses managed by lpha-identity:
 
 ```
 Identity Registry Contract:
   - Storage: set of member addresses
   - Query: isMember(address) → true/false
   - Modify: add(address), remove(address), addBatch([addresses]), removeBatch([addresses])
-  - Access: only stl-identity can modify
+  - Access: only lpha-identity can modify
 ```
 
 That's it. A simple address set. No status enums, no metadata, no expiry dates on-chain.
@@ -166,7 +166,7 @@ All the complexity lives off-chain in the Synome:
 | **KYC documents** | Legal entity (off-chain) | Actual verification records |
 | **Personal identity** | Legal entity (off-chain) | Never stored in Synome |
 
-stl-identity handles the translation: it monitors Synome for attestation changes, expiries, and revocations, then updates the simple on-chain list accordingly.
+lpha-identity handles the translation: it monitors Synome for attestation changes, expiries, and revocations, then updates the simple on-chain list accordingly.
 
 ### Why This Design?
 
@@ -247,7 +247,7 @@ Each Identity Network controls a legal entity that performs actual KYC:
 │  │  - Receives KYC applications                        │ │
 │  │  - Verifies documents                               │ │
 │  │  - Stores records (off-chain)                       │ │
-│  │  - Updates Synome → stl-identity syncs to chain     │ │
+│  │  - Updates Synome → lpha-identity syncs to chain     │ │
 │  │  - Handles disputes, appeals, revocations           │ │
 │  └────────────────────────────────────────────────────┘ │
 │                                                          │
@@ -269,7 +269,7 @@ Each Identity Network controls a legal entity that performs actual KYC:
 3. DECISION
    Legal entity approves or denies
    → If approved: attestation recorded in Synome with expiry date
-                  stl-identity adds address to on-chain list
+                  lpha-identity adds address to on-chain list
    → If denied: application rejected, not added
 
 4. MAINTAIN
@@ -278,8 +278,8 @@ Each Identity Network controls a legal entity that performs actual KYC:
    → Synome attestation extended, address remains on list
 
 5. EXPIRE / REVOKE
-   → Expiry: stl-identity removes address when expiry date passes
-   → Revocation: legal entity revokes in Synome, stl-identity removes address
+   → Expiry: lpha-identity removes address when expiry date passes
+   → Revocation: legal entity revokes in Synome, lpha-identity removes address
 ```
 
 ### Regulatory Compliance
@@ -301,32 +301,32 @@ Attestations can be revoked for:
 - **Request** — User requests removal
 - **Legal order** — Court order or regulatory action
 
-Revocation is immediate — legal entity marks revoked in Synome, stl-identity removes address from on-chain list.
+Revocation is immediate — legal entity marks revoked in Synome, lpha-identity removes address from on-chain list.
 
 ---
 
-## Sentinel Integration (stl-identity)
+## Sentinel Integration (lpha-identity)
 
 ### Overview
 
-**stl-identity** is the Sentinel that manages an Identity Network's on-chain address list.
+**lpha-identity** is the Sentinel that manages an Identity Network's on-chain address list.
 
 **Level:** Per Identity Network
 **Operator:** Identity Network GovOps / Legal Entity Operations
 
 ### Role
 
-stl-identity is the bridge between off-chain verification and on-chain membership:
+lpha-identity is the bridge between off-chain verification and on-chain membership:
 
 ```
-Legal Entity → Synome → stl-identity → On-chain Registry
+Legal Entity → Synome → lpha-identity → On-chain Registry
    (KYC)      (state)    (executor)      (simple list)
 ```
 
 1. Legal entity performs KYC, updates attestation in Synome
-2. stl-identity monitors Synome for changes
-3. When attestation becomes active → stl-identity calls `add(address)`
-4. When attestation expires/revoked → stl-identity calls `remove(address)`
+2. lpha-identity monitors Synome for changes
+3. When attestation becomes active → lpha-identity calls `add(address)`
+4. When attestation expires/revoked → lpha-identity calls `remove(address)`
 
 ### Responsibilities
 
@@ -339,8 +339,8 @@ Legal Entity → Synome → stl-identity → On-chain Registry
 
 ### Security Model
 
-- **Sole writer** — Only stl-identity can modify the on-chain registry
-- **Synome as source of truth** — stl-identity only acts on Synome state
+- **Sole writer** — Only lpha-identity can modify the on-chain registry
+- **Synome as source of truth** — lpha-identity only acts on Synome state
 - **Audit trail** — All changes logged in Synome with timestamps
 - **Rate limits** — Maximum updates per period (prevents spam/abuse)
 
@@ -365,14 +365,14 @@ Restrictions are enforced at the **token level**, not the exchange level:
    - This is a UX optimization, not a security check
 
 3. **Attestation Events**
-   - stl-identity emits events when addresses are added/removed
-   - stl-exchange can subscribe to cancel orders from removed addresses proactively
+   - lpha-identity emits events when addresses are added/removed
+   - lpha-exchange can subscribe to cancel orders from removed addresses proactively
 
 ### Settlement Flow
 
 ```
 Exchange Settlement:
-  1. stl-exchange submits settlement batch
+  1. lpha-exchange submits settlement batch
   2. Settlement contract calls token.transfer(seller → buyer)
   3. Token contract checks: buyer in accepted Identity Network?
      - JAAA-Halo checks US-Accredited.isMember(buyer) → true ✓
@@ -397,7 +397,7 @@ Each Identity Network has its own governance:
 - **Token-based voting** (if network issues token)
 - **Fee setting** — Membership and verification fees
 - **Policy updates** — Verification standards, accepted documents
-- **Operator appointments** — Legal entity board, stl-identity operators
+- **Operator appointments** — Legal entity board, lpha-identity operators
 
 ### Sky Core Oversight
 
@@ -480,7 +480,7 @@ Identity Networks face consequences for failures:
 |----------|--------------|
 | `sky-intents.md` | Identity Networks enable permissioned trading |
 | `passthrough-halo.md` | Passthrough Halos may require Identity Networks for counterparty restrictions |
-| `sentinel-network.md` | stl-identity is a new Sentinel type |
+| `sentinel-network.md` | lpha-identity is an LPHA beacon for identity registry management |
 | `atlas-synome-separation.md` | Attestation metadata stored in Synome |
 
 ---

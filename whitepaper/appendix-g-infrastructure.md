@@ -108,7 +108,7 @@ Overview of currently deployed contracts, bridges, and legacy systems.
 
 ---
 
-## DeFi Integrations (Core Approved Collateral)
+## DeFi Integrations (Core Halos)
 
 ### Morpho
 

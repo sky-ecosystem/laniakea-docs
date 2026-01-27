@@ -1,6 +1,6 @@
 # Asset Classification
 
-**Last Updated:** 2025-12-25
+**Last Updated:** 2026-01-27
 
 ## Asset Classification
 

@@ -36,7 +36,7 @@ What differs between PAU deployments:
 | Layer | Location | Upstream Connection | Downstream Connection |
 |-------|----------|--------------------|-----------------------|
 | **Generator** | Mainnet | ERC20 stablecoin contract | Prime Layer (via ERC4626 vault) |
-| **Prime** | Mainnet | Generator Layer | Halo Layer + Core Approved Collateral |
+| **Prime** | Mainnet | Generator Layer | Halo Layer (including Core Halos) |
 | **Halo** | Mainnet | Prime Layer | RWA strategies, custodians, regulated endpoints |
 | **Foreign** | Altchains | Mainnet Prime (via bridge) | Foreign Halo Layer |
 
@@ -54,8 +54,8 @@ What differs between PAU deployments:
 
 - Receives capital from Generator via ERC4626 vault
 - Deploys to:
-  - **Halo Layer** — the primary long-term deployment path
-  - **Core Approved Collateral** — legacy DeFi endpoints (major Morpho vaults, Curve pools, Aave pools) directly approved by Sky Core
+  - **Halo Layer** — the primary long-term deployment path (includes both Prime-created Halos and Core Halos)
+  - **Core Halos** — legacy DeFi (Morpho vaults, Aave pools, SparkLend) wrapped as Halo Units under Core Council governance
   - **Foreign Primes** — via bridge for cross-chain deployment
 - Each Prime controls its own vault's liquidity availability
 
@@ -89,7 +89,7 @@ What differs between PAU deployments:
 |------------|-----------|---------|
 | Generator → Prime | ERC4626 vault | Rate limits on deposit/withdraw |
 | Prime → Halo | ERC4626 vault (or other vault types) | Rate limits + vault-specific parameters |
-| Prime → Core Approved Collateral | Direct (ERC4626, Aave, Curve) | Rate limits + protocol-specific parameters |
+| Prime → Core Halos | Via CoreHaloFacet (ERC4626, Aave, Curve interfaces) | Rate limits + protocol-specific parameters |
 | Prime → Foreign Prime | Direct bridge transfer (no vault) | Rate limits on LayerZero/CCTP transfers |
 | Foreign Prime → Foreign Halo | Various vault types | Rate limits + vault-specific parameters |
 | Halo → RWA/Custodian | Asset transfer | Rate limits on transfers to custodian addresses |
@@ -171,8 +171,8 @@ This means:
    │    RWA/Custodian                      RWA/Custodian
    │    Endpoints                          Endpoints
    │
-   └──► Core Approved Collateral
-        (Morpho, Aave, Curve - legacy DeFi approved by Sky Core)
+   └──► Core Halos
+        (Morpho, Aave, SparkLend - legacy DeFi wrapped as Halo Units)
 ```
 
 **Note: Risk Capital Tokens**

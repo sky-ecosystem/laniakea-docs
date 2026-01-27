@@ -1,6 +1,6 @@
 # Correlation Framework (Category Caps + Capacity Rights)
 
-**Last Updated:** 2026-01-03
+**Last Updated:** 2026-01-27
 **Status:** Draft
 
 This framework has two layers:

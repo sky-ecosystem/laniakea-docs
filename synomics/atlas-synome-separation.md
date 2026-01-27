@@ -2,7 +2,7 @@
 
 **Status:** Draft
 **Pillar:** 8
-**Last Updated:** 2025-12-27
+**Last Updated:** 2026-01-27
 
 ---
 
@@ -54,7 +54,7 @@ A graph database containing ALL operational data, structured for machine consump
 
 | Current Atlas Location | Synome Destination | Notes |
 |------------------------|-------------------|-------|
-| Agent Artifacts (A.6.1-A.6.5) | Agent Nodes | Complete specs for Spark, Grove, Keel, Launch, Obex |
+| Agent Artifacts (A.6.1-A.6.6) | Agent Nodes | Complete specs for all 6 Primes (5 Stars + 1 Institutional) |
 | Instance Configuration Documents | Instance Nodes | Contract addresses, rate limits, parameters |
 | Active Data Documents (A.1) | State Nodes | Modifiable outside governance cycles |
 | Budget Documents | Budget Nodes | Rates, allocations, disbursement rules |
@@ -225,7 +225,7 @@ The Synome structure enables a crucial property: **Synomic Agents can be fully a
 
 ### What Makes This Possible
 
-A Synomic Agent (Prime, Halo, Executor) exists entirely within the Synome:
+A Synomic Agent (Prime, Halo, Generator) exists entirely within the Synome:
 
 | Property | Implication |
 |----------|-------------|
@@ -266,9 +266,9 @@ This enables: sealed-bid auctions, multi-party settlement, cross-jurisdictional 
 
 ### Agent Types
 
-**Primes** — Specialized, heavyweight Synomic Agents (5 currently: Spark, Grove, Keel, Launch 3, Obex). Require transformation primitives, foundations, nested contributors.
+**Primes** — Specialized, heavyweight Synomic Agents. Two subtypes: Star Primes (5: Spark, Grove, Keel, Star4, Star5) and Institutional Primes (1: Obex). Require transformation primitives, foundations, nested contributors.
 
-**Halos** — General-purpose Synomic Agents. Can wrap any value and give it agency. A tokenized building becomes an entity that can manage itself; a portfolio becomes an autonomous allocator. Halos are the fractal layer — they proliferate.
+**Halos** — General-purpose Synomic Agents. Can wrap any value and give it agency. Organized into **Halo Classes** (shared SC + legal infra) containing **Halo Units** (individual products). Examples: tranched Passthrough Halo (senior/junior sharing one PAU), NFAT Facility (same buybox, varying duration/size). Halos are the fractal layer — they proliferate.
 
 **Executors** — Perform privileged operations with collateral backing. Post escrow, face slashing for failures.
 
@@ -331,7 +331,7 @@ Each Prime Agent creates their own "mini-Atlas" to explain their Agent Artifact:
 **Contents (derived from Agent Artifact):**
 - What the Prime does (strategic overview from A.6 introduction sections)
 - Key parameters explained in plain language
-- Risk disclosures without full GRF formulas
+- Risk disclosures without full Risk Framework formulas
 - Governance processes for the Prime (Root Edit Primitive configuration)
 - How to participate (staking, using services)
 
@@ -345,12 +345,20 @@ Each Prime Agent creates their own "mini-Atlas" to explain their Agent Artifact:
 
 **Current Prime Agents needing Mini-Atlases:**
 
+*Star Primes:*
+
 | Prime | Focus | SubProxy |
 |-------|-------|----------|
 | Spark | DeFi: SLL (6 chains), SparkLend, Spark Savings | `0x3300...af8c4` |
 | Grove | Institutional: CLOs, RWA allocations | `0x1369...891Ba` |
 | Keel | Solana ecosystem, USDS adoption | `0x355C...2c310` |
-| Launch Agent 3 | Distribution rewards, integration boosts | TBD |
+| Star4 | TBD | TBD |
+| Star5 | TBD | TBD |
+
+*Institutional Primes:*
+
+| Prime | Focus | SubProxy |
+|-------|-------|----------|
 | Obex | Agent incubator (Prime + Halo development) | `0x8be0...c8071` |
 
 ### Halo Mini-Atlases
@@ -368,13 +376,19 @@ For Halos with external participants (like Passthrough Halos with institutional 
 ### The Pattern
 
 ```
-Sky Atlas           → Describes Sky Core (A.0-A.5 + A.6 intro)
-  ├─ Spark Mini-Atlas    → Describes Spark Agent Artifact node
-  │    ├─ SLL docs       → Describes SLL Instance nodes
-  │    ├─ SparkLend docs → Describes SparkLend Instance nodes
-  │    └─ Halo A docs    → Describes Halo A node
-  ├─ Grove Mini-Atlas    → Describes Grove Agent Artifact node
-  │    └─ Halo B docs    → Describes Halo B node
+Sky Atlas               → Describes Sky Core (A.0-A.5 + A.6 intro)
+  ├─ Spark Mini-Atlas        → Describes Spark Agent Artifact node
+  │    ├─ SLL docs           → Describes SLL Instance nodes
+  │    ├─ SparkLend docs     → Describes SparkLend Instance nodes
+  │    └─ Halo A docs        → Describes Halo A node
+  │         └─ Halo Class 1  → Shared PAU + sentinel + legal
+  │              ├─ Unit 1   → Senior tranche
+  │              └─ Unit 2   → Junior tranche
+  ├─ Grove Mini-Atlas        → Describes Grove Agent Artifact node
+  │    └─ Halo B docs        → Describes Halo B node (NFAT Facility)
+  │         └─ Halo Class 1  → Shared buybox + lpha-nfat
+  │              ├─ NFAT 1   → 6mo term, 10M
+  │              └─ NFAT 2   → 12mo term, 25M
   └─ ...
 ```
 
@@ -435,14 +449,12 @@ The Atlas describes intent; the Synome encodes implementation.
 
 Sentinels operate on Synome data, not Atlas text:
 
-| Sentinel | Synome Data Consumed | Synome Data Written |
-|----------|---------------------|---------------------|
+| Beacon | Synome Data Consumed | Synome Data Written |
+|--------|---------------------|---------------------|
 | stl-base | Prime pBEAM permissions, rate limits | Bid submissions, capacity requests |
-| stl-erc | LCTS config, queue state | Settlement transactions, exchange rates |
-| stl-unit | Halo parameters, risk thresholds | Status updates, breach alerts |
-| stl-auction | Bid submissions, capacity pools | Clearing prices, allocations |
-| stl-prime | Prime Artifact config | Encumbrance calculations, penalty assessments |
-| stl-verify | All above (read-only) | Verification attestations |
+| lpha-lcts | LCTS config, queue state, Halo parameters | Settlement transactions, exchange rates, status updates |
+| lpha-auction | Bid submissions, capacity pools | Clearing prices, allocations |
+| lpla-checker | All above (read-only) | Verification attestations |
 
 ### BEAM Hierarchy in Synome
 

@@ -182,7 +182,7 @@ Algorithmic SKY buyback using protocol surplus.
 
 | Property | Value |
 |----------|-------|
-| Source | TMF Step 4 allocation (10% × Net Revenue Ratio) |
+| Source | TMF Step 4 allocation (20% × Net Revenue Ratio) |
 | Mechanism | Programmatic open-market buybacks |
 | Distribution | Purchased SKY distributed to stakers |
 | Governance | Parameters subject to change through decentralized governance |
@@ -300,28 +300,59 @@ Global senior risk capital for all USDS; LCTS-based with queue settlement.
 
 ### Loss Absorption Waterfall
 
-Defined sequence for absorbing losses.
+Defined sequence for absorbing losses, structured in three tiers.
 
 ```
 Loss Event
     ↓
-┌─────────────────────────────┐
-│  First Loss Capital (10%)   │  ← Prime's IJRC absorbs first
-├─────────────────────────────┤
-│   Remaining JRC (pro-rata)  │  ← IJRC + EJRC share proportionally
-├─────────────────────────────┤
-│     Senior Risk Capital     │  ← Only after JRC = 0
-├─────────────────────────────┤
-│   Genesis Capital Haircut   │  ← Ultimate backstop
-├─────────────────────────────┤
-│   USDS Peg Adjustment       │  ← Last resort
-└─────────────────────────────┘
+┌─── PRIME-LEVEL (per-Prime) ─────────────────────────────────────┐
+│  1. First Loss Capital (10%)   │  ← Prime's IJRC absorbs first  │
+├────────────────────────────────┤                                │
+│  2. Remaining JRC (pro-rata)   │  ← IJRC + EJRC proportionally  │
+├────────────────────────────────┤                                │
+│  3. Agent Token Inflation      │  ← Dilute Prime token holders  │
+├────────────────────────────────┤                                │
+│  4. TISRC                      │  ← Prime-isolated SRC          │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─── SYSTEM-LEVEL (shared across all Primes) ─────────────────────┐
+│  5. Global SRC (srUSDS)        │  ← System-wide senior capital  │
+├────────────────────────────────┤                                │
+│  6. SKY Token Inflation        │  ← Dilute protocol token       │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─── NUCLEAR OPTIONS (protocol reserves / peg) ───────────────────┐
+│  7. Genesis Capital Haircut    │  ← Protocol reserves           │
+├────────────────────────────────┤                                │
+│  8. USDS Peg Adjustment        │  ← Final backstop              │
+└─────────────────────────────────────────────────────────────────┘
 ```
+
+| Step | Capital Layer | Tier | Mechanism |
+|------|---------------|------|-----------|
+| **1** | First Loss Capital | Prime | First 10% of IJRC absorbed before any other capital |
+| **2** | Remaining JRC | Prime | IJRC + EJRC share losses proportionally |
+| **3** | Agent Token Inflation | Prime | Dilute Prime token holders (potentially to infinity) |
+| **4** | TISRC | Prime | Prime-isolated senior risk capital |
+| **5** | Global SRC (srUSDS) | System | Shared senior risk capital pool |
+| **6** | SKY Token Inflation | System | Dilute SKY holders at protocol level |
+| **7** | Genesis Capital | Nuclear | Protocol reserves haircut |
+| **8** | USDS Peg Adjustment | Nuclear | Final backstop — affects all USDS holders |
 
 **First Loss Capital (FLC):**
 - First 10% of Total JRC absorbed solely by Prime's own capital (IJRC)
 - Ensures Prime has direct skin in the game for initial losses
 - Losses beyond FLC allocated pro-rata across remaining JRC (internal + external)
+
+**Token Inflation Layers:**
+- Agent Token Inflation (step 3) dilutes the specific Prime's token holders
+- SKY Token Inflation (step 6) dilutes protocol-level token holders
+- Both can theoretically cover unlimited losses through dilution
+
+**Nuclear Options:**
+- Steps 7-8 should never be reached under normal conditions
+- Genesis Capital is the protocol's reserve fund
+- Peg Adjustment is the absolute last resort, affecting all USDS holders
 
 ---
 
@@ -467,7 +498,7 @@ Process for modifying Atlas documents through governance.
 | **1. Security & Maintenance**     | 21% (Genesis) / 4-10% (Post-Genesis)    | Core teams, security, risk management          |
 | **2. Aggregate Backstop Capital** | Variable (target: 1.5% of total supply) | Solvency buffer for bad debt protection        |
 | **3. Fortification Conserver**    | 20% × Net Revenue Ratio                 | Legal defense, resilience, unquantifiable risk |
-| **4. Smart Burn Engine**          | 10% × Net Revenue Ratio                 | SKY buybacks                                   |
+| **4. Smart Burn Engine**          | 20% × Net Revenue Ratio                 | SKY buybacks                                   |
 | **5. Staking Rewards**            | 100% of remainder                       | Distributed to SKY stakers                     |
 
 **Key Property:** Each step calculates allocation based on what remains after previous step (sequential waterfall).
@@ -614,7 +645,7 @@ ASC and DAB are the Asset Liability Management (ALM) liquidity layers that keep 
 
 Prime Agents are required to maintain ASC and DAB proportional to the capital they deploy from the Sky Collateral Portfolio, and the system can support rentals that transfer ASC/DAB obligations together between Primes.
 
-More detail: `active/risk-framework/asc.md`.
+More detail: `risk-framework/asc.md`.
 
 ---
 

@@ -1,9 +1,9 @@
-# Risk Framework (GRF)
+# Risk Framework
 
 **Status:** Draft
-**Last Updated:** 2026-01-03
+**Last Updated:** 2026-01-27
 
-This folder replaces the former monolithic `general-risk-framework.md` by splitting it into focused modules.
+This folder contains the modular Risk Framework documentation.
 
 ## Module Index
 
@@ -29,8 +29,8 @@ Capital requirements should reflect: **what is the maximum loss we could be forc
 2. **Data infrastructure** — How to track USDS lot ages for liability duration analysis
 3. **Halo Unit treatment** — How do Halo Unit tokens get classified? (Likely as unmatched given redemption constraints)
 4. **Rate limit integration** — How capital requirements translate to PAU rate limits
-5. **Sentinel implementation** — Formulas and algorithms for stk-verify calculations
+5. **Beacon implementation** — Formulas and algorithms for lpla-checker calculations
 
 ---
 
-*This document defines the General Risk Framework. For Sentinel integration details, see the Sentinel Network document.*
+*This document defines the Risk Framework. For Sentinel integration details, see the Sentinel Network document.*

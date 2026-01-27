@@ -1,6 +1,6 @@
 # Collateralized Lending Risk (Jump-to-Default + Liquidation Loss)
 
-**Last Updated:** 2026-01-03
+**Last Updated:** 2026-01-27
 
 This document covers risk for collateralized lending positions where losses arise from **fast price moves**, **liquidation mechanics**, and **execution/oracle constraints** (as opposed to pull-to-par duration mechanics).
 

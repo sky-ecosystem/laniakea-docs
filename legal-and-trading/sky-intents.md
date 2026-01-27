@@ -2,7 +2,7 @@
 
 **Status:** Draft
 **Pillar:** 8
-**Last Updated:** 2026-01-04
+**Last Updated:** 2026-01-27
 
 ---
 
@@ -185,7 +185,7 @@ Exchange Halos are **infrastructure providers**, not capital deployers. Like Ide
 | **Revenue source** | Investment returns | Trading fees |
 | **Capital deployment** | Yes | No (prohibited) |
 | **Asset custody** | Holds assets via PAU | No custody (intents settle peer-to-peer) |
-| **Operated by** | stl-unit | stl-exchange |
+| **Operated by** | lpha-lcts | lpha-exchange |
 
 ### Market Configuration
 
@@ -285,11 +285,11 @@ Multiple Exchange Halos can operate simultaneously:
 
 ---
 
-## Orderbook Sentinel (stl-exchange)
+## Exchange Operator (lpha-exchange)
 
 ### Overview
 
-**stl-exchange** operates the off-chain orderbook and matching engine for an Exchange Halo.
+**lpha-exchange** operates the off-chain orderbook and matching engine for an Exchange Halo. Exchange operators are LPHA (Low Power, High Authority) beacons — they operate on behalf of Exchange Halos with high authority but execute deterministically based on governance rules. See `beacon-framework.md` for the full beacon taxonomy.
 
 **Level:** Per Exchange Halo
 **Operator:** Exchange Halo GovOps
@@ -298,7 +298,7 @@ Multiple Exchange Halos can operate simultaneously:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           stl-exchange                                    │
+│                           lpha-exchange                                    │
 │                                                                          │
 │  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────────┐  │
 │  │   Order Gateway  │  │  Matching Engine │  │  Settlement Builder  │  │
@@ -322,12 +322,12 @@ Multiple Exchange Halos can operate simultaneously:
 
 ```
 1. SUBMIT
-   User sends order to stl-exchange (off-chain API)
+   User sends order to lpha-exchange (off-chain API)
    - Order type: LIMIT, MARKET, IOC, FOK
    - Includes signed intent (or intent is created on match)
 
 2. VALIDATE
-   stl-exchange validates:
+   lpha-exchange validates:
    - Signature validity
    - Balance sufficiency (query on-chain)
    - Identity Network attestation (for restricted markets)
@@ -346,7 +346,7 @@ Multiple Exchange Halos can operate simultaneously:
 
 5. SETTLE
    Periodically (or on threshold):
-   - stl-exchange creates settlement batch
+   - lpha-exchange creates settlement batch
    - Submits to on-chain settlement contract
    - Atomic execution of all matched trades
 
@@ -363,13 +363,13 @@ The matching engine operates with strict fairness guarantees:
 | Property | Implementation |
 |----------|----------------|
 | **Price-time priority** | Best price wins; ties broken by submission time |
-| **No front-running** | stl-exchange cannot see orders before placement |
+| **No front-running** | lpha-exchange cannot see orders before placement |
 | **Deterministic** | Same inputs produce same matches |
 | **Auditable** | Match records stored for verification |
 
 ### Settlement Batching
 
-stl-exchange batches trades for efficiency:
+lpha-exchange batches trades for efficiency:
 
 ```
 Settlement triggers:
@@ -387,7 +387,7 @@ Batching reduces gas costs and enables atomic cross-market settlement.
 | **Settlement revert** | Retry with subset; isolate failing trades |
 | **Balance insufficient** | Cancel order, notify user |
 | **Attestation expired** | Cancel order, notify user |
-| **stl-exchange downtime** | Orders remain in book; resume on recovery |
+| **lpha-exchange downtime** | Orders remain in book; resume on recovery |
 
 ---
 
@@ -484,11 +484,11 @@ This makes delegated limits enforceable on-chain without giving stl-base arbitra
    - Validates against bounds
    - If compliant, stl-base signs intent
 
-3. stl-base submits order to stl-exchange
+3. stl-base submits order to lpha-exchange
    - Order placed in orderbook
    - Matches against other orders
 
-4. stl-exchange creates settlement batch
+4. lpha-exchange creates settlement batch
    - Includes Prime's matched trade
    - Submits to settlement contract
 
@@ -524,7 +524,7 @@ Users who aren't Primes trade directly with their own wallets:
 1. User signs intent with their wallet
    "Sell 1000 USDS for at least 990 sUSDS, expires in 1 hour"
 
-2. User submits order to stl-exchange
+2. User submits order to lpha-exchange
    - Order placed in orderbook
    - Intent stored (already signed)
 
@@ -532,7 +532,7 @@ Users who aren't Primes trade directly with their own wallets:
    - Price-time priority
    - Fair matching
 
-4. stl-exchange creates settlement batch
+4. lpha-exchange creates settlement batch
    - User's matched trade included
    - Submitted to settlement contract
 
@@ -546,7 +546,7 @@ Users who aren't Primes trade directly with their own wallets:
 Users sign intents **before** order submission:
 - User specifies price, amount, and expiry
 - Signs intent authorizing the trade
-- Submits signed intent + order to stl-exchange
+- Submits signed intent + order to lpha-exchange
 - If order matches, intent already authorized — settlement can proceed
 
 ### User vs Prime Differences
@@ -578,7 +578,7 @@ The exchange doesn't need separate identity checks — it just attempts the trad
 
 ```
 Settlement Flow:
-  1. stl-exchange submits settlement batch
+  1. lpha-exchange submits settlement batch
   2. Settlement contract executes token transfers
   3. Each token's transfer function checks: is recipient in an accepted Identity Network?
      - If yes → transfer succeeds
@@ -599,15 +599,15 @@ This is a UX optimization — it prevents users from seeing orders they can't fi
 
 ### Attestation Events
 
-stl-exchange can subscribe to Identity Network events:
+lpha-exchange can subscribe to Identity Network events:
 
 ```
-Events from stl-identity:
+Events from lpha-identity:
   - MemberAdded(address)
   - MemberRemoved(address)
 ```
 
-When an address is removed, stl-exchange can proactively:
+When an address is removed, lpha-exchange can proactively:
 1. Cancel open orders from that address for restricted tokens
 2. Prevent new order submission for restricted tokens
 
@@ -673,9 +673,9 @@ Sky Intents shifts MEV extraction from on-chain actors (searchers, validators) t
 
 The system relies on exchange operator incentives (reputation, fees, governance oversight) rather than cryptographic guarantees.
 
-### stl-exchange Trust Model
+### lpha-exchange Trust Model
 
-Users trust stl-exchange to:
+Users trust lpha-exchange to:
 1. **Match fairly** — Price-time priority, no preferential treatment
 2. **Settle promptly** — Submit batches without undue delay
 3. **Not censor** — Accept all valid orders
@@ -700,7 +700,7 @@ Sky Intents rate limiting for Primes is intended to mirror the Allocation System
 
 | Failure | Impact | Recovery |
 |---------|--------|----------|
-| **stl-exchange down** | No new matches; existing orders preserved | Resume on recovery |
+| **lpha-exchange down** | No new matches; existing orders preserved | Resume on recovery |
 | **Settlement contract paused** | No settlements; orders accumulate | Governance unpauses |
 | **Identity Network down** | Can't verify new attestations | Use cached status; degrade gracefully |
 | **Bad settlement batch** | Batch reverts | Retry with subset |
@@ -738,7 +738,7 @@ Intent Settlement Contract:
   → PAUs (source/destination for Prime trades)
   → Synome (trade logging)
 
-stl-exchange:
+lpha-exchange:
   → Intent Settlement Contract (submit settlement batches)
   → stl-base instances (receive Prime orders)
   → Identity Networks (optional eligibility pre-checks for UX)
@@ -871,7 +871,7 @@ This principle ensures the intent specification is **minimal yet complete** for 
 | Document | Relationship |
 |----------|--------------|
 | `identity-network.md` | Identity Networks enable token-level transfer restrictions |
-| `sentinel-network.md` | stl-exchange is defined as a Sentinel type |
+| `beacon-framework.md` | lpha-exchange is defined as an LPHA beacon |
 | `risk-framework/README.md` | Risk framework governs Prime trading bounds |
 
 ---
@@ -906,7 +906,7 @@ Result: delegated trading is “live”, but only within a bounded trading balan
    - `amountInMax = 500k USDS`
    - `minOutPerIn` computed from the oracle price with the configured slippage haircut
    - expiry within policy bounds
-3. `stl-exchange` matches the order off-chain and submits a settlement batch.
+3. `lpha-exchange` matches the order off-chain and submits a settlement batch.
 4. Settlement:
    - validates the vault’s EIP-1271 signature
    - calls the vault’s **stateful** validation hook (enforces allowed pair, oracle availability, fill-time slippage, and consumes per-window notional)

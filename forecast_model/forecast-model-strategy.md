@@ -1,7 +1,11 @@
 # Sky Forecast Model Strategy
 
 **Status:** Draft
-**Last Updated:** 2026-01-08
+**Last Updated:** 2026-01-27
+
+---
+
+> **Note on Simplifications:** This forecast model is intentionally simplified for practical forecasting purposes. It implements a 3-step TMF waterfall (Security, Backstop, Staking) rather than the full 5-step waterfall defined in the whitepaper (which includes Fortification Conserver and Smart Burn Engine as separate steps). The backstop allocation uses a fixed rate rather than the dynamic formula based on buffer fill level. These simplifications allow for clearer scenario modeling while the full TMF mechanics are documented in `whitepaper/appendix-a-protocol-features.md` and `whitepaper/appendix-c-treasury-management-function.md`.
 
 ---
 

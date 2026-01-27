@@ -1,6 +1,6 @@
 # Market Risk (FRTB-Style Drawdown for Unmatched Liquid Assets)
 
-**Last Updated:** 2026-01-03
+**Last Updated:** 2026-01-27
 
 This document defines the drawdown-based capital treatment used for the **unmatched portion** of assets that must be resilient to forced sale during stress.
 

@@ -1,6 +1,6 @@
 # Actively Stabilizing Collateral (ASC)
 
-**Last Updated:** 2026-01-03
+**Last Updated:** 2026-01-27
 
 ASC is the Asset Liability Management (ALM) requirement that each Prime must satisfy to keep USDS near $1 during downward peg pressure. Complementary to ASC, each Prime must also maintain a Demand Absorption Buffer (DAB) to provide sell-side liquidity during upward peg pressure.
 
@@ -120,5 +120,5 @@ Target state (Laniakea intent):
 - Concentration and portfolio-risk controls live in `correlation-framework.md` and the capital modules; ASC determines “how fast can we buy” during peg defense, not how much capital buffers credit/market losses.
 
 See also:
-- Whitepaper summary: `active/whitepaper/appendix-a-protocol-features.md`
-This document is derived from the Sky Atlas Stability Scope (ALM / ASC / DAB sections), but `active/` is intended to be distributed standalone without bundled reference material.
+- Whitepaper summary: `whitepaper/appendix-a-protocol-features.md`
+This document is derived from the Sky Atlas Stability Scope (ALM / ASC / DAB sections).

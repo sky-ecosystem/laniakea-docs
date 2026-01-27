@@ -1,7 +1,7 @@
 # Risk Capital Ingression
 
 **Status:** Draft
-**Last Updated:** 2026-01-01
+**Last Updated:** 2026-01-27
 
 ---
 
@@ -420,4 +420,4 @@ All curves use the same quarter-circle shape with 3:1 max-to-anchor ratio.
 
 ---
 
-*This document defines the continuous ingression rate model. For LCTS queue mechanics, see `active/smart-contracts/lcts.md`. For capital requirements, see `active/risk-framework/README.md`.*
+*This document defines the continuous ingression rate model. For LCTS queue mechanics, see `smart-contracts/lcts.md`. For capital requirements, see `risk-framework/README.md`.*

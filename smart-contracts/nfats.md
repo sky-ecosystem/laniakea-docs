@@ -1,7 +1,7 @@
 # Non-Fungible Allocation Token Standard (NFATS) — Business Requirements
 
 **Status:** Draft
-**Last Updated:** 2025-01-15
+**Last Updated:** 2026-01-27
 
 ---
 
@@ -44,13 +44,40 @@ NFATS solves a different problem than LCTS:
 
 ---
 
+## Halo Class Structure
+
+An **NFAT Facility** is a **Halo Class** — a grouping of Halo Units (individual NFAT deals) that share the same smart contract infrastructure and legal framework (buybox).
+
+### What a Halo Class (NFAT Facility) Shares
+
+| Component | Description |
+|-----------|-------------|
+| **PAU** | Controller + ALMProxy + RateLimits for the Facility |
+| **Sentinel** | lpha-nfat formation manages all NFATs in the Facility |
+| **Legal Buybox** | Acceptable parameter ranges, counterparty requirements, recourse mechanisms |
+| **Queue + Redeem Contracts** | Shared infrastructure for capital flows |
+
+### What Individual NFATs (Halo Units) Can Vary
+
+| Parameter | Variation Within Buybox |
+|-----------|------------------------|
+| **Duration** | e.g., 6-12 months vs 12-24 months |
+| **Size** | Different notional amounts per deal |
+| **APY** | Within the facility's acceptable range |
+| **Counterparty** | Different Primes for each NFAT |
+| **Specific Terms** | Bespoke conditions within buybox constraints |
+
+This structure enables scalable bespoke deals: one legal framework, one sentinel, many individual positions with varying terms.
+
+---
+
 ## System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                              HALO                                        │
 │                                                                          │
-│   Operates one or more NFAT Facilities                                   │
+│   Operates one or more NFAT Facilities (Halo Classes)                    │
 │   Each Facility = separate smart contract with its own buybox            │
 │                                                                          │
 └────────────────────────────────────┬────────────────────────────────────┘
@@ -680,6 +707,17 @@ An NFAT can optionally be wrapped in a fungible ERC-20 token, allowing the deal 
 - Can be deployed per-NFAT or as a factory pattern
 - Reward claiming and redemption flows need to account for wrapper as intermediary
 - Transfer restrictions on the underlying NFAT (if any) apply to the wrapper depositing/withdrawing
+
+---
+
+## Related Documents
+
+| Document | Relationship |
+|----------|--------------|
+| `structuring-halo.md` | Business overview of Structuring Halos using NFATS |
+| `lcts.md` | Alternative token standard for pooled, fungible positions |
+| `sentinel-network.md` | lpha-nfat sentinel specification |
+| `passthrough-halo.md` | Alternative Halo type using LCTS |
 
 ---
 
