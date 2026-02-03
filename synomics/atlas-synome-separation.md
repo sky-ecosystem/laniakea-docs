@@ -577,3 +577,15 @@ The Atlas/Synome separation resolves the fundamental tension between comprehensi
 The Atlas becomes the human-interpretable window into an arbitrarily complex machine-readable system. Every stakeholder can understand their rights and the system's principles without needing to parse operational specifications.
 
 **Key Insight:** Agent Artifacts are already structured for machines (addresses, rate limits, ICDs). The Atlas/Synome split formalizes what's implicit: A.0-A.5 + A.6 intro are the Atlas; A.6.1-A.6.5 details are the Synome.
+
+---
+
+## Related Documents
+
+| Document | Relationship |
+|----------|--------------|
+| `synome-layers.md` | The 5-layer architecture and artifact hierarchy (synart, telart, embart) |
+| `syno-teleonomic-paradigm.md` | External interaction model — how Synomic Agents operate through beacons |
+| `beacon-framework.md` | How beacons derive authority envelopes from governance |
+| `probabilistic-mesh.md` | The soft knowledge layer that informs governance decisions |
+| `short-term-actuators.md` | Phase 1 beacon implementation — teleonome-less beacons interacting with Synome-MVP |

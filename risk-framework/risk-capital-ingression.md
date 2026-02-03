@@ -364,7 +364,7 @@ Total Effective Risk Capital = (Effective JRC + Effective SRC) × MC_multiplier
 Capital Adequacy = Total Effective Risk Capital ≥ Required Risk Capital
 ```
 
-Where Required Risk Capital comes from the General Risk Framework (SPTP matching, gap risk, etc.).
+Where Required Risk Capital comes from the Risk Framework (duration matching, gap risk, etc.).
 
 ---
 

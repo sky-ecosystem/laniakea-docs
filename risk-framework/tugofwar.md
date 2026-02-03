@@ -1,4 +1,4 @@
-# SPTP Capacity Tug-of-War Mechanism
+# Duration Capacity Tug-of-War Mechanism
 
 **Status:** Draft
 **Last Updated:** 2026-01-27
@@ -7,7 +7,7 @@
 
 ## Overview
 
-When Lindy-measured SPTP capacity doesn't match reservations, all capacity must be allocated through tugging. The Tug-of-War mechanism allocates capacity fairly based on need, distance, and effective value.
+When Lindy-measured duration capacity doesn't match reservations, all capacity must be allocated through tugging. The Tug-of-War mechanism allocates capacity fairly based on need, distance, and effective value.
 
 **Two phases:**
 1. **Phase 1: Tug-of-War** — Primes tug on all buckets (including their own) to fill their need
@@ -456,7 +456,7 @@ Together, these guarantee that dust amounts get cleaned up in bounded iterations
 
 ## Connection to Risk Framework
 
-The Tug-of-War mechanism is part of the weekly SPTP capacity allocation process:
+The Tug-of-War mechanism is part of the weekly duration capacity allocation process (ALDM):
 
 1. **Lindy Measurement** — Calculate liability duration distribution
 2. **Structural Caps** — Apply governance caps per bucket
@@ -477,4 +477,4 @@ See `README.md` for the broader capital requirement framework.
 
 ---
 
-*This document describes the SPTP capacity redistribution mechanism. For the broader risk framework, see `README.md`.*
+*This document describes the duration capacity redistribution mechanism. For the broader risk framework, see `README.md`.*

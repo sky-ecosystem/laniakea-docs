@@ -467,8 +467,8 @@ Token rewards to incentivize USDS/sUSDS adoption through tagging. Rewards are ti
 
 | Property | Value |
 |----------|-------|
-| Recipient | Stars (who then distribute at their discretion) |
-| Split | No enforced split — each Star determines how to share with integrators |
+| Recipient | Primes (who then distribute at their discretion) |
+| Split | No enforced split — each Prime determines how to share with integrators |
 | Eligible Assets | USDS and sUSDS (both count as adoption) |
 | Minimum Balance | None |
 
@@ -503,7 +503,7 @@ Two paths qualify for Tier 3:
 
 **Tagging Mechanism:**
 
-Tagging associates a USDS/sUSDS balance with a Star for Distribution Reward purposes.
+Tagging associates a USDS/sUSDS balance with a Prime for Distribution Reward purposes.
 
 | Method | How It Works |
 |--------|--------------|
@@ -524,17 +524,17 @@ Tagging associates a USDS/sUSDS balance with a Star for Distribution Reward purp
 
 #### Liability Duration Rewards
 
-Rewards for Primes that source tagged USDS demand feeding into the SPTP (Stressed Pull-to-Par) system.
+Rewards for Primes that source tagged USDS demand feeding into the ALDM (Asset-Liability Duration Matching) system.
 
 | Property | Value |
 |----------|-------|
 | Purpose | Compensate Primes for bringing sticky USDS demand (liability duration) |
-| Eligibility | Tagged USDS that sits in SPTP buckets |
+| Eligibility | Tagged USDS that sits in Duration Buckets |
 | Split | 2/3 to tagging Prime, 1/3 to Sky (initial setting) |
 
 **How It Works:**
 
-1. USDS accounts accrue liability duration over time and are placed in SPTP buckets based on their duration profile
+1. USDS accounts accrue liability duration over time and are placed in Duration Buckets based on their duration profile
 2. Primes tag USDS accounts, giving them a proportional "share" of each bucket's underlying demand
 3. When a Prime pays fees to reserve capacity, their reservation "tugs" on buckets to match their duration needs
 4. Fees flow back to whoever tagged the USDS that actually gets tugged
@@ -600,17 +600,17 @@ Rewards for Primes providing compliant governance frontends.
 
 ---
 
-### Prime: SPTP Capacity Reservation (Planned)
+### Prime: Duration Capacity Reservation (Planned)
 
 Acquire duration-matching capacity via auctions.
 
 | Property | Value |
 |----------|-------|
-| Purpose | Reserve SPTP bucket capacity for long-duration assets |
+| Purpose | Reserve Duration Bucket capacity for long-duration assets |
 | Mechanism | Weekly sealed-bid auctions |
 | Benefit | Lower capital requirements when assets match liability duration |
 
-**101 SPTP Buckets:**
+**101 Duration Buckets:**
 - Each bucket = 0.5 months (15 days)
 - Bucket 0 = immediate liquidity
 - Bucket 84 = 42 months (JAAA CLO AAA)
@@ -816,9 +816,9 @@ Generators have a limited set of specific primitives available to them:
 
 | Property | Value |
 |----------|-------|
-| Purpose | Distribute SPTP auction income to Primes |
+| Purpose | Distribute duration auction income to Primes |
 | Recipients | Primes that have sourced sticky demand (long-duration liabilities) |
-| Source | Revenue from SPTP capacity auctions |
+| Source | Revenue from Duration Bucket capacity auctions |
 
 ---
 

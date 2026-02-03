@@ -253,3 +253,16 @@ Embodiments differ in **local cognitive power**, which constrains what EMAs they
 
 > *The syno‑teleonomic paradigm separates private cognition from public action: teleonomes dream, embodiments host, embodied agents execute, beacons externalize intent under law, and the synome governs the aperture where intelligence touches reality.*
 
+---
+
+## Related Documents
+
+| Document | Relationship |
+|----------|--------------|
+| `synome-layers.md` | Internal teleonome structure — artifact hierarchy (synart, telart, embart), knowledge flows, the human interface pattern |
+| `probabilistic-mesh.md` | How teleonomes represent and update knowledge — truth values, ossification, evidence flow |
+| `beacon-framework.md` | Detailed beacon taxonomy, lifecycle, and naming conventions |
+| `actuator-perspective.md` | First-person view from an actuator embodiment |
+| `dreamer-perspective.md` | First-person view from a dreamer embodiment |
+| `security-and-resources.md` | Resource management and self-corruption prevention |
+

@@ -327,7 +327,7 @@ The target encumbrance ratio is ≤90%, providing a 10% buffer above minimum req
 
 ### Duration Matching
 
-Sky tracks USDS lot ages to estimate how long holders will actually stay, using a Lindy-based model: the longer someone has held, the longer they're likely to continue holding. This liability duration data determines capacity in duration buckets, measured by Stressed Pull-to-Par (SPTP) — the time until an asset converges to its fundamental value under stress conditions.
+Sky tracks USDS lot ages to estimate how long holders will actually stay, using the Lindy Duration Model: the longer someone has held, the longer they're likely to continue holding. This liability duration data determines capacity in Duration Buckets, which are matched against asset durations measured by Stressed Pull-to-Par (SPTP) — the time until an asset converges to its fundamental value under stress conditions. This Asset-Liability Duration Matching (ALDM) system enables capital-efficient deployment of long-duration assets.
 
 The risk framework matches asset characteristics to liability profiles: assets with longer time-to-liquidity require backing from longer-duration liabilities. When an asset's duration matches available liability capacity, it only needs capital for fundamental risk (credit default, smart contract failure). Unmatched assets must hold additional capital covering potential mark-to-market losses from credit spread widening — temporary price drops that recover as spreads normalize.
 
@@ -532,7 +532,7 @@ For implementation details beyond this whitepaper:
 
 **Risk Framework:**
 - `risk-framework/capital-formula.md` — Risk capital calculations
-- `risk-framework/duration-model.md` — SPTP buckets and liability duration
+- `risk-framework/duration-model.md` — Duration Buckets and liability duration (Lindy Duration Model)
 - `risk-framework/asset-classification.md` — Asset type classifications
 
 **Halos:**

@@ -142,7 +142,7 @@ Term definitions for the Sky Protocol.
 | **Settlement Cycle** | Weekly: Tue lock → Wed settle (post-Laniakea) |
 | **Settlement Lock Period** | Period when queue entries cannot be withdrawn. Weekly mode: 24h (Tue 12:00 → Wed 12:00 UTC). Weekday mode: 3h (12:00 → 15:00 UTC) |
 | **OSRC Auction** | Sealed-bid auction for Senior Risk Capital capacity |
-| **SPTP** | Stressed Pull-to-Par — time until asset converges to fundamental value under stress. Used for duration matching: assets are assigned to buckets based on SPTP, matched against liability duration capacity. Formula uses double exponential decay calibrated to empirical bank run data |
+| **SPTP** | Stressed Pull-to-Par — time until an asset converges to fundamental value under stress conditions; the asset-side duration metric. Assets are assigned to Duration Buckets based on their SPTP |
 | **Prime Intent Vault** | Restricted trading sub-account for delegated Prime trading. Holds bounded working capital, enforces trading policy (allowed pairs, slippage limits, notional caps). Limits blast radius — only vault balance is exposed to settlement, not full Prime PAU |
 
 ---
@@ -194,8 +194,9 @@ Term definitions for the Sky Protocol.
 | Term | Definition |
 |------|------------|
 | **GRF (deprecated)** | Former monolithic "General Risk Framework"; replaced by the modular Risk Framework docs in `risk-framework/` |
-| **SPTP Bucket** | Time bucket for liability matching (0.5 months each) |
-| **Lindy-Based Demand** | Liability duration estimation based on current age |
+| **ALDM** | Asset-Liability Duration Matching — the system that matches asset durations (SPTP) against liability durations (Lindy) via Duration Buckets. Enables capital-efficient deployment when assets can be held to maturity |
+| **Duration Bucket** | Time bucket for duration matching (0.5 months each, 101 buckets total). Assets require capacity in buckets matching their SPTP; liabilities provide capacity based on Lindy-estimated remaining duration |
+| **Lindy Duration Model** | Liability-side duration estimation based on current holding age; the longer someone has held, the longer they're likely to continue holding. Structural caps (double exponential decay) limit capacity per bucket based on empirical bank run data |
 | **Risk Weight** | Capital for fundamental risk (credit, smart contract) |
 | **FRTB Drawdown** | Capital for full mark-to-market drawdown |
 | **Gap Risk** | Risk from discrete price jumps that bypass stop-losses; relevant for collateralized lending liquidations |

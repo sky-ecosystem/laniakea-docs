@@ -44,9 +44,9 @@ Basel III-inspired capital requirements framework. Core principle: **Capital Req
 | Document | Description |
 |----------|-------------|
 | README.md | Framework overview and module map |
-| duration-model.md | Liability duration analysis, SPTP buckets, structural caps |
-| asset-classification.md | Asset characteristics, fundamental risk, drawdown risk |
-| matching.md | Rate risk vs credit spread risk, SPTP eligibility |
+| duration-model.md | Liability duration analysis (Lindy Duration Model), Duration Buckets, structural caps |
+| asset-classification.md | Asset characteristics, fundamental risk, drawdown risk, SPTP |
+| matching.md | Rate risk vs credit spread risk, duration matching eligibility |
 | asset-type-treatment.md | Worked treatments for TradFi, crypto, hybrid assets |
 | collateralized-lending-risk.md | Jump-to-default and liquidation loss (gap risk) |
 | market-risk-frtb.md | FRTB-style drawdown treatment for unmatched liquid assets |

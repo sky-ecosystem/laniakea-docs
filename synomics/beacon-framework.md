@@ -360,7 +360,10 @@ This mirrors corporate structures: subsidiaries, SPVs, and intelligence cut-outs
 |----------|--------------|
 | `legal-and-trading/sentinel-network.md` | Full specification of HPHA Sentinels — Baseline, Stream, Warden formations |
 | `risk-framework/sentinel-integration.md` | How beacons connect to risk framework calculations |
-| `synomics/atlas-synome-separation.md` | How beacon authority envelopes derive from governance |
+| `atlas-synome-separation.md` | How beacon authority envelopes derive from governance |
+| `short-term-actuators.md` | Phase 1 teleonome-less beacon implementation and evolution pathway |
+| `actuator-perspective.md` | First-person view of an actuator operating beacons |
+| `syno-teleonomic-paradigm.md` | The 5-layer architecture that beacons operate within |
 | Configurator Unit spec | BEAM hierarchy (aBEAM, cBEAM, pBEAM) for High Authority beacons |
 
 ---

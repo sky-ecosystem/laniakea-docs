@@ -11,15 +11,18 @@
 2. [Sentinels and Beacons](#sentinels-and-beacons)
 3. [Diamond PAU Deployment](#1-diamond-pau-deployment)
 4. [Synome-MVP](#2-synome-mvp)
-5. [Checker Beacon](#3-watcher-beacon)
+5. [Checker Beacon](#3-checker-beacon)
 6. [Relay Beacon](#4-relay-beacon)
 7. [Core Halos and Legacy Cleanup](#5-core-halos-and-legacy-cleanup)
 8. [Configurator Unit](#6-configurator-unit)
 9. [NFAT Smart Contracts](#7-nfat-smart-contracts)
 10. [NFAT Beacon](#8-nfat-beacon)
-11. [Structuring Halo Legal](#9-structuring-halo-legal)
-12. [SOFR Hedging](#10-sofr-hedging)
-13. [Sequencing and Execution](#sequencing-and-execution)
+11. [Report Beacon](#9-report-beacon)
+12. [Collateral Beacon](#10-collateral-beacon-speculative)
+13. [Council Beacon](#11-council-beacon)
+14. [Structuring Halo Legal](#12-structuring-halo-legal)
+15. [SOFR Hedging](#13-sofr-hedging)
+16. [Sequencing and Execution](#sequencing-and-execution)
 
 ---
 
@@ -29,9 +32,9 @@ Phase 1 is pragmatically focused on delivering a minimal viable infrastructure f
 
 Seven deliverables in sequence order:
 
-1. **Legacy PAU Updates** — Upgrade controllers with NFAT actions, clean up removed exposures
+1. **Diamond PAU Deployment** — Upgrade to Diamond PAU architecture (EIP-2535)
 2. **Synome-MVP** — Operational database for risk parameters and NFAT records
-3. **MVP Beacons** — Three low-power beacons for monitoring, execution, and NFAT management
+3. **MVP Beacons** — Six low-power beacons for monitoring, reporting, execution, and governance
 4. **Core Halos and Legacy Cleanup** — Standardize legacy assets as Core Halos, wind down the rest
 5. **Configurator Unit** — Simplest form enabling spell-less operations
 6. **NFAT Smart Contracts** — Facility and Redeemer contracts for Structuring Halos
@@ -62,9 +65,29 @@ Phase 1 deploys **low-power beacons** (programs, not AI) to enable Core Halo and
 |--------|------|---------|
 | **lpla-checker** | Low Power, Low Authority | Monitor positions, calculate CRRs, track settlement |
 | **lpha-relay** | Low Power, High Authority | Execute PAU transactions with rate limits |
-| **lpha-nfat** | Low Power, High Authority | Manage NFAT Facility lifecycle |
+| **lpha-nfat** | Low Power, High Authority | Manage NFAT Facility lifecycle, write NFAT records to Synome |
+| **lpha-report** | Low Power, High Authority | Post 24h Prime performance summaries to Synome |
+| **lpha-collateral** | Low Power, High Authority | Upload Core Halo / legacy RWA data to Synome (speculative) |
+| **lpha-council** | Low Power, High Authority | Core Council toolkit for risk equations and report formats |
 
 These MVP beacons provide the operational foundation. As scale increases, high-power (AI) sentinels will replace or augment them with adaptive decision-making.
+
+### Beacon Categories
+
+**Read-only (LPLA):**
+- lpla-checker — observes, calculates, alerts (no write authority)
+
+**Reporters (LPHA):**
+- lpha-report — writes Prime performance summaries to Synome
+- lpha-collateral — writes Core Halo / legacy data to Synome (speculative — may not be needed)
+- lpha-nfat — writes NFAT records to Synome (also executes)
+
+**Executors (LPHA):**
+- lpha-relay — executes PAU transactions
+- lpha-nfat — executes NFAT lifecycle operations
+
+**Governance tooling (LPHA):**
+- lpha-council — Core Council interface for updating Synome
 
 ---
 
@@ -399,7 +422,66 @@ The NFAT Beacon (lpha-nfat) manages the NFAT Facility lifecycle — from queue s
 
 ---
 
-## 9. Structuring Halo Legal
+## 9. Report Beacon
+
+The Report Beacon (lpha-report) posts Prime performance summaries to the Synome on a 24-hour cycle.
+
+**Purpose:** Summarize how each Prime fulfilled its CRRs and encumbrance ratio since the last Synome update
+
+| Responsibility | Description |
+|----------------|-------------|
+| **CRR Fulfillment** | Report whether Prime met its Capital Ratio Requirements |
+| **Encumbrance Ratio** | Report Prime's encumbrance status |
+| **24h Cycle** | Post summary aligned with Synome update cadence |
+| **Historical Record** | Maintain performance history in Synome |
+
+**Inputs:** Prime position data, CRR calculations from lpla-checker, encumbrance data
+
+**Outputs:** 24h performance summaries written to Synome-MVP
+
+---
+
+## 10. Collateral Beacon (Speculative)
+
+The Collateral Beacon (lpha-collateral) uploads data for Core Halos and legacy RWA positions.
+
+> **Note:** This beacon is speculative and may not be needed depending on how Core Halo data flows are structured.
+
+**Purpose:** Report Core Halo and legacy RWA data to Synome
+
+| Responsibility | Description |
+|----------------|-------------|
+| **Core Halo Data** | Upload position data for legacy assets wrapped as Core Halos |
+| **Legacy RWA** | Report relevant data for legacy real-world asset positions |
+| **Format Compliance** | Follow report formats specified by lpha-council |
+
+**Inputs:** Core Halo position state, legacy RWA data sources
+
+**Outputs:** Collateral data written to Synome-MVP
+
+---
+
+## 11. Council Beacon
+
+The Council Beacon (lpha-council) is the Core Council toolkit for managing Synome configuration.
+
+**Purpose:** Enable Core Council to update risk equations and specify report formats
+
+| Responsibility | Description |
+|----------------|-------------|
+| **Risk Equations** | Update equations in the Synome risk framework |
+| **Report Formats** | Specify data formats for lpha-collateral and lpha-nfat reports |
+| **Configuration Management** | Maintain Synome operational parameters |
+
+**Inputs:** Core Council signed updates
+
+**Outputs:** Updated risk equations and report format specifications in Synome-MVP
+
+> **Note:** lpha-council is governance tooling, not an autonomous beacon. It provides the interface through which Core Council configures the operational Synome.
+
+---
+
+## 12. Structuring Halo Legal
 
 The legal infrastructure for Structuring Halos must be established before NFAT Facilities can operate. This framework enables lpha-nfat to execute deals autonomously within governance-approved bounds.
 
@@ -449,9 +531,9 @@ Each NFAT represents a claim on a distinct **Halo Unit** — legally and operati
 
 ---
 
-## 10. SOFR Hedging
+## 13. SOFR Hedging
 
-Primes deploying into NFATs with duration must manage interest rate risk. When using the SPTP (Short-term Prime Transfer Protocol) system for duration matching, Primes have two options:
+Primes deploying into NFATs with duration must manage interest rate risk. When using the ALDM (Asset-Liability Duration Matching) system for duration matching, Primes have two options:
 
 | Option | Description |
 |--------|-------------|
@@ -460,7 +542,7 @@ Primes deploying into NFATs with duration must manage interest rate risk. When u
 
 ### Why This Matters
 
-Fixed-rate NFATs with duration create interest rate exposure. If SOFR rises, the Prime holds a below-market position. The SPTP system assumes either:
+Fixed-rate NFATs with duration create interest rate exposure. If SOFR rises, the Prime holds a below-market position. The duration matching system assumes either:
 
 1. The Prime has hedged this risk externally (swaps, futures), receiving variable SOFR exposure that offsets fixed NFAT duration, OR
 2. The NFAT itself is priced as SOFR + spread, so yield floats with the benchmark
@@ -471,7 +553,7 @@ lpla-checker validates that Primes deploying into duration NFATs have declared e
 - Hedge positions covering the interest rate exposure
 - SOFR plus terms on the underlying NFAT
 
-Primes without valid hedging or floating-rate terms cannot deploy into duration NFATs via the SPTP system.
+Primes without valid hedging or floating-rate terms cannot deploy into duration NFATs via the ALDM system.
 
 ---
 

@@ -35,7 +35,7 @@ Normal pull-to-par (or WAL for amortizing assets) assumes typical prepayment and
 - Amortization continues but reinvestment into new loans slows
 - Pull-to-par extends, sometimes significantly
 
-Using unstressed duration would be like stress-testing a lifeboat in calm seas. SPTP-matching validity must hold during stress.
+Using unstressed duration would be like stress-testing a lifeboat in calm seas. Duration matching validity must hold during stress.
 
 **Stressed Pull-to-Par Calculation**
 
@@ -60,6 +60,6 @@ The stress modifier is derived from historical worst-case prepayment slowdowns f
 - **ETH:** Infinite (no pull to par — perpetual volatility)
 - **Sparklend positions:** None (perpetual, no maturity)
 
-Assets with no pull-to-par cannot be SPTP-matched regardless of stress assumptions.
+Assets with no pull-to-par cannot be duration-matched regardless of stress assumptions.
 
 ---

@@ -1,6 +1,6 @@
 # Duration Model (Demand Side)
 
-**Last Updated:** 2026-01-27
+**Last Updated:** 2026-01-28
 
 ## Liability Duration Analysis (Demand Side)
 
@@ -8,16 +8,16 @@
 
 Determine how much of the USDS liability base is short-term (could demand liquidity soon) versus long-term (sticky, unlikely to redeem).
 
-### Method: Lindy-Based Demand Model
+### Method: Lindy Duration Model
 
 For each lot of USDS:
 1. Measure current age (time since last transfer)
 2. Expected remaining holding time = current age × Lindy factor
 3. Apply conservative haircut (e.g., 0.5x or 0.7x instead of 1x pure Lindy)
 
-### SPTP Bucket Structure
+### Duration Bucket Structure
 
-The SPTP bucket system uses a two-layer capacity calculation:
+The Duration Bucket system uses a two-layer capacity calculation:
 1. **Weekly Lindy Measurement** — Dynamic calculation of liability duration distribution
 2. **Structural Maximum Caps** — Governance-set upper limits per bucket, derived from empirical bank run research
 
@@ -34,7 +34,7 @@ The system uses **101 buckets**, each representing 0.5 months (15 days):
 
 **Bucket semantics:**
 - **Liability side:** Bucket N contains liabilities with expected remaining duration ≥ N × 0.5 months
-- **Asset side:** Bucket N is required for assets with SPTP in the range [(N-1) × 0.5, N × 0.5) months
+- **Asset side:** Bucket N is required for assets with SPTP (Stressed Pull-to-Par) in the range [(N-1) × 0.5, N × 0.5) months
 - **Bucket 100:** Captures all liabilities with expected duration ≥ 50 months (the structural/permanent base)
 
 #### Structural Maximum Caps: Double Exponential Model
@@ -145,7 +145,7 @@ The parameters were fitted to match the aggressive end of empirical bank run res
 | **12 months** | 24 | 35.8% | 64% | Survived full stress cycle |
 | **24 months** | 48 | 23.5% | 76% | Structural holders only |
 | **36 months** | 72 | 15.5% | 85% | Deep Lindy territory |
-| **42 months (JAAA)** | 84 | 12.6% | 87% | SPTP capacity for CLO AAA |
+| **42 months (JAAA)** | 84 | 12.6% | 87% | Duration capacity for CLO AAA |
 | **50 months+** | 100 | 9.5% | 90% | Permanent/structural base |
 
 *Note: These caps represent maximum allowable allocation even if Lindy measurement suggests higher capacity. Governance may adjust parameters based on observed USDS holder behavior.*
@@ -181,14 +181,14 @@ Else:
 | Side | Rule | Rationale |
 |------|------|-----------|
 | **Liabilities** | Round DOWN to nearest bucket | A 5.5-week liability → 5wk bucket. Conservative: assumes earlier redemption. |
-| **Assets** | Round UP to nearest bucket | A 3.5-year SPTP asset → 42mo bucket. Conservative: requires longer-duration liabilities. |
+| **Assets** | Round UP to nearest bucket | An asset with 3.5-year SPTP → 42mo bucket. Conservative: requires longer-duration liabilities. |
 
 #### Cumulative Capacity for Matching
 
 An asset can match against its required bucket AND all higher buckets. Higher-tier capacity can always fulfill lower-tier requirements.
 
 **Example:**
-- Asset with 12mo SPTP requires 12mo bucket
+- An asset with 12mo SPTP requires 12mo bucket
 - Available capacity = 12mo + 15mo + 18mo + ... + 48mo (cumulative)
 - A 48mo liability can match a 12mo asset (but not vice versa)
 
@@ -198,9 +198,9 @@ Cumulative Capacity at Bucket N = Σ (Effective Capacity for all buckets ≥ N)
 
 ---
 
-### SPTP Capacity Reservation System
+### Duration Capacity Reservation System
 
-SPTP bucket capacity is allocated to Primes through a reservation system. Primes acquire reservations via weekly auctions, then can resell them on a secondary market.
+Duration Bucket capacity is allocated to Primes through a reservation system. Primes acquire reservations via weekly auctions, then can resell them on a secondary market.
 
 #### Core Principles
 
@@ -213,7 +213,7 @@ SPTP bucket capacity is allocated to Primes through a reservation system. Primes
 | Event | Frequency | Description |
 |-------|-----------|-------------|
 | Lindy measurement | Weekly | Measure USDS lot ages, calculate liability duration distribution |
-| SPTP auctions | Weekly | Auction unreserved capacity in each bucket |
+| Duration auctions | Weekly | Auction unreserved capacity in each bucket |
 | Own-bucket allocation | Weekly | Reservations claim from their bucket first |
 | Tug-of-war | Weekly | Redistribute excess capacity to unmet need |
 | Settlement | Weekly | Process deposits, redemptions, yield distribution |

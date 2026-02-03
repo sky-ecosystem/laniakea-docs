@@ -35,20 +35,20 @@ Week N                              Week N+1
 ### Settlement Sequence
 
 1. **Measurement Period** (Tue → Tue)
-   - OSRC and SPTP bids submitted (sealed)
+   - OSRC and Duration bids submitted (sealed)
    - Interest and distributions calculated on this period's data
 
 2. **Processing Period** (Tue noon → Wed noon)
    - Auctions revealed and matched
    - Lindy measurement snapshot
    - Tug-of-war allocation
-   - SPTP excess auction
+   - Duration excess auction
    - Prepayments made (interest, distributions)
    - Verification and compliance checks
 
 3. **Moment of Settlement** (Wed noon)
    - New OSRC allocations take effect
-   - New SPTP capacity published
+   - New Duration capacity published
    - srUSDS exchange rate updated
    - LCTS queues settle
    - Penalties begin accruing for non-compliant actors
@@ -137,7 +137,7 @@ Where:
 
 ## Part 2: lpha-auction (Auction Sentinel)
 
-A new Sentinel type that runs sealed-bid auctions for OSRC and SPTP capacity.
+A new Sentinel type that runs sealed-bid auctions for OSRC and Duration capacity.
 
 ### Architecture
 
@@ -173,8 +173,8 @@ A new Sentinel type that runs sealed-bid auctions for OSRC and SPTP capacity.
 ```
 {
   prime_id: <Prime identifier>,
-  auction_type: "OSRC" | "SPTP",
-  bucket: <bucket number for SPTP, null for OSRC>,
+  auction_type: "OSRC" | "Duration",
+  bucket: <bucket number for Duration, null for OSRC>,
   amount: <capacity amount requested>,
   max_rate: <maximum rate willing to pay>,
   signature: <stl-base private key signature>,
@@ -303,17 +303,17 @@ Primes that win OSRC capacity:
 
 ---
 
-## Part 4: SPTP Bucket Auction
+## Part 4: Duration Bucket Auction
 
 ### Purpose
 
-Allocate SPTP capacity reservations to Primes. Reservations grant the right to claim SPTP capacity when Lindy measurement provides it.
+Allocate Duration capacity reservations to Primes. Reservations grant the right to claim Duration capacity when Lindy measurement provides it.
 
 ### Relationship to OSRC
 
-SPTP and OSRC are **separate auctions** serving different purposes:
+Duration and OSRC are **separate auctions** serving different purposes:
 
-| Aspect | OSRC Auction | SPTP Bucket Auction |
+| Aspect | OSRC Auction | Duration Bucket Auction |
 |--------|--------------|---------------------|
 | **What's allocated** | Senior Risk Capital capacity | Duration-matching capacity |
 | **Purpose** | Capital structure (loss absorption) | Capital treatment (risk weight vs FRTB) |
@@ -322,12 +322,12 @@ SPTP and OSRC are **separate auctions** serving different purposes:
 
 A Prime might:
 - Win OSRC capacity (to use SRC in its capital structure)
-- Win SPTP capacity (to get favorable capital treatment on its assets)
+- Win Duration capacity (to get favorable capital treatment on its assets)
 - Win both, one, or neither
 
 ### Auction Sequence
 
-The SPTP auction follows a specific sequence where tug-of-war happens FIRST, then excess is auctioned:
+The Duration auction follows a specific sequence where tug-of-war happens FIRST, then excess is auctioned:
 
 ```
 1. Bid submission window opens
@@ -338,7 +338,7 @@ The SPTP auction follows a specific sequence where tug-of-war happens FIRST, the
 6. Excess capacity identified (Lindy capacity - consumed by reservations)
 7. Auction matches bids against excess capacity
 8. Winners pay uniform clearing price
-9. New SPTP bucket capacity published to Synome
+9. New Duration bucket capacity published to Synome
 ```
 
 **Key insight:** The auction only allocates *excess* capacity that wasn't consumed by existing reservations via tug-of-war. This ensures:
@@ -380,10 +380,10 @@ The SPTP auction follows a specific sequence where tug-of-war happens FIRST, the
 
 ### Multi-Week Reservations
 
-Unlike OSRC, SPTP allows multi-week reservations:
+Unlike OSRC, Duration allows multi-week reservations:
 
 **Rationale:**
-- SPTP capacity is about duration matching, which is inherently longer-term
+- Duration capacity is about duration matching, which is inherently longer-term
 - Primes need planning certainty for asset acquisition
 - Reservations don't directly affect other participants' yields (unlike OSRC rates)
 
@@ -547,7 +547,7 @@ This means only one side ever accumulates multi-week generations.
 
 ### Timing
 
-Tug-of-war runs as part of the SPTP auction sequence, BEFORE the auction matches bids. This ensures existing reservations get their capacity first, and only genuine excess goes to auction.
+Tug-of-war runs as part of the Duration auction sequence, BEFORE the auction matches bids. This ensures existing reservations get their capacity first, and only genuine excess goes to auction.
 
 ### Process
 
@@ -570,7 +570,7 @@ Tug-of-war runs as part of the SPTP auction sequence, BEFORE the auction matches
 
 4. **Excess Identification**
    - After tug-of-war completes, calculate remaining capacity per bucket
-   - This excess goes to the SPTP auction (Part 4)
+   - This excess goes to the Duration auction (Part 4)
 
 5. **Capital Calculation** (after auction completes)
    - Apply Risk Framework formulas based on final allocation
@@ -585,7 +585,7 @@ When Lindy-measured capacity ≠ total reservations:
 
 **Lindy > Reservations:**
 - Tug-of-war satisfies all existing reservations
-- Excess capacity goes to SPTP auction
+- Excess capacity goes to Duration auction
 - New Primes can win capacity via auction
 
 **Lindy < Reservations:**
@@ -605,21 +605,21 @@ All times are **UTC**.
 | Day/Time | Event | Actor |
 |----------|-------|-------|
 | **Tuesday 12:00** | Measurement Period ends | — |
-| | Bid window closes (OSRC + SPTP) | lpha-auction |
+| | Bid window closes (OSRC + Duration) | lpha-auction |
 | | **LCTS generations LOCKED** | lpha-lcts |
 | | New active generation opens | lpha-lcts |
 | | Processing Period begins | — |
 | **Tuesday 12:00-14:00** | Auctions revealed and matched | lpha-auction |
 | **Tuesday 14:00-16:00** | Lindy measurement snapshot | lpla-checker |
 | **Tuesday 16:00-18:00** | Tug-of-war allocation | lpha-auction |
-| **Tuesday 18:00-20:00** | SPTP excess auction matching | lpha-auction |
+| **Tuesday 18:00-20:00** | Duration excess auction matching | lpha-auction |
 | **Tuesday 20:00-22:00** | Interest calculations finalized | stl-base (each Prime) |
 | **Tuesday 22:00-24:00** | Distribution calculations finalized | lpla-checker |
 | **Wednesday 00:00-08:00** | Prepayments submitted | stl-base |
 | **Wednesday 08:00-12:00** | Verification and compliance checks | lpla-checker |
 | **Wednesday 12:00** | **Moment of Settlement** | — |
 | | New OSRC allocations take effect | lpha-auction |
-| | New SPTP capacity published to Synome | lpha-auction |
+| | New Duration capacity published to Synome | lpha-auction |
 | | srUSDS exchange rate updated | lpha-lcts |
 | | **LCTS locked generations settle** | lpha-lcts |
 | | Locked generations unlock (ACTIVE or FINALIZED) | lpha-lcts |
@@ -655,7 +655,7 @@ Lindy measurement
 Tug-of-war (existing reservations)
     │
     ▼
-SPTP excess auction (depends on tug-of-war output)
+Duration excess auction (depends on tug-of-war output)
     │
     ▼
 All results known → Prepayments can be calculated and submitted
@@ -705,9 +705,9 @@ Wed 12:00: Everything takes effect simultaneously
 
 4. **Escalation thresholds** — At what point does lateness trigger restrictions vs just penalties?
 
-5. **SPTP reservation duration limits** — Max 52 weeks? Longer? Should there be a cap?
+5. **Duration reservation duration limits** — Max 52 weeks? Longer? Should there be a cap?
 
-6. **Secondary market mechanics** — How exactly do SPTP reservation trades settle? Same weekly cycle or continuous?
+6. **Secondary market mechanics** — How exactly do Duration reservation trades settle? Same weekly cycle or continuous?
 
 7. **Emergency procedures** — What happens if systemic issue prevents settlement? (e.g., network outage, oracle failure)
 

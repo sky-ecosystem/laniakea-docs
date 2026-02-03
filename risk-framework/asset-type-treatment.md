@@ -11,7 +11,7 @@
 | Fundamental risk | Credit risk weight of underlying securities |
 | Drawdown risk | FRTB-style drawdown (see `market-risk-frtb.md`) |
 | Stressed pull-to-par | Normal pull-to-par × stress modifier (e.g., ~3.5 years for JAAA) |
-| Matching | Can be SPTP-matched to liability tiers ≥ stressed pull-to-par |
+| Matching | Can be duration-matched to liability tiers ≥ stressed pull-to-par |
 | **Capital if matched** | Risk weight only |
 | **Capital if unmatched** | Full FRTB drawdown |
 
@@ -22,7 +22,7 @@
 | Fundamental risk | Smart contract risk, oracle risk |
 | Drawdown risk | Gap risk — bad debt from flash crash (see `collateralized-lending-risk.md`) |
 | Pull-to-par | **None** (perpetual positions, no maturity) |
-| Matching | **Cannot be SPTP-matched** |
+| Matching | **Cannot be duration-matched** (no pull-to-par) |
 | **Capital** | Must cover gap risk at relevant confidence level |
 
 ### Overcollateralized TradFi Lending (e.g., Lending Against Tokenized Treasuries)

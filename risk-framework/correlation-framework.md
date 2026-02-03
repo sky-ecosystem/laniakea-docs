@@ -18,7 +18,7 @@ This framework has two layers:
 
 ## Why This Exists
 
-Duration matching (SPTP buckets + caps) prevents classic maturity mismatch, but it does not stop the system from concentrating into a single correlated risk type (e.g., “lots of CLO-like credit”) by adding more risk capital. This framework makes “we simply don’t want more of this risk” enforceable.
+Duration matching (ALDM with Duration Buckets + caps) prevents classic maturity mismatch, but it does not stop the system from concentrating into a single correlated risk type (e.g., "lots of CLO-like credit") by adding more risk capital. This framework makes "we simply don't want more of this risk" enforceable.
 
 ## How Caps Are Set (Scenario Calibration)
 
@@ -40,7 +40,7 @@ This turns “correlation” into a concrete calibration surface rather than an 
 
 Use the same exposure basis as enforcement:
 
-- **Matched exposure:** notional / SPTP-value
+- **Matched exposure:** notional / duration-value
 - **Unmatched exposure:** market value (MTM)
 
 Scenario calibration may run in either of two modes:
@@ -94,7 +94,7 @@ An arbitrary governance-defined label used for concentration limits.
 
 Caps are measured on a unified “portfolio exposure” basis, but the measurement differs by treatment:
 
-- **Matched exposure:** measured using notional / SPTP-value (the “hold-to-maturity” relevant size).
+- **Matched exposure:** measured using notional / duration-value (the "hold-to-maturity" relevant size).
 - **Unmatched exposure:** measured using market value (MTM).
 
 Interpretation: if an exposure is treated as forced-sale (unmatched), it consumes category capacity by its MTM size; if it is treated as duration-matched, it consumes by notional.
@@ -135,7 +135,7 @@ This allocation changes gradually over time based on which Primes have been payi
 For a given exposure, the “speed” at which over-cap penalty converts into allocation is governed by:
 
 ```
-T = max(SPTP_duration, 3 months)
+T = max(asset_SPTP, 3 months)
 ```
 
 Intuition: longer-duration assets take longer to normalize; very short durations still have a minimum normalization of 3 months.

@@ -739,13 +739,13 @@ Sealed-bid auction for Senior Risk Capital capacity allocation.
 
 ---
 
-### SPTP Bucket Auction (Planned)
+### Duration Bucket Auction (Planned)
 
 Capacity reservations for duration-matched asset deployment.
 
 | Property | Value |
 |----------|-------|
-| Purpose | Reserve capacity in SPTP buckets for long-duration assets |
+| Purpose | Reserve capacity in Duration Buckets for long-duration assets |
 | Benefit | Lower capital requirements when assets match liability duration |
 | Status | **Planned** |
 

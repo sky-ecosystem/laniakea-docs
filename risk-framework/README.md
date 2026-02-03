@@ -7,9 +7,9 @@ This folder contains the modular Risk Framework documentation.
 
 ## Module Index
 
-- `duration-model.md` — Liability duration analysis, SPTP buckets, structural caps, capacity reservation.
-- `asset-classification.md` — Asset characteristics: fundamental risk, drawdown risk, stressed pull-to-par.
-- `matching.md` — Rate risk vs credit spread risk, SPTP eligibility, matched/unmatched treatment, partial matching.
+- `duration-model.md` — Liability duration analysis (Lindy Duration Model), Duration Buckets, structural caps, capacity reservation.
+- `asset-classification.md` — Asset characteristics: fundamental risk, drawdown risk, stressed pull-to-par (SPTP).
+- `matching.md` — Rate risk vs credit spread risk, duration matching eligibility, matched/unmatched treatment, partial matching.
 - `asset-type-treatment.md` — Worked treatments for major asset types (TradFi, crypto lending, hybrid).
 - `collateralized-lending-risk.md` — Jump-to-default + liquidation loss (gap risk) for collateralized lending.
 - `market-risk-frtb.md` — FRTB-style drawdown treatment for unmatched liquid assets.

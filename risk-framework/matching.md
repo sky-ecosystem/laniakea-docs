@@ -4,35 +4,35 @@
 
 ## Rate Risk vs Credit Spread Risk
 
-SPTP-matching is designed to protect against **credit spread risk**, not **interest rate risk**. This distinction is fundamental to understanding when SPTP provides value and when it doesn't.
+Duration matching (ALDM) is designed to protect against **credit spread risk**, not **interest rate risk**. This distinction is fundamental to understanding when duration matching provides value and when it doesn't.
 
 ### Why the Distinction Matters
 
 **Credit spread risk** and **interest rate risk** behave fundamentally differently:
 
-| Risk Type | Behavior | SSR Response | SPTP Applicability |
+| Risk Type | Behavior | SSR Response | Duration Matching Applicability |
 |-----------|----------|--------------|-------------------|
-| **Credit spread widening** | Mean-reverting; cyclical | SSR stays flat or falls (flight to quality) | SPTP protects — temporary MTM loss, no cash flow mismatch |
-| **General rate rise** | Can be permanent (regime shift) | SSR rises | SPTP does NOT protect — ongoing cash flow mismatch |
+| **Credit spread widening** | Mean-reverting; cyclical | SSR stays flat or falls (flight to quality) | ALDM protects — temporary MTM loss, no cash flow mismatch |
+| **General rate rise** | Can be permanent (regime shift) | SSR rises | ALDM does NOT protect — ongoing cash flow mismatch |
 
 ### The Mechanism
 
-**Why credit spread risk is manageable with SPTP:**
+**Why credit spread risk is manageable with duration matching:**
 
 1. Credit spread widening causes asset prices to fall temporarily
 2. But SSR (Sky Savings Rate) doesn't rise — it tracks general rate levels, not credit spreads
 3. During credit stress, USDS often benefits from flight-to-quality, potentially *lowering* SSR
 4. The Prime has no cash flow mismatch — it can afford to wait
 5. As credit spreads compress (empirically mean-reverting), asset prices recover
-6. SPTP ensures the Prime has time to wait for recovery
+6. Duration matching ensures the Prime has time to wait for recovery
 
-**Why rate risk is NOT manageable with SPTP:**
+**Why rate risk is NOT manageable with duration matching:**
 
 1. General rate rise (e.g., Fed hikes) causes SSR to rise permanently
 2. If the Prime holds fixed-rate assets, it earns the old lower rate
 3. This creates ongoing negative carry: pays SSR + margin, earns old rate
 4. This isn't a temporary MTM shock — it's permanent cash flow drag
-5. SPTP doesn't help because there's no "pull to par" on the rate differential itself
+5. Duration matching doesn't help because there's no "pull to par" on the rate differential itself
 6. The Prime will bleed continuously until the asset matures or rates fall
 
 ### Empirical Support
@@ -50,7 +50,7 @@ SPTP-matching is designed to protect against **credit spread risk**, not **inter
 
 ### Rate Hedging Requirement
 
-**All Prime fixed-rate exposure must be rate-hedged.** SPTP eligibility requires that positions be rate-neutral relative to SSR.
+**All Prime fixed-rate exposure must be rate-hedged.** Duration matching eligibility requires that positions be rate-neutral relative to SSR.
 
 #### Methods of Rate Hedging
 
@@ -76,9 +76,9 @@ Rate Hedge Capital = Fixed Rate Exposure × Duration × Expected Rate Volatility
 
 This capital is **in addition to** credit risk capital, not a substitute for it.
 
-### SPTP Eligibility Summary
+### Duration Matching Eligibility Summary
 
-For an asset to be SPTP-eligible, it must satisfy **both** conditions:
+For an asset to be eligible for matched treatment, it must satisfy **both** conditions:
 
 1. **Has stressed pull-to-par** ≤ matched liability tier duration (existing requirement)
 2. **Is rate-neutral relative to SSR** — either:
@@ -87,12 +87,12 @@ For an asset to be SPTP-eligible, it must satisfy **both** conditions:
    - Prime holds rate hedging capital for unhedged fixed-rate portion
 
 ```
-SPTP Eligible = (Has Pull-to-Par) AND (Rate Neutral OR Rate Hedge Capital Held)
+Match Eligible = (Has Pull-to-Par) AND (Rate Neutral OR Rate Hedge Capital Held)
 ```
 
 ### What This Means for Asset Types
 
-| Asset | Rate Exposure | Typical Handling | SPTP Eligible? |
+| Asset | Rate Exposure | Typical Handling | Match Eligible? |
 |-------|---------------|------------------|----------------|
 | **JAAA (CLO AAA)** | Floating-rate (SOFR + spread) | Natural hedge | ✓ Yes |
 | **Fixed-rate corporate bonds** | Fixed-rate | Must swap to floating or hold rate capital | Conditional |
@@ -100,15 +100,15 @@ SPTP Eligible = (Has Pull-to-Par) AND (Rate Neutral OR Rate Hedge Capital Held)
 | **Long-duration treasuries** | Fixed, long duration | Must hedge or hold significant rate capital | Conditional |
 | **Sparklend** | Floating-rate (typically) | N/A — no pull-to-par regardless | ✗ No (no SPTP) |
 
-### The Value Proposition of SPTP
+### The Value Proposition of Duration Matching
 
-With rate risk properly hedged, SPTP allows Primes to:
+With rate risk properly hedged, duration matching (ALDM) allows Primes to:
 
 - **Avoid hedging credit spread risk** on long-duration variable-rate assets
 - **Take credit spread exposure** for yield while managing capital efficiently
 - **Wait out temporary credit dislocations** without forced sales
 
-This is the core value: SPTP lets Primes capture credit spread (which is compensated and mean-reverting) while requiring them to hedge rate risk (which can be permanent and catastrophic if unhedged).
+This is the core value: duration matching lets Primes capture credit spread (which is compensated and mean-reverting) while requiring them to hedge rate risk (which can be permanent and catastrophic if unhedged).
 
 ---
 
@@ -116,7 +116,7 @@ This is the core value: SPTP lets Primes capture credit spread (which is compens
 
 Assets can be matched against liability tiers based on their stressed pull-to-par:
 
-### Matched Assets (SPTP-Matched Treatment)
+### Matched Assets (Duration-Matched Treatment)
 
 **Condition:** Asset stressed pull-to-par ≤ matched liability tier duration
 
@@ -145,26 +145,26 @@ Assets can be matched against liability tiers based on their stressed pull-to-pa
 
 ### Partial Matching (Split Treatment)
 
-When an asset position exceeds available SPTP capacity, the position is split into matched and unmatched portions. Each portion receives its appropriate capital treatment.
+When an asset position exceeds available duration capacity, the position is split into matched and unmatched portions. Each portion receives its appropriate capital treatment.
 
 **Example:**
 - Hold $500M JAAA (SPTP = 42 months, requires 42mo bucket)
-- Cumulative SPTP capacity at 42mo+: $300M
+- Cumulative duration capacity at 42mo+: $300M
 
 | Portion | Amount | Treatment | CRR | Capital Required |
 |---------|--------|-----------|-----|------------------|
-| Matched | $300M | SPTP-matched (risk weight) | 5% | $15M |
+| Matched | $300M | Duration-matched (risk weight) | 5% | $15M |
 | Unmatched | $200M | FRTB (drawdown) | 10% | $20M |
 | **Total** | $500M | — | — | **$35M** |
 
 **Calculation:**
 ```
-Matched Amount = min(Position Size, Available SPTP Capacity at SPTP bucket)
+Matched Amount = min(Position Size, Available Duration Capacity at required bucket)
 Unmatched Amount = Position Size - Matched Amount
 
 Capital = (Matched Amount × Risk Weight) + (Unmatched Amount × FRTB Drawdown)
 ```
 
-**Key property:** As SPTP capacity grows (longer-duration liabilities accumulate), more of each position can be matched, reducing overall capital requirements. This creates natural incentive alignment — sticky liabilities enable more efficient capital deployment.
+**Key property:** As duration capacity grows (longer-duration liabilities accumulate), more of each position can be matched, reducing overall capital requirements. This creates natural incentive alignment — sticky liabilities enable more efficient capital deployment.
 
 ---
