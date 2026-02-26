@@ -850,21 +850,102 @@ This principle ensures the intent specification is **minimal yet complete** for 
 
 ---
 
-## Open Questions
+## Open Questions (Answered)
 
-1. **Settlement frequency** — How often should batches settle? 1 second? 10 seconds? Event-driven?
+### 1) Settlement frequency
 
-2. **Gas costs** — Who pays settlement gas? Exchange Halo? Pro-rata among traders?
+**Recommendation:** hybrid **event-driven + max-latency cap**.
 
-3. **Partial fills** — How are partial fills handled for maker rebates?
+- **Intent Protocol time cap:** settle at least once per block (default target: ~10s cadence on 10s block-time deployments).
+- **Exchange Halo trigger A (size cap):** settle when batch reaches `N` matches (e.g., 1-5).
+- **Exchange Halo trigger B (notional cap):** settle when batch notional exceeds `$X` (e.g., $5-20M equivalent).
 
-4. **Cross-chain** — How do intents work for assets on different chains?
+### 2) Gas costs (who pays)
 
-5. **Oracle integration** — Which oracle(s) are approved per asset, and how do we handle stale/missing oracle updates at settlement time?
+**Exchange Halo pays gas for `SettleBatch`** (operator responsibility).
 
-6. **Emergency pause** — Can governance pause specific markets? All trading?
+Recover costs via output-based fees (consistent with this spec's fee abstraction):
+- Each fill can include a small fee output to `feeCollector`.
+- Fee schedule can be market-specific, with governance caps.
+- For permissionless P2P settlement, the submitter pays gas and can be compensated via an optional `settlerRecipient` output.
 
-7. **Order types** — What order types beyond limit/market? Stop-loss? Trailing?
+Spec tweak:
+- Settlement contract should support an explicit `feeCollector` and optional `settlerRecipient` per batch while keeping fees represented as outputs.
+
+### 3) Partial fills + maker rebates
+
+Two viable models:
+
+- **A) On-chain deterministic rebate (trust-minimized):**
+  - Each fill includes a rebate output to the maker (or maker referrer), proportional to fill notional.
+  - Works naturally with output-based fees.
+  - Requires strict rounding rules (round against the value receiver to avoid leakage).
+
+- **B) Off-chain accrued rebate (lower gas):**
+  - Settlement moves principal only.
+  - Exchange Halo maintains a rebate ledger and pays periodically (or nets against future fees).
+  - Simpler on-chain, but adds accounting/trust requirements.
+
+Decision rule:
+- Prefer **A** when minimizing trust in the Exchange Halo is primary.
+- Prefer **B** when minimizing gas/on-chain complexity is primary, with auditability requirements.
+
+### 4) Cross-chain intents
+
+Supported design options:
+
+- **A) Integrate an existing cross-chain intent protocol.**
+- **B) HTLC/escrow atomicity model:**
+  - User locks on chain A; proof/claim releases on chain B.
+  - Requires explicit light-client/oracle/prover assumptions.
+- **C) ERC-7683-style solver routing:**
+  - Solvers bridge/fulfill and user receives destination-chain output.
+  - Requires strict replay protection, deadlines, and chain-aware nonce domains.
+
+### 5) Oracle integration (per asset)
+
+Only require oracle checks when both are true:
+- Maker is a **Prime Intent Vault** (delegated policy path).
+- Asset is in a `requiresOracle` set (for example, permissioned/RWA-like assets).
+
+Stale/missing oracle at settlement time:
+- **Fail closed** for delegated trades.
+- If oracle exceeds `maxAge`, vault hook reverts.
+- Batch builder isolates failing fills and retries with subset.
+
+Why oracle is needed:
+- Prime policy constraints are economic (notional, exposure, slippage), not raw token-unit checks.
+- Oracle price is required to evaluate governance-defined policy bounds at fill time.
+
+### 6) Emergency pause (levels + precedence)
+
+Pause levels:
+- **Global pause (Sky governance):** stops all settlements.
+- **Exchange Halo pause:** stops `SettleBatch` for that Halo.
+- **Market pause:** blocks fills for a specific base/quote market.
+- **Asset-level pause (optional):** blocks settlements involving a token.
+
+Precedence:
+- `global > halo > market > asset`
+
+Guardrail philosophy:
+- Tightening restrictions should be instant.
+- Loosening restrictions should follow constrained/governed rollout.
+
+### 7) Order types beyond limit/market
+
+Support as core intent semantics:
+- **LIMIT** (exact-in/out with price bounds).
+- **MARKET** (user-facing loose bound, but still bounded for Prime vaults via oracle slippage policy).
+
+Optional in v1 (matching-engine behavior, not new intent types):
+- **IOC**
+- **FOK**
+
+Defer (more oracle/time coupling and harder deterministic safety):
+- **Stop-loss**
+- **Trailing**
+- **TWAP**
 
 ---
 
