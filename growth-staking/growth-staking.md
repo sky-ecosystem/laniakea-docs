@@ -9,7 +9,9 @@
 
 Growth Staking aligns SKY governance token holders with ecosystem innovation. Under Growth Staking, SKY stakers must also hold other Sky Ecosystem tokens — called **growth assets** — to unlock staking rewards. The more directly a growth asset contributes to ecosystem innovation, the higher its **Growth Factor** — the multiplier that amplifies its contribution to the staking requirement.
 
-This creates a direct economic link between governance participation (staking SKY) and investment in the ecosystem's growth layer (holding Agent tokens, providing risk capital, or holding sSGA).
+Eligible growth assets are deliberately limited to instruments that require an individual investment decision and carry meaningful risk: Agent governance tokens (Generator, Guardian, Prime, Halo) and Prime junior risk capital (TEJRC). Passive yield wrappers — savings tokens, senior risk capital, and Halo Units — are excluded. This keeps Growth Staking pointed at the live edge of innovation rather than at safe carry.
+
+This creates a direct economic link between governance participation (staking SKY) and investment in the ecosystem's equity-like growth layer.
 
 ---
 
@@ -19,13 +21,10 @@ Each eligible growth asset has a **Growth Factor (GF)** — a multiplier on the 
 
 | Category | Assets | Growth Factor | Effect |
 |---|---|---|---|
-| **Agent tokens** | Guardian, Prime, Generator, Halo governance tokens | 2.5× | $1 counts as $2.50 |
+| **Agent governance tokens** | Generator, Guardian, Prime, Halo | 2.5× | $1 counts as $2.50 |
 | **Junior risk capital** | TEJRC (per-Prime) | ~1.67× | $1 counts as $1.67 |
-| **Senior risk capital** | srSGA, TISRC, ESRC | 1.0× | $1 counts as $1.00 |
-| **Savings** | sSGA, fixed-rate sSGA | 0.5× | $1 counts as $0.50 |
-| **Halo Units** | Portfolio, Term, Trading shares | ~0.33× | $1 counts as $0.33 |
 
-**Excluded assets:** stSCST, LCTS queue positions, DAI, MKR.
+**Excluded assets:** Senior risk capital (srSGA, TISRC, ESRC), savings tokens (sSGA, fixed-rate sSGA), Halo Units (Portfolio, Term, Trading shares), stSCST, LCTS queue positions, DAI, MKR. These are passive holdings that don't require an active investment thesis — Growth Staking is reserved for capital that flows into innovation through individual judgment.
 
 ### Reward Scaling
 
@@ -53,10 +52,10 @@ Total GF Reference Value = Σ (Asset Reference Value_i × GF_i)
 Staking Factor = min(1, Total GF Reference Value / Staked SKY Reference Value)
 ```
 
-**Example** — $100k staked SKY (at Reference Value), holding $20k SPK (at Reference Value, GF 2.5×) + $30k srSGA (GF 1.0×):
+**Example** — $100k staked SKY (at Reference Value), holding $20k SPK (at Reference Value, GF 2.5×) + $18k Spark TEJRC (GF ~1.67×):
 
 ```
-GF Value = ($20k × 2.5) + ($30k × 1.0) = $50k + $30k = $80k
+GF Value = ($20k × 2.5) + ($18k × 1.67) = $50k + $30k = $80k
 Staking Factor = min(1, $80k / $100k) = 80%
 ```
 
@@ -193,9 +192,9 @@ Effective Value = min(Reference Value, Market Value)
 
 The asymmetry is deliberate: you can't inflate growth asset values by pumping, but genuine impairment does reduce your staking factor credit. SKY uses Reference Value directly (not min) because the denominator should be stable — a SKY dump shouldn't make it trivially easy to earn full rewards.
 
-### Risk Capital and sSGA
+### TEJRC
 
-TEJRC, TISRC, ESRC, srSGA, sSGA, and fixed-rate sSGA are valued at their on-chain redemption value — no Reference Value adjustment needed, since these tokens are directly backed by underlying capital at a known ratio.
+TEJRC is valued at its on-chain redemption value — no Reference Value adjustment needed, since the token is directly backed by underlying capital at a known ratio.
 
 ### Tokenized vs Tokenless
 
@@ -203,13 +202,13 @@ Not all agents participate in Growth Staking as growth assets:
 
 | Agent | Tokenized | Growth Asset |
 |---|---|---|
-| **Guardian** | Yes | Yes (GF 2.5×) |
-| **Prime** | Yes + TISRC, TEJRC | Yes (GF 2.5×) |
-| **Generator** | Yes + ESRC, sSGA, fixed-rate sSGA, stSCST | Yes (GF 2.5×) |
-| **Halo** | Yes + Halo Units | Yes (GF 2.5×) |
+| **Guardian** | Yes | Yes (governance token GF 2.5×) |
+| **Prime** | Yes; also issues TISRC, TEJRC | Yes (governance token GF 2.5×, TEJRC GF ~1.67×; TISRC excluded) |
+| **Generator** | Yes; also issues ESRC, sSGA, fixed-rate sSGA, stSCST | Yes (governance token GF 2.5×; all other issued tokens excluded) |
+| **Halo** | Yes; also issues Halo Units | Yes (governance token GF 2.5×; Halo Units excluded) |
 | **Core Controlled** | No | No |
 | **Recovery** | No | No |
-| **Holding** | No | No (is the staking vehicle) |
+| **Folio** | No | No (is the staking vehicle) |
 
 ### Why Reference Values Throughout
 
@@ -267,25 +266,27 @@ This creates an accepted paradox: an Agent's book value is used twice for stakin
 Growth Staking creates a direct incentive to convert passive holdings into active innovation investment:
 
 ```
-$100k sSGA   → GF value: $100k × 0.5 = $50k effective
+$100k sSGA (or other passive holding) → GF value: $0 (excluded)
     ↓ invest into a Prime
-$100k in Prime book value → GF value: $100k × 2.5 = $250k effective
+$100k in Prime tokens → GF value: $100k × 2.5 = $250k effective
 ```
 
-Same capital, 5× the staking factor efficiency. This pulls capital from the savings layer into the Agent layer.
+Holding savings tokens, senior risk capital, or Halo Units earns no staking factor. Stakers who want rewards must take a position on a specific Agent — picking which Prime, Halo, Generator, or Guardian to back, or which Prime's first-loss tranche (TEJRC) to underwrite.
 
 ### Ecosystem alignment
 
-- **SKY whales** must become ecosystem participants, not passive governance holders
+- **SKY whales** must become active ecosystem participants — passive governance holders earn nothing
 - **Agent token demand** is structurally supported by stakers seeking efficient GF
-- **Risk capital supply** increases as stakers invest in TEJRC/SRC for GF credit
-- **Mercenary staking** is eliminated — holding SKY alone earns nothing
+- **Junior risk capital supply** increases as stakers underwrite specific Primes via TEJRC for GF credit
+- **Mercenary staking** is eliminated — holding SKY alone earns nothing, and neither does parking capital in passive yield wrappers
 
 ### Natural segmentation
 
-- Risk-tolerant stakers → hold Agent tokens (GF 2.5×) → maximum capital efficiency
-- Moderate stakers → hold TEJRC/SRC (GF 1.0–1.67×) → balanced approach
-- Conservative stakers → hold sSGA (GF 0.5×) → still works, just requires more capital
+- Concentrated stakers → hold Agent governance tokens (GF 2.5×) → maximum capital efficiency, full equity exposure to a chosen Agent
+- Underwriters → hold one or more Primes' TEJRC (GF ~1.67×) → first-loss exposure to a specific Prime's book without governance responsibility
+- Mixed → blend governance tokens and TEJRC across Agents to express a portfolio thesis
+
+There is no passive tier. Earning Growth Staking rewards requires picking specific Agents to back.
 
 ---
 

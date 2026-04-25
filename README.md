@@ -35,7 +35,7 @@ This documentation is designed for navigation with **code LLMs** (Claude Code, C
 | [`trading/`](trading/) | Sentinel network and Sky Intents — real-time execution infrastructure and intent-based trading protocol |
 | [`synomics/`](synomics/) | The Synome and the entities that inhabit it — macrosynomics, synodoxics, neurosymbolic, synoteleonomics, the Hearth, core concepts |
 | [`governance-transition/`](governance-transition/) | Alignment conserver consolidation — three legacy roles merged into single Guardian role with collateral backing |
-| [`growth-staking/`](growth-staking/) | Growth Staking — SKY staker incentives tied to ecosystem growth asset holdings (Agent tokens, risk capital, sSGA) |
+| [`growth-staking/`](growth-staking/) | Growth Staking — SKY staker incentives tied to ecosystem growth asset holdings (Agent governance tokens and Prime junior risk capital / TEJRC) |
 | [`skychain/`](skychain/) | Skychain research — proposed AI-native EVM blockchain optimized for agent operation |
 | [`input-documents/`](input-documents/) | Community contributions — submit PRs with corrections, suggestions, questions, or new information |
 

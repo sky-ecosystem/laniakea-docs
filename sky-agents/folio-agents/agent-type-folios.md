@@ -127,9 +127,9 @@ A sentinel can automate this cycle, optimizing the balance between SKY accumulat
 │  │  Staked SKY: 100,000 SKY     │  │
 │  │                               │  │
 │  │  Growth Assets:               │  │
-│  │    SPK:    $30,000            │  │
-│  │    TEJRC:  $15,000            │  │
-│  │    srSGA:  $10,000            │  │
+│  │    SPK:         $30,000       │  │
+│  │    GROVE:       $10,000       │  │
+│  │    Spark TEJRC: $15,000       │  │
 │  │                               │  │
 │  │  Pending Rewards: ...         │  │
 │  └───────────────────────────────┘  │

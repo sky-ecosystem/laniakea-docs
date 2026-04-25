@@ -136,11 +136,11 @@ Several related terms describe governance execution roles across the documentati
 | Term | Definition |
 |------|------------|
 | **Growth Staking** | Mechanism aligning SKY stakers with ecosystem innovation; stakers must hold growth assets alongside staked SKY to unlock staking rewards |
-| **Growth Factor (GF)** | Multiplier on a growth asset's Reference Value that determines how much it counts toward unlocking staking rewards. Higher GF = more credit per dollar. Agent tokens: 2.5×, Junior risk capital: ~1.67×, Senior risk capital: 1.0×, Savings: 0.5×, Halo Units: ~0.33× |
+| **Growth Factor (GF)** | Multiplier on a growth asset's Reference Value that determines how much it counts toward unlocking staking rewards. Higher GF = more credit per dollar. Agent governance tokens: 2.5×, Junior risk capital (TEJRC): ~1.67×. Senior risk capital, savings tokens, and Halo Units are excluded |
 | **Staking Factor** | Ratio (0 to 1) of GF-adjusted growth asset value to staked SKY Reference Value; determines what percentage of base staking rewards a staker earns |
 | **Reference Value** | Fundamentals-based valuation used in Growth Staking instead of spot market prices; makes the system immune to speculative price swings. Derived from the global P/E model for revenue-generating assets, or redemption value for risk capital |
 | **Global P/E Model** | Governance-set valuation framework for Reference Values. One global Base P/E parameter, with per-income-stream Modifier (center P/E), Variance (range), and Growth Score (position within range) |
-| **Growth Asset** | Ecosystem token eligible for Growth Staking: Agent governance tokens, risk capital (TEJRC, TISRC, ESRC, srSGA), savings (sSGA, fixed-rate sSGA), and Halo Units |
+| **Growth Asset** | Ecosystem token eligible for Growth Staking: Agent governance tokens (Generator, Guardian, Prime, Halo) and Prime junior risk capital (TEJRC). Limited to instruments that require an individual investment decision and carry meaningful risk; passive yield wrappers are excluded |
 
 ---
 

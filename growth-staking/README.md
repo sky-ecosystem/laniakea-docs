@@ -1,6 +1,6 @@
 # Growth Staking
 
-Specification for Growth Staking — the mechanism that aligns SKY governance token holders with ecosystem innovation by requiring stakers to also hold growth assets (Agent tokens, risk capital, or sSGA) to unlock staking rewards. Growth assets are amplified by Growth Factors that reflect how directly each asset contributes to innovation.
+Specification for Growth Staking — the mechanism that aligns SKY governance token holders with ecosystem innovation by requiring stakers to also hold growth assets (Agent governance tokens or Prime junior risk capital / TEJRC) to unlock staking rewards. Growth assets are amplified by Growth Factors that reflect how directly each asset contributes to innovation. Passive yield wrappers (savings tokens, senior risk capital, Halo Units) are deliberately excluded.
 
 ## Documents
 
