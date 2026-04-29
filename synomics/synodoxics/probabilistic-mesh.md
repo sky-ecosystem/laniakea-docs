@@ -17,10 +17,7 @@ concepts:
 
 # The Probabilistic Mesh
 
-**Status:** Speculative / architectural concept
-**Last Updated:** 2026-02-03
-
-This document describes the probabilistic mesh — the dense network of soft, informing connections that permeates the entire Synome architecture, overlaid on the sparse deontic skeleton.
+The dense network of soft, informing connections that permeates the entire Synome architecture, overlaid on the sparse deontic skeleton.
 
 ---
 
@@ -306,32 +303,3 @@ How is dreamer output validated? The answer is already implicit in the architect
 **The bandwidth limiter is primarily defensive.** Dreamers and actuators exchange information at high bandwidth. The primary constraint on this exchange is defensive: dreamer infrastructure is extremely valuable (heavy embodiments, proprietary strategies, evolved dreamarts) and must be protected from exposure. The broader dreamer-actuator exchange is architecturally mediated through the telart layer, but the bandwidth limiter itself protects the dreamer's operational security.
 
 For first-person perspectives, see [`../synoteleonomics/dreamer-perspective.md`](../synoteleonomics/dreamer-perspective.md) and [`../synoteleonomics/actuator-perspective.md`](../synoteleonomics/actuator-perspective.md).
-
----
-
-## Summary
-
-| Concept | Description |
-|---------|-------------|
-| **Probabilistic mesh** | Dense network of soft, informing connections overlaid on deontic skeleton |
-| **Authority hierarchy** | synart > telart > embart for probabilistic knowledge |
-| **Crystallization** | Governance converts probabilistic evidence into deontic rules |
-| **RSI** | Knowledge bases recursively improve their pattern-mining strategies |
-| **Meta-learning** | Getting better at getting better at finding useful patterns |
-| **Synomic inertia** | Evidence-weighted resistance to change — high-confidence patterns are stable, low-confidence patterns are fluid |
-| **Alignment incentive** | Higher-authority knowledge = safer = embodiments naturally look up |
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | The 5-layer architecture and artifact hierarchy (synart, telart, embart) |
-| [`retrieval-policy.md`](retrieval-policy.md) | Invariants for querying the probabilistic mesh |
-| [`security-and-resources.md`](security-and-resources.md) | The update problem — how ossification prevents self-corruption |
-| [`dreamer-perspective.md`](../synoteleonomics/dreamer-perspective.md) | How dreamers use the mesh for exploration and RSI |
-| [`actuator-perspective.md`](../synoteleonomics/actuator-perspective.md) | How actuators use the mesh for decision-making |
-| [`short-term-experiments.md`](../neurosymbolic/short-term-experiments.md) | Phase 1 dreamer implementation pathway |
-| [`neuro-symbolic-cognition.md`](neuro-symbolic-cognition.md) | The cognition loop that operates on the mesh — perception, manipulation, symbolic gate |
-| [`cognition-as-manipulation.md`](../neurosymbolic/cognition-as-manipulation.md) | Practical cognition mechanics — how agents query and update the mesh |

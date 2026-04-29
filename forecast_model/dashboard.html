@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Base 2026 - Sky Forecast</title>
+    <title>2026 Q2 – 2027 Q1 - Sky Forecast</title>
     <meta http-equiv="refresh" content="5">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -52,38 +52,37 @@
     </style>
 </head>
 <body>
-    <h1>Base 2026</h1>
-    <h2>Conservative baseline projection for 2026</h2>
+    <h1>2026 Q2 – 2027 Q1</h1>
+    <h2>Forward model anchored to Q1 actuals ($11.7B USDS, $31.0M net revenue)</h2>
 
     <div class="grid">
         <div class="inputs">
             <div class="section">
                 <div class="section-title">Base Model</div>
-                <table><tr><td>base_usds</td><td>9.7B</td></tr>
-<tr><td>sofr</td><td>0.0364</td></tr>
-<tr><td>savings_rate_spread</td><td>0.0030</td></tr>
+                <table><tr><td>base_usds</td><td>10.4B</td></tr>
+<tr><td>sofr</td><td>0.0365</td></tr>
+<tr><td>savings_rate_spread</td><td>0.0010</td></tr>
 <tr><td>gross_revenue_rate_spread</td><td>0.0030</td></tr>
 <tr><td>security_rate</td><td>0.21</td></tr>
 <tr><td>tier2_ratio</td><td>0.10</td></tr>
 <tr><td>tier3_ratio</td><td>0.10</td></tr>
 <tr><td>tier4_ratio</td><td>0.10</td></tr>
 </table>
-                <div class='ext-title' style='margin-top:10px'>Trajectories</div><table><tr><td>base_usds</td><td>M1: 9.7B → M12: 16.0B (linear)</td></tr>
+                <div class='ext-title' style='margin-top:10px'>Trajectories</div><table><tr><td>base_usds</td><td>M1: 10.4B → M12: 16.8B (linear)</td></tr>
+<tr><td>unrewarded_usds_user</td><td>M1: 4.1B → M12: 3.9B (linear)</td></tr>
 </table>
-                <div class='ext-title' style='margin-top:10px'>Changes</div><table><tr><th>M</th><th>Field</th><th>Value</th></tr><tr><td>M6</td><td>sofr</td><td>0.0339</td></tr>
-<tr><td>M9</td><td>sofr</td><td>0.0314</td></tr>
+                <div class='ext-title' style='margin-top:10px'>Changes</div><table><tr><th>M</th><th>Field</th><th>Value</th></tr><tr><td>M2</td><td>savings_rate_spread</td><td>0.0000</td></tr>
 </table>
             </div>
 
             <div class="extensions">
                 <div class="section">
                     <div class="ext-title">PSM Exposure</div>
-                    <table><tr><td>pct</td><td>40% of total USDS</td></tr>
+                    <table><tr><td>pct</td><td>30% of total USDS</td></tr>
 <tr><td>spread</td><td>-0.0030</td></tr>
 </table>
-                    <div class='ext-title' style='margin-top:10px'>Changes</div><table><tr><th>M</th><th>Field</th><th>Value</th></tr><tr><td>M4</td><td>psm_pct</td><td>0.30</td></tr>
-<tr><td>M7</td><td>psm_pct</td><td>0.25</td></tr>
-<tr><td>M10</td><td>psm_pct</td><td>0.15</td></tr>
+                    <div class='ext-title' style='margin-top:10px'>Changes</div><table><tr><th>M</th><th>Field</th><th>Value</th></tr><tr><td>M4</td><td>psm_pct</td><td>0.25</td></tr>
+<tr><td>M7</td><td>psm_pct</td><td>0.15</td></tr>
 </table>
                 </div>
 
@@ -118,33 +117,19 @@
                 <div class="ext-title">Token Farming (Stars)</div>
                 <table><tr><td>distribution_rate</td><td>0.175</td></tr>
 <tr><td>farm_yield_spread</td><td>0.0010</td></tr>
-<tr><td>spark</td><td>230M @ 0.65 (M1)</td></tr>
-<tr><td>grove</td><td>60% of Spark @ 0.70 (M4)</td></tr>
-<tr><td>keel</td><td>25% of Spark @ 0.70 (M9)</td></tr>
-<tr><td>star4</td><td>25% of Spark @ 0.32 (M8)</td></tr>
-<tr><td>star5</td><td>25% of Spark @ 0.80 (M10)</td></tr>
+<tr><td>spark</td><td>200M @ 0.65 (M1)</td></tr>
+<tr><td>grove</td><td>60% of Spark @ 0.70 (M3)</td></tr>
+<tr><td>keel</td><td>25% of Spark @ 0.70 (M6)</td></tr>
+<tr><td>star4</td><td>25% of Spark @ 0.32 (M5)</td></tr>
+<tr><td>star5</td><td>25% of Spark @ 0.80 (M7)</td></tr>
 </table>
-                <div class='ext-title' style='margin-top:10px'>Changes</div><table><tr><th>M</th><th>Field</th><th>Value</th></tr><tr><td>M4</td><td>spark_market_cap</td><td>250M</td></tr>
-<tr><td>M7</td><td>spark_market_cap</td><td>270M</td></tr>
-</table>
-            </div>
-
-            <div class="section">
-                <div class="ext-title">Genesis Capital</div>
-                <table><tr><td>core_buffer</td><td>50M</td></tr>
-<tr><td>min_threshold</td><td>50M</td></tr>
-<tr><td>spark</td><td>25M</td></tr>
-<tr><td>grove</td><td>25M</td></tr>
-<tr><td>keel</td><td>20M</td></tr>
-<tr><td>star4</td><td>25M</td></tr>
-<tr><td>star5</td><td>25M</td></tr>
-</table>
+                
             </div>
 
             <div class="section">
                 <div class="ext-title">Genesis Prime</div>
                 <table><tr><td>sell_rate</td><td>0.175</td></tr>
-<tr><td>obex</td><td>60% of Spark @ 0.50 (M11)</td></tr>
+<tr><td>obex</td><td>60% of Spark @ 0.50 (M8)</td></tr>
 </table>
             </div>
         </div>
@@ -154,190 +139,174 @@
             <div class="quarters">
                 
         <div class="quarter">
-            <h3>Q1</h3>
+            <h3>Q2 2026</h3>
             <table>
-                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th><th>Backstop</th></tr>
-                
-            <tr>
-                <td>Jan</td>
-                <td>10,297.59M</td>
-                <td>34.86M</td>
-                <td>10.84M</td>
-                <td>2.28M</td>
-                <td>8.56M</td>
-                <td>6.42M</td>
-                <td>56.14M</td>
-            </tr>
-            <tr>
-                <td>Feb</td>
-                <td>10,874.86M</td>
-                <td>36.73M</td>
-                <td>10.81M</td>
-                <td>2.27M</td>
-                <td>8.54M</td>
-                <td>6.41M</td>
-                <td>54.09M</td>
-            </tr>
-            <tr>
-                <td>Mar</td>
-                <td>11,452.13M</td>
-                <td>38.60M</td>
-                <td>10.79M</td>
-                <td>2.27M</td>
-                <td>8.52M</td>
-                <td>6.39M</td>
-                <td>52.04M</td>
-            </tr>
-                <tr class="total">
-                    <td><strong>Q1</strong></td>
-                    <td>—</td>
-                    <td><strong>110.19M</strong></td>
-                    <td><strong>32.44M</strong></td>
-                    <td><strong>6.81M</strong></td>
-                    <td><strong>25.62M</strong></td>
-                    <td><strong>19.22M</strong></td>
-                    <td><strong>52.04M</strong></td>
-                </tr>
-            </table>
-        </div>
-        <div class="quarter">
-            <h3>Q2</h3>
-            <table>
-                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th><th>Backstop</th></tr>
+                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th></tr>
                 
             <tr>
                 <td>Apr</td>
-                <td>14,179.37M</td>
-                <td>48.48M</td>
-                <td>17.06M</td>
-                <td>3.58M</td>
-                <td>13.48M</td>
-                <td>10.11M</td>
-                <td>50.23M</td>
+                <td>11,687.29M</td>
+                <td>39.05M</td>
+                <td>15.87M</td>
+                <td>3.33M</td>
+                <td>12.54M</td>
+                <td>9.40M</td>
             </tr>
             <tr>
                 <td>May</td>
-                <td>14,756.64M</td>
-                <td>50.39M</td>
-                <td>17.08M</td>
-                <td>3.59M</td>
-                <td>13.49M</td>
-                <td>10.12M</td>
-                <td>48.42M</td>
+                <td>12,302.07M</td>
+                <td>40.34M</td>
+                <td>15.98M</td>
+                <td>3.36M</td>
+                <td>12.62M</td>
+                <td>9.47M</td>
             </tr>
             <tr>
                 <td>Jun</td>
-                <td>15,510.52M</td>
-                <td>49.75M</td>
-                <td>16.43M</td>
-                <td>3.45M</td>
-                <td>12.98M</td>
-                <td>9.74M</td>
-                <td>48.49M</td>
+                <td>13,967.24M</td>
+                <td>45.57M</td>
+                <td>18.15M</td>
+                <td>3.81M</td>
+                <td>14.34M</td>
+                <td>10.75M</td>
             </tr>
                 <tr class="total">
-                    <td><strong>Q2</strong></td>
+                    <td><strong>Q2 2026</strong></td>
                     <td>—</td>
-                    <td><strong>148.62M</strong></td>
-                    <td><strong>50.58M</strong></td>
-                    <td><strong>10.62M</strong></td>
-                    <td><strong>39.96M</strong></td>
-                    <td><strong>29.97M</strong></td>
-                    <td><strong>48.49M</strong></td>
+                    <td><strong>124.95M</strong></td>
+                    <td><strong>49.99M</strong></td>
+                    <td><strong>10.50M</strong></td>
+                    <td><strong>39.50M</strong></td>
+                    <td><strong>29.62M</strong></td>
                 </tr>
             </table>
         </div>
         <div class="quarter">
-            <h3>Q3</h3>
+            <h3>Q3 2026</h3>
             <table>
-                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th><th>Backstop</th></tr>
+                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th></tr>
                 
             <tr>
                 <td>Jul</td>
-                <td>16,325.72M</td>
-                <td>52.89M</td>
-                <td>17.49M</td>
-                <td>3.67M</td>
-                <td>13.82M</td>
-                <td>10.36M</td>
-                <td>48.76M</td>
+                <td>14,549.06M</td>
+                <td>47.76M</td>
+                <td>18.50M</td>
+                <td>3.88M</td>
+                <td>14.61M</td>
+                <td>10.96M</td>
             </tr>
             <tr>
                 <td>Aug</td>
-                <td>17,184.27M</td>
-                <td>55.59M</td>
-                <td>18.10M</td>
-                <td>3.80M</td>
-                <td>14.30M</td>
-                <td>10.72M</td>
-                <td>49.15M</td>
+                <td>15,205.54M</td>
+                <td>49.84M</td>
+                <td>18.50M</td>
+                <td>3.88M</td>
+                <td>14.61M</td>
+                <td>10.96M</td>
             </tr>
             <tr>
                 <td>Sep</td>
-                <td>18,362.31M</td>
-                <td>55.56M</td>
-                <td>17.86M</td>
-                <td>3.75M</td>
-                <td>14.11M</td>
-                <td>10.58M</td>
-                <td>49.50M</td>
+                <td>16,043.29M</td>
+                <td>52.49M</td>
+                <td>18.80M</td>
+                <td>3.95M</td>
+                <td>14.85M</td>
+                <td>11.14M</td>
             </tr>
                 <tr class="total">
-                    <td><strong>Q3</strong></td>
+                    <td><strong>Q3 2026</strong></td>
                     <td>—</td>
-                    <td><strong>164.04M</strong></td>
-                    <td><strong>53.45M</strong></td>
-                    <td><strong>11.22M</strong></td>
-                    <td><strong>42.22M</strong></td>
-                    <td><strong>31.67M</strong></td>
-                    <td><strong>49.50M</strong></td>
+                    <td><strong>150.09M</strong></td>
+                    <td><strong>55.79M</strong></td>
+                    <td><strong>11.72M</strong></td>
+                    <td><strong>44.08M</strong></td>
+                    <td><strong>33.06M</strong></td>
                 </tr>
             </table>
         </div>
         <div class="quarter">
-            <h3>Q4</h3>
+            <h3>Q4 2026</h3>
             <table>
-                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th><th>Backstop</th></tr>
+                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th></tr>
                 
             <tr>
                 <td>Oct</td>
-                <td>19,487.78M</td>
-                <td>60.32M</td>
-                <td>20.18M</td>
-                <td>4.24M</td>
-                <td>15.94M</td>
-                <td>11.96M</td>
-                <td>50.30M</td>
+                <td>16,811.77M</td>
+                <td>55.77M</td>
+                <td>19.65M</td>
+                <td>4.13M</td>
+                <td>15.52M</td>
+                <td>11.64M</td>
             </tr>
             <tr>
                 <td>Nov</td>
-                <td>20,065.05M</td>
-                <td>63.24M</td>
-                <td>21.44M</td>
-                <td>4.50M</td>
-                <td>16.94M</td>
-                <td>12.71M</td>
-                <td>46.35M</td>
+                <td>17,393.59M</td>
+                <td>58.51M</td>
+                <td>20.55M</td>
+                <td>4.32M</td>
+                <td>16.24M</td>
+                <td>12.18M</td>
             </tr>
             <tr>
                 <td>Dec</td>
-                <td>20,642.32M</td>
-                <td>65.14M</td>
-                <td>21.69M</td>
-                <td>4.56M</td>
-                <td>17.14M</td>
-                <td>12.85M</td>
-                <td>47.46M</td>
+                <td>17,975.41M</td>
+                <td>60.55M</td>
+                <td>20.75M</td>
+                <td>4.36M</td>
+                <td>16.39M</td>
+                <td>12.29M</td>
             </tr>
                 <tr class="total">
-                    <td><strong>Q4</strong></td>
+                    <td><strong>Q4 2026</strong></td>
                     <td>—</td>
-                    <td><strong>188.69M</strong></td>
-                    <td><strong>63.32M</strong></td>
-                    <td><strong>13.30M</strong></td>
-                    <td><strong>50.02M</strong></td>
-                    <td><strong>37.52M</strong></td>
-                    <td><strong>47.46M</strong></td>
+                    <td><strong>174.83M</strong></td>
+                    <td><strong>60.95M</strong></td>
+                    <td><strong>12.80M</strong></td>
+                    <td><strong>48.15M</strong></td>
+                    <td><strong>36.11M</strong></td>
+                </tr>
+            </table>
+        </div>
+        <div class="quarter">
+            <h3>Q1 2027</h3>
+            <table>
+                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th></tr>
+                
+            <tr>
+                <td>Jan</td>
+                <td>18,557.23M</td>
+                <td>62.42M</td>
+                <td>20.77M</td>
+                <td>4.36M</td>
+                <td>16.41M</td>
+                <td>12.31M</td>
+            </tr>
+            <tr>
+                <td>Feb</td>
+                <td>19,139.05M</td>
+                <td>64.29M</td>
+                <td>20.80M</td>
+                <td>4.37M</td>
+                <td>16.43M</td>
+                <td>12.32M</td>
+            </tr>
+            <tr>
+                <td>Mar</td>
+                <td>19,720.86M</td>
+                <td>66.16M</td>
+                <td>20.83M</td>
+                <td>4.37M</td>
+                <td>16.45M</td>
+                <td>12.34M</td>
+            </tr>
+                <tr class="total">
+                    <td><strong>Q1 2027</strong></td>
+                    <td>—</td>
+                    <td><strong>192.88M</strong></td>
+                    <td><strong>62.40M</strong></td>
+                    <td><strong>13.10M</strong></td>
+                    <td><strong>49.30M</strong></td>
+                    <td><strong>36.97M</strong></td>
                 </tr>
             </table>
         </div>
@@ -346,57 +315,52 @@
             <div class="annual">
                 <div class="section-title">Annual Summary</div>
                 <table>
-                    <tr><th>Quarter</th><th>USDS</th><th>Gross Rev</th><th>Net Revenue</th><th>Security</th><th>Profit</th><th>Staking</th><th>Backstop</th></tr>
+                    <tr><th>Quarter</th><th>USDS</th><th>Gross Rev</th><th>Net Revenue</th><th>Security</th><th>Profit</th><th>Staking</th></tr>
                     
         <tr>
-            <td>Q1</td>
-            <td>11,452.13M</td>
-            <td>110.19M</td>
-            <td>32.44M</td>
-            <td>6.81M</td>
-            <td>25.62M</td>
-            <td>19.22M</td>
-            <td>52.04M</td>
+            <td>Q2 2026</td>
+            <td>13,967.24M</td>
+            <td>124.95M</td>
+            <td>49.99M</td>
+            <td>10.50M</td>
+            <td>39.50M</td>
+            <td>29.62M</td>
         </tr>
         <tr>
-            <td>Q2</td>
-            <td>15,510.52M</td>
-            <td>148.62M</td>
-            <td>50.58M</td>
-            <td>10.62M</td>
-            <td>39.96M</td>
-            <td>29.97M</td>
-            <td>48.49M</td>
+            <td>Q3 2026</td>
+            <td>16,043.29M</td>
+            <td>150.09M</td>
+            <td>55.79M</td>
+            <td>11.72M</td>
+            <td>44.08M</td>
+            <td>33.06M</td>
         </tr>
         <tr>
-            <td>Q3</td>
-            <td>18,362.31M</td>
-            <td>164.04M</td>
-            <td>53.45M</td>
-            <td>11.22M</td>
-            <td>42.22M</td>
-            <td>31.67M</td>
-            <td>49.50M</td>
+            <td>Q4 2026</td>
+            <td>17,975.41M</td>
+            <td>174.83M</td>
+            <td>60.95M</td>
+            <td>12.80M</td>
+            <td>48.15M</td>
+            <td>36.11M</td>
         </tr>
         <tr>
-            <td>Q4</td>
-            <td>20,642.32M</td>
-            <td>188.69M</td>
-            <td>63.32M</td>
-            <td>13.30M</td>
-            <td>50.02M</td>
-            <td>37.52M</td>
-            <td>47.46M</td>
+            <td>Q1 2027</td>
+            <td>19,720.86M</td>
+            <td>192.88M</td>
+            <td>62.40M</td>
+            <td>13.10M</td>
+            <td>49.30M</td>
+            <td>36.97M</td>
         </tr>
                     <tr>
                         <td>Year</td>
-                        <td class="highlight">20,642.32M</td>
-                        <td class="highlight">611.53M</td>
-                        <td class="highlight">199.78M</td>
-                        <td class="highlight">41.95M</td>
-                        <td class="highlight">157.82M</td>
-                        <td class="highlight">118.37M</td>
-                        <td class="highlight">47.46M</td>
+                        <td class="highlight">19,720.86M</td>
+                        <td class="highlight">642.75M</td>
+                        <td class="highlight">229.13M</td>
+                        <td class="highlight">48.12M</td>
+                        <td class="highlight">181.01M</td>
+                        <td class="highlight">135.76M</td>
                     </tr>
                 </table>
             </div>

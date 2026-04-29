@@ -8,9 +8,6 @@ concepts:
 
 # Hardware-Aware Cognition
 
-**Status:** Core architectural commitment
-**Last Updated:** 2026-02-15
-
 The optimal cognition strategy depends on the hardware it runs on. A 64-core CPU with a single GPU pipelines differently than a multi-GPU cluster with weak CPUs. The Synome doesn't treat this as an engineering detail to be configured — it treats hardware topology as **knowledge in the graph**, and scheduling strategies as **patterns subject to the same evidence dynamics as everything else.**
 
 ---
@@ -144,29 +141,3 @@ The system observes its own performance and writes evidence:
 Performance metrics are just more evidence. GPU utilization, query latency, turns per second, context efficiency — all feed back into strategy TVs. The system learns its own optimal scheduling the same way it learns optimal trading strategies: try things, observe results, accumulate evidence.
 
 This is the fractal pattern from the [security docs](../synodoxics/security-and-resources.md) at its most literal. The same evidence dynamics that govern "should I increase exposure to ETH" also govern "should I run 8 parallel CPU queries or 16." Same graph, same TVs, same learning loop. The system doesn't distinguish between knowledge about the world and knowledge about itself.
-
----
-
-## Summary
-
-| Concept | Description |
-|---------|-------------|
-| **Hardware in the graph** | GPU specs, CPU cores, latencies are claims with TVs, not config files |
-| **Pipelining** | GPU and CPU never idle — speculative pre-execution fills gaps |
-| **Context efficiency** | Surgical context assembly = more turns per second = faster convergence |
-| **Fixed-cost economics** | Self-hosted GPU changes the calculus: exploration is free, idle time is waste |
-| **Scheduling as patterns** | Execution strategies are graph patterns with TVs, evolved through evidence |
-| **Self-optimization** | Performance observations are evidence; the system learns its own optimal scheduling |
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`query-mechanics.md`](query-mechanics.md) | The queries that scheduling manages — backends, stochastic traversal, strategy programs |
-| [`cognition-as-manipulation.md`](cognition-as-manipulation.md) | The cognition loop that hardware scheduling serves |
-| [`attention-allocation.md`](attention-allocation.md) | Turn length tradeoffs are hardware-dependent |
-| [`live-graph-context.md`](live-graph-context.md) | Context rendering efficiency shapes pipelining |
-| [`../synoteleonomics/teleonome-economics.md`](../synoteleonomics/teleonome-economics.md) | Fixed-cost GPU, never-idle queue, compute economics |
-| [`../synodoxics/security-and-resources.md`](../synodoxics/security-and-resources.md) | The fractal security pattern — same dynamics at every scale |

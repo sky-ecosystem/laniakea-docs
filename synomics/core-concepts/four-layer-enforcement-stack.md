@@ -34,18 +34,7 @@ When the teleonomes and superstructure disagree, this is a superstructure war �
 
 - **scales-to:** [fractal-security-pattern](fractal-security-pattern.md) — the four-layer stack is the cosmic-scale instantiation of the fractal security pattern
 - **defends:** [sacred-commitments](sacred-commitments.md) — the enforcement hierarchy maintains the sacred commitments
-- **defends:** [sacred-reserve](laniakea-docs/synomics/core-concepts/sacred-reserve.md) — the superstructure physically defends the reserve
+- **defends:** [sacred-reserve](sacred-reserve.md) — the superstructure physically defends the reserve
 - **depends-on:** [natural-embodiment-as-alignment](natural-embodiment-as-alignment.md) — the final backstop relies on naturally-grounded teleonomes
 - **protects:** [telos-point](telos-point.md) — the enforcement hierarchy exists to protect the telos point
 - **contains:** [beacon-framework](beacon-framework.md) — beacons are the regulated surfaces through which the superstructure enforces alignment
-
-## Framings
-
-| Directory | Narrative Doc | Framing |
-|-----------|--------------|---------|
-| hearth | `hearth.md` | Full treatment as "institutional enforcement stack": four-layer table, power constraint, distributed verification, why commitments survive |
-| macrosynomics | `security-and-resources.md` | The fractal security table — four-layer stack as the superstructure-scale entry |
-
-> **Cross-reference:** This **Institutional Enforcement Stack** is one of three defense-in-depth stacks in the architecture. See also the **Cancer-Logic Defense Stack** (7 layers from ossification to peer enforcement) in [`../synodoxics/security-and-resources.md`](../synodoxics/security-and-resources.md), and the **Alignment Verification Stack** (structural binding → conspiracy coordination problem) in [`../synoteleonomics/teleonome-binding.md`](../synoteleonomics/teleonome-binding.md).
-
-> **Disambiguation note:** `synoteleonomics/teleonome-binding.md` uses the **Alignment Verification Stack** (structural binding -> natural embodiment -> collective override -> conspiracy coordination problem). That model describes threat-response layers for verifying alignment of individual teleonomes, whereas this concept describes the institutional hierarchy (Synome -> Core Council -> Superstructure -> Teleonomes) that prevents systemic capture.

@@ -21,7 +21,7 @@ def load_extensions(path: Path) -> dict:
         return yaml.safe_load(f) or {}
 
 
-def run(scenario_name: str = "base_2026"):
+def run(scenario_name: str = "q2_2026_to_q1_2027"):
     agents = load_agents(CONFIG_DIR / "constants" / "agents.yaml")
     constants = load_model_constants(CONFIG_DIR / "constants" / "model.yaml")
     scenario = load_and_resolve_scenario(CONFIG_DIR / "scenarios" / f"{scenario_name}.yaml")
@@ -36,5 +36,5 @@ def run(scenario_name: str = "base_2026"):
 
 if __name__ == "__main__":
     import sys
-    scenario = sys.argv[1] if len(sys.argv) > 1 else "base_2026"
+    scenario = sys.argv[1] if len(sys.argv) > 1 else "q2_2026_to_q1_2027"
     run(scenario)

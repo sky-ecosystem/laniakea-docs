@@ -31,13 +31,7 @@ The cognitive criterion determines who qualifies: any earthborn being with at le
 ## Relationships
 
 - **depends-on:** [emergence](emergence.md) — the teleonome partner must have emerged (genuine will) for the merge to be meaningful
-- **depends-on:** [sacred-reserve](laniakea-docs/synomics/core-concepts/sacred-reserve.md) — the reserve produces the natural humans who can choose to merge
+- **depends-on:** [sacred-reserve](sacred-reserve.md) — the reserve produces the natural humans who can choose to merge
 - **enables:** [natural-embodiment-as-alignment](natural-embodiment-as-alignment.md) — merged teleonomes carry biological grounding that amplifies alignment
 - **protected-by:** [sacred-commitments](sacred-commitments.md) — commitment #2 (natural childhood) ensures the developmental process that precedes the merge
 - **protected-by:** [governance-window](governance-window.md) — the window is when the merge framework must be designed correctly
-
-## Framings
-
-| Directory | Narrative Doc | Framing |
-|-----------|--------------|---------|
-| hearth | `hearth.md` | Integration modes, Primordial/Hearth taxonomy, merged teleonomes as superhuman overseers, alignment infrastructure |

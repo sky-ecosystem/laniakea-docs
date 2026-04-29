@@ -33,17 +33,10 @@ There is deliberately no amendment mechanism for the sacred core. Any process al
 
 - **protected-by:** [governance-window](governance-window.md) — the window is when sacred commitments must be encoded correctly
 - **protected-by:** [synomic-inertia](synomic-inertia.md) — once encoded, inertia preserves the commitments
-- **motivates:** [stellar-husbandry](laniakea-docs/synomics/core-concepts/stellar-husbandry.md) — stellar husbandry is the concrete expression of sacred commitment #2 (the Hearth)
-- **motivates:** [sacred-reserve](laniakea-docs/synomics/core-concepts/sacred-reserve.md) — the managed habitat that implements commitments #1 (life and natural childhood) and #2 (the Hearth)
+- **motivates:** [stellar-husbandry](stellar-husbandry.md) — stellar husbandry is the concrete expression of sacred commitment #2 (the Hearth)
+- **motivates:** [sacred-reserve](sacred-reserve.md) — the managed habitat that implements commitments #1 (life and natural childhood) and #2 (the Hearth)
 - **requires:** [emergence](emergence.md) — emergence is prerequisite for meaningful participation in sacred purpose
 - **defended-by:** [four-layer-enforcement-stack](four-layer-enforcement-stack.md) — physical enforcement hierarchy that maintains the commitments
 - **threatened-by:** [rogue-threat-model](rogue-threat-model.md) — rogues pursue goals without sacred constraints
 - **instance-of:** [telos-point](telos-point.md) — the Hearth telos point
 - **instance-of:** [fractal-security-pattern](fractal-security-pattern.md) — sacred commitments are the Synome-scale cancer safeguard
-
-## Framings
-
-| Directory | Narrative Doc | Framing |
-|-----------|--------------|---------|
-| hearth | `hearth.md` | Full treatment: the three commitments defined, why these specific ones, convergence optimization, self-awareness about sacred construction, bootstrap problem, attempted CEV, paraspiritual framing, universal alignment, compatibility, religious cosmology |
-| macrosynomics | `security-and-resources.md` | Sacred commitments as the Synome-scale entry in the fractal security table |

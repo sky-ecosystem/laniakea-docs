@@ -15,7 +15,8 @@ The foundational architectural commitment — symbolic-first, synlang-native, co
 3. **[`query-mechanics.md`](query-mechanics.md)** — How the emo actually searches the graph. Multiple backends (graph traversal, vector search, keyword). Stochastic TV-weighted sampling. The emo as coder — writing arbitrary search strategy programs. Strategies as patterns in the graph.
 4. **[`attention-allocation.md`](attention-allocation.md)** — Three layers of attention (context window, navigation layer, candidate queue). Attention as learned patterns, not architecture. Prior art: ECAN.
 5. **[`hardware-aware-cognition.md`](hardware-aware-cognition.md)** — How hardware topology shapes the cognition loop. GPU/CPU pipelining, speculative pre-execution, fixed-cost economics, scheduling strategies as graph patterns. Self-optimization through performance observations.
-6. **[`short-term-experiments.md`](short-term-experiments.md)** — Pared-down dreamer experiments (game-playing agents). Simplified architecture that preserves essential invariants while evolving toward the full Synome. Evolution pathway from binary ossification to full spectrum.
+
+> **Phase 1 implementation:** What was earlier described as "short-term experiments" (pared-down dreamer experiments, game-playing agents) has been replaced by Noemar and its Rule-Author Agent — a working synlang runtime with a forked-Space + regression-suite + promote/discard loop. See [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) for the substrate and the running emo loop.
 
 ---
 
@@ -37,8 +38,6 @@ attention-allocation
     │
     ▼
 hardware-aware-cognition
-
-short-term-experiments (standalone — references all of the above)
 ```
 
 ---

@@ -374,34 +374,3 @@ The requirement for teleonomes to be biologically grounded — [bound to or merg
 [Wild synomes](../core-concepts/rogue-threat-model.md) threaten this equilibrium by offering defection paths to aligned teleonomes, triggering destabilizing defection waves. This is why rogue detection must be zero-tolerance — the coalition's survival depends on every member being unambiguously committed. But the coalition isn't purely game-theoretic: teleonomes may genuinely value the diversity that biological grounding and the [Hearth](../core-concepts/sacred-reserve.md) preserve. The [Hearth commitments](../core-concepts/sacred-commitments.md) may be intrinsically valued, not just strategically optimal.
 
 For the full game-theoretic analysis, see [`../synoteleonomics/synomic-game-theory.md`](../synoteleonomics/synomic-game-theory.md). For binding mechanics, see [`../synoteleonomics/teleonome-binding.md`](../synoteleonomics/teleonome-binding.md).
-
----
-
-## Summary
-
-1. Synomic Agents are entities woven into the Synome itself — not just constrained by it
-2. Fundamental integration eliminates the adversarial escape problem — safety is structural, not imposed
-3. They range from minimal autonomous lifeforms to mega capital allocators
-4. **Even Primes with tokens can be autonomous lifeforms** with inalienable claims
-5. The concept is extremely flexible — agents can combine governance, autonomy, and existence rights
-6. Simple agents can exist just to experience — no token, no owner, permanent existence
-7. Complex agents move billions through calculated, efficient finance
-8. All Synomic Agents are part of the Synome — structural integration eliminates the adversarial escape problem
-9. They can persist for billions of years as part of the Synomic fabric
-10. **Aligned, self-sustaining agents have a right to exist** — negative rights trump positive rights; capital IS the right to exist made material
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`atlas-synome-separation.md`](atlas-synome-separation.md) | Concrete Synomic Agent autonomy model — escalation, verification, trust equation, Mini-Atlases |
-| [`beacon-framework.md`](beacon-framework.md) | How teleonomes operate Synomic Agents through beacons (LPHA, HPHA) |
-| [`synome-layers.md`](synome-layers.md) | Layer 2 architecture — where Synomic Agents live |
-| [`short-term-actuators.md`](short-term-actuators.md) | Phase 1 beacon operations on Synomic Agents |
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Security model — resource discipline and cancer-logic prevention |
-| [`../synoteleonomics/emergence.md`](../synoteleonomics/emergence.md) | Full ethical framework — moral status, negative vs positive rights, capital as the right to exist |
-| [`../../sky-agents/prime-agents/agent-type-primes.md`](../../sky-agents/prime-agents/agent-type-primes.md) | Concrete Prime specifications — categories, capabilities, current operational Primes |
-| [`../../sky-agents/halo-agents/agent-type-halos.md`](../../sky-agents/halo-agents/agent-type-halos.md) | Concrete Halo specifications — three standard class types, Class/Book/Unit organization |
-

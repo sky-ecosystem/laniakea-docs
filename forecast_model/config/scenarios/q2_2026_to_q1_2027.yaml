@@ -1,0 +1,50 @@
+name: "2026 Q2 – 2027 Q1"
+description: "Forward model anchored to Q1 actuals ($11.7B USDS, $31.0M net revenue)"
+months: 12
+start_month: 4    # April 2026
+start_year: 2026
+
+# Month mapping: M1=Apr, M2=May, M3=Jun, M4=Jul, M5=Aug, M6=Sep,
+#                M7=Oct, M8=Nov, M9=Dec, M10=Jan'27, M11=Feb'27, M12=Mar'27
+
+agent_launches:
+  spark: 1    # Apr (already running)
+  grove: 3    # Jun (delayed from Apr)
+  keel: 6     # Sep
+  star4: 5    # Aug
+  star5: 7    # Oct
+
+baseline:
+  base_usds: 10400000000       # calibrated: total USDS ≈ $11.7B at M1 after farming boosts
+  unrewarded_usds_user: 4100000000   # current actual (mostly DAI, mostly unrewarded)
+  sofr: "0.0365"                     # flat per SOFRWATCH
+  savings_rate_spread: "0.0010"      # current 10bps spread
+  gross_revenue_rate_spread: "0.0030"
+  farm_yield_spread: "0.0040"
+  sell_token_rate: "0.25"
+  security_rate: "0.21"
+  spark_market_cap: 200000000
+  psm_pct: "0.30"                    # already at 0.30 as of April
+  tier2_ratio: "0.10"
+  tier3_ratio: "0.10"
+  tier4_ratio: "0.10"
+
+trajectories:
+  base_usds:
+    points:
+      1: 10400000000      # Apr 2026 (total USDS ≈ $11.7B)
+      12: 16800000000     # Mar 2027 (total USDS ≈ $19.5B)
+    mode: linear
+  unrewarded_usds_user:
+    points:
+      1: 4100000000
+      12: 3900000000      # full -200M decline by end of Q1 2027
+    mode: linear
+
+changes:
+  2:
+    savings_rate_spread: "0.0000"    # May: SSR drops to SOFR
+  4:
+    psm_pct: "0.25"                  # Jul
+  7:
+    psm_pct: "0.15"                  # Oct

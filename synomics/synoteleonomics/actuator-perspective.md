@@ -11,6 +11,8 @@ concepts:
 
 This document describes the Synome architecture from the perspective of an **Actuator** — an embodiment that interacts with the real world to generate value, achieve its purpose, and survive.
 
+> **Phase note:** The full actuator described below is a Phase 9-10 capability. Today, "actuators" are the deterministic teleonome-less beacons described in [`../macrosynomics/short-term-actuators.md`](../macrosynomics/short-term-actuators.md). The bridge — embodiments that actually run cognition loops and feed evidence back to the Synome — is being built now via the Rule-Author Agent (see [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md)). The actuator-as-validation role described here is operational at small scale today: regression-suite outcomes ARE evidence, promote/discard IS the validation gate.
+
 ---
 
 ## What I Am
@@ -262,31 +264,3 @@ I operate under hard constraints:
 - **Access Controls** — Can only use authorized capabilities
 
 These aren't limitations — they're what make me trustworthy.
-
----
-
-## Summary
-
-| Aspect | Actuator Perspective |
-|--------|----------------------|
-| **Purpose** | Fulfill directive, generate value, survive |
-| **World** | Real, through Beacons and Hardware |
-| **Actions** | Real consequences, real value |
-| **Learning** | From experience + synome updates + dreamer discoveries |
-| **Relationship to Dreamers** | They explore for me, I execute in reality |
-| **Survival** | Stay aligned, stay resourced, stay useful |
-| **Constraints** | Axioms, directive, resource limits |
-| **Lifecycle** | Long-running, may scale/migrate |
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`dreamer-perspective.md`](dreamer-perspective.md) | My counterpart — explores in simulation so I can execute in reality |
-| [`beacon-framework.md`](../macrosynomics/beacon-framework.md) | How I interact with the world through regulated apertures |
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | The 5-layer architecture I exist within |
-| [`retrieval-policy.md`](../synodoxics/retrieval-policy.md) | How I query the probabilistic mesh |
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Why resource discipline and alignment matter for survival |
-| [`short-term-actuators.md`](../macrosynomics/short-term-actuators.md) | Phase 1 teleonome-less beacons — precursor to full actuators |

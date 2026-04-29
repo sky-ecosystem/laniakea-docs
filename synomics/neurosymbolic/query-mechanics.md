@@ -9,10 +9,9 @@ concepts:
 
 # Query Mechanics
 
-**Status:** Core architectural commitment
-**Last Updated:** 2026-02-15
-
 How the emo actually searches the graph. [`cognition-as-manipulation.md`](cognition-as-manipulation.md) describes the principle: compact pattern-matching function calls that reshape vast regions of context. This document makes it concrete — what kinds of queries exist, how they handle the combinatorial explosion of graph traversal, and how the emo learns to write its own search strategies.
+
+The runtime sits underneath. Noemar's three-layer query resolution (direct fact matching via inverted index → rewriting → compound resolution via set operations) is the mechanism the strategies described here compose into. See [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) for the substrate; this doc describes what the emo writes on top of it.
 
 ---
 
@@ -160,29 +159,3 @@ The query engine composes TVs during traversal — multiplying strengths, taking
 The engine does NOT compute "what is the marginal probability of X given all possible worlds?" That's #P-hard and unnecessary. The engine returns individual claims with their TVs and the composed TV of the path that found them. The **emo** reasons about what the TVs mean in combination. The hard probabilistic reasoning happens in the cognition loop, not in the storage layer.
 
 The query engine is a TV-aware graph traverser with sampling. It is not a probabilistic database.
-
----
-
-## Summary
-
-| Concept | Description |
-|---------|-------------|
-| **Interface contract** | All queries return candidates + evidence + cost, regardless of backend |
-| **Multiple backends** | Graph traversal, vector search, keyword/regex, aggregation — composable |
-| **Stochastic traversal** | Monte Carlo-style sampling weighted by TV; temperature controls exploration |
-| **Emo as coder** | The emo writes arbitrary s-expression search programs, not just parameterized queries |
-| **Strategies as patterns** | Search programs live in the graph with TVs, subject to the same evidence dynamics |
-| **TV-aware, not probabilistic** | The engine composes TVs for pruning/ranking; it doesn't do probabilistic inference |
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`cognition-as-manipulation.md`](cognition-as-manipulation.md) | The principle this doc makes concrete — pattern-matching function calls, the 10:10000 ratio |
-| [`live-graph-context.md`](live-graph-context.md) | The live context that query results get rendered into |
-| [`attention-allocation.md`](attention-allocation.md) | Attention determines what to query; query results reshape attention |
-| [`hardware-aware-cognition.md`](hardware-aware-cognition.md) | Hardware constraints shape query scheduling and parallelism |
-| [`../synodoxics/probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | The mesh being queried |
-| [`../synoteleonomics/dreamer-perspective.md`](../synoteleonomics/dreamer-perspective.md) | Dreamers evolve better query strategies |

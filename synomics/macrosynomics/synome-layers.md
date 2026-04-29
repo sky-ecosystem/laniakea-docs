@@ -370,18 +370,3 @@ These are the foundational decisions that are hard to change once built:
 10. **Probabilistic-deontic architecture** — Soft probabilistic connections (knowledge, evidence) inform hard deontic connections (rules, governance). Governance crystallizes probability into authority.
 
 Everything else (storage backend, sync transport, query language) can be swapped.
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`synome-overview.md`](synome-overview.md) | High-level introduction to all Synome concepts |
-| [`beacon-framework.md`](beacon-framework.md) | Detailed beacon taxonomy (LPLA/LPHA/HPLA/HPHA), lifecycle, naming |
-| [`atlas-synome-separation.md`](atlas-synome-separation.md) | How Atlas and Synome relate, Synomic Agent autonomy, verification model |
-| [`probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | Detailed truth value system, ossification levels, evidence flow |
-| [`retrieval-policy.md`](../synodoxics/retrieval-policy.md) | Invariants for querying the probabilistic mesh |
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Resource management, cancer-logic, the update problem |
-| [`actuator-perspective.md`](../synoteleonomics/actuator-perspective.md) | First-person actuator embodiment view |
-| [`dreamer-perspective.md`](../synoteleonomics/dreamer-perspective.md) | First-person dreamer embodiment view |

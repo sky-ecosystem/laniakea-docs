@@ -12,10 +12,7 @@ concepts:
 
 # Short-Term Actuator Work: Teleonome-less Beacons
 
-**Status:** Implementation pathway
-**Last Updated:** 2026-02-03
-
-This document describes Phase 1 beacon deployments and how they evolve toward full teleonome-based actuators.
+Phase 1 beacon deployments and how they evolve toward full teleonome-based actuators.
 
 ---
 
@@ -346,33 +343,3 @@ Phase 1 is not just "getting things done" — it's learning about operational re
 | How fast can operations run | Informs settlement cycle decisions |
 
 This operational experience becomes the foundation for sentinel and teleonome design.
-
----
-
-## Summary
-
-| Aspect | Phase 1 | Evolves Toward |
-|--------|---------|----------------|
-| Beacons | Low-power (deterministic) | High-power sentinels, then teleonome embodiments |
-| Intelligence | None (rule-based) | AI (adaptive), then RSI |
-| Learning | None | Sentinels learn, teleonomes have full RSI |
-| Synome | MVP (operational database) | Full synart + telart + embart |
-| Governance | Human-in-loop (Core Council) | Increasing autonomy within bounds |
-| Settlement | Manual | Formalized monthly → daily → continuous |
-
-**The goal:** Build working infrastructure that accepts increasing autonomy without rearchitecting.
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`beacon-framework.md`](beacon-framework.md) | Full beacon taxonomy (LPLA/LPHA/HPLA/HPHA) |
-| [`synome-layers.md`](synome-layers.md) | The 5-layer architecture these beacons evolve toward |
-| [`actuator-perspective.md`](../synoteleonomics/actuator-perspective.md) | Full actuator embodiment — the evolution target |
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Security principles (rate limits, audit trails, governance) |
-| [`atlas-synome-separation.md`](atlas-synome-separation.md) | How Synome-MVP relates to full Atlas/Synome model |
-| [`short-term-experiments.md`](../neurosymbolic/short-term-experiments.md) | Parallel dreamer pathway (game-playing agents) |
-| [`phase-1-overview.md`](../../roadmap/phase1/phase-1-overview.md) | Full Phase 1 implementation spec |
-| [`../synoteleonomics/teleonome-economics.md`](../synoteleonomics/teleonome-economics.md) | Full teleonome economics — the target these Phase 1 beacons evolve toward |

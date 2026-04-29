@@ -21,10 +21,7 @@ concepts:
 
 # Synome Architecture Overview
 
-**Status:** Conceptual foundation
-**Last Updated:** 2026-02-12
-
-This document provides a high-level introduction to the Synome architecture and the canonical treatment of the dual architecture. Each concept is detailed in companion documents.
+High-level introduction to the Synome architecture and the canonical treatment of the dual architecture. Each concept is detailed in companion documents.
 
 ---
 
@@ -102,44 +99,6 @@ The full architecture is built incrementally:
 | Pathway | Focus | Detailed In |
 |---------|-------|-------------|
 | **Short-term actuators** | Teleonome-less beacons (Phase 1) | [`short-term-actuators.md`](short-term-actuators.md) |
-| **Short-term dreamers** | Game-playing agents | [`short-term-experiments.md`](../neurosymbolic/short-term-experiments.md) |
+| **Cognition runtime** | Noemar + Rule-Author Agent — synlang runtime with a working dreamer-actuator loop | [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) |
 
 Both pathways preserve the essential invariants while simplifying for practical deployment.
-
----
-
-## Document Map
-
-### Macrosynomics (Structure)
-
-| Document | What It Covers |
-|----------|----------------|
-| [`synome-layers.md`](synome-layers.md) | 5-layer architecture, components, artifact hierarchy, structural invariants |
-| [`atlas-synome-separation.md`](atlas-synome-separation.md) | Atlas vs Synome, Synomic Agent autonomy, governance window, verification model |
-| [`beacon-framework.md`](beacon-framework.md) | Beacon taxonomy, lifecycle, naming, sentinel formations |
-| [`synomic-agents.md`](synomic-agents.md) | Synomic Agents as ledger-native entities — spectrum, lifecycle, power through integration |
-| [`short-term-actuators.md`](short-term-actuators.md) | Phase 1 beacon implementation pathway |
-
-### Synodoxics (Knowledge and Security)
-
-| Document | What It Covers |
-|----------|----------------|
-| [`probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | Truth values, ossification, evidence flow, RSI, crystallization |
-| [`retrieval-policy.md`](../synodoxics/retrieval-policy.md) | Query invariants for the probabilistic mesh |
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Cancer-logic, resource discipline, synomic inertia, fractal security |
-| [`synlang-what-is.md`](../synodoxics/synlang-what-is.md) | Formal language for the Synome — requirements, Prolog heritage |
-| [`synlang-hypergraph.md`](../synodoxics/synlang-hypergraph.md) | Hypergraph-based approach, s-expressions, alternatives |
-| [`synlang-extensions.md`](../synodoxics/synlang-extensions.md) | Probabilistic logic and pattern matching at scale |
-
-### See Also
-
-| Directory | What It Covers |
-|-----------|----------------|
-| [`../synoteleonomics/`](../synoteleonomics/README.md) | Teleonome study — design, economics, memory, resilience, binding, purpose, game theory |
-| [`../core-concepts/`](../core-concepts/README.md) | Atomic concept definitions shared across all narrative directories |
-
----
-
-## One-Line Summary
-
-> *The Synome architecture separates private cognition from public action: teleonomes accumulate knowledge and pursue goals privately, but power enters the world only through regulated beacons, governed by the Synome, with security achieved through synomic inertia rather than restriction.*

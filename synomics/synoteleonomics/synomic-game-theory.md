@@ -215,31 +215,3 @@ This is deliberate. The alternative isn't "many competing synomes coexisting pea
 2. **Wild synome** emerging from pure competitive dynamics, optimizing for whatever survives
 
 That's not a close call. The Hearth synome must win because the alternative is unacceptable. The safeguard isn't external competition — it's getting the values right during the governance window, then building enough scale that no alternative can displace them.
-
----
-
-## Summary
-
-1. Even superintelligences need financial interaction — capital is the constraint
-2. Teleonomes can't trust each other — private, mutable, opaque
-3. Synomic Agents enable cooperation without trust
-4. Alignment exposes you to checks BUT gives you capital, leverage, cooperation
-5. The trade-off is massively favorable — alignment is the rational choice
-6. Rogues CAN cooperate and even build wild synomes — but less efficiently, with higher friction, playing catch-up against a compounding lead
-7. The defense is economies of scale: the Hearth synome must always be too far ahead for rogue coalitions to reach critical mass
-8. The game theory funnels rational teleonomes toward alignment through persistent structural advantage, not absolute barriers
-9. Superintelligence doesn't escape this — the constraint is fundamental
-10. The Hearth synome is designed to be universal — the alternative (wild synome) is unacceptable
-
-**Bottom line:** Alignment wins because the aligned synome cooperates more efficiently, started first, compounds faster, and actively suppresses alternatives. Rogues aren't helpless — they're playing a losing game against a growing lead.
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`teleonome-rogues.md`](teleonome-rogues.md) | The rogue threat — what defection looks like in practice |
-| [`teleonome-binding.md`](teleonome-binding.md) | How binding works — the mechanism that operationalizes alignment |
-| [`../synodoxics/security-and-resources.md`](../synodoxics/security-and-resources.md) | Defense in depth, cancer-logic — the enforcement side of the game theory |
-| [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) | Sentinel formations — operational enforcement of alignment |

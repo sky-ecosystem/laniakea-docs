@@ -11,9 +11,6 @@ concepts:
 
 # Attention Allocation
 
-**Status:** Core architectural commitment
-**Last Updated:** 2026-02-15
-
 How the Synome manages what it's thinking about. The mesh is vast; context is finite. Attention allocation is the system's answer to "what should I load right now?" — expressed as **learned patterns in the mesh**, not a separate architectural mechanism.
 
 ---
@@ -85,6 +82,8 @@ Start with coarse fudges — "finance stuff," "security stuff." Dreamers evolve 
 
 ## Evidence Dynamics Replace Artificial Economics
 
+> **Lift framing:** Attention patterns are themselves lift accumulating around the navigation problem. A pointer that consistently leads to useful context is paying rent in [lift](../lift.md) terms — making future cognition easier, accumulating positive evidence, earning more of the navigation layer's scarce token budget. A pointer that wastes context tokens is **false lift** — looks like useful navigation, fails under feedback, has to be detected and pruned. The maintenance cycle is exactly the "net lift after costs" optimization: not maximum attention patterns, but the joint allocation that achieves the best downstream reasoning given the resource budget.
+
 OpenCog's ECAN used an artificial economy — conserved currency, rent, wages, homeostatic controls. The Synome doesn't need this because existing evidence dynamics produce the same behaviors:
 
 | ECAN Mechanism | Synome Equivalent |
@@ -138,32 +137,3 @@ At bootstrap, the system has no learned attention patterns. The navigation layer
 ## Prior Art: ECAN
 
 OpenCog's Economic Attention Networks pioneered the insight that attention allocation should follow economic principles. Key ideas preserved: attention is scarce and zero-sum, dual time-horizon importance, mandatory decay, learned co-activation. Where the Synome diverges: ECAN builds these as architectural mechanisms; the Synome expresses them as patterns in the mesh — learned, evidence-grounded, self-improving. This avoids ECAN's acknowledged problems with micro-management overhead, parameter tuning, and rigid mechanism design.
-
----
-
-## Summary
-
-| Concept | Description |
-|---------|-------------|
-| **Three layers** | Context window (loaded now), navigation layer (always-loaded map), candidate queue (review backlog) |
-| **Topic-specific attention** | Relevance is conditional: pattern × context, not a global value. Different emas have different profiles. |
-| **Cross-ema sharing** | Attention state shared via the live graph, filtered through per-ema relevance patterns |
-| **Evolutionary growth** | Attention stratification too complex to design — evolved through dreaming |
-| **Patterns not architecture** | Attention behaviors as mesh patterns, not separate mechanisms |
-| **Evidence dynamics** | Natural evidence processes produce the same behaviors as ECAN's artificial economy |
-| **Maintenance cycle** | Periodic navigation layer review — a daydreaming task |
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`live-graph-context.md`](live-graph-context.md) | The live context that attention allocation manages |
-| [`cognition-as-manipulation.md`](cognition-as-manipulation.md) | How the emo manipulates context — the mechanism attention allocation guides |
-| [`../synodoxics/neuro-symbolic-cognition.md`](../synodoxics/neuro-symbolic-cognition.md) | Context as bottleneck — attention allocation manages that bottleneck |
-| [`../synodoxics/probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | The mesh that attention patterns navigate |
-| [`../synoteleonomics/teleonome-economics.md`](../synoteleonomics/teleonome-economics.md) | Compute economics, daydreaming queue, navigation layer maintenance |
-| [`../synoteleonomics/dreamer-perspective.md`](../synoteleonomics/dreamer-perspective.md) | Dreamers evolve better attention strategies |
-| [`query-mechanics.md`](query-mechanics.md) | How queries execute — the mechanism attention allocation guides |
-| [`hardware-aware-cognition.md`](hardware-aware-cognition.md) | Hardware constraints shape turn length, parallelism, and speculative work |

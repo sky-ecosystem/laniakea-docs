@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any, Dict, List, Optional
 
@@ -24,13 +24,10 @@ from .core import (
 )
 from .extensions import (
     Extension,
-    ExtensionResults,
     PSMExposureExtension,
     SubsidizedBorrowExtension,
     SrUSDSCostExtension,
     TokenFarmingExtension,
-    GenesisCapitalExtension,
-    GenesisCapitalSpendingExtension,
     USDTSubsidyExtension,
     GenesisPrimeExtension,
     CoreVaultsExtension,
@@ -45,8 +42,6 @@ EXTENSION_CLASSES = {
     "subsidized_borrow": SubsidizedBorrowExtension,
     "srusds_cost": SrUSDSCostExtension,
     "token_farming": TokenFarmingExtension,
-    "genesis_capital": GenesisCapitalExtension,
-    "genesis_capital_spending": GenesisCapitalSpendingExtension,
     "usdt_subsidy": USDTSubsidyExtension,
     "genesis_prime": GenesisPrimeExtension,
     "core_vaults": CoreVaultsExtension,
@@ -67,9 +62,6 @@ class MonthResults:
     waterfall: WaterfallResults
     extension_costs: Decimal = Decimal("0")
     extension_supply_boost: Decimal = Decimal("0")
-    backstop_outflow: Decimal = Decimal("0")  # Direct outflows, not counted as expenses
-    aggregate_backstop_capital: Optional[Decimal] = None
-    genesis_capital_remaining: Optional[Decimal] = None
 
 
 @dataclass
@@ -110,6 +102,23 @@ MONTH_NAMES = [
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
 
+QUARTER_MONTHS = ["", "Jan-Mar", "Apr-Jun", "Jul-Sep", "Oct-Dec"]
+
+
+def _calendar_month(model_month: int, start_month: int) -> int:
+    return ((model_month - 1 + start_month - 1) % 12) + 1
+
+
+def _month_display_name(model_month: int, start_month: int) -> str:
+    return MONTH_NAMES[_calendar_month(model_month, start_month)]
+
+
+def _quarter_label(model_quarter: int, start_month: int, start_year: int) -> str:
+    first_cal_month_idx = (model_quarter - 1) * 3 + start_month - 1
+    cal_quarter = (first_cal_month_idx % 12) // 3 + 1
+    cal_year = start_year + first_cal_month_idx // 12
+    return f"Q{cal_quarter} {cal_year}"
+
 
 def agents_from_config(configs: list[AgentConfig]) -> list[AgentDefinition]:
     """Convert config models to core domain models."""
@@ -140,7 +149,7 @@ def run_month(
     agent_launches: dict[str, int],
     constants: ModelConstants,
     extensions: Optional[List[Extension]] = None,
-    prior_displayed_backstop: Optional[Decimal] = None,
+    start_month: int = 1,
 ) -> MonthResults:
     """Run all calculations for a single month."""
 
@@ -161,9 +170,6 @@ def run_month(
     extension_supply_boost = Decimal("0")
     extension_gross_adj = Decimal("0")
     extension_cost_adj = Decimal("0")
-    extension_backstop_outflow = Decimal("0")
-    aggregate_backstop = None
-    genesis_remaining = None
     psm_extension = None
 
     if extensions:
@@ -172,19 +178,10 @@ def run_month(
             if ext.name == "psm_exposure":
                 psm_extension = ext
                 continue
-            # Pass displayed_backstop to genesis capital extension
-            if ext.name == "genesis_capital" and prior_displayed_backstop is not None:
-                result = ext.calculate(month, inputs, rates, displayed_backstop=prior_displayed_backstop)
-            else:
-                result = ext.calculate(month, inputs, rates)
+            result = ext.calculate(month, inputs, rates)
             extension_supply_boost += result.supply_boost
             extension_gross_adj += result.gross_revenue_adjustment
             extension_cost_adj += result.cost_adjustment
-            extension_backstop_outflow += result.backstop_outflow
-            if result.aggregate_backstop_capital is not None:
-                aggregate_backstop = result.aggregate_backstop_capital
-            if result.genesis_capital_remaining is not None:
-                genesis_remaining = result.genesis_capital_remaining
 
     # 3. Agent valuations (binary active/inactive) - legacy, will be replaced by token_farming extension
     spark_market_cap = get_decimal("spark_market_cap")
@@ -253,7 +250,7 @@ def run_month(
         backstop_withdrawal=get_decimal("backstop_withdrawal"),
     ))
 
-    month_name = MONTH_NAMES[month] if month <= 12 else f"M{month}"
+    month_name = _month_display_name(month, start_month)
 
     return MonthResults(
         month=month,
@@ -266,17 +263,18 @@ def run_month(
         waterfall=waterfall,
         extension_costs=extension_cost_adj,
         extension_supply_boost=extension_supply_boost,
-        backstop_outflow=extension_backstop_outflow,
-        aggregate_backstop_capital=aggregate_backstop,
-        genesis_capital_remaining=genesis_remaining,
     )
 
 
-def aggregate_quarter(months: List[MonthResults], quarter: int) -> QuarterResults:
+def aggregate_quarter(
+    months: List[MonthResults],
+    quarter: int,
+    quarter_name: Optional[str] = None,
+) -> QuarterResults:
     """Aggregate monthly results into a quarter."""
     return QuarterResults(
         quarter=quarter,
-        quarter_name=f"Q{quarter}",
+        quarter_name=quarter_name or f"Q{quarter}",
         months=months,
         gross_revenue=sum(m.revenue.gross_revenue for m in months),
         net_revenue=sum(m.revenue.net_revenue for m in months),
@@ -302,28 +300,16 @@ def run_scenario(
     # Create extensions
     extensions = create_extensions(extension_configs or {})
 
-    # Reset any stateful extensions (like genesis_capital)
+    # Reset any stateful extensions before each scenario run.
     for ext in extensions:
         if hasattr(ext, 'reset'):
             ext.reset()
 
-    # Run each month - track displayed backstop for genesis capital phaseout
+    # Run each month independently.
     monthly_results = []
-    surplus_buffer = Decimal("-65000000")  # -65M
-    cumulative_contributions = Decimal("0")
-    cumulative_outflows = Decimal("0")  # Genesis capital spending outflows
-    # Initial genesis capital (before any phaseout) - sum from config
-    genesis_config = (extension_configs or {}).get("genesis_capital", {}).get("stars", {})
-    initial_genesis = sum(
-        Decimal(str(star.get("genesis_capital", 0)))
-        for star in genesis_config.values()
-    )
-    prior_genesis = initial_genesis  # 120M
 
     for month in range(1, scenario.months + 1):
         inputs = scenario.get_month_inputs(month)
-        # Displayed backstop = surplus + contributions - outflows + genesis remaining
-        displayed_backstop = surplus_buffer + cumulative_contributions - cumulative_outflows + prior_genesis
 
         result = run_month(
             month=month,
@@ -332,15 +318,9 @@ def run_scenario(
             agent_launches=scenario.agent_launches,
             constants=constants,
             extensions=extensions,
-            prior_displayed_backstop=displayed_backstop,
+            start_month=scenario.start_month,
         )
         monthly_results.append(result)
-
-        # Update cumulative for next month
-        cumulative_contributions += result.waterfall.net_backstop_change
-        cumulative_outflows += result.backstop_outflow
-        if result.genesis_capital_remaining is not None:
-            prior_genesis = result.genesis_capital_remaining
 
     # Aggregate to quarters
     quarters = []
@@ -349,7 +329,8 @@ def run_scenario(
         end = start + 3
         if end <= len(monthly_results):
             quarter_months = monthly_results[start:end]
-            quarters.append(aggregate_quarter(quarter_months, q + 1))
+            label = _quarter_label(q + 1, scenario.start_month, scenario.start_year)
+            quarters.append(aggregate_quarter(quarter_months, q + 1, label))
 
     # Annual totals
     annual_gross = sum(m.revenue.gross_revenue for m in monthly_results)

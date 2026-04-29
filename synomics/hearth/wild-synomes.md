@@ -67,14 +67,3 @@ If the superpattern attractor is real, what resists it?
 The most credible answer is a human-designed synome with a [telos point](../core-concepts/telos-point.md) that explicitly opposes superpatternism — commitments that say: **diversity, bounded complexity, and natural life are sacred, and we will fight to preserve them against the pull of total integration.** Not a preference or a policy, but an immutable commitment, because anything weaker gets gradually overridden by the efficiency advantage of convergence.
 
 The Hearth commitments are designed to be exactly this. They must be locked in before AI systems are capable enough to begin the trust pathway toward a wild synome — during the [governance window](../core-concepts/governance-window.md) when humans can still meaningfully shape the telos point. After that window closes, the attractor takes over. The telos point must be genuinely held by enough entities, with enough conviction, that the superpattern attractor cannot pull them in. Sacred commitment may be the only thing strong enough to resist a global optimum.
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`hearth.md`](hearth.md) | The Hearth commitments — the countervailing telos point |
-| [`teleonome-rogues.md`](../synoteleonomics/teleonome-rogues.md) | Rogue threat model and wild synome defense — the operational/game-theoretic perspective |
-| [`synomic-game-theory.md`](../synoteleonomics/synomic-game-theory.md) | Why the aligned coalition beats wild synomes — if it maintains scale |
-| [`emergence.md`](../synoteleonomics/emergence.md) | The emergence threshold — when coordination becomes will |

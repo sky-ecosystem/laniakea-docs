@@ -1,16 +1,18 @@
 # Extensions configuration for Sky Forecast Model
-# These are temporary/transitional mechanisms that can be disabled
+# Month numbering: M1=Apr 2026, M2=May, M3=Jun, M4=Jul, M5=Aug, M6=Sep,
+#                  M7=Oct, M8=Nov, M9=Dec, M10=Jan'27, M11=Feb'27, M12=Mar'27
+# Negative months = before model start (Jan 2026 = M-2, Feb 2026 = M-1)
 
 psm_exposure:
   enabled: true
-  pct: "0.40"             # 40% of base USDS supply
+  pct: "0.40"             # default; scenario overrides to 0.30 from M1
   spread: "-0.0030"       # -30bps vs SOFR
 
 subsidized_borrow:
   enabled: true
   total_amount: 2000000000    # $2B total (1B Spark + 1B Grove)
-  start_month: 1              # Jan 2026
-  duration_months: 24         # 2 years
+  start_month: -2             # Jan 2026 = 3 months before model start
+  duration_months: 24         # 2 years from Jan 2026
 
 srusds_cost:
   enabled: true
@@ -23,53 +25,25 @@ token_farming:
   duration_months: 24            # 2 years
   stars:
     spark:
-      market_cap: 230000000
+      market_cap: 200000000
       ownership: "0.65"
-      launch_month: 1
+      launch_month: 1            # Apr 2026 (already running since Jan, duration fine)
     grove:
       market_cap_pct: "0.60"    # 60% of Spark MC
       ownership: "0.70"
-      launch_month: 4
+      launch_month: 3            # Jun 2026
     keel:
       market_cap_pct: "0.25"    # 25% of Spark MC
       ownership: "0.70"
-      launch_month: 9
+      launch_month: 6            # Sep 2026
     star4:
       market_cap_pct: "0.25"    # 25% of Spark MC
       ownership: "0.32"
-      launch_month: 8
+      launch_month: 5            # Aug 2026
     star5:
       market_cap_pct: "0.25"    # 25% of Spark MC
       ownership: "0.80"
-      launch_month: 10
-
-genesis_capital:
-  enabled: true
-  core_buffer: 50000000           # $50M core buffer
-  min_backstop_threshold: 50000000
-  base_phaseout_per_star: 1000000
-  phaseout_per_10m_above: 1000000
-  stars:
-    spark:
-      genesis_capital: 25000000   # 25M
-      token_launch: 1
-      has_volume: true
-    grove:
-      genesis_capital: 25000000   # 25M
-      token_launch: 4
-      has_volume: true
-    keel:
-      genesis_capital: 20000000   # 20M
-      token_launch: 9
-      has_volume: true
-    star4:
-      genesis_capital: 25000000   # 25M
-      token_launch: 8
-      has_volume: true
-    star5:
-      genesis_capital: 25000000   # 25M (total: 120M)
-      token_launch: 10
-      has_volume: true
+      launch_month: 7            # Oct 2026
 
 usdt_subsidy:
   enabled: true
@@ -84,13 +58,7 @@ genesis_prime:
     obex:
       market_cap_pct: "0.60"  # 60% of Spark MC
       ownership: "0.50"
-      launch_month: 11
-
-genesis_capital_spending:
-  enabled: true
-  start_month: 2           # M1 is 0, spending starts M2
-  end_month: 12            # Linear trajectory ends at M12
-  total_outflow: 35000000  # $35M total outflow by M12
+      launch_month: 8          # Nov 2026
 
 core_vaults:
   enabled: true
@@ -103,7 +71,7 @@ agent_creation_fee:
   agents:
     large_agent_1:
       type: large            # 150M market cap
-      launch_month: 12
+      launch_month: 9        # Dec 2026
     small_agent_1:
       type: small            # 50M market cap
-      launch_month: 12
+      launch_month: 9        # Dec 2026

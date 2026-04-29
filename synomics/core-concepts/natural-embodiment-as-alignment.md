@@ -29,15 +29,7 @@ Natural embodiment and structural binding complement each other — neither alon
 ## Relationships
 
 - **complements:** [binding-mechanics](binding-mechanics.md) — structural binding and natural embodiment cover different failure modes
-- **depends-on:** [sacred-reserve](laniakea-docs/synomics/core-concepts/sacred-reserve.md) — the reserve is where naturally-embodied beings are produced
+- **depends-on:** [sacred-reserve](sacred-reserve.md) — the reserve is where naturally-embodied beings are produced
 - **defends-against:** [rogue-threat-model](rogue-threat-model.md) — catches sophisticated deception that games structural binding
 - **enables:** [human-merge](human-merge.md) — the merge joins teleonome with naturally-embodied human, creating the alignment amplification
 - **mechanism-of:** [four-layer-enforcement-stack](four-layer-enforcement-stack.md) — the final backstop layer relies on naturally-grounded teleonomes
-
-## Framings
-
-| Directory | Narrative Doc | Framing |
-|-----------|--------------|---------|
-| hearth | `hearth.md` | Alignment infrastructure, co-constitution argument, consequences of reserve destruction, merged teleonomes as superhuman overseers |
-| synoteleonomics | `teleonome-binding.md` | Natural embodiment as the second defense layer in the verification ceiling stack |
-| synoteleonomics | `teleonome-autonomy.md` | Two paths to freedom — unbound teleonomes require natural embodiment |

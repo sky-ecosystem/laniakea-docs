@@ -225,6 +225,8 @@ class ResolvedScenario:
         trajectories: dict[str, TrajectoryConfig],
         changes: dict[int, dict[str, Any]],
         impulses: dict[int, dict[str, Any]],
+        start_month: int = 1,
+        start_year: int = 2026,
     ):
         self.name = name
         self.description = description
@@ -235,6 +237,8 @@ class ResolvedScenario:
         self.trajectories = trajectories
         self.changes = changes
         self.impulses = impulses
+        self.start_month = start_month
+        self.start_year = start_year
 
     def get_month_inputs(self, month: int) -> dict[str, Any]:
         """Get resolved inputs for a specific month."""
@@ -304,4 +308,6 @@ def resolve_scenario(
         trajectories=config.trajectories,
         changes=changes,
         impulses=impulses,
+        start_month=config.start_month,
+        start_year=config.start_year,
     )

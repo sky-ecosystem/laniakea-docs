@@ -8,12 +8,11 @@ concepts:
 
 # Live Graph Context
 
-**Status:** Core architectural commitment
-**Last Updated:** 2026-02-15
-
-The context window for a synlang-native emo is not a static text buffer. It is a **live reactive view into the probabilistic mesh**. The s-expressions loaded into context are rendered views of graph nodes, and the underlying graph is alive — other emas are writing to it, evidence is flowing in, truth values are shifting, the orchestrator is updating priorities. Context can go stale between turns.
+The context window for a synlang-native emo is not a static text buffer. It is a **live reactive view into the probabilistic mesh** — concretely, into Noemar's Space. The s-expressions loaded into context are rendered views of graph nodes, and the underlying graph is alive — other emas are writing to it, evidence is flowing in, truth values are shifting, the orchestrator is updating priorities. Context can go stale between turns.
 
 This is fundamentally different from how current LLMs work. Current LLMs reason over frozen text. The Synome's emos reason over rendered views of a living graph.
+
+For the runtime that supplies the live graph — Space semantics, three-layer query resolution, evidence-stamped beliefs — see [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md).
 
 ---
 
@@ -109,30 +108,3 @@ The abstract "live reactive view" described above rests on a concrete data model
 This separation means truth values can come from anywhere — accumulated evidence (e.g., a Beta distribution over support/contradiction counts), governance fiat, external model output, or manual override. The graph doesn't care how the numbers got there. The query engine filters on TVs when they exist and ignores them when they don't.
 
 See [`../synodoxics/probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) for the full probabilistic mesh specification.
-
----
-
-## Summary
-
-| Concept | Description |
-|---------|-------------|
-| **Live binding** | Context s-expressions are rendered views bound to graph nodes, not copies |
-| **Staleness as default** | The graph is always changing; perfect freshness is neither achievable nor necessary |
-| **Safety from the gate** | The symbolic gate checks the live graph; stale context is an efficiency problem, not a safety problem |
-| **Between-turn reconciliation** | Check bindings, classify changes, patch or rebuild — a learned tradeoff |
-| **Snapshot isolation** | Within a turn, context is consistent. Between turns, reconciliation happens. |
-| **Live navigation layer** | The "system prompt" changes when the underlying graph changes, not just during maintenance |
-| **Change provenance** | What changed, why, and who — shapes the emo's response |
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`cognition-as-manipulation.md`](cognition-as-manipulation.md) | How the emo manipulates the live context — function calls, pattern matching, convergence |
-| [`attention-allocation.md`](attention-allocation.md) | Three layers of attention that organize context management |
-| [`../synodoxics/neuro-symbolic-cognition.md`](../synodoxics/neuro-symbolic-cognition.md) | The architectural commitment: symbolic-first, synlang-native, context as bottleneck |
-| [`../synodoxics/probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | The mesh that context is a rendered view of |
-| [`../synodoxics/security-and-resources.md`](../synodoxics/security-and-resources.md) | The symbolic gate that makes staleness safe |
-| [`query-mechanics.md`](query-mechanics.md) | How the emo queries the live graph — backends, stochastic traversal, strategy programs |

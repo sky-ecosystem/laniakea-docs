@@ -1,0 +1,54 @@
+name: "Base 2026 (Revised)"
+description: "Revised Q2-Q4 forecast anchored to Q1 actuals"
+months: 12
+
+# Q1 actuals: USDS $11.7B, net revenue $30.96M
+# Key changes vs original:
+#   - Grove launch delayed M4 → M6
+#   - SOFR flat 3.65% (no CME rate cuts materialising)
+#   - SSR spread 30bps → 10bps actual, → 0bps from M5
+#   - unrewarded_usds_user 3.6B → 4.1B (DAI demand, mostly unrewarded), declining to 3.95B by Dec
+#   - SPK market cap 200M flat (was 230M → 250M → 270M)
+
+agent_launches:
+  spark: 1
+  grove: 6
+  keel: 9
+  star4: 8
+  star5: 10
+
+baseline:
+  base_usds: 9650000000
+  unrewarded_usds_user: 4100000000   # was 3600000000 — DAI demand largely unrewarded
+  sofr: "0.0365"                     # was 0.0364 — flat per SOFRWATCH, no cuts expected
+  savings_rate_spread: "0.0010"      # was 0.0030 — actual spread is 10bps
+  gross_revenue_rate_spread: "0.0030"
+  farm_yield_spread: "0.0040"
+  sell_token_rate: "0.25"
+  security_rate: "0.21"
+  spark_market_cap: 200000000        # was 230M → 250M → 270M — held at 200M
+  tier2_ratio: "0.10"
+  tier3_ratio: "0.10"
+  tier4_ratio: "0.10"
+
+trajectories:
+  base_usds:
+    points:
+      1: 9650000000
+      12: 16000000000
+    mode: linear
+  unrewarded_usds_user:
+    points:
+      4: 4100000000
+      12: 3950000000    # -150M by Dec (9/12 of -200M total decline to eoq Q1 2027)
+    mode: linear
+
+changes:
+  4:
+    psm_pct: "0.30"
+  5:
+    savings_rate_spread: "0.0000"    # SSR = SOFR from May
+  7:
+    psm_pct: "0.25"
+  10:
+    psm_pct: "0.15"

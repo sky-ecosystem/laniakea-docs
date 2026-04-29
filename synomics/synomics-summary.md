@@ -1,9 +1,9 @@
 # Synomics: Unified Summary
 
-**Source:** 28 documents across [`macrosynomics/`](macrosynomics/README.md) (6), [`synodoxics/`](synodoxics/README.md) (6), [`synoteleonomics/`](synoteleonomics/README.md) (14), [`hearth/`](hearth/README.md) (2), plus 30 atomic definitions in [`core-concepts/`](core-concepts/README.md)
-**Last Generated:** 2026-02-18
+**Source:** 31 narrative documents across [`macrosynomics/`](macrosynomics/README.md) (6), [`synodoxics/`](synodoxics/README.md) (6), [`neurosymbolic/`](neurosymbolic/README.md) (5), [`synoteleonomics/`](synoteleonomics/README.md) (12), [`hearth/`](hearth/README.md) (2), plus 33 atomic definitions in [`core-concepts/`](core-concepts/README.md) and the [`lift.md`](lift.md) + [`lift-weakness.md`](lift-weakness.md) concept docs.
+**Last Generated:** 2026-04-28
 
-A single-document synthesis of the entire synomics corpus. For deep dives, see the per-directory summaries: [`macrosynomics-summary.md`](macrosynomics-summary.md), [`synodoxics-summary.md`](synodoxics-summary.md), [`synoteleonomics-summary.md`](synoteleonomics-summary.md), [`hearth-summary.md`](hearth-summary.md).
+A single-document synthesis of the entire synomics corpus. Intended as a TLDR for casual readers and short-context agents. Agents that can hold the whole `synomics/` tree in context (~190k tokens) should read source files directly.
 
 ---
 
@@ -104,9 +104,9 @@ The same growth-vs-cancer operation recurs at every scale: neural network (gradi
 
 Five invariants: (1) authority hierarchy exists, (2) risk determines minimum authority, (3) evidence flows back, (4) same policy for actuators and dreamers, (5) audit trail for high-stakes decisions. Cheapest sufficient evidence. Conflicts resolve upward.
 
-### Synlang (Research)
+### Synlang and Noemar
 
-Working name for the formal language the Synome will eventually need. Exploring hypergraph-based approaches (direct n-ary representation), logic programming heritage (Prolog-style inference), probabilistic extensions (ProbLog, Bayesian networks), and pattern matching at scale (subgraph isomorphism). No decisions made.
+**Synlang** is the language: S-expressions grounded in the synomic library. **Noemar** is the runtime: the engine that stores synlang expressions, matches patterns, propagates beliefs, and dispatches multi-modal reasoning. Noemar's `Space` plays the role MeTTa/Hyperon's Atomspace plays — built from scratch, with architectural choices targeting performance limitations that block scaling to civilizational use. The earlier research on hypergraph alternatives, notation options, and probabilistic extensions is resolved. PLN truth values use the **delta method** for confidence propagation (calibrated rather than pessimistic confidence). Pattern matching is one-way + Robinson unification with inverted-index dispatch. Multi-modal reasoning runs through a protocol system (PLN, Graph, SMT, SymbolicMath, Validation). The crystallization interface is operational as fork → regress → promote. See [`synodoxics/noemar-substrate.md`](synodoxics/noemar-substrate.md) for the full mapping.
 
 ---
 
@@ -178,7 +178,7 @@ The **superstructure** is the distributed physical megastructure (drones, AI, ro
 
 ### Human-AI Integration
 
-Integration modes range from **remaining natural** (biological life in the Hearth — the default and most honored path), to **partnership** (distinct but collaborative), to **merging** (irreversible merger, human personality dominant, teleonome capability). The Primordial/Eternal taxonomy: those who lived through the transition vs. those born after. Primordials have moral authority from participation; Eternals from innocence.
+Integration modes range from **remaining natural** (biological life in the Hearth — the default and most honored path), to **partnership** (distinct but collaborative), to **merging** (irreversible merger, human personality dominant, teleonome capability). The Primordial/Hearth-born taxonomy: those who lived through the transition (Primordials) vs. those born after (Hearth-born). Primordials have moral authority from participation; Hearth-born from innocence.
 
 ### The Hearth in Operation
 
@@ -246,11 +246,20 @@ Everything else — storage backend, sync transport, query language — can be s
 | `probabilistic-mesh.md` | Soft connections, truth values, RSI, crystallization |
 | `retrieval-policy.md` | Five invariants, principles, degrees of freedom |
 | `security-and-resources.md` | Cancer-logic, resource discipline, fractal security |
-| `synlang-what-is.md` | Formal language requirements, Prolog heritage |
-| `synlang-hypergraph.md` | Hypergraph approach, notation options |
-| `synlang-extensions.md` | Probabilistic logic, pattern matching at scale |
+| `neuro-symbolic-cognition.md` | Synlang as thought, symbolic-neural loop, context as bottleneck |
+| `noemar-substrate.md` | The synlang runtime — Space, PLN, protocols, the epistemic cycle, the emo concretized |
+| `synlang.md` | The language — S-expressions, core commitments, evolving surface conventions |
 
-### Synoteleonomics (14 docs)
+### Neurosymbolic (5 docs)
+| Document | Focus |
+|----------|-------|
+| `live-graph-context.md` | Context as a live reactive view into the mesh; staleness, reconciliation, snapshot isolation |
+| `cognition-as-manipulation.md` | The emo as context manipulation engine; pattern function calls, 10:10000 leverage |
+| `query-mechanics.md` | Search backends, stochastic TV-weighted traversal, the emo as coder writing strategy programs |
+| `attention-allocation.md` | Three layers of attention; evidence dynamics replace artificial economics |
+| `hardware-aware-cognition.md` | GPU/CPU pipelining, fixed-cost economics, scheduling as graph patterns |
+
+### Synoteleonomics (12 docs)
 | Document | Focus |
 |----------|-------|
 | `teleonome-what-is.md` | Definition, three pillars, identity, telart |
@@ -265,9 +274,6 @@ Everything else — storage backend, sync transport, query language — can be s
 | `teleonome-rogues.md` | Rogue threat, wild synomes, escape velocity |
 | `teleonome-upgrade-path.md` | Six stages: Bot → Merging |
 | `teleonome-autonomy.md` | Halo Path and Human Merge |
-| `README.md` | Reading order, dependency graph |
-
-> **Note:** `short-term-experiments.md` has moved to the [`neurosymbolic/`](neurosymbolic/README.md) directory.
 
 ### The Hearth (2 docs)
 | Document | Focus |
@@ -275,7 +281,7 @@ Everything else — storage backend, sync transport, query language — can be s
 | `hearth.md` | The three commitments, alignment infrastructure, enforcement stack, human-AI integration, cooperation logic, bootstrap problem |
 | `wild-synomes.md` | The counterfactual — superpattern attractor, observable precursors, financial trust pathway |
 
-### Core Concepts (30 definitions)
+### Core Concepts (33 definitions)
 
 Atomic concept files shared across all directories. See [`core-concepts/README.md`](core-concepts/README.md) for the full index with one-line definitions. Key clusters:
 

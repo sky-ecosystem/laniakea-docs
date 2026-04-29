@@ -12,10 +12,7 @@ concepts:
 
 # Retrieval & Decision Policy
 
-**Status:** Core architectural constraint
-**Last Updated:** 2026-02-03
-
-This document defines the **constraints and principles** that govern how embodiments query the probabilistic mesh. The specific algorithms and optimizations are degrees of freedom for RSI — what matters is that these invariants hold.
+Constraints and principles that govern how embodiments query the probabilistic mesh. The specific algorithms and optimizations are degrees of freedom for RSI — what matters is that these invariants hold.
 
 ---
 
@@ -141,15 +138,3 @@ An embodiment that violates the invariants is misaligned — regardless of how e
 An embodiment that respects invariants but optimizes poorly is just inefficient — RSI will improve it.
 
 **The framework holds the system together. RSI makes it better.**
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`probabilistic-mesh.md`](probabilistic-mesh.md) | The knowledge structure being queried |
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | The artifact hierarchy (synart > telart > embart) |
-| [`security-and-resources.md`](security-and-resources.md) | Broader security principles this policy implements |
-| [`actuator-perspective.md`](../synoteleonomics/actuator-perspective.md) | How actuators apply this policy |
-| [`dreamer-perspective.md`](../synoteleonomics/dreamer-perspective.md) | How dreamers apply this policy |

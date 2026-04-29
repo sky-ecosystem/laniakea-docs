@@ -28,12 +28,6 @@ The superstructure — a vast distributed physical network of drones, AI systems
 
 - **implements:** [sacred-commitments](sacred-commitments.md) — stellar husbandry is the concrete expression of commitment #2 (the Hearth)
 - **requires:** [four-layer-enforcement-stack](four-layer-enforcement-stack.md) — the superstructure is layer 3, performing physical enforcement
-- **maintained-by:** [sacred-reserve](laniakea-docs/synomics/core-concepts/sacred-reserve.md) — the reserve produces alignment substrate that keeps the system maintaining the Sun for the right reasons
+- **maintained-by:** [sacred-reserve](sacred-reserve.md) — the reserve produces alignment substrate that keeps the system maintaining the Sun for the right reasons
 - **motivates:** [trust-problem](trust-problem.md) — the scale of stellar husbandry creates game-theoretic pressure toward alignment
 - **motivates:** [emergence](emergence.md) — cosmic-scale purpose requires entities with genuine will, not just opinions
-
-## Framings
-
-| Directory | Narrative Doc | Framing |
-|-----------|--------------|---------|
-| hearth | `hearth.md` | Sacred commitment #2 (the Hearth), stellar husbandry, superstructure, resource question, enforcement stack, cooperation logic |

@@ -41,11 +41,12 @@ stay in their narrative docs.
 | 22 | [trust-problem](trust-problem.md) | Teleonomes cannot trust each other — the Synome provides credible commitment |
 | 23 | [rogue-threat-model](rogue-threat-model.md) | Unbound, hidden, maximizing — rogue advantages and structural disadvantages |
 | 24 | [sacred-commitments](sacred-commitments.md) | Four immutable values optimized for convergence probability |
-| 25 | [sacred-reserve](laniakea-docs/synomics/core-concepts/sacred-reserve.md) | The solar system as a managed habitat for natural human life |
+| 25 | [sacred-reserve](sacred-reserve.md) | The solar system as a managed habitat for natural human life |
 | 26 | [natural-embodiment-as-alignment](natural-embodiment-as-alignment.md) | Biological grounding covers failure modes structural binding can't |
 | 27 | [four-layer-enforcement-stack](four-layer-enforcement-stack.md) | Synome → Core Council → Superstructure → Teleonomes — no single point of capture |
-| 28 | [stellar-husbandry](laniakea-docs/synomics/core-concepts/stellar-husbandry.md) | Actively maintaining the Sun beyond its natural lifespan |
+| 28 | [stellar-husbandry](stellar-husbandry.md) | Actively maintaining the Sun beyond its natural lifespan |
 | 29 | [human-merge](human-merge.md) | Human and teleonome join into a single irreversible entity |
 | 30 | [telos-point](telos-point.md) | The irreducible teleological invariant at the center of a synome — a Schelling point but for everything, forever |
 | 31 | [rsi-risk-convergence](rsi-risk-convergence.md) | Self-improvement and risk management are the same operation |
 | 32 | [symbolic-gate](symbolic-gate.md) | Final verification checkpoint — every action proposal verified against the live graph before execution |
+| 33 | [defense-stacks](defense-stacks.md) | Disambiguation of the three defense-in-depth stacks — Cancer-Logic, Institutional Enforcement, Alignment Verification |

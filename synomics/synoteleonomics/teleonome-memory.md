@@ -183,18 +183,3 @@ A teleonome with multiple embodiments has a specific memory architecture:
 **Promotion is the bridge.** The embart → telart promotion pathway is how local experience becomes shared knowledge. Not everything promotes — only patterns that pass validation and demonstrate value across contexts.
 
 **Sync evolves with the teleonome.** The specific mechanism for multi-embodiment synchronization — how proposals are collected, conflicts resolved, updates propagated — is part of the telart itself and evolves based on the teleonome's environment and needs. The architecture provides invariants (authority hierarchy, validation before promotion); the teleonome provides the sync protocol.
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | The (strength, confidence) framework and ossification spectrum that govern memory consolidation |
-| [`retrieval-policy.md`](../synodoxics/retrieval-policy.md) | The authority/cost/risk trade-off that governs memory retrieval |
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Cancer-logic and resource discipline — memory corruption and forgetting |
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | The 5-layer architecture defining synart, telart, embart |
-| [`teleonome-economics.md`](teleonome-economics.md) | LoRA adapters as a form of procedural memory; daydreaming as memory processing |
-| [`teleonome-what-is.md`](teleonome-what-is.md) | The telart as cognitive genome; identity through momentum |
-| [`neuro-symbolic-cognition.md`](../synodoxics/neuro-symbolic-cognition.md) | The cognition loop — how memory is accessed and manipulated in practice |
-| [`cognition-as-manipulation.md`](../neurosymbolic/cognition-as-manipulation.md) | Memory retrieval as graph manipulation — practical implementation |

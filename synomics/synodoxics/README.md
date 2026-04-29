@@ -4,6 +4,10 @@ The study of synomic belief, knowledge dynamics, and how the Synome knows and le
 
 Where [macrosynomics](../macrosynomics/README.md) defines what the Synome IS (structure, entities, authority, governance), synodoxics defines what the Synome BELIEVES and how it learns — the epistemic and security half of the dual architecture.
 
+**One-line gloss:** synodoxics is how you think as a shared brain, and how you individually think in a way that fully taps into the shared brain. The synodoxic mesh puts the meat on the macrosynomic skeleton, using governance gates (the [crystallization interface](../core-concepts/crystallization-interface.md)) to transition from probabilities to deontics.
+
+**Design constraint on the axioms:** the core synodoxic commitments should be few, simple, and implementation-invariant — they must carry over regardless of language, hardware, model, embodiment, or how much of the system has been rewritten. Well-suited for constant vibe coding, self-rewrite, different hardware, different embodiments.
+
 ---
 
 ## Reading Order
@@ -21,19 +25,11 @@ Start here for the knowledge dynamics.
 How the Synome actually thinks — the architectural commitments. For the practical mechanisms (live context, context manipulation, attention), see [`../neurosymbolic/`](../neurosymbolic/README.md).
 
 4. **[`neuro-symbolic-cognition.md`](neuro-symbolic-cognition.md)** — Synlang as cognitive language, the symbolic-neural loop (emo), context as bottleneck. How the mesh gets used.
+5. **[`noemar-substrate.md`](noemar-substrate.md)** — The synlang runtime: Space, PLN truth values, the protocol system, the epistemic cycle, the emo concretized as the Rule-Author Agent.
 
-### Research: Synlang
+### Synlang
 
-The notation direction is set (s-expressions grounded in the synomic library). Structural and scalability questions remain open.
-
-5. **[`synlang-what-is.md`](synlang-what-is.md)** — Requirements, Prolog heritage, remaining open questions.
-6. **[`synlang-hypergraph.md`](synlang-hypergraph.md)** — Hypergraph-based approach, comparison with alternatives.
-7. **[`synlang-extensions.md`](synlang-extensions.md)** — Probabilistic logic and pattern matching at scale.
-
-### Working Notes
-
-8. **[`synodoxics-practical-input.md`](synodoxics-practical-input.md)** — Working notes from discussion — input for formalizing the synodoxics axioms.
-9. **[`synodoxics-todo.md`](synodoxics-todo.md)** — Open items: terminology consistency ("synomic inertia" vs "ossification"), cross-boundary reference maintenance.
+6. **[`synlang.md`](synlang.md)** — The language itself: S-expressions grounded in the synomic library. Settled questions and evolving surface conventions. (The earlier hypergraph/notation/extensions research track is resolved by Noemar's design — see `noemar-substrate.md`.)
 
 ---
 
@@ -43,13 +39,16 @@ The notation direction is set (s-expressions grounded in the synomic library). S
 probabilistic-mesh
     ├──► retrieval-policy
     ├──► security-and-resources
-    └──► neuro-symbolic-cognition ──► ../neurosymbolic/ (practical mechanisms)
+    └──► neuro-symbolic-cognition ──► noemar-substrate
+                                          │
+                                          ▼
+                                      ../neurosymbolic/ (practical mechanisms)
 
-synlang-what-is ──► synlang-hypergraph ──► synlang-extensions
-(independent research track)
+synlang ◄── noemar-substrate
+(language) ◄── (runtime)
 ```
 
-The core epistemic track and the synlang research track are independent — synlang is about formal representation of the concepts described in the epistemic docs, but doesn't depend on reading them first.
+`noemar-substrate.md` grounds the abstract epistemic architecture in its concrete runtime. `synlang.md` describes the language; `noemar-substrate.md` describes what runs it.
 
 ---
 

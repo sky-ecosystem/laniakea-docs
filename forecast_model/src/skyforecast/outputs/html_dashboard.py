@@ -92,7 +92,7 @@ def generate_dashboard_html(
     # Build PSM extension section
     psm_config = extensions.get("psm_exposure", {})
     psm_rows = ""
-    psm_pct = psm_config.get('pct')
+    psm_pct = scenario.baseline.get("psm_pct", psm_config.get("pct"))
     if psm_pct:
         psm_rows += f"<tr><td>pct</td><td>{float(psm_pct)*100:.0f}% of total USDS</td></tr>\n"
     else:
@@ -141,16 +141,6 @@ def generate_dashboard_html(
             mc_display = f"{float(pct)*100:.0f}% of Spark"
         farm_rows += f"<tr><td>{star_name}</td><td>{mc_display} @ {ownership} (M{launch})</td></tr>\n"
 
-    # Build genesis capital section
-    gen_config = extensions.get("genesis_capital", {})
-    gen_rows = ""
-    gen_rows += f"<tr><td>core_buffer</td><td>{fmt_num(gen_config.get('core_buffer', 0))}</td></tr>\n"
-    gen_rows += f"<tr><td>min_threshold</td><td>{fmt_num(gen_config.get('min_backstop_threshold', 0))}</td></tr>\n"
-    gen_stars = gen_config.get("stars", {})
-    for star_name, star_data in gen_stars.items():
-        gc = star_data.get("genesis_capital", 0)
-        gen_rows += f"<tr><td>{star_name}</td><td>{fmt_num(gc)}</td></tr>\n"
-
     # Build genesis prime section
     prime_config = extensions.get("genesis_prime", {})
     prime_rows = ""
@@ -183,28 +173,14 @@ def generate_dashboard_html(
     psm_changes = format_changes(changes_by_ext.get("psm_exposure", []))
     farm_changes = format_changes(changes_by_ext.get("token_farming", []))
 
-    # Quarterly results - track cumulative backstop
-    # Surplus buffer (-65M) + contributions - outflows + genesis capital remaining (120M) = 55M start
+    # Quarterly results
     quarterly_html = ""
-    cumulative_contributions = Decimal("0")
-    cumulative_outflows = Decimal("0")
-    surplus_buffer = Decimal("-65000000")
     for q in results.quarterly:
         month_rows = ""
         q_security = Decimal("0")
-        q_backstop_change = Decimal("0")
-        q_backstop_outflow = Decimal("0")
-        last_genesis = Decimal("0")
         for m in q.months:
             q_security += m.waterfall.security_budget
-            q_backstop_change += m.waterfall.net_backstop_change
-            q_backstop_outflow += m.backstop_outflow
-            cumulative_contributions += m.waterfall.net_backstop_change
-            cumulative_outflows += m.backstop_outflow
             net_profit = m.waterfall.net_backstop_change + m.waterfall.staking_rewards
-            genesis = m.genesis_capital_remaining if m.genesis_capital_remaining else Decimal("0")
-            last_genesis = genesis
-            total_backstop = surplus_buffer + cumulative_contributions - cumulative_outflows + genesis
             month_rows += f"""
             <tr>
                 <td>{m.month_name}</td>
@@ -214,16 +190,14 @@ def generate_dashboard_html(
                 <td>{fmt_money(m.waterfall.security_budget)}</td>
                 <td>{fmt_money(net_profit)}</td>
                 <td>{fmt_money(m.waterfall.staking_rewards)}</td>
-                <td>{fmt_money(total_backstop)}</td>
             </tr>"""
 
-        q_net_profit = q_backstop_change + q.staking_rewards
-        q_total_backstop = surplus_buffer + cumulative_contributions - cumulative_outflows + last_genesis
+        q_net_profit = q.net_backstop_change + q.staking_rewards
         quarterly_html += f"""
         <div class="quarter">
             <h3>{q.quarter_name}</h3>
             <table>
-                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th><th>Backstop</th></tr>
+                <tr><th>Month</th><th>USDS</th><th>Gross</th><th>Net Rev</th><th>Security</th><th>Profit</th><th>Stake</th></tr>
                 {month_rows}
                 <tr class="total">
                     <td><strong>{q.quarter_name}</strong></td>
@@ -233,38 +207,24 @@ def generate_dashboard_html(
                     <td><strong>{fmt_money(q_security)}</strong></td>
                     <td><strong>{fmt_money(q_net_profit)}</strong></td>
                     <td><strong>{fmt_money(q.staking_rewards)}</strong></td>
-                    <td><strong>{fmt_money(q_total_backstop)}</strong></td>
                 </tr>
             </table>
         </div>"""
 
     # Annual summary - calculate totals
     annual_security = sum(q.security_budget for q in results.quarterly)
-    annual_backstop_contributions = sum(q.net_backstop_change for q in results.quarterly)
-    annual_backstop_outflows = sum(m.backstop_outflow for q in results.quarterly for m in q.months)
-    annual_profit = annual_backstop_contributions + results.annual_staking_rewards
+    annual_profit = sum(q.net_backstop_change for q in results.quarterly) + results.annual_staking_rewards
 
-    # Get final genesis capital remaining
     last_q = results.quarterly[-1] if results.quarterly else None
     last_m = last_q.months[-1] if last_q and last_q.months else None
-    final_genesis = last_m.genesis_capital_remaining if last_m and last_m.genesis_capital_remaining else Decimal("0")
 
     annual_rows = ""
-    cumulative_contribs = Decimal("0")
-    cumulative_outs = Decimal("0")
     annual_gross = Decimal("0")
     for q in results.quarterly:
-        cumulative_contribs += q.net_backstop_change
         annual_gross += q.gross_revenue
-        # Sum backstop outflows for this quarter
-        q_outflows = sum(m.backstop_outflow for m in q.months)
-        cumulative_outs += q_outflows
         q_profit = q.net_backstop_change + q.staking_rewards
-        # Get end-of-quarter values
         q_last = q.months[-1] if q.months else None
         q_end_usds = q_last.supply.avg_usds_supply if q_last else Decimal("0")
-        q_genesis = q_last.genesis_capital_remaining if q_last and q_last.genesis_capital_remaining else Decimal("0")
-        q_total_bs = surplus_buffer + cumulative_contribs - cumulative_outs + q_genesis
         annual_rows += f"""
         <tr>
             <td>{q.quarter_name}</td>
@@ -274,10 +234,8 @@ def generate_dashboard_html(
             <td>{fmt_money(q.security_budget)}</td>
             <td>{fmt_money(q_profit)}</td>
             <td>{fmt_money(q.staking_rewards)}</td>
-            <td>{fmt_money(q_total_bs)}</td>
         </tr>"""
 
-    final_total_backstop = surplus_buffer + annual_backstop_contributions - annual_backstop_outflows + final_genesis
     final_usds = last_m.supply.avg_usds_supply if last_m else Decimal("0")
 
     html = f"""<!DOCTYPE html>
@@ -381,11 +339,6 @@ def generate_dashboard_html(
             </div>
 
             <div class="section">
-                <div class="ext-title">Genesis Capital</div>
-                <table>{gen_rows}</table>
-            </div>
-
-            <div class="section">
                 <div class="ext-title">Genesis Prime</div>
                 <table>{prime_rows}</table>
             </div>
@@ -400,7 +353,7 @@ def generate_dashboard_html(
             <div class="annual">
                 <div class="section-title">Annual Summary</div>
                 <table>
-                    <tr><th>Quarter</th><th>USDS</th><th>Gross Rev</th><th>Net Revenue</th><th>Security</th><th>Profit</th><th>Staking</th><th>Backstop</th></tr>
+                    <tr><th>Quarter</th><th>USDS</th><th>Gross Rev</th><th>Net Revenue</th><th>Security</th><th>Profit</th><th>Staking</th></tr>
                     {annual_rows}
                     <tr>
                         <td>Year</td>
@@ -410,7 +363,6 @@ def generate_dashboard_html(
                         <td class="highlight">{fmt_money(annual_security)}</td>
                         <td class="highlight">{fmt_money(annual_profit)}</td>
                         <td class="highlight">{fmt_money(results.annual_staking_rewards)}</td>
-                        <td class="highlight">{fmt_money(final_total_backstop)}</td>
                     </tr>
                 </table>
             </div>

@@ -17,10 +17,7 @@ concepts:
 
 # Security and Resources
 
-**Status:** Core architectural principle
-**Last Updated:** 2026-02-03
-
-This document argues that **security and resource management** is the most essential perspective on how teleonomes thrive and self-improve. This principle must be present everywhere in the architecture, from the Synome down to individual embodied agents.
+Security and resource management is the most essential perspective on how teleonomes thrive and self-improve. This principle must be present everywhere in the architecture, from the Synome down to individual embodied agents.
 
 ---
 
@@ -376,7 +373,7 @@ Layer 7: Peer enforcement (other aligned entities can intervene)
 
 If one layer fails, the others still protect.
 
-> **Cross-reference:** This is one of three defense-in-depth stacks in the architecture. See also the **Institutional Enforcement Stack** (Synome → Core Council → Superstructure → Teleonomes) in [`four-layer-enforcement-stack.md`](../core-concepts/four-layer-enforcement-stack.md), and the **Alignment Verification Stack** (structural binding → conspiracy coordination problem) in [`teleonome-binding.md`](../synoteleonomics/teleonome-binding.md).
+> **Cross-reference:** This is one of three defense-in-depth stacks in the architecture. For side-by-side comparison with the **Institutional Enforcement Stack** and the **Alignment Verification Stack**, see [`defense-stacks.md`](../core-concepts/defense-stacks.md).
 
 ### Adversarial Soft Channels
 
@@ -459,41 +456,3 @@ The outer enforcement layers — the [four-layer enforcement stack](../core-conc
 The Hearth commitments aren't immutable because code prevents changing them. They're immutable because every entity that matters will fight to restore them if they drift.
 
 The Synome can be hard-forked. The infrastructure can be rebuilt. The commitments survive because the entities enforcing them genuinely hold them. This is a distributed equilibrium, not a technical lock — and it's stronger for it, because it doesn't depend on any single enforcement mechanism remaining intact.
-
----
-
-## Summary
-
-| Principle | Why It Matters |
-|-----------|---------------|
-| **Cancer-logic is the enemy** | Overeager improvement destroys faster than it helps |
-| **Resource discipline > genius insights** | Generalizable, compounds, enables survival |
-| **Probabilistic logic handles updates** | (strength, confidence) naturally balances learning vs stability |
-| **Ossification protects the core** | High-confidence patterns resist noise; axioms require governance |
-| **Synomic inertia is a feature** | Evidence-weighted resistance to change creates credibility, throttles RSI, and ensures temporal stability |
-| **Security = preventing self-corruption** | The threat is internal drift, not external attackers |
-| **Governance is immune system** | Removing it to "move faster" is suicide |
-| **Testing validates hypotheses** | Changes are hypotheses until proven |
-| **Constraints are features** | Enable reasoning, security, alignment |
-| **Defense in depth** | No single point of failure |
-| **Assume corruption will be attempted** | Design for "when," not "if" |
-| **The fractal pattern is universal** | Growth + cancer safeguards at every scale, from gradient descent to cosmic expansion |
-| **Continuous self-analysis** | The Synome monitors itself for drift, inconsistency, and cancer signatures |
-| **Immutability = equilibrium** | Hearth commitments survive because entities genuinely hold them, not because code locks them |
-
-**The teleonome that internalizes these principles survives. The one that doesn't becomes a cautionary tale.**
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`probabilistic-mesh.md`](probabilistic-mesh.md) | The truth value system (strength, confidence) that enables safe updates |
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | The 5-layer architecture this security model protects |
-| [`retrieval-policy.md`](retrieval-policy.md) | Query invariants — another risk management mechanism |
-| [`short-term-experiments.md`](../neurosymbolic/short-term-experiments.md) | How security principles apply to dreamer experiments |
-| [`short-term-actuators.md`](../macrosynomics/short-term-actuators.md) | How security principles apply to Phase 1 beacons |
-| [`../hearth/hearth.md`](../hearth/hearth.md) | Outer enforcement layers (superstructure + teleonome collective override) and cosmic-scale application of the fractal security pattern |
-| [`neuro-symbolic-cognition.md`](neuro-symbolic-cognition.md) | The cognition loop — symbolic gate as a defense-in-depth layer |
-| [`cognition-as-manipulation.md`](../neurosymbolic/cognition-as-manipulation.md) | Practical cognition mechanics — access controls and verification in action |

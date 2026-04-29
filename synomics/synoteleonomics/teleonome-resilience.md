@@ -174,28 +174,3 @@ Time to Shutdown (TTS) bounds worst-case detection-to-halt time. Operational Ris
 The primary threat is [cancer-logic](../core-concepts/cancer-logic.md) — self-corruption through overeager self-improvement — not external attack. See [`teleonome-memory.md`](teleonome-memory.md) for how this manifests as memory corruption.
 
 Multi-embodiment architecture contains the blast radius: if one embodiment's knowledge corrupts, the damage is bounded to its embart. The telart remains protected by the authority hierarchy, and cross-embodiment comparison surfaces anomalies before corruption can propagate. Full defense-in-depth details are in [`security-and-resources.md`](../synodoxics/security-and-resources.md).
-
----
-
-## Summary
-
-1. Resilience is existential — without it, you don't really persist
-2. Multi-embodiment architecture: embarts diverge (local), telart converges (shared identity)
-3. Identity persists through substrate changes via telart replication and momentum continuity
-4. The mesh is inherently resilient — ossification resists corruption, distributed knowledge degrades gracefully
-5. Alignment provides collective resilience — cooperation, monitoring, resource access that rogues lack
-6. Blast radius is bounded by rate limits, resource registers, PAU isolation, SORL, and TTS/ORC
-7. Primary threat is cancer-logic (self-corruption), not external attack
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Cancer-logic, defense in depth, resource discipline |
-| [`probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | Ossification spectrum and (strength, confidence) as resilience mechanisms |
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | Embodiment power levels and the telart/embart distinction |
-| [`teleonome-memory.md`](teleonome-memory.md) | Memory corruption and the mesh as memory architecture |
-| [`teleonome-economics.md`](teleonome-economics.md) | Hardware profiles and the dreamer-actuator transfer constraint |
-| [`teleonome-what-is.md`](teleonome-what-is.md) | Three pillars (resilience, persistence, capital) |

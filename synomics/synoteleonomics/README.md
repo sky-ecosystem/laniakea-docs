@@ -47,13 +47,7 @@ How teleonomes relate to each other and to the Synome — game theory, binding, 
 
 ### Implementation
 
-Bridging from vision to code. The short-term experiments doc has moved to [`../neurosymbolic/short-term-experiments.md`](../neurosymbolic/short-term-experiments.md) where it sits alongside the concrete cognition mechanics it tests.
-
-### Maintenance
-
-| Doc | Topic |
-|-----|-------|
-| [synotele-todo.md](synotele-todo.md) | Open items for synoteleonomics (currently all resolved) |
+Bridging from vision to code. The earlier short-term experiments pathway (game-playing agents) has been replaced by Noemar and the Rule-Author Agent — see [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) for the running synlang runtime and the first concrete dreamer-actuator loop.
 
 ---
 

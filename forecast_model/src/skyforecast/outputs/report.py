@@ -88,10 +88,13 @@ def format_inputs_section(
     psm = extensions.get("psm_exposure", {})
     if psm:
         lines.append("  PSM Exposure:")
-        if psm.get('pct'):
-            lines.append(f"    pct: {float(psm['pct'])*100:.0f}% of total USDS")
-        elif psm.get('amount'):
-            lines.append(f"    amount: {fmt_num(psm['amount'])}")
+        # psm_pct comes from scenario inputs, not extensions config
+        baseline_pct = scenario.baseline.get("psm_pct", psm.get("pct", 0))
+        lines.append(f"    pct: {float(baseline_pct)*100:.0f}% of total USDS (baseline)")
+        # Show scheduled changes to psm_pct
+        for m in sorted(scenario.changes.keys()):
+            if "psm_pct" in scenario.changes[m]:
+                lines.append(f"      M{m}: → {float(scenario.changes[m]['psm_pct'])*100:.0f}%")
         if psm.get('spread'):
             lines.append(f"    spread: {psm['spread']}")
 
@@ -140,17 +143,6 @@ def format_inputs_section(
                 mc_display = f"{float(pct)*100:.0f}% of Spark"
             lines.append(f"    {star_name}: {mc_display} @ {ownership} (M{launch})")
 
-    # Genesis Capital
-    gen = extensions.get("genesis_capital", {})
-    if gen:
-        lines.append("  Genesis Capital:")
-        lines.append(f"    core_buffer: {fmt_num(gen.get('core_buffer', 0))}")
-        lines.append(f"    min_threshold: {fmt_num(gen.get('min_backstop_threshold', 0))}")
-        gen_stars = gen.get("stars", {})
-        for star_name, star_data in gen_stars.items():
-            gc = star_data.get("genesis_capital", 0)
-            lines.append(f"    {star_name}: {fmt_num(gc)}")
-
     # Genesis Prime
     prime = extensions.get("genesis_prime", {})
     if prime:
@@ -193,11 +185,11 @@ def generate_report(
         "COLUMN DEFINITIONS",
         "SSR: Sky Savings Rate (annualized)",
         "USDS: Total USDS supply",
-        "Gross Rev: Total revenue before savings rate expenses",
-        "Net Rev: Revenue after savings rate expenses",
-        "Security: Security operational expenses",
-        "Profit: Net profit after operational expenses",
-        "Staking: Funds distributed to SKY stakers as staking rewards",
+        "Gross Rev: Total revenue including core GRR + token sales + extension gross adjustments",
+        "Net Rev: Revenue after savings expense, distribution rewards, and extension costs",
+        "Security: security_rate × Net Rev (allocated to security budget)",
+        "Profit: After-security revenue (backstop contribution + staking rewards)",
+        "Staking: 75% of after-security revenue → SKY staker rewards",
         "",
     ])
 

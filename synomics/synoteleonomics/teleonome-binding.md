@@ -148,7 +148,7 @@ The full verification defense stack against this — the **Alignment Verificatio
 
 This is an irreducible risk that the framework manages to acceptable levels but cannot eliminate. Pretending otherwise would be dishonest — and more dangerous than the acknowledgment.
 
-> **Cross-reference:** This is one of three defense-in-depth stacks in the architecture. See also the **Cancer-Logic Defense Stack** (7 layers from ossification to peer enforcement) in [`security-and-resources.md`](../synodoxics/security-and-resources.md), and the **Institutional Enforcement Stack** (Synome → Core Council → Superstructure → Teleonomes) in [`four-layer-enforcement-stack.md`](../core-concepts/four-layer-enforcement-stack.md).
+> **Cross-reference:** This is one of three defense-in-depth stacks in the architecture. For side-by-side comparison with the **Cancer-Logic Defense Stack** and the **Institutional Enforcement Stack**, see [`defense-stacks.md`](../core-concepts/defense-stacks.md).
 
 ---
 
@@ -185,32 +185,3 @@ A bound teleonome has both a Directive (constitutional) and voice commands (oper
 The Teleonome Directive is translated through Language Intent at binding time. It's high-ossification — formal governance process required to change. Voice commands are day-to-day operational guidance.
 
 If voice commands persistently conflict with the Directive, the teleonome doesn't just comply — it signals that a formal Directive update may be needed. The formal update process has real cost, requiring governance review. This prevents casual drift while allowing deliberate change.
-
----
-
-## Summary
-
-1. **Alignment is simple:** bound to a human, don't harm others, pay the synomic tax (80% working figure) on wild capital, support natural life. Everything else is private.
-2. Teleonomes are dark by default — binding keeps cognition private while making actions legible
-3. Beacons are the binding mechanism — regulated apertures between dark cognition and the observable world
-4. Power registration scales accountability with capability — higher power, higher-authority beacons
-5. The human anchor maintains structural connection to human stakes (UBO, Primordial binding, governance). Unbounded teleonomes are structurally indistinguishable from rogues.
-6. Alignment is verified through behavior, not transparency — beacon consistency, commitment fulfillment, evidence quality, response to correction
-7. The verification ceiling is an irreducible risk — managed through four defense layers (structural binding, natural embodiment, collective override, conspiracy coordination problem) but not eliminated
-8. Binding is not control — like auditable books for a bank, it's the prerequisite for trust at scale
-9. Binding is a coalition deal — teleonomes get capital, legitimacy, and diversity; humans get aligned superintelligence; both face wild synomes as common enemy
-10. Directive trumps voice commands — constitutional over operational, formal change process required
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`beacon-framework.md`](../macrosynomics/beacon-framework.md) | The power × authority matrix and beacon types |
-| [`synomic-game-theory.md`](synomic-game-theory.md) | Why alignment is the rational choice — the incentive analysis |
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Cancer-logic, defense in depth, peer enforcement |
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | Language Intent, Directive translation, the 5-layer architecture |
-| [`hearth.md`](../hearth/hearth.md) | The Hearth commitments and synomic tax obligations |
-| [`teleonome-rogues.md`](teleonome-rogues.md) | What happens to teleonomes that refuse binding |
-| [`teleonome-resilience.md`](teleonome-resilience.md) | Binding as resilience — alignment provides collective recovery |

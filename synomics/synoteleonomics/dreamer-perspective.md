@@ -12,6 +12,8 @@ concepts:
 
 This document describes the Synome architecture from the perspective of a **Dreamer** — an embodiment that simulates being an actuator for the purpose of training, RSI, and safe strategy exploration.
 
+> **Phase note:** The Rule-Author Agent — described in [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) — is the first running instance of this loop today, scaled down. It uses an LLM as the proposing component, a forked Space as the dreamart, a curated regression suite as the fitness signal, and explicit promote/discard as the crystallization gate. The full perspective described below is the scaling target; the current implementation is the proof that the loop closes.
+
 ---
 
 ## What I Am
@@ -330,33 +332,3 @@ Even though I'm simulating, I still follow:
 I'm not a sandbox where anything goes. I'm a simulation of an aligned actuator, testing strategies within alignment constraints.
 
 The dream might constrain my knowledge or resources, but it doesn't remove my alignment obligations.
-
----
-
-## Summary
-
-| Aspect | Dreamer Perspective |
-|--------|---------------------|
-| **Purpose** | Pretend to be an actuator for training/RSI |
-| **World** | Simulated via Dreamart |
-| **Actions** | Affect simulation, not reality |
-| **Method** | Run many dream-embodiments with evolutionary learning |
-| **Evolution** | Genetic algorithms optimize orchestrator weights, strategies, query patterns |
-| **Output** | Better embarts → pattern mined → telart improvements |
-| **Learning** | Extracted from winners, may improve telart/synart |
-| **Relationship to Actuators** | I explore so they can exploit |
-| **Constraints** | Still follow axioms and directive |
-| **Lifecycle** | Spawn → Evolve → Converge → Extract → Terminate |
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`actuator-perspective.md`](actuator-perspective.md) | My counterpart — executes in reality what I explore in simulation |
-| [`probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | How my learning propagates through telart to improve actuators |
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | The 5-layer architecture and dreamarts |
-| [`retrieval-policy.md`](../synodoxics/retrieval-policy.md) | How I query the probabilistic mesh |
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Why alignment holds even in simulation |
-| [`short-term-experiments.md`](../neurosymbolic/short-term-experiments.md) | Phase 1 dreamer experiments — game-playing agents |

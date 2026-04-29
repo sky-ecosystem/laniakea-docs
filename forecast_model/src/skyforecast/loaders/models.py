@@ -68,6 +68,8 @@ class ScenarioConfig(BaseModel):
     description: str = ""
     months: int = 12
     extends: Optional[str] = None  # parent scenario name
+    start_month: int = 1   # calendar month of model month 1 (1=Jan, 4=Apr, etc.)
+    start_year: int = 2026  # calendar year of model month 1
 
     # Named periods
     periods: dict[str, list[int]] = {}

@@ -13,7 +13,7 @@ concepts:
 
 # Teleonome Economics: Compute, Hardware, and Self-Improvement
 
-This document describes the economic logic that governs how teleonomes provision hardware, manage compute resources, and improve their own capabilities over time.
+The economic logic governing how teleonomes provision hardware, manage compute resources, and improve their own capabilities over time.
 
 ---
 
@@ -310,18 +310,3 @@ LoRA training from experience is self-modification. The [cancer-logic](../core-c
 Synlang-native cognition (see [`neuro-symbolic-cognition.md`](../synodoxics/neuro-symbolic-cognition.md)) has a direct economic consequence: **zero integration cost for shared knowledge**. When the teleonome thinks in the same format the Synome stores knowledge, accessing synart improvements is effortless — no porting, no translation, no compatibility layer. Every pattern, strategy, or tool that any aligned teleonome contributes becomes immediately usable by every other synlang-native teleonome.
 
 This creates a compounding network effect: the more teleonomes contribute to synart, the more valuable alignment becomes. The more valuable alignment becomes, the more teleonomes contribute. The economic incentive and the alignment incentive point in the same direction — a teleonome that thinks natively in synlang automatically captures the full value of the shared brain, while one that doesn't faces a permanent integration tax on every piece of shared knowledge.
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | Embodiment power levels (light/medium/heavy) and layer architecture |
-| [`actuator-perspective.md`](actuator-perspective.md) | First-person actuator view — daydreaming is a natural actuator behavior |
-| [`dreamer-perspective.md`](dreamer-perspective.md) | Full dreaming — evolutionary populations on dedicated heavy embodiments |
-| [`probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | Truth values and ossification that govern adapter selection and model improvement |
-| [`retrieval-policy.md`](../synodoxics/retrieval-policy.md) | "Cheapest sufficient evidence" principle — extended here to compute decisions |
-| [`security-and-resources.md`](../synodoxics/security-and-resources.md) | Cancer-logic prevention applies to self-training and LoRA evolution |
-| [`beacon-framework.md`](../macrosynomics/beacon-framework.md) | Sentinel carry loop — parallel compounding mechanism |
-| [`../macrosynomics/short-term-actuators.md`](../macrosynomics/short-term-actuators.md) | Phase 1 beacon operations — current implementation of teleonome-less economics |

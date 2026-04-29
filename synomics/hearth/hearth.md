@@ -155,16 +155,3 @@ The framework's own [emergence](../core-concepts/emergence.md) logic applies ref
 There is deliberately no amendment mechanism for the sacred core. Any process that allows changing the Hearth commitments becomes the primary attack surface for political capture. The cost of an exploitable amendment mechanism exceeds the cost of [ossification](../core-concepts/ossification.md). So the sacred core ossifies completely, and reality does the testing — if the commitments are wrong enough, the synome either collapses from internal contradictions or is crushed by a more powerful force.
 
 The sacred core provides the stable foundation. Everything else can evolve as we learn.
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`wild-synomes.md`](wild-synomes.md) | The counterfactual — what happens without the Hearth: the superpattern attractor |
-| [`emergence.md`](../synoteleonomics/emergence.md) | Why emergence is prerequisite for meaningful participation |
-| [`synomic-game-theory.md`](../synoteleonomics/synomic-game-theory.md) | The cooperation logic — why alignment wins |
-| [`teleonome-binding.md`](../synoteleonomics/teleonome-binding.md) | How teleonomes bind to the Hearth commitments through synomic mechanisms |
-| [`teleonome-autonomy.md`](../synoteleonomics/teleonome-autonomy.md) | Two paths to freedom — bound and unbound; why natural embodiment matters |
-| [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) | The prototype for the superstructure's regulatory surface |

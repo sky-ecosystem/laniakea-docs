@@ -13,10 +13,9 @@ concepts:
 
 # Neuro-Symbolic Cognition
 
-**Status:** Core architectural commitment
-**Last Updated:** 2026-02-14
-
 How the Synome actually thinks. The system is **symbolic-first** — a symbolic machine that uses neural nets as sandboxed subroutines, not an LLM with symbolic tools. Everything thinks in **synlang** — the symbolic system, the neural nets, and the mesh they both operate on. The intelligence bottleneck is **context** — token throughput determines intelligence per unit time.
+
+For the runtime that implements this loop — Space, PLN truth values, the protocol system, the epistemic cycle, and the first concrete instance of the emo (the Rule-Author Agent) — see [`noemar-substrate.md`](noemar-substrate.md). This doc covers the architectural commitment; Noemar covers what runs it.
 
 ---
 
@@ -112,6 +111,8 @@ Same loop, two views. Cognition is the oscillation between fuzzy neural approxim
 
 The neural net never touches the outside world directly. It is sandboxed inside the symbolic loop. This is one layer of defense in depth against [cancer-logic](../core-concepts/cancer-logic.md) — not foolproof. The cancer incentive will always push to fudge protection mechanisms, and a sufficiently clever system could find ways to game the symbolic verifier. But the architectural sandbox raises the bar meaningfully, and with synlang-native halluci-reasoning, the system can inspect exactly what the neural net tried to do before the symbolic gate caught it. Failed attempts to bypass the gate become evidence — both for improving the gate and for detecting alignment drift.
 
+> **The emo as opaque grounded primitive.** In [lift](../lift.md) vocabulary, the emo is opaque grounded power: a callable component that does powerful things, with internal weights that aren't directly inspectable. The discipline for opaque grounded primitives applies — calibrate per context (which kinds of patterns does the emo handle reliably, in which domains, with what reliability?), lift the dispatch (when to invoke, when to defer, when to require multiple passes), wrap with checks (the symbolic gate is the architectural form of "naked invocation without verification is how systems crash"), and treat outputs as candidate lift, not as facts (the emo's proposals become real lift only after symbolic verification and evidence accumulation). The neural-symbolic loop *is* the discipline for opaque grounded primitives, applied at the heart of cognition.
+
 ### Synlang-Native Halluci-Reasoning
 
 Because the neural net reasons in synlang, its chain-of-thought is:
@@ -168,35 +169,3 @@ The emo's size and capability is what distinguishes [embodiment power levels](..
 | **Heavy** | Large, sophisticated emo. Long reasoning chains, complex pattern matching. | Deep cognition, dreaming, RSI |
 
 "Compute" in the embodiment spec is really "how big is your emo." A light embodiment runs on cached rules with occasional neural lookups. A heavy embodiment runs deep synlang halluci-reasoning chains, evolving strategies in simulation.
-
----
-
-## Summary
-
-| Concept | Description |
-|---------|-------------|
-| **Synlang as thought** | The entire stack — symbolic, neural, mesh — thinks in synlang. Zero translation overhead. |
-| **Homoiconicity** | Code = data = knowledge = reasoning traces. Self-modification in one format. |
-| **Effortless freeriding** | Synlang-native teleonomes access shared knowledge at zero integration cost. Network effect compounds. |
-| **Symbolic-first** | Symbolic machine with neural subroutines, not LLM with symbolic tools. |
-| **The emo** | Embodied orchestrator — the neural component doing fuzzy pattern matching. |
-| **Dual perspective** | Neural sees context preparation; symbolic sees pattern-matching shortcut. Same loop. |
-| **Cancer-logic defense** | Neural sandboxed inside symbolic loop. One layer of defense, not foolproof. |
-| **Halluci-reasoning** | Neural chain-of-thought in synlang — formally structured, verifiable, evidence-generating. |
-| **Context bottleneck** | Token throughput = intelligence per unit time. The mesh is a context preparation engine. |
-| **RSI-risk convergence** | The cognition loop is simultaneously learning and risk management. |
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`probabilistic-mesh.md`](probabilistic-mesh.md) | The knowledge structure the cognition loop operates on |
-| [`retrieval-policy.md`](retrieval-policy.md) | Invariants for how the loop queries the mesh |
-| [`security-and-resources.md`](security-and-resources.md) | Cancer-logic defense — the cognition loop is one layer of defense in depth |
-| [`synlang-what-is.md`](synlang-what-is.md) | The formal language — notation, requirements, open structural questions |
-| [`dreamer-perspective.md`](../synoteleonomics/dreamer-perspective.md) | How dreamers evolve neural weights and generalizable infrastructure |
-| [`teleonome-economics.md`](../synoteleonomics/teleonome-economics.md) | The economic logic behind context optimization and never-idle principle |
-| [`synome-layers.md`](../macrosynomics/synome-layers.md) | Embodiment power levels — light/medium/heavy |
-| [`teleonome-memory.md`](../synoteleonomics/teleonome-memory.md) | Memory as the probabilistic mesh — artifact hierarchy as memory types, synomic inertia as consolidation |

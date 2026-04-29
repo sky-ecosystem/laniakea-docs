@@ -15,12 +15,6 @@ concepts:
 
 # Atlas/Synome Separation
 
-**Status:** Draft
-**Pillar:** 8
-**Last Updated:** 2026-01-27
-
----
-
 ## The Problem
 
 The Atlas was originally envisioned as the complete, immutable knowledge base of all Sky data, algorithms, and intelligence. The Endgame State would lock this comprehensive documentation forever.
@@ -656,17 +650,3 @@ The Atlas becomes the human-interpretable window into an arbitrarily complex mac
 **Key Insight:** Agent Artifacts are already structured for machines (addresses, rate limits, ICDs). The Atlas/Synome split formalizes what's implicit: A.0-A.5 + A.6 intro are the Atlas; A.6.1-A.6.5 details are the Synome.
 
 **Key Urgency:** The current period — while humans can still meaningfully participate in governance — is the critical window for getting the Atlas right. Our best attempt at CEV means locking in values while the governance window exists, before the system outgrows human oversight. The Synome eventually becomes the adult maintaining the habitat; the Atlas is what ensures that adult carries the right values.
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`synome-layers.md`](synome-layers.md) | The 5-layer architecture and artifact hierarchy (synart, telart, embart) |
-| [`synome-overview.md`](synome-overview.md) | High-level introduction to all Synome concepts |
-| [`beacon-framework.md`](beacon-framework.md) | How beacons derive authority envelopes from governance |
-| [`probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | The soft knowledge layer that informs governance decisions |
-| [`short-term-actuators.md`](short-term-actuators.md) | Phase 1 beacon implementation — teleonome-less beacons interacting with Synome-MVP |
-| [`../synoteleonomics/teleonome-autonomy.md`](../synoteleonomics/teleonome-autonomy.md) | Natural embodiment as alignment mechanism — why the "system as adult" model isn't pure paternalism |
-| [`../hearth/hearth.md`](../hearth/hearth.md) | The sacred commitments the Atlas must carry through the governance transition |

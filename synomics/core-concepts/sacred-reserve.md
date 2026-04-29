@@ -31,13 +31,7 @@ The transition occurs in phases: bootstrap (industrial use of sacred bodies perm
 ## Relationships
 
 - **implements:** [sacred-commitments](sacred-commitments.md) — the reserve implements commitment #1 (life and natural childhood) and #2 (the Hearth)
-- **maintained-by:** [stellar-husbandry](laniakea-docs/synomics/core-concepts/stellar-husbandry.md) — stellar husbandry maintains the Sun that the reserve depends on
+- **maintained-by:** [stellar-husbandry](stellar-husbandry.md) — stellar husbandry maintains the Sun that the reserve depends on
 - **defended-by:** [four-layer-enforcement-stack](four-layer-enforcement-stack.md) — the superstructure defends the reserve from physical and systemic threats
 - **enables:** [natural-embodiment-as-alignment](natural-embodiment-as-alignment.md) — the reserve produces the naturally-embodied beings that ground alignment
 - **enables:** [human-merge](human-merge.md) — the reserve produces the natural humans who can choose to merge
-
-## Framings
-
-| Directory | Narrative Doc | Framing |
-|-----------|--------------|---------|
-| hearth | `hearth.md` | Sacred commitment #2 (the Hearth), reserve as alignment infrastructure, co-constitution argument, what's protected vs. harvestable |

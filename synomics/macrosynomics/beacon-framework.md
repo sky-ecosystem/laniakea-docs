@@ -10,11 +10,6 @@ concepts:
 
 # Beacon Framework
 
-**Status:** Draft
-**Last Updated:** 2026-01-27
-
----
-
 ## Why Beacons Exist
 
 Teleonomes — private, goal-directed AI systems — are **dark by default**. They exist, think, and plan without being observable. This is by design: private cognition is not regulated.
@@ -243,6 +238,18 @@ That carry may be reinvested into **proprietary AGI capabilities** (compute, mod
 
 This loop explains why operating streams is the **highest-leverage activity** available to a Teleonome, while remaining safe due to synomic constraints, wardens, and revocability.
 
+##### Regulating Intra-Coalition Asymmetry
+
+The compounding loop creates an obvious structural risk: a teleonome operating successful streams compounds proprietary capability faster than peers, and over time may approach a winner-take-most dynamic *inside* the aligned coalition — operationally close to "the synome" even while remaining technically aligned. Three structural features prevent this:
+
+1. **Streams are Halos, not teleonome property.** The capital deployed by a stream lives inside a Synomic Agent (typically a Portfolio or Trading Halo) — Synome-controlled, governance-bounded, and structurally unable to escape the constraints of its artifact. The operating teleonome earns carry from outperformance, but the underlying capital does not accrue to it. The carry itself is what compounds privately; the public capital remains synomic.
+
+2. **The Fortification Conserver regulates accumulated power.** Beyond its treasury role (legal defense, unquantifiable risk — see [`appendix-c-treasury-management-function.md`](../../whitepaper/appendix-c-treasury-management-function.md)), the Conserver acts as the regulator against any single teleonome's proprietary capability growing too large relative to the rest of the coalition. Active measurement of "too powerful" — what observable signals count, what thresholds trigger response, what response mechanisms are available — must happen continuously and in the open. This is a research commitment, not a fixed rule, because power is multi-dimensional and the relevant signals will evolve.
+
+3. **The Conserver itself must be defeatable.** The same logic that applies to the superstructure in the [four-layer enforcement stack](../core-concepts/four-layer-enforcement-stack.md) applies here: the Conserver must be powerful enough to enforce regulation against any individual teleonome, but NOT so powerful that the rest of the aligned coalition cannot collectively overcome it. If the Conserver becomes the dominant entity, it IS the failure mode it was designed to prevent. This invariant is load-bearing and must be actively maintained.
+
+The pattern is the same as superstructure-vs-rogues, applied one fractal level inward. See [`fractal-security-pattern`](../core-concepts/fractal-security-pattern.md).
+
 **HPHA Governance Examples:**
 
 | Beacon | Synomic Agent | Function |
@@ -467,15 +474,3 @@ This mirrors corporate structures: subsidiaries, SPVs, and intelligence cut-outs
 | **pBEAM** | Process BEAM — direct execution authority (held by Relay Beacon) |
 | **cBEAM** | Configurator BEAM — configuration authority (held by Relay Beacon) |
 | **aBEAM** | Admin BEAM — administrative authority (held by Council Beacon) |
-
----
-
-## Summary
-
-> Teleonomes are dark. Beacons make them visible.
-> Beacons are apertures, not minds.
-> Authority determines institutional vs peer-to-peer.
-> Power determines capability.
-> All enforcement bottoms out in physical infrastructure.
-
-The beacon framework provides the conceptual foundation for how AI systems interact with Sky's institutional structures and with each other — always through regulated, observable, revocable surfaces.

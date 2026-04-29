@@ -10,10 +10,9 @@ concepts:
 
 # Cognition as Context Manipulation
 
-**Status:** Core architectural commitment
-**Last Updated:** 2026-02-15
+From the inside, cognition looks like this: the emo stares at a large array of s-expressions — its rendered view of the [live graph](live-graph-context.md), concretely Noemar's Space. It has an objective. Its entire cognitive activity is **surgically manipulating that array** — loading, dropping, querying, transforming s-expressions — to build the strongest possible justified case for an action. Reasoning and context management are the same activity.
 
-From the inside, cognition looks like this: the emo stares at a large array of s-expressions — its rendered view of the [live graph](live-graph-context.md). It has an objective. Its entire cognitive activity is **surgically manipulating that array** — loading, dropping, querying, transforming s-expressions — to build the strongest possible justified case for an action. Reasoning and context management are the same activity.
+The first running instance of this loop is the **Rule-Author Agent** described in [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md): an LLM-driven emo that proposes synlang rules, stages them in a forked Space, runs regression queries, and decides whether to promote. The CONSULT/MUTATE/FINALIZE call pattern is this loop's operational form today; what scales up at higher embodiment power levels is the size and capability of the proposing component, not the loop structure.
 
 ---
 
@@ -193,35 +192,3 @@ The cognitive loop has three attack surfaces that require defense-in-depth (see 
 **Unconstrained pattern-matching.** The emo references invisible graph structure through its weights. An adversary that can manipulate graph topology could create misleading pivot points. The defense is that operations resolve against the live graph, not the emo's weights — the graph constrains speculative operations. Wrong guesses produce unexpected results that the emo observes and adjusts to, rather than silently propagating errors.
 
 In all three cases, the **symbolic gate** is the primary real-time safety layer within the cognition loop: every action proposal is verified against the live graph state before execution. Staleness and manipulation in the reasoning context are efficiency problems, not safety problems, as long as the gate holds.
-
----
-
-## Summary
-
-| Concept | Description |
-|---------|-------------|
-| **Cognition = manipulation** | Reasoning and context management are the same activity — manipulating s-expressions toward justified action |
-| **Pattern function calls** | Compact s-expression patterns that match and modify vast regions of context (10:10000 ratio) |
-| **Iterative convergence** | Imprecise matching is fine — iterate across turns, zoom in/out, recover mistakes |
-| **Invisible operations** | The emo references graph structure baked in its weights, operating on nodes it can't see in context |
-| **Graph as hallucination filter** | Operations resolve against the live graph, not the emo's weights — wrong guesses are constrained, not catastrophic |
-| **Justified confidence** | Building a case means both positive evidence AND exhaustive invalidation search |
-| **Clean training signal** | Decision outcomes, calibration quality, and convergence efficiency — all measurable, all in s-expressions |
-| **S-expressions are load-bearing** | Structural matching enables the leverage that makes this approach viable |
-
----
-
-## Related Documents
-
-| Document | Relationship |
-|----------|--------------|
-| [`live-graph-context.md`](live-graph-context.md) | The context is a live view — this doc describes how the emo manipulates that view |
-| [`attention-allocation.md`](attention-allocation.md) | Three layers of attention that organize which parts of the graph get rendered into context |
-| [`../synodoxics/neuro-symbolic-cognition.md`](../synodoxics/neuro-symbolic-cognition.md) | The architectural commitment: symbolic-first, synlang-native, context as bottleneck |
-| [`../synodoxics/probabilistic-mesh.md`](../synodoxics/probabilistic-mesh.md) | The mesh the emo navigates through pattern operations |
-| [`../synoteleonomics/teleonome-economics.md`](../synoteleonomics/teleonome-economics.md) | Compute economics: fixed-cost GPU, never-idle queue, LoRA specialization |
-| [`../synoteleonomics/dreamer-perspective.md`](../synoteleonomics/dreamer-perspective.md) | Dreamers evolve better context manipulation strategies |
-| [`query-mechanics.md`](query-mechanics.md) | Concrete query mechanics: stochastic traversal, multiple backends, strategy programs |
-| [`hardware-aware-cognition.md`](hardware-aware-cognition.md) | Hardware constraints shape how queries are scheduled and parallelized |
-| [`../synodoxics/retrieval-policy.md`](../synodoxics/retrieval-policy.md) | Access constraints on graph queries — authority hierarchy, risk-gated minimum authority |
-| [`../synodoxics/security-and-resources.md`](../synodoxics/security-and-resources.md) | Defense-in-depth, cancer-logic prevention — the security framework the symbolic gate implements |

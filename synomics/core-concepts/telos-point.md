@@ -32,12 +32,4 @@ A telos point can be designed or emergent. The Hearth telos point — the [sacre
 - **solves:** [trust-problem](trust-problem.md) — provides the credible commitment that coordination needs
 - **protected-by:** [ossification](ossification.md) — at maximum ossification; only reality tests it
 - **protected-by:** [synomic-inertia](synomic-inertia.md) — at maximum inertia; no perturbation can shift it
-- **motivates:** [stellar-husbandry](laniakea-docs/synomics/core-concepts/stellar-husbandry.md) — the concrete sacred purpose the Hearth telos point generates
-
-## Framings
-
-| Directory | Narrative Doc | Framing |
-|-----------|--------------|---------|
-| hearth | `hearth.md` | Full treatment: why telos points exist, convergence optimization, stellar husbandry as concrete expression, the specific Hearth telos point |
-| synoteleonomics | `synomic-game-theory.md` | Game-theoretic analysis: why agents converge on the telos point |
-| synoteleonomics | `emergence.md` | Emergence as prerequisite for committing to a telos point |
+- **motivates:** [stellar-husbandry](stellar-husbandry.md) — the concrete sacred purpose the Hearth telos point generates
