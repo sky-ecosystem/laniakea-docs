@@ -98,9 +98,35 @@ Once distributed, the synome has three flow paths:
                                                             (full and partial)
 ```
 
-Synserv is the center of gravity. Every concern below is, in one form
-or another, about synserv being the single sequencer that the whole
-system funnels through.
+Synserv is the center of gravity for **synart replication**. Every
+concern about synart replication below is, in one form or another,
+about synserv being the single sequencer that the whole system funnels
+through.
+
+### Telart spread — a separate channel
+
+There's also a **second replication channel**: telart spread within a
+single teleonome's emb fleet. When a tel runs multiple embs (for
+resilience per `syn-tel-emb.md` §7), its telart contents must replicate
+across them. This channel is:
+
+| Property | Synart replication | Telart spread |
+|---|---|---|
+| Direction | synserv → all participants | one tel's authoritative emb → that tel's other embs |
+| Authority | governance-controlled | per-tel internal |
+| Bandwidth budget | global, governance-set | per-tel, paid by that tel |
+| Visibility | public | private to the tel |
+| Trust profile | gate-mediated | tel's own pubkey ring |
+
+A tel running 3-5 embs has roughly tel-internal-fanout × telart-update-
+rate of bandwidth obligation on its private channel. This is separate
+from the bandwidth this tel pays for synart replication-out (per the
+pricing in `syn-overview.md` §19).
+
+The two channels can use the same physical network but have distinct
+authority models. Tel-internal traffic doesn't go through syngate; it
+goes through telgates (each tel's own gate instance, running the
+universal `&core-telgate` spec).
 
 ---
 
@@ -229,7 +255,7 @@ trail the canonical history by some delay.
 
 ## 5. Partial sync correctness
 
-Rules and data co-locate (per `topology.md` §13-14): if you don't sync
+Rules and data co-locate (per `topology.md` §15-16): if you don't sync
 a Space, you don't get its rules. The common case is clean — partial
 sync gives partial *capabilities*, missing capabilities just aren't
 there to call.
@@ -331,6 +357,26 @@ propagates, the rule may run with stale code.
 - **Retraction propagation:** retract master, verify every projection
   retracted before any reader can touch them.
 
+### Call-out propagation across wardens
+
+The same rule-propagation discipline applies to loops that contain
+call-outs (`(call-out $service ...)` per `synlang-patterns.md` §5).
+When a Sentinel-Baseline strategy is updated, every Warden running
+the same strategy must also pick up the update — they re-derive
+against the same code with their own LLM call-outs.
+
+Mixed-version Wardens are particularly dangerous: an old-version
+Warden checking against new-version Baseline outputs will see false
+disagreement and may halt a healthy Baseline. Mitigation: per-formation
+loops project synchronously, with version atoms that Wardens check
+against Baseline before halting.
+
+Also: **expected disagreement** between Wardens (because each has its
+own LLM at the same call-out site) is normal. Threshold tuning per
+recipe is governance's responsibility — too tight and false halts
+fire; too loose and rogue Baselines escape detection. This tuning is
+itself a recipe parameter, not a fixed constant.
+
 ---
 
 ## 7. Hot-spotting on universal Spaces
@@ -389,7 +435,7 @@ default; others have natural retention boundaries.
 
 ### Tiering
 
-The temperature axis (axis C from `topology.md` §3) becomes a real
+The temperature axis (axis C from `topology.md` §4) becomes a real
 physical decision:
 
 - **Hot:** active-epoch er-samples; current submission window
@@ -622,10 +668,35 @@ deontic-skeleton updates.
 event rates exceed ~10k/sec sustained or when settlements need
 sub-second close. Before then, single-leader + standby is fine.
 
-**f) Telart and embart sync semantics.** This doc only covers synart
-replication. Telart (per-teleonome) and embart (per-embodiment) have
-their own sync stories — out of scope here, but the synart-side
-interaction (auth chains, write provenance) needs clean APIs.
+**f) Telart and embart sync semantics.** Telart spread within a tel's
+emb fleet runs on a separate channel (§1) but shares physical
+substrate with synart replication. Bandwidth contention,
+prioritization, and per-tel quotas need design. Embart never
+replicates so doesn't need a sync story, just locality optimization.
+
+**g) Telseed onboarding load.** When many telseeds spawn simultaneously
+(e.g., a popular telseed configuration drops, dozens of researchers
+fire it up), each new tel pulls a substantial synart slice on first
+sync. Spike load profile: peak 50-200MB×N parallel transfers for a few
+minutes, falling to steady-state per-tel sync rates after. Mitigations:
+synart slices delta-cacheable at gateway; telseed configs declare
+sync set so synserv can predict; per-tel sync-rate limits during
+high-spawn windows.
+
+**h) Endoscraper bandwidth.** Endoscrapers (`topology.md` §6 executable
+layer) poll chain RPC endpoints at protocol-specific rates. Each
+endoscraper writes parsed events into `&core-endoscrapers` and forwards
+verified facts to entart leaves. Load profile: chain-protocol-bound
+inflow, with reconciliation cost when matched against beacon
+submissions. Per-protocol endoscraper independence allows horizontal
+scaling.
+
+**i) Cross-tel telgate-to-telgate traffic.** Tels coordinating
+peer-to-peer (e.g., negotiating call-out service contracts, sharing
+proposals before publication) generate inter-tel traffic that doesn't
+pass through synserv. Distributed; growing with tel population;
+needs its own routing/discovery story analogous to DNS or peer
+discovery in P2P systems.
 
 ---
 

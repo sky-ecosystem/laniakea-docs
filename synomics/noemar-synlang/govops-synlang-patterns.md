@@ -3,7 +3,37 @@
 Tech-inspiration extract from the working AETHER demo at
 `noemar-work/aether/examples/govops_demo/`. Documents the load-bearing
 synlang and Python shapes plus the architectural decisions behind them.
-Companion to `synart-access-and-runtime.md` and `synlang-context.md`.
+Companion to `synart-access-and-runtime.md`, `topology.md`, and
+`synlang-patterns.md`.
+
+> **Status note (2026):** this doc captures the runnable govops_demo as
+> of its current state — the patterns shown are what *runs today*. Three
+> things have evolved in the canonical model since:
+>
+> 1. **Permission-rule shape.** The demo uses a longer preamble
+>    (`in-class` + `beacon-role` + `beacon-status` + flat capability
+>    checks). The canonical successor is the auth-only form
+>    `(if (auth $beacon $verb $target) True False)` — see
+>    `settlement-cycle-example.md` and `syn-overview.md` §16. Beacon
+>    properties are governance's concern at grant-time; the rule reads
+>    only the auth fact.
+> 2. **Space layout.** The demo runs single-Space; the canonical layout
+>    is the six-layer synome root + entart tree per `topology.md`. The
+>    auth shapes shown here transfer cleanly — `(halo-admin …)` /
+>    `(book-admin …)` style facts become `(auth … verb target)` atoms in
+>    the entart owning the target.
+> 3. **Strategy/cognition bridge.** The demo has no mechanism for
+>    synart-resolved code to consult local cognition; it's all
+>    deterministic. The canonical successor is the call-out primitive
+>    `(call-out $service (inputs ...) (output-shape ...))` — see
+>    `synlang-patterns.md` §5 and §6 (Sentinel formation patterns) and
+>    `synart-access-and-runtime.md` §11.6. The demo's pure-determinism
+>    pattern remains valid for verifier-shaped beacons.
+>
+> The pipeline shape (gate → policy → effect → audit), constructor
+> conventions, attestation-as-positive-flag pattern, ed25519 beacon
+> identity, and AETHER-constraint workarounds documented below all
+> remain canonical.
 
 ---
 
@@ -378,9 +408,11 @@ Notable:
 
 ## What's deliberately not here
 
-- **Cross-Space writes.** Demo uses one Space. Multi-Space (`&genesis`,
-  `&governance`, `&operational`, `&library`) is the next layer of the
-  runtime doc but doesn't change the auth shapes.
+- **Cross-Space writes.** Demo uses one Space. The canonical layout is
+  the six-layer synome root (`&core-*`) + entart tree
+  (`&entity-<type>-<id>-…`) per `topology.md` §5–§9. The auth shapes
+  documented above transfer directly — only the destination Space names
+  change.
 - **Telart / embart.** Demo is purely synart-scope. Teleonome-private
   rules and per-embodiment learned patterns live in different Spaces
   with different auth models.

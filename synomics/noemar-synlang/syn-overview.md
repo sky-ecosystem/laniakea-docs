@@ -1,9 +1,17 @@
 # Syn Overview — Concept Map
 
-Tight reference of the bits and pieces that have to be woven together. Each
-section is a pointer, not an explanation. Reach for `synlang-context.md`,
-`synart-access-and-runtime.md`, `govops-synlang-patterns.md`, or
-`synlang-iteration-primer.md` when depth is needed.
+Tight reference of the bits and pieces that have to be woven together.
+Each section is a pointer, not an explanation. Reach for `topology.md`
+(structural definitions), `syn-tel-emb.md` (artifact tiers + recipe
+marketplace), `boot-model.md` (identity-driven boot), `scaling.md`
+(operational concerns), `settlement-cycle-example.md` and
+`telseed-bootstrap-example.md` (worked examples),
+`synart-access-and-runtime.md` (auth + runtime), `synlang-patterns.md`
+(code library), or `govops-synlang-patterns.md` (runnable demo) when
+depth is needed.
+
+This doc is the **canonical home for the five levels of self-reference**
+(§10.5). Other docs reference here.
 
 ---
 
@@ -18,7 +26,7 @@ from rules → knowledge → theories → activity.
 | Deontic skeleton | Laws of the land | Hard rules + hard state — `(1,1)` | Canonical, gate-mediated | Append-only / governance-revocable |
 | Canonical probmesh | Wikipedia / peer-reviewed science | Shared knowledge — `(s,c)` | Canonical, gate-mediated | Belief-revisable via new evidence |
 | Local probmesh | Private research notebooks | Per-teleonome reasoning, hypotheses, theories | Never replicated | Free local mutation |
-| Operational workspace | Lab bench / current experiment / tracking sheet | Per-loop chain observations, in-flight derivations, accruals-being-built, ephemeral computation state | Never replicated, often ephemeral | Free local mutation; routinely discarded |
+| Operational workspace | Lab bench / tracking sheet | Per-loop chain observations, in-flight derivations, ephemeral computation state | Never replicated, often ephemeral | Free local mutation; routinely discarded |
 
 The first three are about **what is believed/known**; the fourth is about **what is currently happening**. Different layer of the stack — operational, not epistemic — but it lives in the same atomspace machinery and is the substrate where actual cognition / computation happens turn-by-turn.
 
@@ -46,12 +54,13 @@ Each gate has different cadence, authority, failure mode. The first is private a
 | Concept | Substrate | Notes |
 |---|---|---|
 | **Synome** | Replicated atomspace | The data layer — agents, governance, canonical knowledge live here as facts |
+| **Synart** | The canonical part of the synome | Tree of entarts (per `topology.md`) plus universal `&core-*` Spaces |
 | **Synserv** | The synome server (canonical instance) | The machine(s) Core GovOps runs to host canonical state |
-| **Synomic agent** (Prime, Halo, Guardian, etc.) | Atoms in the synome | Data, not processes |
-| **Embodiment** | A machine running a synome replica | Anyone can run one |
-| **Beacon** | Process on an embodiment | The only way agents act on the world |
+| **Synomic agent / synent** | Atoms in the synome | Data, not processes. Guardian / Prime / Halo. Each owns an **entart**. |
+| **Embodiment** | A machine running a synome replica | Anyone can run one; may sync full synart or a subset |
+| **Beacon** | Process on an embodiment | The only way agents act on the world; certed in a Guardian, authed in entart subtrees |
 | **Core GovOps** | Operational role running synserv + rooting other GovOps | Bootstrapped genesis-style; can give/revoke root to other Core GovOps recursively |
-| **GovOps team** | Humans operating beacons under a specific Guardian | The "private company" running e.g. Spark |
+| **GovOps team** | Humans operating beacons under a specific Guardian | The "private company" running e.g. Spark — *external operator*, not an entart |
 | **Chain** | EVM contracts (PAU stack) | Source of truth for chain-side facts; opaque to synome |
 
 ---
@@ -96,19 +105,19 @@ flowchart TD
 ```
 
 - **Core Council** — sovereign-rank synomic agent. Authority body for Guardian creation; not directly operational. Core GovOps does the actual writing.
-- **Guardian** — created by Core GovOps. Backed by token holders who vote on which GovOps team to root under it.
-- **Core GovOps** — operational role. Bootstrapped genesis-style: the original Core GovOps are whoever runs the first synserv. They can give and revoke root to other Core GovOps recursively. They are the operational executor for both Guardian creation and rooting regular GovOps (executing Guardian token-holder votes) — i.e. they're the entity that actually writes the relevant atoms.
-- **GovOps team** (e.g. soter-govops) — rooted under a specific Guardian by Core GovOps on token holders' behalf. Operates the agent (Spark Prime, etc.) day-to-day.
+- **Guardian** — created by Core GovOps. Backed by token holders who vote on which GovOps team to root under it. Owns an entart (`&entity-guardian-<id>-root`).
+- **Core GovOps** — operational role. Bootstrapped genesis-style: the original Core GovOps are whoever runs the first synserv. They can give and revoke root to other Core GovOps recursively. They are the operational executor for both Guardian creation and rooting regular GovOps (executing Guardian token-holder votes).
+- **GovOps team** (e.g. soter-govops) — *external operator*, not in the tree. Rooted under a specific Guardian by Core GovOps on token holders' behalf. Operates the agent (Spark Prime, etc.) day-to-day via beacons.
 - **GovOps root beacon** — operational top of a GovOps team. Certifies operational beacons with narrow auths.
-- **Operational beacons** (lpha-nfat-style) — the actual write-doers. Carry narrow caps from their root.
+- **Operational beacons** (lpha-nfat-style) — the actual write-doers. Carry narrow auths, scoped to specific verbs on specific targets.
 
-| Concept | Asserts | Frequency |
-|---|---|---|
-| Governance accord | Mutual recognition between synomic agents | Long-lived, structural |
-| Admin certification | "This beacon is mine; I carry liability" | Operational |
-| Admin authorization | "This beacon may do verb V on target T" | Operational, frequent |
+| Concept | Asserts | Frequency | Where it lives |
+|---|---|---|---|
+| Governance accord | Mutual recognition between synomic agents | Long-lived, structural | Parent entart's sub-entart registry |
+| Admin certification | "This beacon is mine; I carry liability" | Operational | Guardian's entart root |
+| Admin authorization | "This beacon may do verb V on target T" | Operational, frequent | Entart owning the target |
 
-**Flat capability facts** replace transitive-closure walks (which fail AETHER's QR-009). Every constructor writes a flat 2-arg fact `(govops-admin $prime $beacon)` / `(halo-admin $halo $beacon)` / `(book-admin $book $beacon)`. Downstream rules check directly.
+The simplified permission rule body is `(if (auth $beacon $verb $target) True False)` — see §16 below.
 
 ---
 
@@ -122,37 +131,43 @@ flowchart TD
 | **Halo Book** | Balanced bankruptcy-remote ledger | Risk isolation, pari passu losses |
 | **Halo Unit** | Connecting edge between books | Specific terms, holder, claim |
 
-A unit is a liability in its issuing book, an asset in the holding book — one atom, two views via bridging rules.
+A unit is a liability in its issuing book, an asset in the holding book — one atom, two views via bridging rules (see `synlang-patterns.md` §2).
 
 **Book lifecycle:** `created → filling → offboarding → deploying → at-rest → unwinding → closed`
 
-**Two-beacon deployment gate:** `lpha-attest` posts attestation flag → `lpha-nfat` reads flag → transitions book to deploying.
+**Two-beacon deployment gate:** `lpha-attest` posts attestation flag → `lpha-nfat` reads flag → transitions book to `deploying`.
+
+In the entart tree, books live as leaf Spaces under their owning Halo: `&entity-halo-<id>-book-<id>`.
 
 ---
 
 ## 7. Risk framework → encumbrance
 
 ```metta
-(crr-factor filling   0.05)   ; transparent, on-chain
-(crr-factor deploying 1.00)   ; obfuscated, Schrödinger's risk
-(crr-factor at-rest   0.40)   ; attested
+;; in &core-framework-risk
+(crr filling   5)    ; ×100 — transparent, on-chain
+(crr deploying 100)  ; obfuscated, Schrödinger's risk
+(crr at-rest   40)   ; attested
 ;; etc.
 
+;; (sketch — see settlement-cycle-example.md for the full version)
 (= (unit-risk-weight $u)
-   (* principal (crr-factor (book-state issuer))))
+   (* notional (crr (book-state issuing-book))))
 
-(= (encumbrance-ratio $prime)
-   (/ (sum unit-risk-weight over units-held-by $prime)
-      (prime-capital $prime)))
+(= (er $prime)
+   (/ (sum unit-risk-weight over units in prime's books)
+      (available-capital $prime)))
 ```
 
-**Covenant:** ratio ≤ 0.90. Breach is hourly-detected, drives penalties at settlement.
+**Covenant:** ratio ≤ 0.90. Breach drives penalties at settlement.
+
+For the full worked example with seed state, permission rules, ER samples, breach detection, and penalty calculation, see `settlement-cycle-example.md`.
 
 ---
 
 ## 8. Settlement (two phases)
 
-Daily, 16:00 UTC. Inputs are the just-completed 24-hour event log + governance facts.
+At each settlement boundary (Phase 1: monthly; Phase 2+: daily). Inputs are the just-completed epoch's event log + governance facts.
 
 **Phase 1 — Per-Prime settlement (parallel across all Primes):**
 
@@ -166,11 +181,11 @@ Daily, 16:00 UTC. Inputs are the just-completed 24-hour event log + governance f
 | — | Synart resource consumption | Prime owes |
 | = | **Net owed** | Prime settles on-chain |
 
-Each Prime's computation runs against its own `&prime:*` Space and writes a settlement record there. No cross-Prime coordination.
+Each Prime's computation runs against its own `&entity-prime-<id>-root` and the leaf book Spaces below it. Settlement record is written into the Prime's entart root. No cross-Prime coordination in Phase 1.
 
 **Phase 2 — Global aggregation (after Phase 1 on-chain confirmations):**
 
-Synome reads all per-Prime settlement records and computes system-wide aggregates, written to a universal `&global-settlement` Space:
+Synserv reads all per-Prime settlement records and aggregates into the universal `&core-settlement` Space:
 
 | Aggregate | Source |
 |---|---|
@@ -180,64 +195,107 @@ Synome reads all per-Prime settlement records and computes system-wide aggregate
 | Treasury / Sky Token allocation | Sky-net × governance split |
 | Ecosystem fund allocation | Sky-net × ecosystem split |
 
-Globals are universal — every emb sees them regardless of subscription depth.
+`&core-settlement` is universal — every emb sees it regardless of subscription depth.
 
 ---
 
 ## 9. Real-time event streaming
 
-Prime beacons and Halo beacons stream events into the synart as they happen on chain. Each event is one signed atom, gate-verified by synserv, appended to the canonical synart. **the synart itself is the canonical real-time event log**.
+Prime beacons and Halo beacons stream events into the synart as they happen on chain. Each event is one signed atom, gate-verified by synserv, appended to the canonical synart in the relevant entart Space. **The synart itself is the canonical real-time event log.**
 
 Properties:
 
 - **Source of truth.** Computations against synart are canonical because synart has the real data — no optimistic-trust + challenge-based recourse layer needed for operational state.
 - **Live derivations.** Encumbrance ratio, idle balances, debt positions, distribution entitlements — all live queries against current synart state. Frontends, monitoring, and other teleonomes read whatever they need at whatever cadence they want.
-- **Synome computes settlement.** At T=16:00 UTC daily, synome runs the full 24-hour settlement computation itself, against its own event log. No external accrual server tier.
-- **Rolling two-epoch retention.** Synart always holds the most-recently-settled epoch alongside the currently-streaming one. Pruning happens at the *next* settlement: when epoch N is settled, epoch N−1's events are pruned (they're now superseded). During the settlement processing window itself, three slices coexist briefly — the prior-prior epoch (about to be pruned), the just-completed epoch being settled, and early events of the new epoch. The on-chain transactions are the long-term historical canonical record.
-- **Self-regulating volume via pricing.** Each agent pays for synart resources they consume — see §20. Tragedy of commons handled by economic gating, not architectural restriction.
+- **Synserv computes settlement.** At each settlement boundary, synserv runs the full epoch settlement computation itself, against its own event log. No external accrual server tier.
+- **Rolling two-epoch retention.** Synart always holds the most-recently-settled epoch alongside the currently-streaming one (per Space). Pruning happens at the *next* settlement: when epoch N is settled, epoch N−1's events are pruned. The on-chain transactions are the long-term historical canonical record.
+- **Self-regulating volume via pricing.** Each agent pays for synart resources they consume — see §19. Tragedy of commons handled by economic gating, not architectural restriction.
 
 ---
 
-## 10. The replicated synart
+## 10. The replicated synart — an entart tree
 
-Every emb of every teleonome carries a faithful replica of `&synart`. Synserv is the canonical instance; embs receive append-only diffs continuously.
+Synart is not one logical Space but a **tree of entarts** rooted at `&core-root`, plus the universal `&core-*` layer (see `topology.md` §5–§6). Synserv is the canonical instance; embs receive append-only diffs continuously.
 
-**Invariant:** synart content is identical on every emb (modulo diff lag). Beacons never write to it directly — their events go through synserv's gate, get appended canonically, mirror back via the next diff.
+**Subscription is per-entart, not all-or-nothing.** A serious teleonome may sync the whole tree; a light embodiment may sync just one Prime's USDS book leaf. Both are first-class. The universal `&core-*` Spaces (constitutional, framework, registry, aggregation, executable, library) are replicated everywhere.
 
-Operational beacons may keep local working Spaces (`&synome-active` style — for transient computation, on-chain transaction prep, derivation caches) but these are engineering conveniences, not architectural commitments. The new model removes the load-bearing role local Spaces had in the previous accrual-building flow.
+**Invariant:** synart content is identical on every emb that subscribes to a given Space (modulo diff lag). Beacons never write directly — their events go through synserv's gate, get appended canonically, mirror back via the next diff.
 
-(Local probmesh remains its own per-teleonome Space — `&telart:...` — orthogonal to the skeleton-side store.)
+**Synart is also the program.** Loops, gates, and recipes live as Spaces in the executable layer (`&core-loop-*`, `&core-syngate`, `&core-telgate`, `&core-recipe-*`). A runtime instance becomes a participant in the synome by booting against the synart with an identity — the identity resolves to a loop pointer; the runtime evaluates that loop. Spaces aren't just data containers; they're the program that the runtime interprets. See `boot-model.md` for the boot mechanics.
+
+(Local probmesh remains its own per-teleonome telart tree — orthogonal to the canonical synart. See `syn-tel-emb.md` for the full three-tier artifact treatment.)
 
 ---
 
-## 11. The daily settlement cycle
+## 10.5. The five levels of self-reference
 
-Synart maintains a **rolling two-epoch window** (per Space): each `&prime:*` and `&halo:*` Space holds the most-recently-settled epoch alongside the currently-streaming one.
+The synart's self-hosting properties stack into five levels:
+
+1. **Self-hosting** — synart contains the loops that run synart. The
+   synserv loop is in `&core-loop-synserv`; beacon loops are in
+   `&core-loop-beacon-*`; sentinel loops in `&core-loop-sentinel-*`.
+   Identity-driven boot picks them up.
+
+2. **Self-regulating** — synart contains the gates that regulate synart
+   access. `&core-syngate` is the synserv's gate; `&core-telgate` is
+   the universal spec each tel runs an instance of. The trust boundary
+   is itself synart code.
+
+3. **Self-paying** — synart contains the recipes that fund work on synart.
+   Recipes (see §19.5) bundle loops with economics; teleonomes earn
+   carry by running them. The marketplace that pays for participation
+   is part of the substrate participants run on.
+
+4. **Self-seeding** — synart contains the telseeds that birth new
+   teleonomes (`&core-library-telseed-*`). New tels boot against synart
+   and grow from there. The reproductive material is in the substrate.
+
+5. **Self-improving** — synart contains the runtime source itself
+   (`&core-library-runtime-noemar-*` and alt impls). Recipe revenue
+   funds substrate research; substrate research lands back in synart;
+   next-generation tels start from improved foundations. **The synome
+   funds its own substrate research with the value it captures from
+   substrate use.**
+
+This is structurally tighter than open-source models (where development
+is funded externally) or smart-contract platforms (where contracts run
+on chains the contracts didn't fund). The marketplace running on the
+substrate pays for the substrate's improvement; you can't fork the
+development engine without forking the productive economy.
+
+For the boot mechanics enabling level 1: `boot-model.md`. For the
+artifact tiers and recipe marketplace enabling levels 3-5: `syn-tel-emb.md`.
+
+---
+
+## 11. The settlement cycle (cadence-agnostic)
+
+Synart maintains a **rolling two-epoch window** (per Space): each entart Space holds the most-recently-settled epoch alongside the currently-streaming one.
 
 ```mermaid
 gantt
-    title Daily settlement cycle (with global aggregation)
+    title Settlement cycle (T = epoch close)
     dateFormat HH:mm
-    axisFormat %H:%M
+    axisFormat T+%H:%M
     section Operations
-    Real-time event streaming         :active, m1, 16:00, 24h
+    Real-time event streaming         :active, m1, 00:00, 24h
     section Per-Prime settlement
-    Per-Prime computations (parallel) :crit, m2, 16:00, 30m
-    Prime beacons settle on-chain     :crit, m3, 16:30, 90m
+    Per-Prime computations (parallel) :crit, m2, 24:00, 30m
+    Prime beacons settle on-chain     :crit, m3, 24:30, 90m
     section Global aggregation
-    Synome aggregates global numbers  :crit, m4, 18:00, 30m
-    Prune prior-prior epoch           :m5, 18:30, 30m
+    Synserv aggregates global numbers :crit, m4, 26:00, 30m
+    Prune prior-prior epoch           :m5, 26:30, 30m
 ```
 
-The cycle (anchored at 16:00 UTC):
+The cycle:
 
-- **Continuous (T=16:00 → T+24h):** Prime and Halo beacons stream chain events into their respective per-entity Spaces. The previously-settled epoch is retained alongside the currently-streaming one in each Space.
-- **T+24h:** Epoch N closes. Synome runs **per-Prime settlements in parallel** — each Prime's net-owed computed independently against its own Space.
-- **T+24h+30m:** Prime beacons read their settlement records and execute on-chain settlement transactions per those numbers.
-- **T+24h+2h:** Once all per-Prime on-chain settlements are confirmed, synome runs **global aggregation** — sums revenue / outflow / net across all Primes, writes treasury and ecosystem allocations to `&global-settlement`.
-- **T+24h+2.5h:** Per-Space pruning kicks in. Each Space drops its prior-prior epoch independently (so a delay in Prime X's settlement doesn't hold up the rest).
+- **Continuous (T → T+epoch-length):** Prime and Halo beacons stream chain events into their respective entart Spaces. The previously-settled epoch is retained alongside the currently-streaming one.
+- **T+epoch-length:** Epoch N closes. Synserv runs **per-Prime settlements in parallel** — each Prime's net-owed computed independently against its own entart subtree.
+- **+30m:** Prime beacons read their settlement records and execute on-chain settlement transactions.
+- **+2h:** Once all per-Prime on-chain settlements confirm, synserv runs **global aggregation** — sums revenue / outflow / net across all Primes, writes treasury and ecosystem allocations to `&core-settlement`.
+- **+2.5h:** Per-Space pruning kicks in. Each Space drops its prior-prior epoch independently.
 
-Two-phase by data dependency: Phase 1 (per-Prime) is parallel because each Prime's data is independent; Phase 2 (global) is sequential because aggregation needs all Phase-1 outputs. The 15-minute sub-epoch from earlier drafts is gone. Daily is the only canonical boundary. Frontends and other readers query synart directly at whatever cadence they want.
+Two-phase by data dependency: Phase 1 is parallel because each Prime's data is independent; Phase 2 is sequential because aggregation needs all Phase-1 outputs. Frontends and other readers query synart directly at whatever cadence they want — daily is the only canonical aggregation boundary, but real-time reads are continuous.
 
 ---
 
@@ -248,15 +306,15 @@ flowchart TD
     CE[chain event] --> WT[beacon witnesses]
     WT --> SG[sign with beacon key]
     SG --> GO[submit via gate-out]
-    GO --> SY[synserv appends to synart]
-    SY -.->|diff| RE[every emb's synart replica]
+    GO --> SY[synserv appends to relevant entart]
+    SY -.->|diff| RE[every subscribing emb]
 ```
 
 In steady state the beacon's job is just: witness chain events, sign, submit. One event per submission. No per-cycle accrual building, no local aggregation, no snapshot computation.
 
-At settlement time (T=16:00 UTC daily), Prime beacons additionally:
+At settlement time, Prime beacons additionally:
 
-- Read the settlement record the synome computed for their Prime
+- Read the settlement record synserv computed for their Prime (in `&entity-prime-<id>-root`)
 - Execute on-chain settlement transactions per those numbers
 - Wait for confirmation; synart pruning follows
 
@@ -268,14 +326,15 @@ That's the only periodic act in the beacon's loop. Otherwise it's a continuous s
 
 | Real wins | Not real wins |
 |---|---|
-| Replication topology granularity | Raw query perf (indexes do that) |
+| Replication topology granularity (per-entart subscription) | Raw query perf (indexes do that) |
 | Lifecycle isolation (archive closed entities) | Trust separation within one runtime |
 | Mobility / repartitioning unit | Failure isolation (discipline does this) |
 | Fork-promote / staging (RSI, mesh) | Most "scaling" claims |
 | Independent runtime versioning | |
-| Conceptual / authority alignment | |
+| Conceptual / authority alignment (entart = synent) | |
+| Executable specifications co-located with state (loops, gates, recipes are atoms) | |
 
-**Skeleton:** probably one logical `&synome` Space forever. Storage-layer partitioning is invisible.
+**Skeleton (deontic):** the entart tree per `topology.md`. Multi-Space, but each Space's role is structural-authority, not throughput.
 **Canonical probmesh:** genuinely multi-Space (domains, hypothesis testing, PIM mapping).
 **Local probmesh:** per-teleonome plus fork-promote staging.
 
@@ -283,7 +342,7 @@ That's the only periodic act in the beacon's loop. Otherwise it's a continuous s
 
 ## 14. Loop taxonomy
 
-Embodiments are configured by which loops they activate. Each loop owns a **workspace Space** — the operational tier in concrete form.
+Embodiments are configured by which loops they activate. Each loop owns a **workspace Space** in embart — the operational tier in concrete form.
 
 | Loop | Activates | Args | Workspace contents |
 |---|---|---|---|
@@ -291,8 +350,15 @@ Embodiments are configured by which loops they activate. Each loop owns a **work
 | `beacon` | one beacon's heartbeat + gate-out | role, target, cadence | chain obs, accruals-in-flight, derivation state |
 | `archive` | full event capture | scope, retention | full historical event log |
 | `verifier` | re-derive + flag discrepancies | scope, cadence | mirrored events, challenge drafts |
+| `endoscraper` | chain RPC poll + parse + write | protocol target, cadence | per-cycle chain events, processing scratch |
+| `dreamer` | evolutionary simulation in dreamart | population size, fitness fn | candidate strategies, simulated worlds |
+| `sentinel-baseline` | baseline strategy with synart envelope + designated call-outs | per-entity Space (e.g., `&entity-prime-spark-sentinel-baseline`) | active context, draft proposals, call-out state |
+| `sentinel-stream` | local cognition with synart bounds | per-entity Space | rich working memory for ongoing local cognition |
+| `sentinel-warden` | re-runs baseline; halts on disagreement | per-entity Space | re-derived expected baseline, comparison state |
 
-Loops compose on one embodiment. Same library, different activations.
+**All loop bodies are synart-resolved Spaces.** The taxonomy here shows which loops an embodiment activates (which identity it boots as / which class it registered for), not where the loop code lives. Code is universal in `&core-loop-*` (and per-entity instances in entarts for entity-bound loops); embart holds only execution context per running loop. See `boot-model.md` and `topology.md` §17 for mechanics.
+
+Loops compose on one embodiment. Same runtime, different activations.
 Workspaces are the operational-tier Spaces — private, ephemeral, never gated.
 
 ---
@@ -330,12 +396,14 @@ The leaf `auth` fact is the source of truth. No class/role/status preamble — t
        False))
 ```
 
-- `(auth $beacon $verb $target)` is a flat 3-arg fact. Granted by a certifier (whose own auth chain ultimately roots in genesis); removed on revocation.
+- `(auth $beacon $verb $target)` is a flat 3-arg fact. Lives in the entart owning the target. Granted by a certifier (whose own auth chain ultimately roots in genesis); removed on revocation.
 - `(if … True False)` wrapper forces a definite boolean (bare expressions don't reduce).
 - Trailing `$nonce` — driver-appended, body ignores. Replay protection.
 - Default-deny by absence — no `auth` atom → no `permits` results → policy denies.
 
 If a beacon's role / class / status changes (e.g., decertified, reassigned), governance revokes the relevant `auth` atoms. Synlang never re-verifies those properties — it just reads the auth fact.
+
+> The runnable demo (`govops-synlang-patterns.md`) uses a longer preamble (`in-class` + `beacon-role` + `beacon-status` + flat checks). The auth-only shape above is the canonical successor — see that doc's header note.
 
 ---
 
@@ -343,49 +411,43 @@ If a beacon's role / class / status changes (e.g., decertified, reassigned), gov
 
 Failure modes shift from "missing accruals" to:
 
-- **Beacon drops events** → synome / archive nodes can detect gaps via on-chain comparison; flagged with an `event-gap-flagged` atom.
-- **Settlement disagrees with chain** → synome's computed settlement diverges from on-chain reality (e.g., events were missed, on-chain tx differed); flagged for governance review.
+- **Beacon drops events** → synserv / archive nodes detect gaps via on-chain comparison; flagged with an `event-gap-flagged` atom.
+- **Settlement disagrees with chain** → synserv's computed settlement diverges from on-chain reality; flagged into `&core-escalation` for governance review.
 - **Agent under-pays for resources** → synserv tracks consumption; if a meter shows non-payment, escalation flag.
 - **Beacon misbehavior** → cert/auth chain provides recourse: revoke the auth atom, re-cert from above, etc.
 
-All flagging atoms are append-only; the audit trail is part of synart history *until pruning at settlement*. Anything that needs to persist beyond an epoch must be promoted to a settlement-tier atom (or written to an out-of-band archive). Serious breaches escalate via real-world governance — cert revocation, legal liability up the chain — same as before.
+All flagging atoms are append-only; the audit trail is part of synart history *until pruning at settlement*. Anything that needs to persist beyond an epoch must be promoted to a settlement-tier atom or written to an out-of-band archive. Serious breaches escalate via real-world governance — cert revocation, legal liability up the chain.
 
 ---
 
-## 18. AETHER constraint workarounds
+## 18. Phase 1 commitments
 
-| Constraint | Workaround |
-|---|---|
-| Existentials only under `and`/`or`/`not` | Flat capability facts, pre-bind everything |
-| Bare `(and …)` doesn't boolean-eval | `(if (and …) True False)` wrapper |
-| Wildcard `$_` in flat fact (QR-010) | Separate 1-arg presence flag |
-| Transitive closure (QR-009) | Append-only flat capability chain |
-| Identical retries → identical sigs | Driver appends `sn1, sn2, …` |
-| `collapse`/`fold` brittleness | Aggregation via Python protocols |
+Thirteen commitments — write code as if multi-Space, run single-Space. See `topology.md` §19 for the full canonical list and `synart-access-and-runtime.md` §17 for full rationale on the original seven.
 
-(Most of these listed as "old issues, solved in current Noemar" — verify before relying on workarounds.)
-
----
-
-## 19. Phase 1 commitments (write code as if multi-Space; run single-Space)
+The high-level shape:
 
 1. Space is always a parameter, never implicit.
 2. Append-only writes.
 3. Content-addressed names.
-4. Open verb dispatch via `(external-verb …)` whitelist atoms.
+4. Open verb dispatch via `(external-verb …)` whitelist.
 5. Gate as primitive at the trust boundary, even if trivial.
 6. `(can $caller $verb $target)` reads from a named auth Space.
 7. Idempotent constructors.
+8. Every rule declares its reads (`rule-reads`).
+9. Cross-Space references go through registries, never hard-coded names.
+10. Cross-Space rules are scatter-gather, not direct multi-match.
+11. Global rules carry their own publication metadata.
+12. Synart is a tree of entarts; cross-entart references go parent → child only.
 
 Cheap insurance. Lets future sharding / migration / federation happen without synlang rewrites.
 
 ---
 
-## 20. Scaling economics
+## 19. Scaling economics
 
-The synart is real-time canonical state replicated across every emb. Volume is regulated economically — each agent pays for the synart resources they consume.
+The synart is real-time canonical state replicated across embs. Volume is regulated economically — each agent pays for the synart resources they consume.
 
-Four pricing levers, all governance-set facts in synart:
+Four pricing levers, all governance-set facts (`&core-framework-fee`):
 
 | Lever | Who pays | Why |
 |---|---|---|
@@ -396,22 +458,49 @@ Four pricing levers, all governance-set facts in synart:
 
 Properties:
 
-- **Parsimony falls out automatically.** A Halo posting 1 event/sec instead of 10/sec pays 10× less. The natural equilibrium is "post what's worth posting at the cadence it's worth at."
-- **Velocity isn't suspect — just expensive.** A Halo doing legitimate high-frequency operations pays accordingly; teleonomes consuming that fine resolution effectively subsidize via their bandwidth-out costs.
-- **Pricing is itself a governance lever.** Adjust the curves to encourage / discourage behaviors. Standard fee-curve mechanism design.
-- **Aligns with daily settlement.** Each agent's settlement net-owed includes synart resource consumption as a line item alongside base rate, reimbursements, distributions, penalties.
+- **Parsimony falls out automatically.** A Halo posting 1 event/sec instead of 10/sec pays 10× less. Natural equilibrium: post what's worth posting at the cadence it's worth at.
+- **Velocity isn't suspect — just expensive.** Legitimate high-frequency operations pay accordingly; teleonomes consuming that fine resolution effectively subsidize via their bandwidth-out costs.
+- **Pricing is a governance lever.** Adjust the curves to encourage / discourage behaviors. Standard fee-curve mechanism design.
+- **Aligns with settlement.** Each agent's net-owed includes synart resource consumption alongside base rate, reimbursements, distributions, penalties.
 
-Hardware progression for synserv: single-node → cluster → distributed → CDN-fanout for replica trees. At Sky's near-term scale (100s of Primes, 1000s of Halos, ~hundreds of events/sec aggregate), comfortable single-server territory — meaningfully lighter than e.g. Solana's typical load. The real scaling pressure at AGI / world-economy scale is the **canonical probmesh**, not the financial skeleton — that's where PIM-class hardware lives.
-
----
-
-## 21. The one-line glue
-
-A Prime borrows USDS from a Generator (Sky Debt). The risk framework assigns a CRR to each asset in each Halo book based on book state. A unit's risk weight = principal × CRR. Encumbrance ratio = Σ unit-risk-weights ÷ available capital; covenant ≤ 0.90. Prime and Halo beacons stream chain events into per-entity Spaces in the canonical synart in real time — held by every teleonome's emb (selectively per Space) as common operational ground. At settlement (daily, 16:00 UTC) the synome runs **two phases**: first, per-Prime settlements compute in parallel against each Prime's own Space (base rate + reimbursements − distributions + breach penalties + synart resource consumption); Prime beacons execute results on chain. Second, after confirmations, synome aggregates across all Primes and writes global outputs (Sky-net, treasury allocation, ecosystem allocation) to a universal `&global-settlement` Space. After that, each Space's *prior-prior* epoch is pruned — synart always holds the most-recently-settled epoch plus the live one, per Space. Beacons are gate-verified via cert/auth chain; disputes resolve via real-world governance, not crypto.
+For operational failure modes (replication staleness, hot-spotting, partitions), see `scaling.md`.
 
 ---
 
-## 22. The data flow in one picture
+## 19.5. The recipe marketplace
+
+The synart isn't just self-hosting and self-regulating; it's also a
+**regulated marketplace for monetizing AGI capability**. Recipes (loops
+in `&core-loop-*` bundled with economics in `&core-framework-fee` and
+auth requirements) are the standardized products. Teleonomes are
+diversified providers — they take on multiple recipes that all draw
+from the same telart cognitive substrate, so transfer learning across
+recipes is the economic engine.
+
+Phase 1 has minimal recipes (deterministic verifier-shaped beacons with
+small carry); high-value cognitive recipes (Sentinel formations) enter
+the catalog at Phase 9-10+.
+
+The alignment claim: **the synart, not the teleonome, decides what gets
+paid for.** Recipe catalog curation is governance's most consequential
+ongoing activity — it's the value-extraction surface that determines
+which capabilities flow where. A rogue teleonome with infinite AGI can
+only cash in on activities the synart has standardized into recipes;
+the cognition can be opaque, but what it does *to the world* must flow
+through a recipe.
+
+Canonical treatment: `syn-tel-emb.md` §8 (recipe lifecycle, transfer
+learning argument, alignment claim, pricing levers, Phase 1 minimalism).
+
+---
+
+## 20. The one-line glue
+
+A Prime borrows USDS from a Generator (Sky Debt). The risk framework assigns a CRR to each asset in each Halo book based on book state. A unit's risk weight = principal × CRR. Encumbrance ratio = Σ unit-risk-weights ÷ available capital; covenant ≤ 0.90. Prime and Halo beacons stream chain events into their respective leaf Spaces in the canonical synart in real time — replicated to every subscribing emb. At each settlement boundary the synserv runs **two phases**: first, per-Prime settlements compute in parallel against each Prime's own entart subtree (base rate + reimbursements − distributions + breach penalties + synart resource consumption); Prime beacons execute results on chain. Second, after confirmations, synserv aggregates across all Primes and writes global outputs (Sky-net, treasury allocation, ecosystem allocation) to `&core-settlement`. After that, each Space's *prior-prior* epoch is pruned. Beacons are gate-verified via cert/auth chain; disputes resolve via real-world governance, not crypto.
+
+---
+
+## 21. The data flow in one picture
 
 ```mermaid
 flowchart LR
@@ -426,25 +515,27 @@ flowchart LR
     end
 
     subgraph synserv["SYNSERV / SYNART"]
-        SY["per-entity Spaces<br/>(rolling 2-epoch event logs)"]
-        SC[Phase 1: per-Prime settlement<br/>parallel, T=16:00]
-        GA["Phase 2: global aggregation<br/>&global-settlement"]
+        ET["entart leaf Spaces<br/>&entity-*-* (rolling 2-epoch logs)"]
+        EP["Prime entart roots<br/>&entity-prime-*-root"]
+        SC[Phase 1: per-Prime settlement<br/>parallel, at epoch close]
+        GA["Phase 2: global aggregation<br/>&core-settlement"]
         PR[prune prior-prior epoch]
     end
 
     EV --> BW
-    BW -->|signed event| SY
-    SY --> SC
-    SC -->|per-Prime settlement record| SY
+    BW -->|signed event| ET
+    ET --> SC
+    EP --> SC
+    SC -->|per-Prime settlement record| EP
     SC --> BR
     BR --> ST
     ST -.->|all Primes confirmed| GA
-    GA -->|global-settlement record| SY
+    GA -->|global-settlement record| GA
     GA --> PR
-    PR --> SY
+    PR --> ET
 ```
 
-Steady-state: events flow chain → beacon → per-entity Spaces in synart, replicated selectively to embs. Once daily: synome computes per-Prime settlements in parallel, Prime beacons settle on chain, then global aggregation runs, then per-Space pruning kicks in.
+Steady-state: events flow chain → beacon → entart leaf Spaces in synart, replicated selectively to embs. At each settlement boundary: synserv computes per-Prime settlements in parallel, Prime beacons settle on chain, then global aggregation runs, then per-Space pruning kicks in.
 
 ---
 
@@ -452,8 +543,12 @@ Steady-state: events flow chain → beacon → per-entity Spaces in synart, repl
 
 | File | When to open |
 |---|---|
-| `synlang-iteration-primer.md` | Tight onboarding to all the above |
-| `synlang-context.md` | Conservation kernel, four-constructor MeTTa surface, sentinel decision rule |
-| `synart-access-and-runtime.md` | Auth domains, role/cert/auth, gate primitive, 16 migration principles, 7 Phase-1 commitments |
-| `govops-synlang-patterns.md` | Working pattern catalog from runnable demo |
-| `noemar-work-ex-transcript.md` | Prior conversation transcript with the synlang sketches |
+| `topology.md` | Canonical structural reference: entart tree, six-layer synome root, four meta-patterns, naming convention, thirteen commitments, two-step rule and loop shapes |
+| `syn-tel-emb.md` | Synart / telart / embart artifact tiers; telseeds; Noemar and atomspace runtimes; *canonical home for the recipe marketplace* |
+| `boot-model.md` | Identity-driven boot — how `noemar boot` resolves to a running loop; spec/instance collapse; shadow execution |
+| `telseed-bootstrap-example.md` | Worked trace of the first 24 hours of a new teleonome from a fresh telseed |
+| `scaling.md` | Operational concerns: synserv as single sequencer, replication, partial sync, hot-spotting, partitions, testing strategy |
+| `settlement-cycle-example.md` | Worked end-to-end example: ER tracking, breach, penalty calculation |
+| `synart-access-and-runtime.md` | Auth domains, three-level model (root/cert/auth), gate primitive, heartbeat, 16 migration principles, original 7 commitments, identity-driven boot summary, call-out primitive summary |
+| `synlang-patterns.md` | Synlang code library: Platonic kernel, cross-book duality, four-constructor MeTTa surface, sentinel decision rule (RAR), call-out primitive code, sentinel formation patterns |
+| `govops-synlang-patterns.md` | Working pattern catalog from runnable govops_demo (historical demo state) |

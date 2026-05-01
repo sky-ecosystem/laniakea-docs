@@ -1,6 +1,6 @@
 # Synart — Access Control and Runtime Architecture
 
-**Status:** Working notes from design discussion. Companion to `synlang-context.md`.
+**Status:** Working notes from design discussion. Companion to `topology.md` (structure), `synlang-patterns.md` (code library), and `syn-overview.md` (concept map).
 **Scope:** The access control kernel, runtime architecture, and scaling principles that the synart's foundational primitives must rest on. Does NOT cover the constructors themselves (book/unit/halo) — those come after this layer is settled.
 
 ---
@@ -266,6 +266,14 @@ Sig check is the spam/DDoS filter. Auth check is access control. They're indepen
 
 ## 10. The heartbeat — pushing the loop into synlang
 
+> **Note:** This section documents the synserv loop specifically — the
+> concrete `(run-forever)` shape that the canonical synserv runs. The
+> *abstract* identity-driven boot model that this is one application
+> of (any conforming runtime + any synart-resolved loop, parameterized
+> by identity) lives in `boot-model.md`. Read this section for "how
+> synserv runs"; read `boot-model.md` for "how any role boots, of which
+> synserv is one."
+
 The principle: **functional core, imperative shell.** Push every decision into synlang; off-space is only the wall-clock metronome.
 
 A grounded `delay` primitive (blocks N ms, returns) is enough to let the entire processing loop live in synlang:
@@ -352,22 +360,92 @@ Two small commitments this requires:
 
 ---
 
+## 11.5. Identity-driven boot
+
+The §10 heartbeat shape generalizes: **every loop in the synome boots
+the same way.** Different identities resolve to different loops; the
+runtime invocation is uniform.
+
+```
+noemar boot --identity=X --key=path/to/key.pem --synart=endpoint
+   ↓
+mount synart
+   ↓
+look up X in &core-registry-beacon → loop pointer
+   ↓
+evaluate (run-forever) with that Space as &self
+```
+
+What's local-only: the private key file. Everything else (which loop,
+which Spaces to subscribe, which auth applies, which gates to run)
+flows from synart based on identity.
+
+Synserv boots with this same procedure — its identity (e.g.,
+`core-synserv-canonical`) resolves to `&core-loop-synserv`. Beacons,
+sentinels, archive embs, verifier embs, endoscrapers all use the same
+boot path with their own identities resolving to their own loop
+Spaces.
+
+For depth — including the spec/instance collapse (`Spaces are the
+program; runtimes are the interpreter`), shadow execution properties,
+hot-swap modes, and failure handling — see `boot-model.md` (canonical).
+
+---
+
+## 11.6. The call-out primitive
+
+A synlang form for synart-resolved loops to consult local cognition at
+strategy-designated points. The synart→telart bridge.
+
+```metta
+(call-out $service
+   (inputs <input-atoms…>)
+   (output-shape <expected-shape>))
+```
+
+When a loop hits a `(call-out …)`, the runtime resolves `$service`
+against the booting identity's telart call-out registry, marshals
+inputs across the synart→telart boundary, validates the response shape,
+and returns the validated value to the surrounding synart code.
+
+The call-out is the **only sanctioned mechanism** for synart-resolved
+code to consult local cognition. Direct telart access from synart loops
+is forbidden because it would break the audit story.
+
+Verifiability profile:
+
+- Inputs to the call-out: fully verifiable (derived from synart state).
+- Call-out output: NOT verifiable (non-deterministic LLM/cognition).
+- Output-shape conformance: verifiable.
+- What the strategy does with the output: fully verifiable.
+
+This is what lets Sentinel-Baseline run ~95% verifiable code while
+still consulting LLM cognition at carefully-chosen decision points —
+wardens re-derive everything except the LLM output and halt on
+disagreement past tolerance.
+
+For the canonical synlang form and the Sentinel formation patterns
+that use it, see `synlang-patterns.md` §5-§6.
+
+---
+
 # PART III — Scaling and Multi-Space
 
 ## 12. The Synome is multi-Space by design
 
-The architecture already commits to logical multi-Space via the artifact tiers (synart / telart / embart). The user's scoping decision: **focus on synart for now** (telart and embart are very different and can be addressed later).
+The architecture already commits to logical multi-Space via the artifact tiers (synart / telart / embart). The scoping for this document: **focus on synart** (telart and embart are different and can be addressed later).
 
-Within synart, access patterns are wildly heterogeneous. Functional partitioning into sub-Spaces falls out naturally:
+Within synart, access patterns are wildly heterogeneous and functional partitioning into sub-Spaces falls out naturally. The canonical layout is the **six-layer synome root + entart tree** defined in `topology.md` §6:
 
-| Sub-Space | Contents | Read freq | Write freq | Volume |
-|---|---|---|---|---|
-| `&genesis` | Atlas, Axioms, Language Intent config | Constant | Near-immutable | Small |
-| `&governance` | Cert, auth, agent registry, beacon pubkeys, root atoms | Constant | Slow (governance-paced) | Small-medium |
-| `&operational` | Books, units, settlement records, attestations | Constant | Fast | Large |
-| `&library` | Mesh knowledge, beliefs, RSI artifacts | Constant | Very fast (evidence flow) | Huge |
+- **Constitutional:** `&core-root`, `&core-telos`, `&core-skeleton`, `&core-governance`, `&core-protocol`
+- **Framework:** `&core-framework-risk`, `&core-framework-distribution`, `&core-framework-fee`
+- **Registry:** `&core-registry-entity`, `&core-registry-beacon`, `&core-registry-contract`
+- **Aggregation:** `&core-settlement`, `&core-escalation`, `&core-endoscrapers`
+- **Executable:** `&core-syngate`, `&core-telgate`, `&core-loop-<class>`, `&core-recipe-*`
+- **Library:** `&core-library-runtime-<impl>`, `&core-library-telseed-<config>`, `&core-library-corpus-<domain>`, `&core-library-published-<topic>`
+- **Per-entity entart subtrees:** `&entity-<type>-<id>-<sub-kind>` (Guardian / Prime / Halo / their books / per-entity sentinel formations)
 
-Mixing all of these in one physical Space puts a small slow-write governance lookup in the same index as a high-throughput evidence stream. Different profiles want different physical structures.
+Mixing all of these in one physical Space would put a small slow-write governance lookup in the same index as a high-throughput event stream from a busy book — different profiles want different physical structures. See `topology.md` for the full taxonomy and the four meta-patterns (frameworks / registries / aggregations / specifications) that govern composition.
 
 ---
 
@@ -394,50 +472,54 @@ This **simplifies our design significantly.** Earlier I had every cross-Space wr
 
 **The gate is for *trust* boundaries, not *Space* boundaries.** Within one Synome runtime, all Spaces are in the same trust domain. Cross-Space writes are direct `add-atom`. The auth check inside the constructor is enough.
 
-Concrete example:
+Concrete example: creating a Prime writes to multiple Spaces atomically — the new Prime's root entart, the parent Guardian's sub-entart registry, and the global entity registry.
 
 ```metta
-(= (create-prime $caller $guardian $prime-id)
-   (case (can $caller create-prime $guardian)        ; auth check (synlang)
+(= (create-prime $caller $guardian $prime-id $prime-root-space)
+   (case (can $caller create-prime $guardian)              ; auth check (synlang)
      ((True
-        (let* (($_ (add-atom &operational (: $prime-id Prime)))
-               ($_ (add-atom &governance  (accordant $guardian $prime-id))))
+        (let* (($_ (add-atom $prime-root-space             (synent $prime-id)))
+               ($_ (add-atom $prime-root-space             (parent-entart $prime-id $guardian)))
+               ($_ (add-atom &entity-guardian-spark-root   (sub-entart $guardian $prime-id $prime-root-space)))
+               ($_ (add-atom &core-registry-entity         (entart-id $prime-id prime $prime-root-space))))
           (Created prime $prime-id)))
       (False (Error unauthorized $caller)))))
 ```
 
-Two `add-atom` calls into different Spaces. No gate-out, no message. The auth check is a regular synlang match against `&governance`.
+Four `add-atom` calls into different Spaces. No gate-out, no message. The auth check is a regular synlang match wherever auth atoms live for this verb.
 
 ---
 
 ## 14. Per-Space queues, single gate
 
-If 1000 Spaces each have to filter every incoming message, that's wasteful. The right model: **one gate (trust boundary), N per-Space incoming queues, routing happens after verification.**
+If many Spaces each have to filter every incoming message, that's wasteful. The right model: **one gate (trust boundary), N per-Space incoming queues, routing happens after verification.**
 
 ```
 External beacons
-   ↓ signed messages (each tagged with a verb)
+   ↓ signed messages (each tagged with a verb + target)
    ↓
 ┌──────────────────────────────────────────────────┐
 │   GATE  (single trust boundary)                  │
 │   1. parse                                       │
-│   2. verify sig (pubkey from replicated         │
-│      &governance, lookup is local)               │
+│   2. verify sig (pubkey from replicated          │
+│      &core-registry-beacon, lookup is local)     │
 │   3. nonce/rate-limit                            │
-│   4. read (verb-target-space $verb $space)       │
+│   4. resolve (verb-target-space $verb $target)   │
 │   5. route verified message to that Space        │
 └──────────────────────────────────────────────────┘
-        ↓                 ↓               ↓
-┌────────────┐    ┌────────────┐    ┌────────────┐
-│ &incoming- │    │ &incoming- │    │ &incoming- │
-│  governance│    │  operational│    │  library   │
-└─────┬──────┘    └─────┬──────┘    └─────┬──────┘
-      │ heartbeat       │                 │
-      ▼                 ▼                 ▼
-   &governance      &operational       &library
+        ↓                       ↓                       ↓
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│ &incoming-       │  │ &incoming-       │  │ &incoming-       │
+│  core-governance │  │  entity-prime-   │  │  entity-halo-    │
+│                  │  │  spark-root      │  │  spark-term-...  │
+└────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘
+         │ heartbeat            │                     │
+         ▼                      ▼                     ▼
+   &core-governance     &entity-prime-       &entity-halo-
+                        spark-root           spark-term-…
 ```
 
-**Routing-as-data is now load-bearing.** The atom `(verb-target-space create-prime &operational)` is what tells the gate where messages go. Adding a new Space = register its verbs in the routing table. Repartitioning = edit the routing atoms. Senders never know which Space their write lands in.
+**Routing-as-data is now load-bearing.** The atom `(verb-target-space create-prime &core-registry-entity)` is what tells the gate where messages go. Adding a new entart = register its inbound verbs in the routing table. Repartitioning = edit the routing atoms. Senders never know which Space their write lands in.
 
 The routing data is itself a hub atom — replicated to wherever the gate runs.
 
@@ -480,10 +562,10 @@ Commitments that preserve flexibility across hardware and scale evolution:
 ### Locality
 - **P1. Space is the unit of locality.** Within: pretend it's all one machine. Across: pretend you're sending a network message.
 - **P2. Most operations are single-Space.** Cross-Space writes are explicit, named, and rare.
-- **P3. Co-locate edges with their dominant access pattern.** `(accordant ...)` lives in `&governance` because that's the auth-read side.
+- **P3. Co-locate edges with their dominant access pattern.** Auth atoms live in the entart owning the verb's target — that's the side reading them at gate time.
 
 ### Naming
-- **P4. Space references are logical names.** `&governance` is a name, not a physical pointer. Runtime maintains `(space-location $name $physical-address)`.
+- **P4. Space references are logical names.** `&core-governance` and `&entity-prime-spark-root` are names, not physical pointers. Runtime maintains `(space-location $name $physical-address)`.
 - **P5. Content addressing for atoms.** Already a permanent design choice. Atom hash = identity, regardless of which Space it lives in.
 - **P6. Routing is data.** Where does verb V write? Look up `(verb-target-space V $space)`. Migrate by editing one atom.
 
@@ -493,7 +575,7 @@ Commitments that preserve flexibility across hardware and scale evolution:
 - **P9. No global ordering.** Within a Space: append-only log. Across: only causality (via nonces / message-IDs).
 
 ### Visibility
-- **P10. Cross-Space dependencies are explicit.** A constructor that reads `&governance` and writes `&operational` says so in its definition.
+- **P10. Cross-Space dependencies are explicit.** A constructor that reads `&core-registry-beacon` and writes into an entart subtree says so in its definition.
 - **P11. Provenance is first-class.** Every write knows what message produced it. Every belief knows what evidence produced it.
 - **P12. Read/write patterns documented per verb.** `(verb-reads V $space)`, `(verb-writes V $space)`.
 
@@ -507,10 +589,12 @@ Commitments that preserve flexibility across hardware and scale evolution:
 
 ## 17. The seven Phase 1 commitments
 
+> These are the **original seven**, with full rationale below. `topology.md` §19 adds **six more** (rule-reads declarations, registry-mediated cross-Space refs, scatter-gather rule shape, rule publication metadata, the entart tree itself, and the synart-as-program commitment) — making **thirteen total**. The seven here remain canonical; the additions cover structural commitments that weren't in scope when this section was written.
+
 Most of the multi-Space discussion is deferrable. Build single-Space, single-gate, single-heartbeat — but commit to these seven from day 1, because retrofitting them later is genuinely painful:
 
 **1. Space is always a parameter, never implicit.**
-Write `(add-atom &operational ...)` and `(match &governance ...)` from day 1, even when both names alias to the same physical Space. Constructor signatures document what they touch; runtime can later split them without code changes.
+Write `(add-atom &entity-prime-spark-root ...)` and `(match &core-governance ...)` from day 1, even when both names alias to the same physical Space. Constructor signatures document what they touch; runtime can later split them without code changes.
 
 **2. Append-only writes.**
 Always `(add-atom ...)`. Remove via `(remove-atom ...)` only when explicitly modeling revocation. Required for: replication, audit, fork/promote, idempotency, content-addressing.
@@ -525,7 +609,7 @@ A new entity's ID is a hash of (creator + nonce + content) or some content-deter
 External writes go through `gate-in` even in Phase 1. Phase 1 gate may do basic sig verification and skip rate-limiting; what matters is that constructors only run on verified messages.
 
 **6. The `(can $caller $verb $target)` predicate reads from a named auth Space.**
-Today `&governance` may be the same physical Space as everything else, but the predicate is written `(match &governance ...)`. When `&governance` becomes its own Space later, no constructor changes.
+Today `&core-governance` may be the same physical Space as everything else, but the predicate is written `(match &core-governance ...)` (or against the appropriate entart Space). When the physical layout splits later, no constructor changes.
 
 **7. Idempotent constructors.**
 Calling `(create-prime same-args)` twice produces the same atom or harmlessly no-ops. Achieved via content-addressing + check-before-write. Required for: retries, async replays, gate redelivery.
@@ -549,9 +633,11 @@ Calling `(create-prime same-args)` twice produces the same atom or harmlessly no
 
 ## 18. Genesis state
 
-Two atoms in genesis:
+Two atoms ship in the initial state of `&core-governance` — there is no separate `&genesis` Space, the bootstrap seed lives directly in the constitutional layer (per `topology.md` §6):
 
 ```metta
+;; in &core-governance — initial state
+
 ;; The meta-role that holds authority to define/grant/revoke roles
 (role-def root-authority
   (verbs create-guardian set-root authorize-govops
@@ -561,7 +647,7 @@ Two atoms in genesis:
 (role-grant core-council root-authority (scope unrestricted))
 ```
 
-That's the seed. Everything else — every Guardian, every GovOps root, every operational beacon, every cert, every auth — derives from writes whose authorization traces back to this grant.
+That's the seed. Everything else — every Guardian entart, every GovOps root, every operational beacon, every cert, every auth — derives from writes whose authorization traces back to this grant.
 
 ## 19. The bootstrap sequence
 
@@ -605,13 +691,43 @@ Suggested implementation order, each step buildable and testable in isolation:
 
 2. **The five governance/auth verbs.** `create-guardian`, `set-root`, `cert-beacon`, `auth-beacon`, `revoke-*`. Each is a constructor with an auth check.
 
-3. **The gate primitive (trivial version).** Sig verification reading from `&governance`'s pubkey atoms; emits `(verified-message ...)` to `&incoming`. Phase 1 may stub the crypto; the *shape* is what matters.
+3. **The gate primitive (trivial version).** Sig verification reading from `&core-registry-beacon`'s pubkey atoms; emits `(verified-message ...)` to `&incoming`. Phase 1 may stub the crypto; the *shape* is what matters.
 
 4. **The dispatch + heartbeat loop in synlang.** `(external-verb …)` whitelist; the `(dispatch …)` rule; `(run-forever)` calling `(heartbeat)` calling `(drain-pending)`.
 
 5. **The construction verbs in order.** `create-prime`, `create-halo`, `create-class`, `create-book`, `issue-unit`. Each builds on the accordancy chain established by predecessors.
 
-6. **Test with a multi-Space-shaped layout.** All four named Spaces (`&genesis`, `&governance`, `&operational`, `&library`) aliased to one physical Space. Write code as if they were already separate.
+6. **Test with the entart-tree-shaped layout.** Synome root `&core-*` Spaces plus a small entart subtree (one Guardian → one Prime → one Halo → one or two book leaves) all aliased to one physical Space. Write code as if they were already separate — the synlang is identical whether they're one backing store or many.
+
+## 20.5. Telseed bootstrap
+
+A new teleonome comes online via a telseed — a minimal package
+(atomspace runtime + connection info + sync prefs + identity material +
+initial endowment) that connects to live synart and grows from there.
+Telseeds don't ship knowledge corpora; they stream from synart on
+connect.
+
+The bootstrap arc:
+
+1. Boot atomspace runtime with telseed config
+2. Connect to synserv (or peer tel)
+3. Sync requested synart slice (per sync-policy)
+4. Telart instantiation — bootstrap procedure (now synced from synart)
+   makes calls about telart sub-Space layout, registers identity
+5. First emb spawn — replicate telart to additional embs for resilience
+6. Begin dreamer / beacon loops; first revenue
+7. Compounding: revenue + RSI → telart growth → more recipe-taking
+
+Concept: `syn-tel-emb.md` §4-§5. Worked trace with concrete identities
+and timings: `telseed-bootstrap-example.md`.
+
+The synart-access perspective on this: telseed bootstrap is just
+identity-driven boot (§11.5 / `boot-model.md`) starting from a fresh
+identity that has no prior synart presence. The key extra step is
+that the founder vouches for the new identity through their existing
+auth chain, letting the new tel register through the gate.
+
+---
 
 ## 21. Things still open / decisions to make later
 
@@ -619,12 +735,12 @@ Suggested implementation order, each step buildable and testable in isolation:
 - **Operational beacon as a kind, or just a beacon with no cert authority?** Lean: latter. Cert authority itself is an auth that may or may not be granted.
 - **Voting machinery for Guardian token-holder vote.** Phase 1: opaque (Core Council enacts on assumed-valid vote). Future: model voting in synlang.
 - **Schema for the buybox / init pattern in `issue-unit`.** Defer until working on the issue-unit constructor.
-- **Telart and embart Space architecture.** Out of scope for this discussion. Each will be very different from synart and from each other.
-- **Cross-Synome federation.** Out of scope for Phase 1. The gate-out/gate-in design accommodates it when needed.
+- **Cross-Synome federation.** Out of scope for Phase 1. The gate-out/gate-in design accommodates it when needed; telgate code applies symmetrically across synome boundaries.
 - **Specific physical hardware bindings (PIM, CXL, etc.).** Out of scope. The principles preserve hardware-portability.
+- **Exoscraper architecture.** Out of scope for current design. Endoscrapers (deterministic chain reads) are in scope; exoscrapers (external API reads with insurance) are deferred — see `topology.md` §6.
 
 ---
 
 ## 22. The one-line summary
 
-**Build a single-Space synart with the seven Phase 1 commitments. The shape of the code is multi-Space; the implementation is single-Space. Scale becomes a runtime concern, never a synlang rewrite.**
+**Build a single-Space synart with the seven Phase 1 commitments documented here (thirteen total per `topology.md` §19); identity-driven boot (§11.5 / `boot-model.md`) makes the synart self-hosting; the call-out primitive (§11.6) admits local cognition at synart-designated points; the shape of the code is multi-Space; the implementation is single-Space; scale becomes a runtime concern, never a synlang rewrite.**
