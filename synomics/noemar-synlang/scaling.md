@@ -16,6 +16,85 @@ The driving requirements:
 
 ---
 
+## TL;DR — the architecture in one page
+
+**The five load-bearing decisions:**
+
+1. **Spaces are grounded atoms with a uniform API.** Name them in synlang
+   from day 1; the binding from logical name → physical backend is a
+   runtime concern. Splitting later doesn't change synlang code.
+2. **Each Space is locally consistent for some purpose.** A book Space
+   is self-contained for book-local reasoning; governance is
+   self-contained for policy. Cross-Space rules give *aggregate views*
+   that don't exist in any single Space.
+3. **Rules are atoms, co-located with data.** If you don't sync a Space,
+   you don't get its rules — they're not in your runtime at all. Partial
+   sync = partial capabilities, with no silent breakage.
+4. **Local-by-default, scatter-gather for global.** Cross-Space rules
+   ship a portable local body (using `&self`) to each target, run
+   against local data, return small results, aggregate. No central
+   pulling.
+5. **Rule updates propagate via the same replication channel as data.**
+   Master rule in governance → synserv projects to each target Space →
+   subscribers replicate normally → rules stay current. No special code
+   path.
+
+**The natural Space family for one Prime:**
+
+```
+&skeleton              constitutional axioms (CRR, covenant shapes) — universal
+&spark-governance      auth, policies, covenants, registry, cross-book rules
+&spark-usds-book       USDS units, books, states, samples + local rules
+&spark-cnys-book       CNYS units, books, states, samples + local rules
+```
+
+Governance reaches into books (read + write); books never reach across.
+Registry atoms in governance name the participating book Spaces.
+
+**Sharding has four orthogonal axes:** authority (genesis / governance /
+operational / library), tenant (per-Prime, per-Halo), temperature (hot /
+warm / cold), cadence (immutable / slow / fast / probabilistic). A
+single Space sits at one point on each.
+
+**Partial sync semantics:** a rule's reads are declared up front; runtime
+refuses to evaluate a rule whose reads aren't satisfied. Default for
+unbound Spaces is hard-fail; lazy-fetch is opt-in; empty-match is never
+the default (silent wrong answers).
+
+**Eleven Phase 1 commitments** (§19): seven original + four added by this
+doc — every rule declares its reads (8), cross-Space references go
+through registries (9), cross-Space rules are scatter-gather (10),
+global rules carry publication metadata (11).
+
+---
+
+## Section map
+
+| § | Topic | Core idea |
+|---|---|---|
+| 1 | Hyperon Spaces basics | Spaces as grounded atoms; DAS as substrate; gate ≠ Space boundary |
+| 2 | Taxonomy mapping | Synome / telart / embart aligns with Hyperon's "many small + shared canonical + deep distributed" |
+| 3 | Four sharding axes | Authority / tenant / temperature / cadence — orthogonal |
+| 4 | Space family pattern | Per-Prime: governance + book Spaces + skeleton |
+| 5 | Registry pattern | Governance names participating book Spaces; rules iterate registry |
+| 6 | Asymmetry rule | Governance reaches into books; books never reach across |
+| 7 | Partial sync basics | Rules co-locate with data; missing Space = missing capability |
+| 8 | The dangerous case | Have rule but not all reads → must hard-fail, never empty-match |
+| 9 | Declarative reads | `(rule-reads $rule $space)` enables capability introspection |
+| 10 | Local consistency | Each Space self-complete for some purpose; aggregates need union |
+| 11 | Local-by-default principle | Scatter-gather for cross-Space; push code to data |
+| 12 | Two-step rule shape | Portable `&self` body + global declaration with targets + combiner |
+| 13 | What scatter-gather buys | Locality, partial-sync participation, actor model, bounded trust |
+| 14 | Aggregator design | Sum/max/count trivial; percentiles need sketches |
+| 15 | Rule publication | Master + projections; synserv broadcasts on update |
+| 16 | Materialized views + CDC | Names what we reinvented |
+| 17 | Subtleties | Transitive deps; version skew; eager vs lazy fetch |
+| 18 | Subscription patterns | Real teleonome shapes lined up with the Space split |
+| 19 | Phase 1 commitments | Eleven total — hygiene that makes scaling free |
+| 20 | One-line summary | The whole architecture compressed |
+
+---
+
 ## 1. What's load-bearing about Hyperon Spaces
 
 Four facts from the Hyperon model do most of the work:
