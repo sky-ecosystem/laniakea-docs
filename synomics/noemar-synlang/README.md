@@ -26,13 +26,18 @@ For a new reader:
 3. **`syn-tel-emb.md`** — synart / telart / embart artifact tiers in
    depth. Telseeds, Noemar and atomspace runtimes, resilience model,
    the recipe marketplace (canonical home), alignment implications.
-4. **`settlement-cycle-example.md`** — worked end-to-end example.
+4. **`risk-framework.md`** — four-book taxonomy (Primebook /
+   Halobook / Riskbook / Exobook), category framework (parameterized
+   stress-simulation equations at three levels), recursive composition
+   of exo books, four-tier resolution hierarchy, the post-state
+   content-based risk model.
+5. **`settlement-cycle-example.md`** — worked end-to-end example.
    One Prime, two books, an ER breach, penalty calculation. ~70 lines
    of synlang spread across the entart tree.
-5. **`telseed-bootstrap-example.md`** — worked telseed bootstrap.
+6. **`telseed-bootstrap-example.md`** — worked telseed bootstrap.
    Trace of one teleonome's first 24 hours from spawn to stable
    multi-emb operation.
-6. **`scaling.md`** — operational concerns when this becomes a
+7. **`scaling.md`** — operational concerns when this becomes a
    networked system. Synserv as single sequencer, replication and
    staleness, partial sync, hot-spotting, partitions, telart spread,
    call-out propagation, telseed onboarding load, testing strategy.
@@ -69,10 +74,11 @@ For deeper material:
 | `syn-overview.md` | Concept map / start-here; canonical home for five levels of self-reference | ~555 |
 | `topology.md` | Canonical structural reference (rewritten with executable + library layers) | ~1130 |
 | `syn-tel-emb.md` | Artifact tiers + telseeds + Noemar + canonical home for recipe marketplace | ~785 |
+| `risk-framework.md` | Four-book taxonomy (Primebook/Halobook/Riskbook/Exobook); category framework (exo asset / exobook / riskbook categories with stress-simulation equations); four-tier resolution hierarchy (math/simulation/heuristics/max-risk); canonical home for the content-based risk model and the default-deny CRR 100% rule | ~1615 |
 | `boot-model.md` | Identity-driven boot model — synart-as-program treatment | ~440 |
 | `telseed-bootstrap-example.md` | Worked trace of a new teleonome's first 24 hours | ~520 |
 | `scaling.md` | Operational / networked concerns | ~710 |
-| `settlement-cycle-example.md` | Worked example with new vocabulary | ~245 |
+| `settlement-cycle-example.md` | Worked example with old state-based CRR (pending update for new content-based model — see `risk-framework.md` §7) | ~245 |
 | `synart-access-and-runtime.md` | Auth domains, runtime, migration principles, identity-driven boot summary, call-out summary | ~745 |
 | `synlang-patterns.md` | Synlang code library + call-out primitive + Sentinel formation patterns | ~635 |
 | `govops-synlang-patterns.md` | Pattern catalog from runnable demo (historical) | ~440 |
@@ -129,5 +135,9 @@ Things that should be true across all docs in this directory:
 - **Telgate code lives in `&core-telgate`** (synart, universal); per-tel instance state lives in that tel's telart.
 - **Telseeds are minimal bootstrap configs**, not packaged knowledge corpora; full treatment in `syn-tel-emb.md` §4.
 - **Call-out primitive** is the only sanctioned mechanism for synart-resolved code to consult local cognition; canonical synlang form in `synlang-patterns.md` §5.
+- **Risk is content-based, not state-based.** The original state-based CRR (`(crr filling 5)` etc.) is gone. Risk derives from category-equation evaluation against current exo book state and Riskbook composition, typically as stress simulations. Canonical home: `risk-framework.md`.
+- **Four book types:** Primebook (Prime aggregation), Halobook (Halo aggregation), Riskbook (the unit of regulation; finality CRR computed here), Exobook (external structures, recursive). Bankruptcy remoteness lies above the Riskbook level.
+- **Riskbook categories are the unit of regulation.** A Riskbook must match a registered Riskbook category or get CRR 100% (default-deny). Risk categories live at three levels (exo asset / exobook / riskbook) with riskbook categories as the load-bearing economic citizens.
+- **Equations are stress simulations.** Category equations evaluate composition under a library of stress scenarios; risk weights reflect worst-case real claim to real assets in correlated crash. Four-tier resolution: math → simulation → heuristics → max-risk.
 
 If a doc contradicts one of these, that's a doc bug, not a model bug.

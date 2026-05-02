@@ -545,10 +545,11 @@ Steady-state: events flow chain → beacon → entart leaf Spaces in synart, rep
 |---|---|
 | `topology.md` | Canonical structural reference: entart tree, six-layer synome root, four meta-patterns, naming convention, thirteen commitments, two-step rule and loop shapes |
 | `syn-tel-emb.md` | Synart / telart / embart artifact tiers; telseeds; Noemar and atomspace runtimes; *canonical home for the recipe marketplace* |
+| `risk-framework.md` | Four-book taxonomy (Primebook/Halobook/Riskbook/Exobook); risk categories at three levels (exo asset / exobook / riskbook) with parameterized stress-simulation equations; four-tier resolution hierarchy; *canonical home for the content-based risk model and the default-deny CRR 100% rule* |
 | `boot-model.md` | Identity-driven boot — how `noemar boot` resolves to a running loop; spec/instance collapse; shadow execution |
 | `telseed-bootstrap-example.md` | Worked trace of the first 24 hours of a new teleonome from a fresh telseed |
 | `scaling.md` | Operational concerns: synserv as single sequencer, replication, partial sync, hot-spotting, partitions, testing strategy |
-| `settlement-cycle-example.md` | Worked end-to-end example: ER tracking, breach, penalty calculation |
+| `settlement-cycle-example.md` | Worked end-to-end example: ER tracking, breach, penalty calculation (uses old state-based CRR; see `risk-framework.md` §7 for the new content-based model) |
 | `synart-access-and-runtime.md` | Auth domains, three-level model (root/cert/auth), gate primitive, heartbeat, 16 migration principles, original 7 commitments, identity-driven boot summary, call-out primitive summary |
 | `synlang-patterns.md` | Synlang code library: Platonic kernel, cross-book duality, four-constructor MeTTa surface, sentinel decision rule (RAR), call-out primitive code, sentinel formation patterns |
 | `govops-synlang-patterns.md` | Working pattern catalog from runnable govops_demo (historical demo state) |

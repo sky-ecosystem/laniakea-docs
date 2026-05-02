@@ -388,7 +388,10 @@ out via scatter-gather.
 
 | Space | Contents |
 |---|---|
-| `&core-framework-risk` | CRR table, ER formula, covenant arithmetic |
+| `&core-framework-risk` | ER formula, covenant arithmetic, loop/depth/repeat heuristic parameters |
+| `&core-framework-risk-categories` | Catalog of risk categories at three levels (exo asset / exobook / riskbook); each category carries a parameterized stress-simulation equation. See `risk-framework.md` §3-§4. |
+| `&core-framework-stress-scenarios` | Library of stress scenarios used by category equations (severe-correlated-crash, credit-crisis, etc.); see `risk-framework.md` §6 |
+| `&core-framework-concentration` | Concentration categories + global limits (deferred); see `risk-framework.md` §13 |
 | `&core-framework-distribution` | Distribution rewards rate, integration boost shapes |
 | `&core-framework-fee` | Agent upkeep, protocol fees, fee shapes, recipe pricing levers |
 
@@ -404,6 +407,7 @@ elsewhere, not from registration.
 | `&core-registry-entity` | All entarts (denormalized index for discovery; tree is canonical) |
 | `&core-registry-beacon` | All beacons + tels (operators are external; pubkey + status + class + loop pointer here — see `boot-model.md` §4) |
 | `&core-registry-contract` | All on-chain contracts (state lives on chain; thin reference layer) |
+| `&core-registry-exo-book` | All monitored exo books — external structures the synome reads but doesn't control (Morpho markets, custody accounts, real-world claims). Populated by external endoscrapers. See `risk-framework.md` §3. |
 
 ### Aggregation layer
 
@@ -661,7 +665,7 @@ Reserved keyword vocabulary:
 | `loop <kind>` (within `&core-loop-*`) | `synserv`, `beacon-<class>`, `sentinel-<formation>`, `endoscraper-<protocol>`, `archive`, `verifier` |
 | `library <kind>` (within `&core-library-*`) | `runtime-<impl>`, `telseed-<config>`, `corpus-<domain>`, `published-<topic>` |
 | `entity <type>` | `guardian`, `prime`, `halo` (extensible: `foreign` for cross-chain, etc.) |
-| `entity <sub-kind>` | `root`, `book`, `class`, `config`, `history`, `sentinel-<formation>` |
+| `entity <sub-kind>` | `root`, `primebook`, `halobook`, `riskbook-<rb-id>`, `book`, `class`, `config`, `history`, `sentinel-<formation>` (book-type sub-kinds reflect the four-book taxonomy from `risk-framework.md` §1) |
 
 Adding a keyword is governance-paced; using one is free. Each keyword
 carries semantics about replication, access, and update mechanics —
@@ -801,23 +805,29 @@ under that Guardian.
         │
         └── &entity-prime-spark-root           Prime auth, policies, halo registry, cross-halo rules
               │
+              ├── &entity-prime-spark-primebook            Prime's aggregation book; holds Halobook units; issues to Generator
+              │
               ├── &entity-prime-spark-sentinel-baseline    per-Prime sentinel formations
               ├── &entity-prime-spark-sentinel-stream       (each holds entity-specific config +
               ├── &entity-prime-spark-sentinel-warden        reference to universal loop template)
               │
-              ├── &entity-halo-spark-term-root             halo policies, book registry
-              │     ├── &entity-halo-spark-term-book-usds    USDS units, books, states, samples
-              │     └── &entity-halo-spark-term-book-cnys    CNYS units, books, states, samples
+              ├── &entity-halo-spark-term-root             halo policies, registry of riskbooks
+              │     ├── &entity-halo-spark-term-halobook   Halo's aggregation book; holds Riskbook units; issues to Primebook
+              │     ├── &entity-halo-spark-term-riskbook-A Riskbook (matches a registered category, e.g. abf-with-cds-cover)
+              │     ├── &entity-halo-spark-term-riskbook-B Riskbook (matches a different category, e.g. morpho-lending)
+              │     └── &entity-halo-spark-term-riskbook-C Riskbook (yet another category)
               │
               └── &entity-halo-spark-trade-root
-                    └── &entity-halo-spark-trade-book-amm
+                    ├── &entity-halo-spark-trade-halobook
+                    └── &entity-halo-spark-trade-riskbook-D
 ```
 
 Each root holds identity + registries + scope-local policies +
-cross-sub-entart rules. Leaf Spaces (books) hold operational state +
-local rules that operate on it. Per-entity sentinel Spaces (Phase 9-10+)
-hold entity-specific configurations of universal loop templates — see
-§17.
+cross-sub-entart rules. The four-book taxonomy from `risk-framework.md`
+§1 is reflected in the Space layout: each Prime has one Primebook;
+each Halo has one Halobook plus one or more Riskbooks. Per-entity
+sentinel Spaces (Phase 9-10+) hold entity-specific configurations of
+universal loop templates — see §17.
 
 Operationally, there's also an endoscraper running in synserv that
 verifies Spark's claims:
@@ -1108,6 +1118,10 @@ flows — are at varying maturity. This is the open work surface.
 | Revocation cascades (Guardian collapse → propagation) | down-tree from `&entity-guardian-*-root` | Not started |
 | Sentinel formations (Baseline / Stream / Warden) | `&core-loop-sentinel-*` + per-entity Spaces | Patterns documented in `synlang-patterns.md`; integration not built |
 | Recipe marketplace catalog | `&core-loop-*` + `&core-recipe-*` + `&core-framework-fee` | Concept documented in `syn-tel-emb.md` §8; minimal recipes only in Phase 1 |
+| Risk framework (four-book taxonomy + categories + stress simulation) | `&core-framework-risk-*` + `&core-registry-exo-book` + per-entart books | Documented in `risk-framework.md`; concentration L3 (Halobook/Primebook category constraints) design deferred |
+| Stress scenario library | `&core-framework-stress-scenarios` | Concept in `risk-framework.md` §6; library not populated |
+| Riskbook category catalog | `&core-framework-risk-categories` (riskbook level) | Concept in `risk-framework.md` §4; catalog not populated; default-deny CRR 100% means category catalog completeness is governance priority |
+| Endoscraper-driven exo book registry | `&core-registry-exo-book` populated by external endoscrapers | Pattern documented; per-protocol endoscraper implementations not built |
 | Endoscraper class | `&core-loop-endoscraper-*` + `&core-endoscrapers` | Pattern documented; per-protocol implementations not built |
 | Telseed catalog | `&core-library-telseed-*` | Concept documented in `syn-tel-emb.md` §4; no live catalog yet |
 | Atomspace runtime conformance | `&core-library-runtime-*` + governance test atoms | Conformance suite not built |
