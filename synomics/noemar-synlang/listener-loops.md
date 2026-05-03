@@ -92,7 +92,7 @@ synserv is responsible for keeping it current.**
 
 Beacons are I/O. Heartbeat loops are scheduled work. In-space
 calculation is reactive derivation. Three roles, three mechanisms;
-the beacon rethink (TBD) collapses old mixed-role beacons into clean
+see `beacons.md` for how old mixed-role beacons collapse into clean
 instances of these categories.
 
 ---
