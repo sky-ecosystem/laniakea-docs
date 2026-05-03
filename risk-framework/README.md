@@ -20,6 +20,7 @@ This folder contains the modular Risk Framework documentation.
 - `operational-risk-capital.md` — Operational Risk Capital (ORC): guardian-posted capital covering compromise damage, rate limit ↔ capital linkage.
 - `sentinel-integration.md` — Output metrics and how Sentinel uses the framework.
 - `risk-monitoring.md` — Risk monitoring framework — metrics, stress testing, anomaly detection, escalation procedures.
+- `open-questions.md` — Living tracker of deferred design questions (attestor schema, privacy buckets, crypto stress calibration, correlation calibration, USDS lot-age tracking).
 
 ## Related: Accounting
 
@@ -35,11 +36,15 @@ Capital requirements should reflect: **what is the maximum loss we could be forc
 
 ## Open Items
 
-1. **Correlation framework specifics** — Stress calibration, multi-group assets, aggregation method
-2. **Data infrastructure** — How to track USDS lot ages for liability duration analysis
-3. ~~**Halo Unit treatment**~~ — Halo Units are look-through to underlying assets. A Halo Unit backed by 2-year ABS is treated as FRTB (if unmatched) or Risk Weight (if liability-matched). No special Halo-level treatment needed; use `asset-classification.md` and `matching.md`
-4. ~~**Rate limit integration**~~ — Addressed in `operational-risk-capital.md`
-5. **Beacon implementation** — Formulas and algorithms for lpla-checker calculations
+Active deferred questions are tracked in `open-questions.md` (correlation
+framework calibration specifics, USDS lot-age tracking infrastructure,
+attestor schema, privacy buckets for v1 crypto-lending test, crypto
+stress scenario calibration).
+
+Resolved items kept here for history:
+- ~~**Halo Unit treatment**~~ — Halo Units are look-through to underlying assets. A Halo Unit backed by 2-year ABS is treated as FRTB (if unmatched) or Risk Weight (if liability-matched). No special Halo-level treatment needed; use `asset-classification.md` and `matching.md`
+- ~~**Rate limit integration**~~ — Addressed in `operational-risk-capital.md`
+- ~~**Beacon implementation (lpla-checker)**~~ — Superseded by the beacon rethink: calculation moves into in-space computation per `noemar-synlang/listener-loops.md` and `noemar-synlang/beacons.md`. `lpla-checker` as a class disappears.
 
 ---
 
