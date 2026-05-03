@@ -62,7 +62,7 @@ and the target (`book-B7`) is owned by the halo.
 ;; ─── &entity-prime-spark-root ────────────────────────────────────
 (synent        spark-prime)
 (synent-type   spark-prime prime)
-(parent-entart spark-prime spark-guardian)
+(parent-entart spark-prime ozone)
 (sub-entart    spark-prime spark-term-halo &entity-halo-spark-term-root)
 
 (available-capital spark-prime 100)

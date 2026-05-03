@@ -85,20 +85,23 @@ core-<kind>[-<topic>...]                                  // synome-level
 entity-<entity-type>-<entity-id>-<sub-kind>[-<sub-id>]    // entart-level
 ```
 
-**An entart tree (Spark, abridged):**
+**An entart tree (Ozone single-guardian topology, Spark expanded):**
 
 ```
 &core-root
-  └── &entity-guardian-spark-root
-        └── &entity-prime-spark-root
-              ├── &entity-prime-spark-sentinel-baseline   ← per-Prime sentinel formations
-              ├── &entity-prime-spark-sentinel-stream
-              ├── &entity-prime-spark-sentinel-warden
-              ├── &entity-halo-spark-term-root
-              │     ├── &entity-halo-spark-term-book-usds
-              │     └── &entity-halo-spark-term-book-cnys
-              └── &entity-halo-spark-trade-root
-                    └── &entity-halo-spark-trade-book-amm
+  └── &entity-guardian-ozone-root              ← single operational guardian
+        ├── &entity-generator-usge-root        ← USDS Generator
+        ├── &entity-prime-spark-root
+        │     ├── &entity-prime-spark-sentinel-baseline   ← per-Prime sentinel formations
+        │     ├── &entity-prime-spark-sentinel-stream
+        │     ├── &entity-prime-spark-sentinel-warden
+        │     ├── &entity-halo-spark-term-root
+        │     │     ├── &entity-halo-spark-term-book-usds
+        │     │     └── &entity-halo-spark-term-book-cnys
+        │     └── &entity-halo-spark-trade-root
+        │           └── &entity-halo-spark-trade-book-amm
+        ├── &entity-prime-grove-root
+        └── &entity-prime-obex-root
 ```
 
 **Thirteen Phase 1 commitments** (§20) — hygiene that makes scaling free.
@@ -301,7 +304,7 @@ subtree:
 (synent spark-prime)
 (synent-type spark-prime prime)
 (synent-name spark-prime "Spark Prime")
-(parent-entart spark-prime spark-guardian)
+(parent-entart spark-prime ozone)
 
 ;; sub-entart registry (nested entities, each has its own root)
 (sub-entart spark-prime spark-term-halo  &entity-halo-spark-term-root)
@@ -664,8 +667,8 @@ Reserved keyword vocabulary:
 | `core <kind>` | `root`, `telos`, `skeleton`, `governance`, `protocol`, `framework`, `registry`, `settlement`, `escalation`, `endoscrapers`, `syngate`, `telgate`, `loop`, `recipe`, `library` |
 | `loop <kind>` (within `&core-loop-*`) | `synserv`, `beacon-<class>`, `sentinel-<formation>`, `endoscraper-<protocol>`, `archive`, `verifier` |
 | `library <kind>` (within `&core-library-*`) | `runtime-<impl>`, `telseed-<config>`, `corpus-<domain>`, `published-<topic>` |
-| `entity <type>` | `guardian`, `prime`, `halo` (extensible: `foreign` for cross-chain, etc.) |
-| `entity <sub-kind>` | `root`, `primebook`, `halobook`, `riskbook-<rb-id>`, `book`, `class`, `config`, `history`, `sentinel-<formation>` (book-type sub-kinds reflect the four-book taxonomy from `risk-framework.md` §1) |
+| `entity <type>` | `guardian`, `generator`, `prime`, `halo` (extensible: `foreign` for cross-chain, etc.) |
+| `entity <sub-kind>` | `root`, `primebook`, `halobook`, `riskbook-<rb-id>`, `genbook`, `structural-demand`, `structural-demand-scrapers`, `structural-demand-auction`, `book`, `class`, `config`, `history`, `sentinel-<formation>` (book-type sub-kinds reflect the four-book taxonomy from `risk-framework.md` §1) |
 
 Adding a keyword is governance-paced; using one is free. Each keyword
 carries semantics about replication, access, and update mechanics —
@@ -704,17 +707,22 @@ Synome-level:
 Entart-level:
 
 ```
-&entity-guardian-spark-root            Guardian Spark's entart root
-&entity-prime-spark-root               Spark Prime's entart root
-&entity-prime-spark-config             config sub-Space attached to Spark Prime root
-&entity-prime-spark-sentinel-baseline  Spark Prime's per-entity Sentinel-Baseline loop instance
+&entity-guardian-ozone-root                  Ozone — single operational guardian
+&entity-generator-usge-root                  USDS Generator entart root
+&entity-generator-usge-genbook               Genbook — Primeunits in, USDS out
+&entity-generator-usge-structural-demand     structural demand capacity + distribution
+&entity-prime-spark-root                     Spark Prime's entart root
+&entity-prime-spark-primebook                Spark's Primebook (aggregates Halobook units)
+&entity-prime-spark-config                   config sub-Space attached to Spark Prime root
+&entity-prime-spark-sentinel-baseline        Spark Prime's per-entity Sentinel-Baseline loop instance
 &entity-prime-spark-sentinel-stream
 &entity-prime-spark-sentinel-warden
-&entity-halo-spark-term-root           Spark Term Halo's entart root
-&entity-halo-spark-term-book-usds      USDS book leaf in Spark Term Halo
-&entity-halo-spark-term-book-cnys      CNYS book leaf
-&entity-halo-spark-trade-root          Spark Trade Halo's entart root
-&entity-halo-spark-trade-book-amm      AMM book leaf
+&entity-halo-spark-term-root                 Spark Term Halo's entart root
+&entity-halo-spark-term-halobook             Spark Term Halo's Halobook
+&entity-halo-spark-term-book-usds            USDS book leaf in Spark Term Halo
+&entity-halo-spark-term-book-cnys            CNYS book leaf
+&entity-halo-spark-trade-root                Spark Trade Halo's entart root
+&entity-halo-spark-trade-book-amm            AMM book leaf
 ```
 
 ### Naming is decoupled from tree topology
@@ -743,7 +751,7 @@ submissions. There's no internal "beacon state" inside synart, only
 | Fact about beacon | Lives in | Why |
 |---|---|---|
 | Pubkey + status + class + loop pointer | `&core-registry-beacon` | needed at the gate for sig verification + at boot for loop resolution, globally |
-| `(cert beacon-X by-spark-guardian)` | `&entity-guardian-spark-root` | guardian holds underwriting liability |
+| `(cert beacon-X by-ozone)` | `&entity-guardian-ozone-root` | guardian holds underwriting liability |
 | `(auth beacon-X verb target)` | entart owning the target | target's owner controls auth |
 | Submission history | wherever it wrote | provenance follows writes |
 
@@ -780,54 +788,73 @@ embart trees relate to the synart they participate in.
    (beacon-accepted beacon-X)
    (beacon-status beacon-X active)
 
-3. Cert: rooted in a Guardian's entart
-   ;; in &entity-guardian-spark-root
-   (cert beacon-X by-spark-guardian)
+3. Cert: rooted in the Guardian's entart
+   ;; in &entity-guardian-ozone-root
+   (cert beacon-X by-ozone)
 
-4. Auth: granted in entarts whose parent chain includes that Guardian
+4. Auth: granted in entarts whose parent chain includes Ozone
    ;; in &entity-prime-spark-root or further down
    (auth beacon-X issue-unit book-B7)
 ```
 
 "Accordant to the Guardian" cleanly cashes out as "the entart's parent
-chain reaches that Guardian." Beacons certed by `spark-guardian` can be
-authed in `spark-prime`, `spark-term-halo`, etc. — the whole subtree
-under that Guardian.
+chain reaches Ozone." Beacons certed by `ozone` can be authed anywhere
+in Ozone's subtree — `spark-prime`, `spark-term-halo`, `usge`, etc.
+Since Ozone is the single operational guardian, this currently means
+"any entity in the synome."
 
 ---
 
-## 11. Example — Spark's entart family
+## 11. Example — the Ozone entart family
 
 ```
 &core-root
   │
-  └── &entity-guardian-spark-root              vote outcomes; cert-atoms for soter-govops's beacons
+  └── &entity-guardian-ozone-root                    Ozone — single operational guardian;
+        │                                            vote outcomes; cert-atoms for all
+        │                                            GovOps teams' beacons
         │
-        └── &entity-prime-spark-root           Prime auth, policies, halo registry, cross-halo rules
-              │
-              ├── &entity-prime-spark-primebook            Prime's aggregation book; holds Halobook units; issues to Generator
-              │
-              ├── &entity-prime-spark-sentinel-baseline    per-Prime sentinel formations
-              ├── &entity-prime-spark-sentinel-stream       (each holds entity-specific config +
-              ├── &entity-prime-spark-sentinel-warden        reference to universal loop template)
-              │
-              ├── &entity-halo-spark-term-root             halo policies, registry of riskbooks
-              │     ├── &entity-halo-spark-term-halobook   Halo's aggregation book; holds Riskbook units; issues to Primebook
-              │     ├── &entity-halo-spark-term-riskbook-A Riskbook (matches a registered category, e.g. abf-with-cds-cover)
-              │     ├── &entity-halo-spark-term-riskbook-B Riskbook (matches a different category, e.g. morpho-lending)
-              │     └── &entity-halo-spark-term-riskbook-C Riskbook (yet another category)
-              │
-              └── &entity-halo-spark-trade-root
-                    ├── &entity-halo-spark-trade-halobook
-                    └── &entity-halo-spark-trade-riskbook-D
+        ├── &entity-generator-usge-root              USDS Generator entart root
+        │     ├── &entity-generator-usge-genbook     Genbook — holds Primeunits, issues USDS
+        │     └── &entity-generator-usge-structural-demand
+        │           ├── &entity-generator-usge-structural-demand-scrapers
+        │           └── &entity-generator-usge-structural-demand-auction
+        │
+        ├── &entity-prime-spark-root                 Prime auth, policies, halo registry, cross-halo rules
+        │     │
+        │     ├── &entity-prime-spark-primebook      Prime's aggregation book; holds Halobook units; issues to Genbook
+        │     │
+        │     ├── &entity-prime-spark-sentinel-baseline    per-Prime sentinel formations
+        │     ├── &entity-prime-spark-sentinel-stream       (each holds entity-specific config +
+        │     ├── &entity-prime-spark-sentinel-warden        reference to universal loop template)
+        │     │
+        │     ├── &entity-halo-spark-term-root             halo policies, registry of riskbooks
+        │     │     ├── &entity-halo-spark-term-halobook   Halo's aggregation book; holds Riskbook units; issues to Primebook
+        │     │     ├── &entity-halo-spark-term-riskbook-A Riskbook (matches a registered category, e.g. abf-with-cds-cover)
+        │     │     ├── &entity-halo-spark-term-riskbook-B Riskbook (matches a different category, e.g. morpho-lending)
+        │     │     └── &entity-halo-spark-term-riskbook-C Riskbook (yet another category)
+        │     │
+        │     └── &entity-halo-spark-trade-root
+        │           ├── &entity-halo-spark-trade-halobook
+        │           └── &entity-halo-spark-trade-riskbook-D
+        │
+        ├── &entity-prime-grove-root                 Star Prime — similar structure to Spark
+        └── &entity-prime-obex-root                  Institutional Prime — similar structure
 ```
 
 Each root holds identity + registries + scope-local policies +
 cross-sub-entart rules. The four-book taxonomy from `risk-framework.md`
 §1 is reflected in the Space layout: each Prime has one Primebook;
-each Halo has one Halobook plus one or more Riskbooks. Per-entity
-sentinel Spaces (Phase 9-10+) hold entity-specific configurations of
-universal loop templates — see §17.
+each Halo has one Halobook plus one or more Riskbooks; the Generator
+has one Genbook. Per-entity sentinel Spaces (Phase 9-10+) hold
+entity-specific configurations of universal loop templates — see §17.
+
+**Single-guardian topology:** Ozone is the only Guardian; USGE and all
+Primes are direct children. Multiple GovOps teams (e.g., the Spark
+operator, the Grove operator, the USGE operator) are rooted under
+Ozone; each operates the entity it administers. The Guardian/GovOps
+separation from `synart-access-and-runtime.md` §4 holds — only the
+Guardian count is collapsed to one.
 
 Operationally, there's also an endoscraper running in synserv that
 verifies Spark's claims:

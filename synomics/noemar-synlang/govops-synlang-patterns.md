@@ -7,7 +7,7 @@ Companion to `synart-access-and-runtime.md`, `topology.md`, and
 `synlang-patterns.md`.
 
 > **Status note (2026):** this doc captures the runnable govops_demo as
-> of its current state — the patterns shown are what *runs today*. Three
+> of its current state — the patterns shown are what *runs today*. Four
 > things have evolved in the canonical model since:
 >
 > 1. **Permission-rule shape.** The demo uses a longer preamble
@@ -29,6 +29,14 @@ Companion to `synart-access-and-runtime.md`, `topology.md`, and
 >    `synlang-patterns.md` §5 and §6 (Sentinel formation patterns) and
 >    `synart-access-and-runtime.md` §11.6. The demo's pure-determinism
 >    pattern remains valid for verifier-shaped beacons.
+> 4. **Single-guardian topology.** The demo's seed atoms include
+>    `(administers phoenix-govops spark-prime)` — implicitly suggesting
+>    a per-Prime guardian shape. The canonical model has Ozone as the
+>    single operational guardian; phoenix-govops (or whatever name the
+>    Spark operator carries) is rooted under Ozone via `set-root` and
+>    administers Spark Prime. The flat capability shapes shown here
+>    work identically; only the guardian count is collapsed to one.
+>    See `topology.md` §11 and `synart-access-and-runtime.md` §19.
 >
 > The pipeline shape (gate → policy → effect → audit), constructor
 > conventions, attestation-as-positive-flag pattern, ed25519 beacon

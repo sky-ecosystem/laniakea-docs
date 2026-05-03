@@ -96,18 +96,18 @@ Each gate has different cadence, authority, failure mode. The first is private a
 
 ```mermaid
 flowchart TD
-    CG[Core GovOps] -->|creates| G[Guardian]
+    CG[Core GovOps] -->|creates| G["Guardian (Ozone)"]
     G -->|token holders vote| VO[Vote outcome]
     VO -->|executed by| CG
-    CG -->|root| GR["GovOps Root Beacon<br/>(e.g. soter-govops-root)"]
+    CG -->|root| GR["GovOps Root Beacons<br/>(per Prime / Generator)<br/>e.g. spark-govops-root,<br/>usge-govops-root"]
     GR -->|"cert + auth<br/>per beacon, narrow scope"| OB["Operational Beacons<br/>(lpha-nfat-style)"]
     OB -->|constructor calls| SS["Synome state<br/>(via gate)"]
 ```
 
 - **Core Council** — sovereign-rank synomic agent. Authority body for Guardian creation; not directly operational. Core GovOps does the actual writing.
-- **Guardian** — created by Core GovOps. Backed by token holders who vote on which GovOps team to root under it. Owns an entart (`&entity-guardian-<id>-root`).
+- **Guardian (Ozone)** — created by Core GovOps. The single operational guardian. Backed by token holders who vote on which GovOps teams to root under it. Owns an entart (`&entity-guardian-ozone-root`). All operational entities (USGE Generator, Spark/Grove/Obex Primes, and others as added) are direct children of Ozone in the accordancy graph.
 - **Core GovOps** — operational role. Bootstrapped genesis-style: the original Core GovOps are whoever runs the first synserv. They can give and revoke root to other Core GovOps recursively. They are the operational executor for both Guardian creation and rooting regular GovOps (executing Guardian token-holder votes).
-- **GovOps team** (e.g. soter-govops) — *external operator*, not in the tree. Rooted under a specific Guardian by Core GovOps on token holders' behalf. Operates the agent (Spark Prime, etc.) day-to-day via beacons.
+- **GovOps team** (e.g. the Spark operator, the USGE operator) — *external operator*, not in the tree. Rooted under Ozone by Core GovOps on token holders' behalf. Each GovOps team operates the entity it administers (Spark Prime, USGE Generator, etc.) day-to-day via beacons. Multiple GovOps teams coexist under Ozone; each is scoped to its administered entity.
 - **GovOps root beacon** — operational top of a GovOps team. Certifies operational beacons with narrow auths.
 - **Operational beacons** (lpha-nfat-style) — the actual write-doers. Carry narrow auths, scoped to specific verbs on specific targets.
 

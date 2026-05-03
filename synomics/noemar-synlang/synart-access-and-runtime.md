@@ -209,7 +209,7 @@ A beacon does exactly one thing: hold a private key, sign a proposed write, send
 
 1. **Beacon pubkeys are atoms.** `(beacon-pubkey lpha-nfat-spark <key-bytes>)` is part of what certification writes. The runtime consults this atom on every signature check. No external key registry.
 
-2. **Constructor calls implicitly carry a verified caller.** From synlang's view, `(create-prime phoenix-team guardian-spark spark-prime)` reads as "the runtime received a valid signed request from phoenix-team." Crypto isn't modeled in synlang; we model who-said-what.
+2. **Constructor calls implicitly carry a verified caller.** From synlang's view, `(create-prime spark-govops-root ozone spark-prime)` reads as "the runtime received a valid signed request from spark-govops-root." Crypto isn't modeled in synlang; we model who-said-what.
 
 3. **The atomspace is the only source of truth for authorization.** No auth cache. Revocation is immediate and global the moment a `(cert ...)` atom is removed.
 
@@ -480,7 +480,7 @@ Concrete example: creating a Prime writes to multiple Spaces atomically — the 
      ((True
         (let* (($_ (add-atom $prime-root-space             (synent $prime-id)))
                ($_ (add-atom $prime-root-space             (parent-entart $prime-id $guardian)))
-               ($_ (add-atom &entity-guardian-spark-root   (sub-entart $guardian $prime-id $prime-root-space)))
+               ($_ (add-atom &entity-guardian-ozone-root   (sub-entart $guardian $prime-id $prime-root-space)))
                ($_ (add-atom &core-registry-entity         (entart-id $prime-id prime $prime-root-space))))
           (Created prime $prime-id)))
       (False (Error unauthorized $caller)))))
@@ -652,32 +652,42 @@ That's the seed. Everything else — every Guardian entart, every GovOps root, e
 ## 19. The bootstrap sequence
 
 ```metta
-;; 1. Core Council creates a Guardian
-(create-guardian core-council guardian-spark)
-;; ⇒ adds (: guardian-spark Guardian)
+;; 1. Core Council creates the single operational Guardian — Ozone
+(create-guardian core-council ozone)
+;; ⇒ adds (: ozone Guardian)
 
-;; 2. Guardian token-holders vote; Core Council enacts and sets the root
-;;    for a GovOps under that Guardian
-(set-root core-council phoenix-govops-root guardian-spark)
-;; ⇒ adds (root phoenix-govops-root for-guardian guardian-spark)
-;; ⇒ adds (beacon-pubkey phoenix-govops-root <key>)
+;; 2. Ozone token-holders vote; Core Council enacts and sets a root
+;;    for each GovOps team operating under Ozone (one per administered
+;;    entity — Spark operator, Grove operator, USGE operator, etc.)
+(set-root core-council spark-govops-root ozone)
+;; ⇒ adds (root spark-govops-root for-guardian ozone)
+;; ⇒ adds (beacon-pubkey spark-govops-root <key>)
 
-;; 3. The GovOps root certifies operational beacons
-(cert-beacon phoenix-govops-root lpha-nfat-spark)
-;; ⇒ adds (cert lpha-nfat-spark by phoenix-govops-root)
+(set-root core-council usge-govops-root ozone)
+;; ⇒ adds (root usge-govops-root for-guardian ozone)
+;; ⇒ adds (beacon-pubkey usge-govops-root <key>)
+
+;; 3. Each GovOps root certifies its own operational beacons
+(cert-beacon spark-govops-root lpha-nfat-spark)
+;; ⇒ adds (cert lpha-nfat-spark by spark-govops-root)
 ;; ⇒ adds (beacon-pubkey lpha-nfat-spark <key>)
 
 ;; 4. The GovOps root authorizes specific scopes
-(auth-beacon phoenix-govops-root lpha-nfat-spark
+(auth-beacon spark-govops-root lpha-nfat-spark
              create-book (in-class spark-class-A))
 
 ;; 5. Operational beacons make construction calls
 ;;    (signed messages arrive via gate-in; dispatch invokes constructor)
-(create-prime lpha-nfat-spark guardian-spark spark-prime)
+(create-prime lpha-nfat-spark ozone spark-prime)
 ;; ⇒ ... and so on down the create-class / create-book / issue-unit chain
+
+;; 6. The Generator is created the same way — accordant to Ozone, not a
+;;    separate Guardian
+(create-generator lpha-usge-bootstrap ozone usge)
+;; ⇒ adds (synent usge), (parent-entart usge ozone)
 ```
 
-Every step's authority trace: operational beacon → GovOps root → Guardian → Core Council → genesis grant.
+Every step's authority trace: operational beacon → GovOps root → Ozone → Core Council → genesis grant. Multiple GovOps teams coexist under Ozone; each is scoped to the entity it administers.
 
 ---
 
