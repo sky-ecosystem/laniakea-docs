@@ -64,6 +64,11 @@ For deeper material:
   ed25519 beacon identity, AETHER constraints. Captures *what runs
   today*; some shapes have evolved in the canonical model (see
   the doc's header note).
+- **`listener-loops.md`** — sketch of the in-space calculation pattern.
+  Endoscrapers / oracles / attestors push data atoms into book spaces;
+  synserv keeps each book's derived state (equity, CRR, ER, etc.)
+  consistent with current inputs in real time. Implementation
+  mechanism deferred to Phase 1.
 
 ---
 
@@ -82,6 +87,7 @@ For deeper material:
 | `synart-access-and-runtime.md` | Auth domains, runtime, migration principles, identity-driven boot summary, call-out summary | ~745 |
 | `synlang-patterns.md` | Synlang code library + call-out primitive + Sentinel formation patterns | ~635 |
 | `govops-synlang-patterns.md` | Pattern catalog from runnable demo (historical) | ~440 |
+| `listener-loops.md` | Sketch of in-space calculation pattern (scrapers/oracles/attestors push data; synserv keeps book derived state real-time consistent); implementation mechanism deferred to Phase 1 | ~85 |
 
 ---
 
