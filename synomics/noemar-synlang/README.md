@@ -69,6 +69,11 @@ For deeper material:
   synserv keeps each book's derived state (equity, CRR, ER, etc.)
   consistent with current inputs in real time. Implementation
   mechanism deferred to Phase 1.
+- **`beacons.md`** — sketch of the new beacon taxonomy after
+  calculation moved into the synart. Input beacons (endoscraper /
+  oracle / attestor) push data; action beacons (relayer / executor /
+  sentinel formation) emit chain txs based on synart state. Old →
+  new class mapping; per-class details deferred to Phase 1.
 
 ---
 
@@ -88,6 +93,7 @@ For deeper material:
 | `synlang-patterns.md` | Synlang code library + call-out primitive + Sentinel formation patterns | ~635 |
 | `govops-synlang-patterns.md` | Pattern catalog from runnable demo (historical) | ~440 |
 | `listener-loops.md` | Sketch of in-space calculation pattern (scrapers/oracles/attestors push data; synserv keeps book derived state real-time consistent); implementation mechanism deferred to Phase 1 | ~85 |
+| `beacons.md` | Sketch of the new two-role beacon taxonomy (input vs action) after calculation moved into the synart; old → new class mapping; per-class details deferred to Phase 1 | ~80 |
 
 ---
 
