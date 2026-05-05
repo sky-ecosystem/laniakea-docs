@@ -109,7 +109,7 @@ Prime Capital Requirements:
     └── Funded by: Guardian's own capital (Guardian Accord)
 ```
 
-**Key distinction:** Portfolio risk capital is Prime capital (shared across all positions). ORC is guardian capital (specific to the party holding execution keys). A Prime may have multiple guardians, each posting ORC for their scope of authority.
+**Key distinction:** Portfolio risk capital is Prime capital (shared across all positions). ORC is Accordant capital (specific to the party holding execution keys). A Prime is rooted under the single operational Guardian (Ozone) but may have multiple Accordants if execution authority is decomposed by PAU scope, each posting ORC for their scope of authority.
 
 ---
 

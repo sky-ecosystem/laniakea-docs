@@ -15,7 +15,7 @@ concepts:
 
 How the Synome actually thinks. The system is **symbolic-first** — a symbolic machine that uses neural nets as sandboxed subroutines, not an LLM with symbolic tools. Everything thinks in **synlang** — the symbolic system, the neural nets, and the mesh they both operate on. The intelligence bottleneck is **context** — token throughput determines intelligence per unit time.
 
-For the runtime that implements this loop — Space, PLN truth values, the protocol system, the epistemic cycle, and the first concrete instance of the emo (the Rule-Author Agent) — see [`noemar-substrate.md`](noemar-substrate.md). This doc covers the architectural commitment; Noemar covers what runs it.
+For the runtime that implements this loop — Space, PLN truth values, the protocol system, the epistemic cycle, and the first concrete instance of the emo (the Rule-Author Agent) — see [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md). This doc covers the architectural commitment; Noemar covers what runs it.
 
 ---
 

@@ -20,16 +20,14 @@ Start here for the knowledge dynamics.
 2. **[`retrieval-policy.md`](retrieval-policy.md)** — Invariants, principles, and degrees of freedom for querying the probabilistic mesh. Risk-gates-authority constraint.
 3. **[`security-and-resources.md`](security-and-resources.md)** — Cancer-logic as the primary threat. Ossification as the solution. Resource discipline, defense in depth, the update problem, adversarial soft channels, fractal security pattern.
 
-### Cognition
+### Substrate and Language
 
-How the Synome actually thinks — the architectural commitments. For the practical mechanisms (live context, context manipulation, attention), see [`../neurosymbolic/`](../neurosymbolic/README.md).
+4. **[`noemar-substrate.md`](noemar-substrate.md)** — The synlang runtime: Space, PLN truth values, the protocol system, the epistemic cycle, the emo concretized as the Rule-Author Agent. Where the architectural commitments cash out into a working substrate.
+5. **[`synlang.md`](synlang.md)** — The language itself: S-expressions grounded in the synomic library. Settled questions and evolving surface conventions. (The earlier hypergraph/notation/extensions research track is resolved by Noemar's design.)
 
-4. **[`neuro-symbolic-cognition.md`](neuro-symbolic-cognition.md)** — Synlang as cognitive language, the symbolic-neural loop (emo), context as bottleneck. How the mesh gets used.
-5. **[`noemar-substrate.md`](noemar-substrate.md)** — The synlang runtime: Space, PLN truth values, the protocol system, the epistemic cycle, the emo concretized as the Rule-Author Agent.
+### Where Cognition Lives
 
-### Synlang
-
-6. **[`synlang.md`](synlang.md)** — The language itself: S-expressions grounded in the synomic library. Settled questions and evolving surface conventions. (The earlier hypergraph/notation/extensions research track is resolved by Noemar's design — see `noemar-substrate.md`.)
+The architectural commitment about how cognition works — symbolic-first, synlang-native, context as bottleneck — lives in [`../neurosymbolic/neuro-symbolic-cognition.md`](../neurosymbolic/neuro-symbolic-cognition.md), alongside the practical mechanisms (live context, context manipulation, attention, hardware-aware cognition) that operationalize it. Synodoxics provides the substrate the cognition loop runs on; neurosymbolic describes the loop itself.
 
 ---
 
@@ -39,22 +37,21 @@ How the Synome actually thinks — the architectural commitments. For the practi
 probabilistic-mesh
     ├──► retrieval-policy
     ├──► security-and-resources
-    └──► neuro-symbolic-cognition ──► noemar-substrate
-                                          │
-                                          ▼
-                                      ../neurosymbolic/ (practical mechanisms)
-
-synlang ◄── noemar-substrate
-(language) ◄── (runtime)
+    └──► noemar-substrate ──► synlang
+                  │
+                  ▼
+          ../neurosymbolic/  (cognition: architecture + mechanisms)
 ```
 
-`noemar-substrate.md` grounds the abstract epistemic architecture in its concrete runtime. `synlang.md` describes the language; `noemar-substrate.md` describes what runs it.
+`noemar-substrate.md` grounds the abstract epistemic architecture in its concrete runtime. `synlang.md` describes the language. The cognition loop that uses both lives next door in `../neurosymbolic/`.
 
 ---
 
 ## Relationship to Siblings
 
 **[Macrosynomics](../macrosynomics/README.md)** defines structure: layers, agents, beacons, governance. Synodoxics defines knowledge: what the Synome believes, how it learns, how it protects itself. The two are the structural (deontic) and epistemic (probabilistic) halves of the [dual architecture](../core-concepts/dual-architecture.md).
+
+**[Neurosymbolic](../neurosymbolic/README.md)** is the cognition side: the architectural commitment (symbolic-first, synlang-native, context as bottleneck) plus the practical mechanisms an individual emo uses. Synodoxics is the shared-brain side — what makes decentralized public AI work; neurosymbolic is the individual-brain side — what makes any AI good at thinking.
 
 **[Synoteleonomics](../synoteleonomics/README.md)** describes the entities that inhabit the structures macrosynomics defines and use the knowledge synodoxics governs. Teleonome memory, resilience, and economics all depend heavily on the probabilistic mesh and security model.
 

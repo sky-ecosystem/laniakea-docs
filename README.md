@@ -11,58 +11,54 @@ Laniakea is Sky's infrastructure for **automated capital deployment at scale**. 
 - **Autonomous operation** — Sentinel network operates infrastructure within governance-defined bounds, enabling 99% automation
 - **Daily settlement cycles** — Standardized daily cycles for auctions, distributions, and LCTS token settlement (lock 13:00 UTC, settle by 16:00 UTC)
 
-This repository provides a complete view of all future Laniakea upgrades alongside current Sky Ecosystem parameters and features.
+## Repo Layout
+
+This repo is currently focused on **synomics** — the study of the Synome and the entities that inhabit it — together with the risk framework and the Noemar runtime that underlies it. Synomics is the data-and-AI-governance layer of the Laniakea program. Earlier-phase material (whitepaper, smart contracts, accounting, roadmap, etc.) is preserved in `inactive/pre-synlang/` while the active synomics-native rewrite proceeds. See [`clean-up-plan.md`](clean-up-plan.md) for the rewrite sequence.
+
+### Active
+
+| Directory | Description |
+|---|---|
+| [`core-concepts/`](core-concepts/) | Atomic concept definitions shared across the synomics narrative directories — also hosts the synomics overview |
+| [`macrosynomics/`](macrosynomics/) | System-level structure — layers, agents, beacons, governance (the deontic skeleton) |
+| [`synodoxics/`](synodoxics/) | Knowledge dynamics — probabilistic mesh, retrieval policy, security model, synlang language reference |
+| [`neurosymbolic/`](neurosymbolic/) | Practical cognition — live graph context, context manipulation, attention allocation, hardware-aware cognition |
+| [`synoteleonomics/`](synoteleonomics/) | Individual teleonomes — what they are, economics, memory, resilience, binding, autonomy paths |
+| [`hearth/`](hearth/) | Teleology — Hearth commitments, alignment infrastructure, wild-synomes counterfactual |
+| [`noemar-synlang/`](noemar-synlang/) | Synart structural architecture and synlang patterns — Noemar runtime tech reference |
+| [`risk-framework/`](risk-framework/) | Capital framework — duration model, asset classification, capital formulas, sentinel integration |
+
+### Inactive
+
+| Directory | Description |
+|---|---|
+| [`inactive/pre-synlang/`](inactive/pre-synlang/) | Earlier-phase docs (whitepaper, smart-contracts, accounting, roadmap, sky-agents, trading, governance-transition, growth-staking, skychain, input-documents, forecast_model) — being progressively rewritten synlang-native |
+| [`inactive/archive/`](inactive/archive/) | Source material for the synomics rewrite (lift, lift-weakness, prior synomics summaries) |
+
+## Key Documents
+
+| Document | Description |
+|---|---|
+| [`core-concepts/README.md`](core-concepts/README.md) | Synomics directory framing and atomic concept index |
+| [`macrosynomics/synome-overview.md`](macrosynomics/synome-overview.md) | Architecture entry point — five layers, dual architecture, knowledge hierarchy |
+| [`macrosynomics/beacon-framework.md`](macrosynomics/beacon-framework.md) | Beacon taxonomy — power × authority matrix |
+| [`hearth/hearth.md`](hearth/hearth.md) | The three Hearth commitments and the alignment-infrastructure argument |
+| [`risk-framework/README.md`](risk-framework/README.md) | Risk framework module index |
+| [`noemar-synlang/syn-overview.md`](noemar-synlang/syn-overview.md) | Synart concept map — four-tier architecture, blockchain analogy, authority chain, settlement |
 
 ## Using This Repository
 
 This documentation is designed for navigation with **code LLMs** (Claude Code, Cursor, etc.). The information density and cross-references between documents make AI assistance valuable for efficiently traversing the content.
 
 **Getting started:**
-- Read the whitepaper for the narrative overview
-- Explore specific directories for technical depth
-- Use your AI assistant to search across documents and trace concepts
-
-## Contents
-
-| Directory | Description |
-|---|---|
-| [`whitepaper/`](whitepaper/) | Public-facing narrative — main 8-part whitepaper plus appendices (glossary, tokens, design rationale, infrastructure) |
-| [`risk-framework/`](risk-framework/) | Basel III-inspired capital requirements — duration model, asset classification, capital formulas, sentinel integration |
-| [`accounting/`](accounting/) | Settlement operations — daily settlement cycle, auctions, tug-of-war allocation, capital recognition |
-| [`smart-contracts/`](smart-contracts/) | On-chain architecture — PAU pattern (Controller + ALMProxy + RateLimits), Diamond proxy, LCTS, NFATS, rate limits |
-| [`roadmap/`](roadmap/) | Implementation phases 0–10 — from MVP beacons through factory stack to full sentinel automation |
-| [`sky-agents/`](sky-agents/) | Synomic Agent specifications — Generators, Primes, Halos, Guardians, plus creation and restructuring mechanics |
-| [`trading/`](trading/) | Sentinel network and Sky Intents — real-time execution infrastructure and intent-based trading protocol |
-| [`synomics/`](synomics/) | The Synome and the entities that inhabit it — macrosynomics, synodoxics, neurosymbolic, synoteleonomics, the Hearth, core concepts |
-| [`governance-transition/`](governance-transition/) | Alignment conserver consolidation — three legacy roles merged into single Guardian role with collateral backing |
-| [`growth-staking/`](growth-staking/) | Growth Staking — SKY staker incentives tied to ecosystem growth asset holdings (Agent governance tokens and Prime junior risk capital / TEJRC) |
-| [`skychain/`](skychain/) | Skychain research — proposed AI-native EVM blockchain optimized for agent operation |
-| [`input-documents/`](input-documents/) | Community contributions — submit PRs with corrections, suggestions, questions, or new information |
-
-## Key Documents
-
-| Document | Description |
-|---|---|
-| [`whitepaper/sky-whitepaper.md`](whitepaper/sky-whitepaper.md) | Main whitepaper — business model, tokens, agents, risk, governance |
-| [`whitepaper/appendix-f-glossary.md`](whitepaper/appendix-f-glossary.md) | Term definitions |
-| [`smart-contracts/architecture-overview.md`](smart-contracts/architecture-overview.md) | Four-layer capital flow architecture and PAU pattern |
-| [`synomics/macrosynomics/beacon-framework.md`](synomics/macrosynomics/beacon-framework.md) | Beacon taxonomy — power x authority matrix (LPLA/LPHA/HPLA/HPHA) |
-| [`roadmap/roadmap-overview.md`](roadmap/roadmap-overview.md) | Master roadmap with phase summaries, dependencies, and milestones |
-
-## Contributing
-
-This repository is public to invite contributions from Sky Ecosystem community members.
-
-**How to contribute:**
-1. Create a pull request adding a new file to the `input-documents/` directory
-2. Your input document can contain: corrections, new information, opinions, context, questions, or suggestions
-3. Contributors with write access will review and merge relevant content into the core documentation
-
-See `input-documents/README.md` for guidelines.
+- New readers: [`core-concepts/README.md`](core-concepts/README.md) for synomics framing, then pick a direction
+- Architecture-first: [`macrosynomics/synome-overview.md`](macrosynomics/synome-overview.md)
+- Purpose-first: [`hearth/hearth.md`](hearth/hearth.md)
+- Implementation-first: [`noemar-synlang/syn-overview.md`](noemar-synlang/syn-overview.md)
 
 ## Status
 
-These documents are drafts under active development. Content may change as the protocol evolves.
+These documents are drafts under active development. The corpus is in a synlang-native rewrite (see [`clean-up-plan.md`](clean-up-plan.md)); content may change as the protocol evolves.
 
 ## Links
 

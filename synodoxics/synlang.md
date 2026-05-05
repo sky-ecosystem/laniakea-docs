@@ -30,7 +30,7 @@ Three commitments are load-bearing:
 - **Compositionality** — n-ary structures nest naturally without reification. A multi-party allocation is one expression, not a triple-store workaround.
 - **Synomic-library grounding** — symbols draw their meaning from the shared synomic library, not from per-document declarations.
 
-Together these enable the [neuro-symbolic cognition](neuro-symbolic-cognition.md) loop: neural nets train synlang-native (synlang in, synlang out, halluci-reasoning in synlang), eliminating translation overhead at every boundary.
+Together these enable the [neuro-symbolic cognition](../neurosymbolic/neuro-symbolic-cognition.md) loop: neural nets train synlang-native (synlang in, synlang out, halluci-reasoning in synlang), eliminating translation overhead at every boundary.
 
 ---
 
@@ -45,7 +45,7 @@ The earlier research track explored questions that Noemar's design has now settl
 | Probabilistic logic (ProbLog, Bayesian nets, MLNs, neural-symbolic) | PLN truth values with the delta method |
 | Pattern matching at scale | Inverted-index dispatch + one-way matching + Robinson unification; stochastic TV-weighted traversal for graph-style queries |
 
-See [`noemar-substrate.md`](noemar-substrate.md) for what the runtime does with these decisions, and [`neuro-symbolic-cognition.md`](neuro-symbolic-cognition.md) for why synlang-native cognition is load-bearing.
+See [`noemar-substrate.md`](noemar-substrate.md) for what the runtime does with these decisions, and [`neuro-symbolic-cognition.md`](../neurosymbolic/neuro-symbolic-cognition.md) for why synlang-native cognition is load-bearing.
 
 ---
 

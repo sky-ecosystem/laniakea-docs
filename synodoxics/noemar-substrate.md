@@ -172,7 +172,7 @@ For the security analysis of why this is bounded rather than unbounded, see [`se
 
 ## The Emo, Concretized
 
-The [neuro-symbolic cognition](neuro-symbolic-cognition.md) loop describes the **emo** (embodied orchestrator) as the neural component that does fuzzy approximate pattern matching, narrowing the search space before the symbolic system verifies and refines.
+The [neuro-symbolic cognition](../neurosymbolic/neuro-symbolic-cognition.md) loop describes the **emo** (embodied orchestrator) as the neural component that does fuzzy approximate pattern matching, narrowing the search space before the symbolic system verifies and refines.
 
 > **Implementation note:** The first running instance — the **Rule-Author Agent**, an LLM driving a tool surface around Noemar — is one concretization of the emo, not the architectural commitment. The dev teams are actively exploring alternatives: different proposing components (smaller specialized models, dreamer formations, hybrid architectures), different tool surfaces, different control loops. What's stable is the pattern: a neural proposer narrowing search, symbolic verification gating action, evidence-stamped results feeding back into the mesh. What's evolving is everything else.
 

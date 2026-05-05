@@ -277,14 +277,14 @@ Agents are organized into four ranks based on their governance relationship to t
 |------|-------------|------------------------|
 | **0** | Core Council | Sovereign |
 | **1** | Guardians, Core Controlled Agents, Recovery Agents | Directly regulated by Core Council |
-| **2** | Primes, Generators | Accordant to a Guardian |
+| **2** | Primes, Generators | Accordant to Ozone (the single operational Guardian) |
 | **3** | Halos, Folio Agents | Administered by a Prime |
 
 **Primes** (Rank 2) — Specialized, heavyweight Synomic Agents. Two subtypes: Star Primes (5: Spark, Grove, Keel, Star4, Star5) and Institutional Primes (1: Obex). Require transformation primitives, foundations, nested contributors.
 
 **Halos** (Rank 3) — General-purpose Synomic Agents. Can wrap any value and give it agency. Organized into **Halo Classes** (shared SC + legal infra) containing **Halo Units** (individual products). Three standard class types: Portfolio (LCTS), Term (NFAT), Trading (AMM). Examples: tranched Portfolio Halo (senior/junior sharing one PAU), NFAT Facility (same buybox, varying duration/size). Halos are the fractal layer — they proliferate.
 
-**Guardians** (Rank 1) — Perform privileged operations with collateral backing. Post escrow, face slashing for failures. Consolidate interpretation, governance participation, and operational execution.
+**Guardians** (Rank 1) — Perform privileged operations with collateral backing. Post escrow, face slashing for failures. Consolidate interpretation, governance participation, and operational execution. Operationally, **Ozone** is currently the single Guardian; USGE Generator and all Primes are direct children of Ozone, with separate GovOps teams administering each entity.
 
 **Core Controlled Agents** (Rank 1) — Tokenless agents directly administered by the Core Council. Manage legacy protocol positions (Morpho, Aave, SparkLend) as general-purpose Core Council operational vehicles.
 

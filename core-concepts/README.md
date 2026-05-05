@@ -1,6 +1,37 @@
 # Core Concepts
 
-Atomic concept definitions shared across the synomics documentation.
+Atomic concept definitions shared across the synomics narrative directories. This README also serves as the synomics overview for new readers.
+
+---
+
+## The synomics directories
+
+Synomics is the study of the Synome and the entities that inhabit it. Five narrative directories plus this shared atomic vocabulary:
+
+| Directory | Focus |
+|-----------|-------|
+| [`../macrosynomics/`](../macrosynomics/README.md) | System-level structure — layers, agents, beacons, governance |
+| [`../synodoxics/`](../synodoxics/README.md) | Knowledge dynamics — probabilistic mesh, security model, retrieval policy, synlang reference |
+| [`../neurosymbolic/`](../neurosymbolic/README.md) | Practical cognition — live graph context, context manipulation, attention, hardware-aware cognition |
+| [`../synoteleonomics/`](../synoteleonomics/README.md) | Individual teleonomes — design, economics, memory, resilience, binding, autonomy |
+| [`../hearth/`](../hearth/README.md) | Teleology — Hearth commitments, alignment infrastructure, wild-synomes counterfactual |
+
+> **What synomics is and isn't.** Synomics is internal scaffolding — a vocabulary used to organize a research and design program around the Synome. The names (macrosynomics, synodoxics, neurosymbolic, synoteleonomics) are useful for keeping concepts separate while we work, but we are not claiming established academic subfields. This is documentation for an active design effort, not received knowledge. Concepts and terminology are subject to revision; the goal is coordination among people building this thing, not nomenclature for posterity.
+
+### How the directories relate
+
+| Macrosynomics | Synodoxics | Neurosymbolic | Synoteleonomics | The Hearth |
+|---------------|------------|---------------|-----------------|------------|
+| System structure | Knowledge dynamics | Practical cognition | Individual teleonome study | Purpose and teleology |
+| Layers, agents, beacons | Probabilistic mesh, security, synlang | Live context, manipulation, attention | Teleonome design, economics | Hearth commitments, cosmic purpose |
+| Deontic skeleton | Probabilistic mesh | How the mesh gets used | Private, per-entity structures | Shared purpose framework |
+| What the Synome IS | What the Synome BELIEVES | How the Synome THINKS | How teleonomes live within it | What teleonomes live for |
+
+Macrosynomics defines structures. Synodoxics defines knowledge dynamics and security. Neurosymbolic operationalizes the epistemic side. Synoteleonomics describes the entities that use these mechanisms. The Hearth provides the purpose that drives all four. Documents frequently cross-reference across all directories.
+
+The Noemar runtime + synlang technical reference lives in [`../noemar-synlang/`](../noemar-synlang/) — adjacent to synomics but distinct, answering "how is this actually implemented" rather than "what does it mean."
+
+---
 
 ## How to use
 

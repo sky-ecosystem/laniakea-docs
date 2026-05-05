@@ -88,7 +88,7 @@ The governance and operational layer. These are the running agents that make the
   |------|-------------|------------------------|
   | **0** | Core Council | Sovereign |
   | **1** | Guardians, Core Controlled Agents, Recovery Agents | Directly regulated by Core Council |
-  | **2** | Primes, Generators | Accordant to a Guardian |
+  | **2** | Primes, Generators | Accordant to Ozone (the single operational Guardian) |
   | **3** | Halos, Folio Agents | Administered by a Prime |
 
   - *Guardians* (Rank 1) — Execute and guard specific tasks, post collateral

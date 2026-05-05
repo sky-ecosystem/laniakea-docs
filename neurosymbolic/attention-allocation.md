@@ -19,7 +19,7 @@ How the Synome manages what it's thinking about. The mesh is vast; context is fi
 
 ### Layer 1: Context Window (Short-Term Attention)
 
-The literal tokens loaded into the emo's context for this reasoning cycle. This is the [bottleneck](../synodoxics/neuro-symbolic-cognition.md) — token throughput determines intelligence per unit time. Changes every cycle, assembled through the [pattern-matching function calls](cognition-as-manipulation.md) the emo uses to manipulate its own context.
+The literal tokens loaded into the emo's context for this reasoning cycle. This is the [bottleneck](neuro-symbolic-cognition.md) — token throughput determines intelligence per unit time. Changes every cycle, assembled through the [pattern-matching function calls](cognition-as-manipulation.md) the emo uses to manipulate its own context.
 
 Context is zero-sum. Loading one pattern means not loading another. Every token must earn its place by contributing to the quality of the next reasoning step.
 

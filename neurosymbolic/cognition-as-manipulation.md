@@ -152,7 +152,7 @@ This gives a concrete, measurable training objective for synlang-native emos:
 
 **Training data:** Every past decision — every evidence chain, every invalidation search, every success and failure — sits in the mesh as s-expressions. Directly consumable as training data in the same format as the reasoning.
 
-Failed attempts are training gold: "here's what the context manipulation should have been given what we now know." The training loop from [`neuro-symbolic-cognition.md`](../synodoxics/neuro-symbolic-cognition.md) is literal — train the emo to be better at manipulating its own context toward justified action.
+Failed attempts are training gold: "here's what the context manipulation should have been given what we now know." The training loop from [`neuro-symbolic-cognition.md`](neuro-symbolic-cognition.md) is literal — train the emo to be better at manipulating its own context toward justified action.
 
 ---
 

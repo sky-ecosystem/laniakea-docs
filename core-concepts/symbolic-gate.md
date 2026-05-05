@@ -48,7 +48,7 @@ The symbolic gate is the final verification checkpoint in the neuro-symbolic cog
 
 | Document | Relationship |
 |----------|--------------|
-| [`../synodoxics/neuro-symbolic-cognition.md`](../synodoxics/neuro-symbolic-cognition.md) | The cognition loop the gate operates within — emo sandboxed inside symbolic verification |
+| [`../neurosymbolic/neuro-symbolic-cognition.md`](../neurosymbolic/neuro-symbolic-cognition.md) | The cognition loop the gate operates within — emo sandboxed inside symbolic verification |
 | [`../neurosymbolic/live-graph-context.md`](../neurosymbolic/live-graph-context.md) | Live graph binding — the gate always verifies against live state, making staleness safe |
 | [`../neurosymbolic/cognition-as-manipulation.md`](../neurosymbolic/cognition-as-manipulation.md) | The emo's reasoning process that produces action proposals the gate verifies |
 | [`../synodoxics/security-and-resources.md`](../synodoxics/security-and-resources.md) | Defense-in-depth security framework the gate implements |

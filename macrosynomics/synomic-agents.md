@@ -303,8 +303,10 @@ Synomic Agents are organized into four ranks based on their governance relations
 |------|-------------|------------------------|
 | **0** | Core Council | Sovereign |
 | **1** | Guardians, Core Controlled Agents, Recovery Agents | Directly regulated by Core Council |
-| **2** | Primes, Generators | Accordant to a Guardian |
+| **2** | Primes, Generators | Accordant to Ozone (the single operational Guardian) |
 | **3** | Halos, Folio Agents | Administered by a Prime |
+
+> **Single operational Guardian.** "Guardian" remains a rank-1 *type* (perform privileged operations with collateral backing, post escrow, face slashing). Operationally, **Ozone** is the only Guardian. The USDS Generator (USGE) and all Primes (Spark, Grove, Keel, Obex, and any others added) are direct children of Ozone in the accordancy graph. Multiple GovOps teams coexist under Ozone, each scoped to the entity it administers.
 
 Rank 1 agents that are not Guardians — Core Controlled Agents and Recovery Agents — are tokenless and serve specialized purposes: Core Controlled Agents manage legacy protocol positions (Morpho, Aave, SparkLend) as general-purpose Core Council operational vehicles, while Recovery Agents are temporary crisis wrappers activated when a Guardian collapses. Rank 3 Folio Agents are standardized supply-side holding structures controlled by a single principal (not to be confused with Halos, which wrap around legal entities).
 

@@ -231,7 +231,7 @@ The genetic algorithms evolve:
 - **Strategy preferences** — Which approaches to favor
 - **Query patterns** — How to use synart/telart knowledge
 - **Risk tolerance** — How conservative/aggressive to be
-- **Neural weights** — LoRA adapters, emo architecture improvements. The training loop (mesh → neural net → better patterns → mesh) is a concrete RSI mechanism that dreamers drive. See [`neuro-symbolic-cognition.md`](../synodoxics/neuro-symbolic-cognition.md).
+- **Neural weights** — LoRA adapters, emo architecture improvements. The training loop (mesh → neural net → better patterns → mesh) is a concrete RSI mechanism that dreamers drive. See [`neuro-symbolic-cognition.md`](../neurosymbolic/neuro-symbolic-cognition.md).
 
 ### Finding the Fitness Function
 
