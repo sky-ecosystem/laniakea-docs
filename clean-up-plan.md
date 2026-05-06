@@ -512,3 +512,44 @@ Active corpus shrinks meaningfully and gets more coherent; archive keeps context
 - Updating `agent-work/CLAUDE.md` directory-structure section (separate pass after dust settles).
 - The other directories now in `inactive/pre-synlang/` — they wait their turn for synlang nativity.
 - Cross-reference link updates throughout — execution work, not planning work.
+
+---
+
+## Post-cleanup audit findings (2026-05-06)
+
+After Items 1-9 landed, a corpus audit identified additional issues the original cleanup didn't address. Some were resolved by the Phase 1 v2 design pass (2026-05-06, `phases/phase-1-spaces.md` rewrite); others remain open. Tracking here so they don't get lost.
+
+### Resolved by Phase 1 v2 design pass
+
+| # | Issue | Resolution |
+|---|---|---|
+| A1 | **`lpla-verify` contradicts beacon-framework.** Phase 1 had `lpla-verify` registered as a real beacon, but `macrosynomics/beacon-framework.md` says verification runs as synart-resolved in-space calculation inside synserv (not a beacon class). | Phase 1 v2 folds verification into synserv's heartbeat synlang loop. No `lpla-verify` beacon class. See `phases/phase-1-spaces.md` v2. |
+| A2 | **Tier-code prefixes (LPLA/LPHA/HPLA/HPHA) still load-bearing in Phase 1.** Old phase-1-spaces.md used them as the classification column in the beacon roster, contradicting the cleanup claim that codes are retired. | Phase 1 v2 beacon roster uses canonical class names: `synserv`, `oracle`, `oracle-exsyn`, `attestor`, `govops-prime`, `govops-halo`, `test-runner`. No tier-code residue. |
+| A3 | **Sub-book Space naming unresolved.** Original phase-1-spaces.md wrote `&entity-prime-{id}-primebook-structbook` (compound sub-kind), violating the flat naming convention in `topology.md` §9. | Phase 1 v2 uses `&entity-prime-{id}-structbook` per the canonical convention. |
+| A4 | **Q24 attestor schema unresolved** in `risk-framework/open-questions.md`. | Phase 1 v2 specifies one-per-exobook attestation by class-accordant attestor; no Tier A/B split needed. See `phases/phase-1-spaces.md` "Attestation model" section. |
+
+### Partially addressed
+
+| # | Issue | Status |
+|---|---|---|
+| A5 | **Prime naming three-way split.** `synomic-agents.md` lists 5 Star Primes (Spark, Grove, Keel, Star4, Star5) + 1 Institutional (Obex). `atlas-synome-separation.md` matches. CLAUDE.md and most other docs say 3 Star Primes. | Phase 1 v2 commits to **6 Primes total**: spark, grove, obex, keel, skybase, launch6. **Remaining work:** reconcile `macrosynomics/synomic-agents.md:159-160` and `macrosynomics/atlas-synome-separation.md:281,373-374` to the v2 names (replace Star4/Star5 with skybase/launch6 OR keep TBD). |
+| A6 | **Risk framework calibration questions** — Q26 privacy buckets, Q27 crypto stress, correlation framework calibration. | Sidestepped in v1 by treating the risk framework as a **black-box category equation** (production synlang signature, deferred internals). When v2+ unfolds the black box, these calibration questions need answers. |
+
+### Unresolved (deferred)
+
+| # | Issue | Notes |
+|---|---|---|
+| A7 | **Dangling cross-refs to `inactive/pre-synlang/`.** Many active docs link `../whitepaper/...`, `../trading/...`, `../smart-contracts/...`, `../accounting/...`, `../sky-agents/...` paths that don't exist post-reorg (everything moved to `inactive/pre-synlang/`). | Confirmed instances: `risk-framework/risk-monitoring.md:31`, `risk-framework/sentinel-integration.md`, `risk-framework/operational-risk-capital.md`, `risk-framework/asc.md`, `macrosynomics/beacon-framework.md:437,443`, `macrosynomics/synomic-agents.md:188,311`, `macrosynomics/atlas-synome-separation.md`, `macrosynomics/topology-layers.md:183`. Item 9 added new pointers but didn't fix backward refs. |
+| A8 | **Phase 0 doc missing.** `phases-ideas.md` itself recommends starting with a Phase 0 substrate doc. | Phases 2-10 docs also unwritten. Phase 0 should capture the irreducible substrate (genesis sudo, gate, identity, authority bootstrap, sudo + audit + failover) every phase rests on. |
+| A9 | **Files in transitional state in `noemar-synlang/`.** | `beacons.md` (Sketch) — conceptual core absorbed into `macrosynomics/beacon-framework.md` per Item 6, but file still exists with old "being collapsed" framing.<br>`listener-loops.md` (Sketch) — implementation mechanism deferred; v1 risk-framework-as-black-box reduces urgency but the doc still says "TBD during Phase 1".<br>`settlement-cycle-example.md` — uses old state-based CRR with §3.5 patch; ER-emission-only Phase 1 sidesteps this but the doc remains.<br>`risk-framework.md` — "synlang-flavored complement" with illustrative numbers. |
+| A10 | **Synlang language design open.** Per `noemar-synlang/synlang.md`: surface conventions, schema/types, versioning, macros — all "still being designed." | Phase 1 v2 needs production-quality synlang for ER computation, so this becomes load-bearing. May require a focused synlang-spec design pass before Phase 1 implementation can begin. |
+| A11 | **Hearth content is one paragraph.** `hearth/README.md` is 3 lines; telos point is "to be developed." `topology-layers.md` flags structured sub-commitments as needed but absent. | Independent of Phase 1; relevant for the broader telos / governance story. |
+| A12 | **USDS lot-age tracking infrastructure** — gates the Lindy duration model. | Phase 1 uses sudo-set capacity ("fake auction"), so deferred until real auctions go live. Tracked as Q in `risk-framework/open-questions.md`. |
+
+### Vocabulary additions (2026-05-06)
+
+- **insyn / exsyn** — new term pair for the **phased synome buildout pattern**. Insyn = computed in-synome from synome-native data; exsyn = oracle-fed gap-filler from infrastructure not yet in synome. Distinct from substrate `endo/exo` (which is about graph membership). Phase 1 uses `insynTRRC + exsynTRRC = TRRC`. The pattern is canonical for any system-wide quantity that spans the synlang-native / legacy boundary during phased buildout. See `phases/phases-ideas.md` "The insyn/exsyn pattern" for the full treatment.
+
+### Log
+
+- 2026-05-06 — Post-cleanup audit performed. 12 issues identified (A1-A12). 4 resolved by Phase 1 v2 design pass (A1 lpla-verify, A2 tier codes, A3 sub-book naming, A4 Q24 attestor schema). 2 partially addressed (A5 Prime naming committed in v2, A6 risk calibration deferred via black-box). 6 remain open (A7 dangling cross-refs, A8 Phase 0 doc, A9 noemar-synlang transitional files, A10 synlang language spec, A11 Hearth content, A12 USDS lot-age tracking). Phase 1 v2 design landed in `phases/phase-1-spaces.md`; lift principle and insyn/exsyn pattern documented in `phases/phases-ideas.md`.

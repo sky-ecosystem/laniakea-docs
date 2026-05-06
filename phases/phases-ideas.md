@@ -101,33 +101,120 @@ Future use cases the same mechanism supports:
 - What-if queries (synodoxics arguments exercised in shadow before becoming endospells)
 - Major migrations / repartitioning (double-mesh trick)
 
-Phase 1 implementation: deep copy is enough at this scale (~53 Spaces, thousands of atoms). Copy-on-write becomes valuable later.
+Phase 1 implementation: deep copy is enough at this scale (~42 Spaces, modest atom count). Copy-on-write becomes valuable later.
+
+---
+
+## The lift principle
+
+Phase 1 is not just "the simplest thing that works." It's an exercise in building **production-quality lift** — synlang that exists once and doesn't get rewritten. The test:
+
+> If we'd build it in Python now and rewrite it in synlang later, build it in synlang now.
+
+The Phase 1 deliverables are bounded — only what's needed for the phase to perform — but within that scope, the synlang is the long-term shape. CRR equations, category match, sub-book routing, ER, equity invariants, health factors, loop bodies — all production synlang evaluated by Noemar from day 1. Python remains for **grounded primitives** the runtime calls into (ed25519 verification, atom storage, network I/O, basic numeric ops); these don't get replaced by synlang later because they can't be.
+
+"Lift" at this stage just means high-quality synlang. Probmesh, dense comments, formal proofs are not yet load-bearing. The bar is: the synlang you write now is the synlang the system runs on indefinitely.
+
+### Code vs data — the discriminator that prevents over-rabbit-holing
+
+- **Code → synlang.** Every rule, equation, derivation, loop body, predicate. Lifty.
+- **Data → atoms** (sudo-set or derived). Stress scenario parameters, asset stress profiles, capital allocations, governance numbers. Sudo-setting *numbers* in Phase 1 isn't duct tape — it's policy. The equations consuming them are synlang.
+
+A function whose body we don't yet know how to write isn't duct tape either, **as long as the signature is real synlang**. Declare the inputs, declare the output, leave the body deferred. The risk framework category equation is exactly this in v1: real synlang signature consuming oracle price+liquidity + exobook attestation, returning CRR; opaque body; no rewrite required when the body matures.
+
+### The insyn/exsyn pattern — phasing capabilities into synome
+
+The synome is built in phases. At any phase, some capabilities are **insyn** (synome-native, real synlang on real atoms) and some are **exsyn** (outside the synome, fed in by trusted oracle providers). For aggregations that span both, split the quantity:
+
+```
+quantity = insyn-component + exsyn-component
+            (computed in-synlang)   (oracle-fed gap-filler)
+```
+
+> **Naming note.** Distinct from `endo`/`exo` in synlang substrate vocabulary (endoasset/exoasset, endobook/exobook), which is about graph membership. **Insyn/exsyn** is about **epistemic provenance** — did we derive this from synome-native data, or did we accept a signed claim from an external provider? Different distinction, different scope, different name.
+
+Phase 1 uses this for TRRC: `insynTRRC` from the 3 P1 halos in real synlang, `exsynTRRC` from oracle for legacy halos. ER = (insynTRRC + exsynTRRC) / TRC is computed in real synlang against real values; only the exsyn number is provider-attested. As more halos migrate into the synlang-native stack, the exsyn number shrinks. **The synlang code doesn't change at the migration boundary.**
+
+This is the canonical mechanism for **phased synome buildout**. Anywhere a system-wide quantity needs values from infrastructure that isn't yet synlang-native:
+
+- Concentration exposure per category (insyn positions + exsyn legacy oracle)
+- Total USDS backing
+- Cross-Prime aggregations in Genbook
+- Telart→synart migration of published patterns
+- Cross-chain aggregations (native-chain insyn + foreign-chain exsyn)
+- Any other partial-migration aggregation
+
+Each `oracle-exsyn-{class}` beacon is **transitional by design** — it deprecates as insyn coverage grows. Both endpoints (full-insyn mature state, mostly-exsyn Phase 1) are valid configurations of the **same synlang**. The phase progression is: insyn coverage grows, exsyn shrinks toward zero per domain, synlang code is unchanged throughout.
+
+When it fits:
+- The quantity is associative (sum, max, etc.) over independent contributors
+- You can identify which contributors are insyn vs exsyn cleanly
+- A trustable provider exists (governance-curated, slashable) for the exsyn side
+- The migration trajectory is one-way (exsyn shrinks, never grows arbitrarily)
+
+When it doesn't fit:
+- Cross-contributor interactions (e.g. correlation matrices — can't split cleanly)
+- The exsyn provider has the same trust deficit as the missing infrastructure (you've moved the problem, not solved it)
+- Migration trajectory isn't well-defined (exsyn could grow without bound → not transitional)
+
+For doesn't-fit cases, black-box deferral (define the function signature, leave the body opaque) is the lifty alternative.
+
+### Black-box deferrals — honest scaffolds, not duct tape
+
+When you don't know enough about a domain to model its internals well, define the function signature in synlang and leave the body opaque. The risk framework in v1 is a single category equation that consumes oracle + attestation and returns CRR; the body is unknown territory; the signature is permanent. When the body matures, fill in the synlang — same signature, same callers, no rewrite. Modeling internals prematurely (stress scenario library, asset stress profile derivation, volatility calibration) would lock in a model that may not survive contact with reality.
+
+The discipline: **define the smallest synlang surface** that lets the layer above proceed. Defer everything else to its respective phase boundary.
+
+### Don't rabbit-hole — what to skip
+
+Lifty doesn't mean fanatical. The boundary:
+
+- ✅ Build the production CRR equation in synlang now (it'll exist forever; build once)
+- ✅ Build the insyn/exsyn split now (the pattern itself is the lift)
+- ✅ Build the heartbeat loop body in real synlang now
+- ✅ Build constructors (`create-halobook`, etc.) as real synlang now
+- ❌ Don't model the full stress scenario library when v1 only needs one category equation
+- ❌ Don't build event-driven derivation when heartbeat sweep suffices
+- ❌ Don't build full multi-Generator architecture when v1 has one Generator
+- ❌ Don't activate concentration excess penalty when v1 has no caps
+- ❌ Don't build asset history derivation when stress profiles are sudo-set
+
+The test for any deferred component: *would building it now exercise architecture we'll otherwise miss, or would it be speculative scaffolding for a phase that hasn't arrived?* If speculative, defer. If load-bearing for the phase's deliverable, build it lifty.
 
 ---
 
 ## Why Phase 1 ended up at the exact scope it did
 
-The conversation iterated:
+The conversation iterated through several scopes; v2 (2026-05-06) settled on:
 
-1. Started with the full architecture from `topology.md` — too much for Phase 1
-2. Narrowed to absolute minimum (gate + halos + book factory) — too little; doesn't include the operational shape that makes Phase 1 actually do anything
-3. Expanded to include Primes + Generator's structural demand subtree + scrapers + oracle + per-halo attestors — landed on 53 fixed Spaces
+1. **Real-time ER per Prime as the single deliverable.** Settlement and penalty action remain manual; the synome publishes ER, governance consumes externally.
+2. **All synlang from day 1**, per the lift principle above. No Python placeholders.
+3. **Risk framework as black box** — one category equation with deferred internals; consumer signature is real synlang.
+4. **Insyn/exsyn split for system-wide quantities** — TRRC = insynTRRC + exsynTRRC; TRC fully insyn (synome-tracked).
+5. **Six Primes all active**, deploying into 3 P1 Halos. No placeholder Primes.
 
-The discriminating principle: include everything that's part of Phase 1's *operational semantics* (Phase 1 is the first phase the system is actually running with real beacons doing real work). Defer everything else to its respective later phase.
-
-What's in Phase 1:
-- 53 fixed Spaces (universal core + Guardian + Generator + 6 Primes + 3 Halos with aggregation hierarchy)
-- 1 constructor (the book factory `create-book`)
-- ~23 beacon identities
+What's in Phase 1 (v2):
+- 42 fixed Spaces (17 universal + Guardian + Generator + 6 Primes × 3 + 3 Halos × 1)
+- 3 constructors (`create-halobook`, `create-riskbook`, `create-exobook`); constructor-made depth grows per deal flow
+- ~15 beacon identities, all running real synlang loops in Noemar
+- Halo class atoms (3) in registry, risk category atom (1) in framework
 - Synart-native test suite + runtime frame mechanism for clone-and-test isolation
-- One risk category, shared across the 3 halos
+- Real-time ER per Prime emitted continuously via synlang heartbeat
+- Authority chain fully sudo at genesis (no Core GovOps role)
 
 What's deferred:
-- Aggregation logic in halobook / riskbook / primebook / structbook / genbook (Phase 1 has the Spaces but derives values at read time)
-- Settlement formalization (Phase 2-3)
+- Stress scenario library, asset stress profile derivation, asset history (risk framework treated as black box)
+- Concentration excess penalty (no caps active)
+- Other Primebook sub-books (only `structbook` active)
+- Settlement closure / penalty calculation (Phase 2)
 - LCTS / srUSDS (Phase 4)
 - Factories for new entities (Phases 5-8)
 - Sentinel formations (Phases 9-10)
+- Cross-Prime concentration in Genbook
+- Multi-Generator architecture
+- Event-driven derivation (heartbeat sweep is enough)
+- Endoscraper-driven verification (no `&core-endoscrapers` in v1)
+- `&core-escalation` (status atoms in books are enough)
 
 ---
 
@@ -154,11 +241,17 @@ The "what carries forward unchanged" section is important — it makes the phase
 
 A few principles that emerged:
 
-- **"Any sudo event is a phase boundary by definition."** This is what makes phase boundaries crisp — modifying fixed Spaces necessarily means leaving the phase. If you're tempted to sudo during a phase, that's the signal you're starting a new phase.
-- **The factory is the only operational construction.** In Phase 1, only the book factory exists. Everything else is fixed at genesis. This is what bounds the operational write surface and makes "what changes during a phase" tractable.
-- **Aggregation Spaces are structural placeholders in early phases.** Halobooks, riskbooks, primebooks, structbooks, genbook — they exist as Spaces in Phase 1 but their actual content is mostly derived at read time by lpla-verify. They become populated with operational atoms only when later phases (settlement, auctions) need persistent aggregate state.
-- **Placeholder topology proves substrate scales.** Three Primes (keel/skybase/launch6) without halos in Phase 1 is intentional — it shows the substrate handles 6 Primes' worth of entart even when only 3 are operationally active.
-- **Test halo deleted in favor of shadow frame.** The clone-and-test pattern is cleaner than dedicated test entities + cleanup verbs. The shadow frame mechanism is the single payoff that handles testing, sudo safety, forecasting, etc.
+- **The lift principle is the bar.** Synlang-first, production-quality, no Python placeholders that get rewritten. Test: code → synlang, data → atoms. Grounded primitives (ed25519, atom storage, network, math) stay native; everything else is synlang.
+- **Insyn/exsyn split is the generalizable phased-buildout device.** Quantity = insyn (real synlang on what's in synome) + exsyn (oracle gap-filler for what's not yet). As phases progress, insyn coverage grows, exsyn shrinks toward zero. The synlang code doesn't change at the migration boundary. Distinct from endo/exo in synlang substrate vocabulary — different scope, different distinction.
+- **Black-box deferrals are honest scaffolds.** Define synlang function signatures; leave bodies opaque when domain understanding is thin. The risk framework category equation is the v1 example — production signature, deferred internals, no rewrite when matured.
+- **Don't rabbit-hole.** Lifty doesn't mean fanatical. Build what's load-bearing for the phase's deliverable; defer speculative scaffolding to its phase boundary.
+- **"Any sudo event is a phase boundary by definition."** Modifying fixed Spaces necessarily means leaving the phase. If you're tempted to sudo during a phase, that's the signal you're starting a new phase.
+- **Real beacons run synlang loops.** Not Python placeholders. Two-step pattern (universal templates + per-entity configs). Phase 1 is when Noemar steps up to production load.
+- **Authority is fully sudo at genesis.** No Core GovOps role in Phase 1; the Guardian holds everything (role-defs, role-grants, certs). Simplifies the authority chain dramatically.
+- **Attestation closes the rollup.** One per exobook, signed by class-accordant attestor. Without it, the exobook doesn't roll up — riskbook category equation excludes it. Integrity discipline that prevents stale data poisoning.
+- **All 6 Primes active.** No placeholder Primes. Each deploys into the 3 P1 Halos. Real ER for everyone from day 1.
+- **Halobooks/riskbooks/exobooks are constructor-made**, not sudo. Deals come in bursts; the substrate accommodates them via 3 factory verbs.
+- **Test halo deleted in favor of shadow frame.** The clone-and-test pattern is cleaner than dedicated test entities + cleanup verbs.
 - **Frames live below synomic surface.** Don't add `&core-frames` Space. The frame mechanism is a runtime feature; from inside synart you can't tell what frame you're in.
 
 ---
