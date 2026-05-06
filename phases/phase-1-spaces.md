@@ -44,14 +44,13 @@ This phase doc answers four questions:
 
 | Space | Holds | Operational? |
 |---|---|---|
-| `&core-root` | Top-level sub-entart registry — Guardian + Generator + 6 Primes + 3 Halos | Fixed |
+| `&core-root` | Top-level sub-entart registry — Guardian + Generator + 2 Oracle Entities + 6 Primes + 3 Halos | Fixed |
 | `&core-syngate` | Gate state — nonce dedup window, per-pubkey rate-limit counters, external-verb whitelist, verb→target-Space routing table | Counters mutate per-message; whitelist + routing fixed |
 | `&core-meta-topology` | Archetypes — declares valid shapes for halobook / riskbook / exobook / tranche / unit / attestation atoms; constructor validation reads here | Fixed |
 | `&core-registry-beacon` | One row per beacon identity: pubkey, status, class, loop-pointer, per-entity-config-pointer | Fixed (status atoms can flip via sudo) |
 | `&core-registry-entity` | Denormalized entity index mirroring the entart tree | Fixed at genesis; extended on book creation |
 | `&core-registry-halo-class` | Halo class definitions — per class: riskbook category, accordant attestors, allowed collateral assets, custodian config | Fixed (3 classes for v1) |
 | `&core-framework-risk-categories` | Riskbook category catalog — v1 has one: `crypto-collateralized-USD-lending`. The category equation is a synlang function consuming oracle price+liquidity + exobook attestation, returning CRR. Internal mechanics deferred (black-box). | Fixed |
-| `&core-oracle` | All oracle-pushed atoms: per-asset price+liquidity ticks (BTC/ETH/stETH/USDC) and per-Prime `(exsyn-trrc-claim _)` | Operational |
 | `&core-test-suite` | Test atom definitions | Fixed (extended by sudo on phase boundary) |
 | `&core-test-results` | Test outcomes — written only in shadow frame | Operational (shadow only) |
 | `&core-loop-synserv` | Synserv heartbeat — synlang body the runtime evaluates continuously; drives all derivations and ER emission | Fixed (loop body is the spec) |
@@ -62,7 +61,7 @@ This phase doc answers four questions:
 | `&core-loop-govops-halo` | Universal template for Halo govops beacons; per-Halo config injected at boot | Fixed |
 | `&core-loop-test-runner` | Test runner loop template (shadow only) | Fixed |
 
-**17 universal Spaces.**
+**16 universal Spaces.**
 
 Note on loop templates: in v2, beacons run real synlang loops evaluated by Noemar. The templates contain canonical loop bodies; per-entity configs (in registry entries or entart roots) inject identity-specific parameters at boot per the two-step loop pattern (`topology.md §17`).
 
@@ -88,12 +87,27 @@ Note on loop templates: in v2, beacons run real synlang loops evaluated by Noema
 
 ---
 
+## Per Oracle Entity — sudo at genesis (×2)
+
+Two domain-specific oracle entities, each accordant to Ozone, replacing the universal `&core-oracle` Space. Oracle data is entity-owned; readers (synserv, derived computation) subscribe to whichever subtree they need. Each entity is a synomic agent in its own right — owns an entart, certs its own beacons, can be revoked independently.
+
+| Space | Holds |
+|---|---|
+| `&entity-oracle-crypto-majors-root` | Crypto Majors Oracle entart root. Auth atoms for the entity's price/liquidity/funding-rate beacons. Holds per-asset, per-tick atoms: `(price-tick {asset} {value} {timestamp})`, `(liquidity-tick {asset} {depth-profile} {timestamp})`, `(funding-rate-tick {perp-asset} {rate} {timestamp})` for the v1 universe (BTC, ETH, stETH, USDC). |
+| `&entity-oracle-book-attestation-root` | Book Attestation Oracle entart root. Auth atoms for the 3 class-accordant attestor beacons (one per halo class). Holds per-Prime exsyn-TRRC claims for legacy halos: `(exsyn-trrc-claim {prime} {amount} {timestamp})`. **Per-exobook attestation atoms still land in their target exobook Spaces** (closing the rollup) — this entity owns the cert chain that makes those attestations recognizable, not the attestations themselves. |
+
+**2 Oracle Entity Spaces.**
+
+The split: Crypto Majors covers *market data* (objective, oracle-pushed, observable on public venues). Book Attestation covers *off-synome state attestation* (signed claims about things the synome can't directly verify — custody balances, legacy halo TRRC, exobook integrity). Different trust models, different beacon classes, different entities.
+
+---
+
 ## Per Prime — sudo at genesis (×6: spark, grove, obex, keel, skybase, launch6)
 
 | Space | Holds |
 |---|---|
 | `&entity-prime-{id}-root` | Prime entart root. Auth atoms for the Prime's govops-prime beacon. Per-Prime govops config (which halos, deploy cadence, allocation strategy). **`(prime-trc {prime} {amount})` atom** — TRC, sudo-set at genesis, governance-updated. Optional per-halo capital allocation atoms for govops bookkeeping. |
-| `&entity-prime-{id}-primebook` | Aggregates Halobook units the Prime holds. Computes insynTRRC via synlang sweep across structbook. Reads `(exsyn-trrc-claim {prime} _)` from `&core-oracle` for exsynTRRC. Reads TRC from root. Computes and emits `(prime-er {prime} {value} {timestamp})` real-time per heartbeat. |
+| `&entity-prime-{id}-primebook` | Aggregates Halobook units the Prime holds. Computes insynTRRC via synlang sweep across structbook. Reads `(exsyn-trrc-claim {prime} _)` from `&entity-oracle-book-attestation-root` for exsynTRRC. Reads TRC from root. Computes and emits `(prime-er {prime} {value} {timestamp})` real-time per heartbeat. |
 | `&entity-prime-{id}-structbook` | The active Primebook sub-book. Reads NFAT units the Prime holds across all 3 halos via cross-book duality. Reads bucket allocations from generator structural-demand-auction. Computes matched/unmatched blend per position, structbook CRR per position. |
 
 **3 Spaces × 6 Primes = 18 Spaces.**
@@ -153,15 +167,15 @@ No Tier A/B split. The attestor walks the exobook, verifies assets at the custod
 
 ## Beacons (all run real synlang loops in Noemar)
 
-| Identity | Class | Loop template | Per-entity config |
-|---|---|---|---|
-| `synserv-canonical` | synserv | `&core-loop-synserv` | n/a (singleton) |
-| `oracle-prices-{provider}` | oracle | `&core-loop-oracle` | per-provider in registry |
-| `oracle-exsyn-{provider}` | oracle-exsyn | `&core-loop-oracle-exsyn` | per-provider in registry |
-| `attestor-{class-id}` × 3 | attestor | `&core-loop-attestor` | per-class config in `&core-registry-halo-class` |
-| `govops-prime-{id}` × 6 | govops-prime | `&core-loop-govops-prime` | per-Prime config in `&entity-prime-{id}-root` |
-| `govops-halo-{id}` × 3 | govops-halo | `&core-loop-govops-halo` | per-Halo config in `&entity-halo-{id}-root` |
-| `test-runner` | test | `&core-loop-test-runner` | shadow only |
+| Identity | Class | Admin'd by | Loop template | Per-entity config |
+|---|---|---|---|---|
+| `synserv-canonical` | synserv | Ozone (Guardian) | `&core-loop-synserv` | n/a (singleton) |
+| `oracle-crypto-majors-{provider}` | oracle | Crypto Majors Oracle | `&core-loop-oracle` | per-provider in registry |
+| `oracle-exsyn-{provider}` | oracle-exsyn | Book Attestation Oracle | `&core-loop-oracle-exsyn` | per-provider in registry |
+| `attestor-{class-id}` × 3 | attestor | Book Attestation Oracle | `&core-loop-attestor` | per-class config in `&core-registry-halo-class` |
+| `govops-prime-{id}` × 6 | govops-prime | each Prime | `&core-loop-govops-prime` | per-Prime config in `&entity-prime-{id}-root` |
+| `govops-halo-{id}` × 3 | govops-halo | each Halo | `&core-loop-govops-halo` | per-Halo config in `&entity-halo-{id}-root` |
+| `test-runner` | test | n/a | `&core-loop-test-runner` | shadow only |
 
 **~15 beacon identities** registered in `&core-registry-beacon` at genesis. All loop bodies are production-quality synlang evaluated by Noemar. Pubkeys, status atoms, class atoms, loop-pointer atoms, and per-entity-config-pointer atoms all sudo-written.
 
@@ -181,8 +195,8 @@ No Tier A/B split. The attestor walks the exobook, verifies assets at the custod
 | `deploy-into-nfat` | govops-prime | Increases Prime's holding of an NFAT unit; updates capital allocation atoms |
 | `rollover-nfat` | govops-prime | At maturity, retires old NFAT, creates new under same/different halobook |
 | `withdraw-from-nfat` | govops-prime | Reduces holding; returns capital to Prime root |
-| `oracle-write-tick` | oracle-{provider} | Pushes price+liquidity atom to `&core-oracle` |
-| `oracle-write-exsyn-trrc` | oracle-exsyn-{provider} | Pushes `(exsyn-trrc-claim {prime} {amount})` to `&core-oracle` |
+| `oracle-write-tick` | oracle-crypto-majors-{provider} | Pushes price/liquidity/funding-rate atoms to `&entity-oracle-crypto-majors-root` |
+| `oracle-write-exsyn-trrc` | oracle-exsyn-{provider} | Pushes `(exsyn-trrc-claim {prime} {amount})` to `&entity-oracle-book-attestation-root` |
 
 **~12 operational verbs.**
 
@@ -192,8 +206,8 @@ No Tier A/B split. The attestor walks the exobook, verifies assets at the custod
 
 | Beacon | Reads | Writes |
 |---|---|---|
-| `oracle-prices-{provider}` | external feeds (off-space) | `&core-oracle` (price+liquidity ticks) |
-| `oracle-exsyn-{provider}` | external (off-space governance attestation) | `&core-oracle` (exsyn-trrc-claim) |
+| `oracle-crypto-majors-{provider}` | external feeds (off-space): exchange APIs, on-chain DEXes, perp venues | `&entity-oracle-crypto-majors-root` (price + liquidity + funding-rate ticks) |
+| `oracle-exsyn-{provider}` | external (off-space governance attestation about legacy halo TRRC) | `&entity-oracle-book-attestation-root` (exsyn-trrc-claim atoms) |
 | `attestor-{class-id}` | exobook state under accordant halos, custodian APIs (off-space) | `(exobook-attestation _)` atoms in exobook Spaces |
 | `govops-halo-{id}` | halo root config, class config, deal queue (off-space) | new halobook/riskbook/exobook Spaces; lifecycle + state atoms within |
 | `govops-prime-{id}` | Prime root config, NFAT availability via cross-book duality, deploy schedule | NFAT-holding updates in halobooks; capital allocation atoms in Prime root |
@@ -208,11 +222,11 @@ The pattern: input beacons (oracles, attestors) write into staging or book Space
 
 ```
 EXTERNAL INPUTS
-  oracle-prices ─────→ &core-oracle (price + liquidity per asset)
-  oracle-exsyn ────────→ &core-oracle ((exsyn-trrc-claim prime _) only)
-  attestor-{class} ──→ exobook attestation atoms in exobook Spaces
-  govops-halo-{id} ──→ create-* / record-unit / transition / update-state
-  govops-prime-{id} ─→ deploy / rollover / withdraw / update-capital-allocation
+  oracle-crypto-majors ──→ &entity-oracle-crypto-majors-root (price + liquidity + funding-rate per asset)
+  oracle-exsyn ──────────→ &entity-oracle-book-attestation-root ((exsyn-trrc-claim prime _))
+  attestor-{class} ──────→ exobook attestation atoms in exobook Spaces
+  govops-halo-{id} ──────→ create-* / record-unit / transition / update-state
+  govops-prime-{id} ─────→ deploy / rollover / withdraw / update-capital-allocation
 
 SYNSERV HEARTBEAT (evaluating &core-loop-synserv)
 
@@ -222,7 +236,7 @@ SYNSERV HEARTBEAT (evaluating &core-loop-synserv)
     if no fresh accordant attestation → exobook excluded from rollup
 
   riskbook level
-    read: child exobook derivations + oracle (price+liquidity) + framework category equation
+    read: child exobook derivations + crypto-majors prices+liquidity + framework category equation
     derive: per-position CRR (category equation = black box consuming the inputs)
 
   halobook level
@@ -236,7 +250,7 @@ SYNSERV HEARTBEAT (evaluating &core-loop-synserv)
 
   Prime primebook level
     read: structbook output → insynTRRC[prime]
-        + (exsyn-trrc-claim prime _) from &core-oracle → exsynTRRC[prime]
+        + (exsyn-trrc-claim prime _) from &entity-oracle-book-attestation-root → exsynTRRC[prime]
         = TRRC[prime]
         read: (prime-trc prime _) atom in &entity-prime-{id}-root → TRC[prime]
     emit: (prime-er prime value T) ← every heartbeat, real-time
@@ -254,7 +268,7 @@ A **frame** is a complete instance of synome state — every Space, every atom. 
 
 Phase 1 use case: clone-and-test isolation. Genesis bootstraps canonical → fork to shadow → run tests against shadow → discard shadow → canonical verified by structural identity.
 
-Implementation: deep copy at this scale (~42 fixed Spaces, modest atom count); becomes copy-on-write at larger states later.
+Implementation: deep copy at this scale (~43 fixed Spaces, modest atom count); becomes copy-on-write at larger states later.
 
 Future use cases: sudo event safety (apply to shadow first, observe, promote), forecasting, what-if queries, major migrations / repartitioning.
 
@@ -268,7 +282,7 @@ Test categories for v2:
 
 | Category | Verifies |
 |---|---|
-| **Topology** | All 42 fixed Spaces exist; sub-entart registries point correctly; entity index matches the actual tree |
+| **Topology** | All 43 fixed Spaces exist; sub-entart registries point correctly; entity index matches the actual tree |
 | **Auth atoms** | Each operational verb has correctly-placed auth atoms; counts match expected per Prime / Halo |
 | **Beacon registry** | All ~15 identities present, status active, class atoms set, loop pointers + config pointers set |
 | **Risk framework** | The one risk category atom present and well-formed; class-attestor accord wired |
@@ -288,25 +302,27 @@ Genesis → shadow fork → test → discard shadow → production start (per `p
 
 After Phase 0 substrate is in place, Phase 1 genesis is a sequence of sudo writes:
 
-1. Allocate the 17 universal Spaces
+1. Allocate the 16 universal Spaces
 2. Allocate the 4 singleton Spaces (Guardian, Generator + Genbook + structural-demand-auction)
-3. Allocate the 18 per-Prime Spaces (root, primebook, structbook × 6)
-4. Allocate the 3 per-Halo root Spaces
-5. Write the genesis authority chain into `&entity-guardian-ozone-root`: role-defs, role-grants, cert atoms for every Phase 1 beacon (~15 identities)
-6. Write the risk category atom into `&core-framework-risk-categories` (`crypto-collateralized-USD-lending` with category equation signature; body deferred)
-7. Write archetype atoms into `&core-meta-topology` (halobook / riskbook / exobook / tranche / attestation / unit shapes)
-8. Write external-verb whitelist into `&core-syngate` (~12 operational verbs + input verbs)
-9. Write routing table into `&core-syngate` (verb → target-Space mappings)
-10. Write the 3 halo class atoms into `&core-registry-halo-class` (riskbook category, accordant attestor, allowed collateral, custodian config per class)
-11. Register all ~15 beacon identities in `&core-registry-beacon` with pubkeys, classes, statuses, loop pointers, per-entity-config pointers
-12. Write per-Prime configs in each `&entity-prime-{id}-root` (`(prime-trc _)` atom, govops-prime config)
-13. Write per-Halo configs in each `&entity-halo-{id}-root` (class binding, govops-halo config)
-14. Write structural-demand auction allocations into `&entity-generator-usge-structural-demand-auction` (per-Prime per-bucket; sudo-set fake auction)
-15. Write the entity index into `&core-registry-entity` (denormalized mirror)
-16. Write all test atoms into `&core-test-suite`; initialize `&core-test-results` empty
-17. Configure operator-level test credentials (runtime config, not synart content)
+3. Allocate the 2 oracle-entity root Spaces (Crypto Majors Oracle, Book Attestation Oracle)
+4. Allocate the 18 per-Prime Spaces (root, primebook, structbook × 6)
+5. Allocate the 3 per-Halo root Spaces
+6. Write the genesis authority chain into `&entity-guardian-ozone-root`: role-defs, role-grants, cert atoms rooting both oracle entities + USGE + 6 Primes; oracle entities and Primes hold their own cert chains for the beacons they admin (~15 identities total across the tree)
+7. Write the risk category atom into `&core-framework-risk-categories` (`crypto-collateralized-USD-lending` with category equation signature; body deferred)
+8. Write archetype atoms into `&core-meta-topology` (halobook / riskbook / exobook / tranche / attestation / unit shapes)
+9. Write external-verb whitelist into `&core-syngate` (~12 operational verbs + input verbs)
+10. Write routing table into `&core-syngate` (verb → target-Space mappings, including oracle-entity targets)
+11. Write the 3 halo class atoms into `&core-registry-halo-class` (riskbook category, accordant attestor, allowed collateral, custodian config per class)
+12. Register all ~15 beacon identities in `&core-registry-beacon` with pubkeys, classes, statuses, loop pointers, per-entity-config pointers
+13. Write per-Prime configs in each `&entity-prime-{id}-root` (`(prime-trc _)` atom, govops-prime config)
+14. Write per-Halo configs in each `&entity-halo-{id}-root` (class binding, govops-halo config)
+15. Write per-oracle-entity configs (asset universe + provider list in Crypto Majors Oracle; class-attestor accord + exsyn-provider list in Book Attestation Oracle)
+16. Write structural-demand auction allocations into `&entity-generator-usge-structural-demand-auction` (per-Prime per-bucket; sudo-set fake auction)
+17. Write the entity index into `&core-registry-entity` (denormalized mirror)
+18. Write all test atoms into `&core-test-suite`; initialize `&core-test-results` empty
+19. Configure operator-level test credentials (runtime config, not synart content)
 
-After step 17, sudo stops. Runtime forks canonical → shadow, switches to shadow, runs the test suite, inspects, discards. Production starts after validation.
+After step 19, sudo stops. Runtime forks canonical → shadow, switches to shadow, runs the test suite, inspects, discards. Production starts after validation.
 
 ---
 
@@ -333,12 +349,13 @@ Each later phase is a topology delta — a precisely-specified set of sudo write
 
 | Category | Count |
 |---|---|
-| Universal Spaces | 17 |
+| Universal Spaces | 16 |
 | Guardian | 1 |
 | Generator | 3 |
+| Oracle entities (×2 × 1) | 2 |
 | Per-Prime (×6 × 3) | 18 |
 | Per-Halo (×3 × 1) | 3 |
-| **Fixed Spaces at genesis** | **42** |
+| **Fixed Spaces at genesis** | **43** |
 | Halo class atoms (registry) | 3 |
 | Risk category atoms (registry) | 1 |
 | Constructor-made (per deal) | unbounded |
@@ -364,4 +381,4 @@ Each later phase is a topology delta — a precisely-specified set of sudo write
 
 ## One-line summary
 
-**Phase 1 v2 is 42 fixed Spaces (17 universal + Guardian + Generator's 3 + 6 Primes' 3 each + 3 Halos' 1 each) sudo-allocated at genesis, plus 3 constructors (halobook/riskbook/exobook factories) growing per deal flow, ~15 beacon identities running real synlang loops in Noemar, and a synserv heartbeat that derives real-time ER per Prime as `TRRC = insynTRRC + exsynTRRC` over fully-synome-tracked TRC; the risk framework is held opaque, attestation closes each exobook for rollup, root/cert/auth all sudo at genesis, and the synlang is production-quality lift from day 1, not Python placeholders.**
+**Phase 1 v2 is 43 fixed Spaces (16 universal + Guardian + Generator's 3 + 2 oracle entities + 6 Primes' 3 each + 3 Halos' 1 each) sudo-allocated at genesis, plus 3 constructors (halobook/riskbook/exobook factories) growing per deal flow, ~15 beacon identities running real synlang loops in Noemar admin'd by their respective synomic agents (Crypto Majors Oracle for price/liquidity/funding, Book Attestation Oracle for attestor cert chain + exsyn-TRRC, Primes/Halos for govops), and a synserv heartbeat that derives real-time ER per Prime as `TRRC = insynTRRC + exsynTRRC` over fully-synome-tracked TRC; the risk framework is held opaque, attestation closes each exobook for rollup, root/cert/auth all sudo at genesis, and the synlang is production-quality lift from day 1, not Python placeholders.**
