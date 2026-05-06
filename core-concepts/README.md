@@ -14,7 +14,7 @@ Synomics is the study of the Synome and the entities that inhabit it. Five narra
 | [`../synodoxics/`](../synodoxics/README.md) | Knowledge dynamics — probabilistic mesh, security model, retrieval policy, synlang reference |
 | [`../neurosymbolic/`](../neurosymbolic/README.md) | Practical cognition — live graph context, context manipulation, attention, hardware-aware cognition |
 | [`../synoteleonomics/`](../synoteleonomics/README.md) | Individual teleonomes — design, economics, memory, resilience, binding, autonomy |
-| [`../hearth/`](../hearth/README.md) | Teleology — Hearth commitments, alignment infrastructure, wild-synomes counterfactual |
+| [`../hearth/`](../hearth/README.md) | Telos point and high-level commitments |
 
 > **What synomics is and isn't.** Synomics is internal scaffolding — a vocabulary used to organize a research and design program around the Synome. The names (macrosynomics, synodoxics, neurosymbolic, synoteleonomics) are useful for keeping concepts separate while we work, but we are not claiming established academic subfields. This is documentation for an active design effort, not received knowledge. Concepts and terminology are subject to revision; the goal is coordination among people building this thing, not nomenclature for posterity.
 
@@ -22,12 +22,12 @@ Synomics is the study of the Synome and the entities that inhabit it. Five narra
 
 | Macrosynomics | Synodoxics | Neurosymbolic | Synoteleonomics | The Hearth |
 |---------------|------------|---------------|-----------------|------------|
-| System structure | Knowledge dynamics | Practical cognition | Individual teleonome study | Purpose and teleology |
-| Layers, agents, beacons | Probabilistic mesh, security, synlang | Live context, manipulation, attention | Teleonome design, economics | Hearth commitments, cosmic purpose |
+| System structure | Knowledge dynamics | Practical cognition | Individual teleonome study | Purpose and commitments |
+| Layers, agents, beacons | Probabilistic mesh, security, synlang | Live context, manipulation, attention | Teleonome design, economics | Telos point and high-level commitments |
 | Deontic skeleton | Probabilistic mesh | How the mesh gets used | Private, per-entity structures | Shared purpose framework |
 | What the Synome IS | What the Synome BELIEVES | How the Synome THINKS | How teleonomes live within it | What teleonomes live for |
 
-Macrosynomics defines structures. Synodoxics defines knowledge dynamics and security. Neurosymbolic operationalizes the epistemic side. Synoteleonomics describes the entities that use these mechanisms. The Hearth provides the purpose that drives all four. Documents frequently cross-reference across all directories.
+Macrosynomics defines structures. Synodoxics defines knowledge dynamics and security. Neurosymbolic operationalizes the epistemic side. Synoteleonomics describes the entities that use these mechanisms. The Hearth holds the system's telos point and high-level commitments. Documents frequently cross-reference across all directories.
 
 The Noemar runtime + synlang technical reference lives in [`../noemar-synlang/`](../noemar-synlang/) — adjacent to synomics but distinct, answering "how is this actually implemented" rather than "what does it mean."
 
@@ -71,13 +71,6 @@ stay in their narrative docs.
 | 21 | [binding-mechanics](binding-mechanics.md) | Keep cognition dark, make action legible — alignment through observable behavior |
 | 22 | [trust-problem](trust-problem.md) | Teleonomes cannot trust each other — the Synome provides credible commitment |
 | 23 | [rogue-threat-model](rogue-threat-model.md) | Unbound, hidden, maximizing — rogue advantages and structural disadvantages |
-| 24 | [sacred-commitments](sacred-commitments.md) | Four immutable values optimized for convergence probability |
-| 25 | [sacred-reserve](sacred-reserve.md) | The solar system as a managed habitat for natural human life |
-| 26 | [natural-embodiment-as-alignment](natural-embodiment-as-alignment.md) | Biological grounding covers failure modes structural binding can't |
-| 27 | [four-layer-enforcement-stack](four-layer-enforcement-stack.md) | Synome → Core Council → Superstructure → Teleonomes — no single point of capture |
-| 28 | [stellar-husbandry](stellar-husbandry.md) | Actively maintaining the Sun beyond its natural lifespan |
-| 29 | [human-merge](human-merge.md) | Human and teleonome join into a single irreversible entity |
-| 30 | [telos-point](telos-point.md) | The irreducible teleological invariant at the center of a synome — a Schelling point but for everything, forever |
-| 31 | [rsi-risk-convergence](rsi-risk-convergence.md) | Self-improvement and risk management are the same operation |
-| 32 | [symbolic-gate](symbolic-gate.md) | Final verification checkpoint — every action proposal verified against the live graph before execution |
-| 33 | [defense-stacks](defense-stacks.md) | Disambiguation of the three defense-in-depth stacks — Cancer-Logic, Institutional Enforcement, Alignment Verification |
+| 24 | [telos-point](telos-point.md) | The irreducible teleological invariant at the center of a synome — a Schelling point but for everything, forever |
+| 25 | [rsi-risk-convergence](rsi-risk-convergence.md) | Self-improvement and risk management are the same operation |
+| 26 | [symbolic-gate](symbolic-gate.md) | Final verification checkpoint — every action proposal verified against the live graph before execution |

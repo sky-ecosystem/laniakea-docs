@@ -4,7 +4,7 @@
 
 **Also known as:** recursive self-improvement, meta-learning, self-improvement
 
-> **In lift vocabulary:** RSI is **lift learning to make better lift** — the recursive loop where the system grows reusable agency around the parts of itself that generate, allocate, test, adapt, compress, and reuse reusable agency. See [`../lift.md`](../lift.md) for the full vocabulary (ground, lift, false lift, meta-lift, opaque grounded primitives, lift the lifters).
+> **In lift vocabulary:** RSI is **lift learning to make better lift** — the recursive loop where the system grows reusable agency around the parts of itself that generate, allocate, test, adapt, compress, and reuse reusable agency. See [`../synodoxics/lift.md`](../synodoxics/lift.md) for the full vocabulary (ground, lift, false lift, meta-lift, opaque grounded primitives, lift the lifters).
 
 ## Definition
 

@@ -10,7 +10,7 @@ concepts:
 
 Synlang is the formal language the Synome uses for knowledge representation, reasoning, and cognition. The earlier research track explored hypergraph alternatives, notation options, and probabilistic extensions; those questions are resolved.
 
-For the runtime that executes synlang — pattern matching, query resolution, belief propagation, multi-modal reasoning — see [`noemar-substrate.md`](noemar-substrate.md). This doc covers the language itself.
+For the runtime that executes synlang — pattern matching, query resolution, belief propagation, multi-modal reasoning — see [`noemar-substrate.md`](../synodoxics/noemar-substrate.md). This doc covers the language itself.
 
 ---
 
@@ -45,7 +45,7 @@ The earlier research track explored questions that Noemar's design has now settl
 | Probabilistic logic (ProbLog, Bayesian nets, MLNs, neural-symbolic) | PLN truth values with the delta method |
 | Pattern matching at scale | Inverted-index dispatch + one-way matching + Robinson unification; stochastic TV-weighted traversal for graph-style queries |
 
-See [`noemar-substrate.md`](noemar-substrate.md) for what the runtime does with these decisions, and [`neuro-symbolic-cognition.md`](../neurosymbolic/neuro-symbolic-cognition.md) for why synlang-native cognition is load-bearing.
+See [`noemar-substrate.md`](../synodoxics/noemar-substrate.md) for what the runtime does with these decisions, and [`neuro-symbolic-cognition.md`](../neurosymbolic/neuro-symbolic-cognition.md) for why synlang-native cognition is load-bearing.
 
 ---
 

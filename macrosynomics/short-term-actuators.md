@@ -28,16 +28,20 @@ Instead: start with **teleonome-less beacons** — deterministic programs that p
 
 ## What Are Teleonome-less Beacons?
 
-Beacons are autonomous operational components. They vary along two axes (see [`beacon-framework.md`](beacon-framework.md) for the canonical definitions):
+Beacons are autonomous operational components classified by **authority tier** plus **I/O role** under it (see [`beacon-framework.md`](beacon-framework.md) for the canonical framing):
 
-| Axis | Low | High |
-|------|-----|------|
-| **Power** | Minimal compute, narrow I/O, executes policies from elsewhere | Substantial compute, continuous I/O, local intelligence and adaptation |
-| **Authority** | Independent action, peer-to-peer interaction between teleonomes | Acts on behalf of a Synomic Agent (Prime, Halo, Generator, Guardian) |
+| Tier | What it is |
+|------|------------|
+| **High authority** | Operates a Synomic Agent — auth-scoped to specific verbs/targets, certified by a synomic agent. |
+| **Low authority** | No Synomic Agent operation. Either passive observation (input) OR direct teleonome-to-teleonome interaction (action). |
 
-**Phase 1 beacons are all Low-Power** — deterministic programs, not AI. They follow rules, don't learn, don't have directives. They're "teleonome-less" because there's no autonomous entity with its own mission.
+Underneath authority, beacons divide by **work shape**:
+- **Input** — push data atoms into book spaces (endoscraper / oracle / attestor)
+- **Action** — emit chain transactions based on synart state (relayer / executor / sentinel formation)
 
-**Sentinels** (high-power, AI beacons) come in later phases (Phase 9-10 in the current roadmap). Full teleonomes come later.
+Phase 1 beacons are **deterministic programs, not AI**. They follow rules, don't learn, don't have directives. They're "teleonome-less" because there's no autonomous entity with its own mission. The deterministic nature is what makes them teleonome-less; it has nothing to do with how much local compute they run.
+
+**Sentinel formations** (high-authority action beacons with continuous real-time strategy loops) come in later phases (Phase 9-10 in the current roadmap). Full teleonomes come later.
 
 ---
 
@@ -45,29 +49,31 @@ Beacons are autonomous operational components. They vary along two axes (see [`b
 
 ### Phase 1 Beacon Set
 
-| Beacon | Type | Reads | Writes | Executes |
-|--------|------|-------|--------|----------|
-| **lpla-verify** | LPLA | positions, prices, risk params | — | — |
-| **lpha-relay** | LPHA | execution requests, rate limits | — | PAU transactions |
-| **lpha-nfat** | LPHA | deal params, queue state | NFAT records | NFAT lifecycle |
-| **lpha-council** | LPHA | — | risk equations, report formats, disclosures | — |
+| Beacon | Authority | Role | Reads | Writes | Executes |
+|--------|-----------|------|-------|--------|----------|
+| **lpla-verify** | Low | Input (verification) | positions, prices, risk params | — | — |
+| **lpha-relay** | High | Action (executor) | execution requests, rate limits | — | PAU transactions |
+| **lpha-nfat** | High | Action (executor + record-writer) | deal params, queue state | NFAT records | NFAT lifecycle |
+| **lpha-council** | High | Action (governance writer) | — | risk equations, report formats, disclosures | — |
 
-Phase 2 extends `lpla-verify` into `lpla-checker` (settlement tracking). Phase 3 introduces `lpha-report` to write daily Prime performance summaries as settlement artifacts.
+Legacy `lp*` prefixes are retained as stable operational identifiers (see [`beacon-framework.md` §11 Glossary](beacon-framework.md#12-glossary)). They no longer encode the retired power axis.
+
+In the new framework, position verification, settlement processing, and CRR calculation move into **synart-resolved in-space computation** that synserv runs (see [`beacon-framework.md` §4](beacon-framework.md#4-io-role-under-authority)). Phase 2's settlement-tracking role survives but as synserv-run code reading the same scraped state, not as a separate beacon class. Phase 3 introduces `lpha-report` to write daily Prime performance summaries as settlement artifacts.
 
 ### Grouped by Function
 
-**Read-only (LPLA):**
+**Verification (low-authority input):**
 - lpla-verify — observes, calculates, alerts (no write authority)
 
-**Reporters (LPHA):**
+**Reporters (high-authority action):**
 - lpha-nfat — writes NFAT records to Synome (also executes)
 - lpha-report — writes daily Prime performance summaries as settlement artifacts (Phase 3+)
 
-**Guardians (LPHA):**
+**Executors (high-authority action):**
 - lpha-relay — executes PAU transactions with rate limits
 - lpha-nfat — executes NFAT lifecycle operations
 
-**Governance tooling (LPHA):**
+**Governance writers (high-authority action):**
 - lpha-council — Core Council interface for updating Synome
 
 ### Data Flow
@@ -147,11 +153,11 @@ Both categories coexist in the Synome-MVP as a single operational database. The 
 | Phase 1 Concept | Full Architecture | Notes |
 |-----------------|-------------------|-------|
 | Synome-MVP | Synart (operational subset) | Risk params, artifacts, NFAT records, disclosures (position data optional) |
-| Low-power beacons | Actuator embodiments | But without teleonome layer, no learning |
+| Deterministic beacons | Actuator embodiments | But without teleonome layer, no learning |
 | lpha-council updates | Governance crystallization | Human-in-loop, signed statements |
 | Rate limits, constraints | Hard constraints (axioms) | Enforced by smart contracts |
-| lpla-verify alerts | LPLA beacon pattern | Read-only, reporting |
-| lpha-* execution | LPHA beacon pattern | High authority, constrained execution |
+| lpla-verify alerts | Low-authority input/verification beacon pattern | Read-only, reporting |
+| lpha-* execution | High-authority action beacon pattern | Operates a Synomic Agent under scoped auth |
 
 ### What's Simplified
 
@@ -163,7 +169,7 @@ Both categories coexist in the Synome-MVP as a single operational database. The 
 
 ### What's Preserved
 
-- **Beacon taxonomy** — LPLA/LPHA/HPLA/HPHA framework applies
+- **Beacon taxonomy** — Two-tier authority + I/O role framework applies
 - **Authority hierarchy** — Synome > beacon operations
 - **Rate limits** — Universal constraint pattern
 - **Audit trail** — All writes to Synome are logged
@@ -185,11 +191,11 @@ GOVERNANCE (Core Council, GovOps)
             │
     ┌───────┼───────┐
     ▼       ▼       ▼
- LPLA     LPHA    LPHA
-verify    relay   nfat ...
+ low-auth  high-auth  high-auth
+ verify    relay     nfat ...
 ```
 
-- All beacons are Low-Power (deterministic programs)
+- All beacons are deterministic programs
 - Human governance provides all configuration
 - No learning, no adaptation
 - Settlement remains manual in Phase 1 (legacy process)
@@ -204,14 +210,14 @@ GOVERNANCE
     ▼
 SYNOME-MVP ◄── Now includes learned patterns
     │
-    ├── Low-Power beacons (unchanged)
+    ├── Deterministic beacons (unchanged)
     │
-    └── High-Power Sentinels (new)
-        • HPLA: Trading, adaptive execution
-        • HPHA: Governance-level autonomy
+    └── Sentinel formations (new)
+        • Baseline / Stream / Warden / Principal
+        • High-authority action beacons with continuous real-time loops
 ```
 
-- Sentinels are High-Power (AI, adaptive)
+- Sentinels run continuous real-time strategy loops
 - Can learn from outcomes within constraints
 - Daily settlement cycle (already live from Phase 3)
 - Still no teleonome layer — sentinels are "proto-teleonomes"
@@ -231,7 +237,7 @@ SYNART (governance layer)
     ├── Teleonome 2 (Halo operations)
     │   └── ...
     │
-    └── Shared beacons (LPLA utilities)
+    └── Shared beacons (low-authority utilities)
 ```
 
 - Teleonomes have directives and missions
@@ -280,8 +286,8 @@ All writes to Synome are logged with source and timestamp. This enables rollback
 ### 4. Separation of Read/Write/Execute
 
 Different beacons have different authorities:
-- LPLA: Read-only (observation, calculation)
-- LPHA: Write and/or execute (within constraints)
+- Low-authority input/verification: read-only (observation, calculation)
+- High-authority action: write and/or execute (within constraints)
 
 This separation prevents any single beacon from having unconstrained authority.
 

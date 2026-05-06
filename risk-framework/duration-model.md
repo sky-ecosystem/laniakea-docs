@@ -1,25 +1,55 @@
 # Duration Model (Demand Side)
 
-**Last Updated:** 2026-01-28
+**Status:** Draft (Phase 3 update, 2026-05-05)
+**Last Updated:** 2026-05-05
+
+Liability duration analysis for `structbook` and `termbook` matching. Determines how much of the USDS liability base is short-term (could demand liquidity soon) versus long-term (sticky, unlikely to redeem). Capacity flows into Primebook sub-book matching per [`primebook-composition.md`](primebook-composition.md).
+
+Companion to:
+- [`primebook-composition.md`](primebook-composition.md) — `structbook` and `termbook` consume duration capacity
+- [`matching.md`](matching.md) — credit-spread vs rate distinction; how capacity is consumed
+- [`asset-classification.md`](asset-classification.md) — Stressed Pull-to-Par split into credit-spread vs rate duration
+
+---
+
+## Architectural placement
+
+Structural demand for USDS holding lives in the **Generator's entart**:
+
+```
+&entity-generator-usge-root
+  └── &entity-generator-usge-structural-demand
+        ├── &entity-generator-usge-structural-demand-scrapers   ← grounded scraper outputs
+        └── &entity-generator-usge-structural-demand-auction    ← capacity allocation
+```
+
+This is where:
+- Scrapers populate raw lot-age data (USDS, DAI, sUSDS holders)
+- Lindy + structural-cap math computes per-bucket capacity
+- Auction (or fake-auction in v1) distributes capacity across Primes
+
+**Phase 1 manual-allocation carve-out:** v1 uses manual governance-set capacity (Lindy + structural caps from existing parameters; data-team scraper will replace later). Equal-split distribution across the 3 Star Primes (Spark/Grove/Keel) per bucket. Real-time scraping and auctions come online in later phases.
+
+---
 
 ## Liability Duration Analysis (Demand Side)
 
 ### Purpose
 
-Determine how much of the USDS liability base is short-term (could demand liquidity soon) versus long-term (sticky, unlikely to redeem).
+Determine how much of the USDS liability base is short-term (could demand liquidity soon) versus long-term (sticky, unlikely to redeem). The output is per-bucket capacity — how much of the liability base can be used to cover assets at each duration tier.
 
 ### Method: Lindy Duration Model
 
 For each lot of USDS:
 1. Measure current age (time since last transfer)
 2. Expected remaining holding time = current age × Lindy factor
-3. Apply conservative haircut (e.g., 0.5x or 0.7x instead of 1x pure Lindy)
+3. Apply conservative haircut (e.g., 0.5× or 0.7× instead of 1× pure Lindy)
 
 ### Duration Bucket Structure
 
 The Duration Bucket system uses a two-layer capacity calculation:
-1. **Daily Lindy Measurement** — Dynamic calculation of liability duration distribution
-2. **Structural Maximum Caps** — Governance-set upper limits per bucket, derived from empirical bank run research
+1. **Daily Lindy Measurement** — dynamic calculation of liability duration distribution
+2. **Structural Maximum Caps** — governance-set upper limits per bucket, derived from empirical bank run research
 
 #### Bucket Definitions
 
@@ -48,7 +78,7 @@ Individual Cap(t) = A × e^(-λ₁ × t) + B × e^(-λ₂ × t)
 **Research-Calibrated Parameters:**
 
 | Parameter | Value | Meaning |
-|-----------|-------|---------|
+|---|---|---|
 | **A** | 10% | Hot money amplitude |
 | **λ₁** | 0.35 | Hot money decay rate (half-life = 1.0 months) |
 | **B** | 0.70% | Sticky money amplitude |
@@ -59,7 +89,7 @@ Individual Cap(t) = A × e^(-λ₁ × t) + B × e^(-λ₂ × t)
 The parameters were fitted to match the aggressive end of empirical bank run research:
 
 | Horizon | Target | Empirical Basis |
-|---------|--------|-----------------|
+|---|---|---|
 | 1 month | 75% | SVB lost 25% in 1 day, 87% over 2 days; First Republic lost 37% in 2 days |
 | 3 months | 55% | First Republic: 57% gone by end Q1 2023; Credit Suisse: 29% deposits gone Q1 |
 | 6 months | 45% | Credit Suisse: ~40% over 6 months |
@@ -74,71 +104,10 @@ The parameters were fitted to match the aggressive end of empirical bank run res
 - MMF crisis data: September 2008 (26% in 2 weeks), March 2020 (30% in 2 weeks)
 - ECB/Fed deposit behavior studies
 
-#### Full Bucket Table
-
-| Bucket | Days  | Individual | Cumulative |     | Bucket | Days  | Individual | Cumulative |
-| ------ | ----- | ---------- | ---------- | --- | ------ | ----- | ---------- | ---------- |
-| 0      | 0     | 14.4061%   | 100.0000%  |     | 51     | 765   | 0.3861%    | 22.3357%   |
-| 1      | 15    | 10.4138%   | 85.5939%   |     | 52     | 780   | 0.3794%    | 21.9496%   |
-| 2      | 30    | 7.5959%    | 75.1801%   |     | 53     | 795   | 0.3728%    | 21.5703%   |
-| 3      | 45    | 5.6057%    | 67.5843%   |     | 54     | 810   | 0.3663%    | 21.1975%   |
-| 4      | 60    | 4.1988%    | 61.9786%   |     | 55     | 825   | 0.3600%    | 20.8312%   |
-| 5      | 75    | 3.2031%    | 57.7798%   |     | 56     | 840   | 0.3537%    | 20.4712%   |
-| 6      | 90    | 2.4972%    | 54.5766%   |     | 57     | 855   | 0.3476%    | 20.1175%   |
-| 7      | 105   | 1.9956%    | 52.0794%   |     | 58     | 870   | 0.3415%    | 19.7699%   |
-| 8      | 120   | 1.6381%    | 50.0838%   |     | 59     | 885   | 0.3356%    | 19.4284%   |
-| 9      | 135   | 1.3821%    | 48.4457%   |     | 60     | 900   | 0.3298%    | 19.0928%   |
-| 10     | 150   | 1.1977%    | 47.0637%   |     | 61     | 915   | 0.3241%    | 18.7630%   |
-| 11     | 165   | 1.0639%    | 45.8660%   |     | 62     | 930   | 0.3185%    | 18.4389%   |
-| 12     | 180   | 0.9658%    | 44.8020%   |     | 63     | 945   | 0.3129%    | 18.1204%   |
-| 13     | 195   | 0.8930%    | 43.8362%   |     | 64     | 960   | 0.3075%    | 17.8075%   |
-| 14     | 210   | 0.8379%    | 42.9432%   |     | 65     | 975   | 0.3022%    | 17.5000%   |
-| 15     | 225   | 0.7955%    | 42.1053%   |     | 66     | 990   | 0.2969%    | 17.1978%   |
-| 16     | 240   | 0.7621%    | 41.3098%   |     | 67     | 1005  | 0.2918%    | 16.9009%   |
-| 17     | 255   | 0.7350%    | 40.5477%   |     | 68     | 1020  | 0.2867%    | 16.6091%   |
-| 18     | 270   | 0.7125%    | 39.8127%   |     | 69     | 1035  | 0.2817%    | 16.3224%   |
-| 19     | 285   | 0.6933%    | 39.1002%   |     | 70     | 1050  | 0.2769%    | 16.0407%   |
-| 20     | 300   | 0.6764%    | 38.4069%   |     | 71     | 1065  | 0.2721%    | 15.7638%   |
-| 21     | 315   | 0.6613%    | 37.7305%   |     | 72     | 1080  | 0.2673%    | 15.4918%   |
-| 22     | 330   | 0.6474%    | 37.0692%   |     | 73     | 1095  | 0.2627%    | 15.2244%   |
-| 23     | 345   | 0.6345%    | 36.4218%   |     | 74     | 1110  | 0.2581%    | 14.9617%   |
-| 24     | 360   | 0.6223%    | 35.7874%   |     | 75     | 1125  | 0.2537%    | 14.7036%   |
-| 25     | 375   | 0.6106%    | 35.1651%   |     | 76     | 1140  | 0.2493%    | 14.4499%   |
-| 26     | 390   | 0.5994%    | 34.5545%   |     | 77     | 1155  | 0.2449%    | 14.2007%   |
-| 27     | 405   | 0.5886%    | 33.9550%   |     | 78     | 1170  | 0.2407%    | 13.9557%   |
-| 28     | 420   | 0.5781%    | 33.3664%   |     | 79     | 1185  | 0.2365%    | 13.7151%   |
-| 29     | 435   | 0.5679%    | 32.7883%   |     | 80     | 1200  | 0.2324%    | 13.4786%   |
-| 30     | 450   | 0.5579%    | 32.2204%   |     | 81     | 1215  | 0.2284%    | 13.2461%   |
-| 31     | 465   | 0.5481%    | 31.6625%   |     | 82     | 1230  | 0.2244%    | 13.0178%   |
-| 32     | 480   | 0.5385%    | 31.1144%   |     | 83     | 1245  | 0.2205%    | 12.7934%   |
-| 33     | 495   | 0.5291%    | 30.5759%   |     | 84     | 1260  | 0.2167%    | 12.5728%   |
-| 34     | 510   | 0.5199%    | 30.0468%   |     | 85     | 1275  | 0.2129%    | 12.3561%   |
-| 35     | 525   | 0.5109%    | 29.5269%   |     | 86     | 1290  | 0.2092%    | 12.1432%   |
-| 36     | 540   | 0.5020%    | 29.0160%   |     | 87     | 1305  | 0.2056%    | 11.9340%   |
-| 37     | 555   | 0.4933%    | 28.5140%   |     | 88     | 1320  | 0.2020%    | 11.7284%   |
-| 38     | 570   | 0.4847%    | 28.0207%   |     | 89     | 1335  | 0.1985%    | 11.5263%   |
-| 39     | 585   | 0.4763%    | 27.5360%   |     | 90     | 1350  | 0.1951%    | 11.3278%   |
-| 40     | 600   | 0.4680%    | 27.0597%   |     | 91     | 1365  | 0.1917%    | 11.1327%   |
-| 41     | 615   | 0.4599%    | 26.5917%   |     | 92     | 1380  | 0.1884%    | 10.9410%   |
-| 42     | 630   | 0.4519%    | 26.1318%   |     | 93     | 1395  | 0.1851%    | 10.7526%   |
-| 43     | 645   | 0.4441%    | 25.6799%   |     | 94     | 1410  | 0.1819%    | 10.5675%   |
-| 44     | 660   | 0.4364%    | 25.2358%   |     | 95     | 1425  | 0.1787%    | 10.3856%   |
-| 45     | 675   | 0.4288%    | 24.7995%   |     | 96     | 1440  | 0.1756%    | 10.2068%   |
-| 46     | 690   | 0.4214%    | 24.3707%   |     | 97     | 1455  | 0.1726%    | 10.0312%   |
-| 47     | 705   | 0.4141%    | 23.9493%   |     | 98     | 1470  | 0.1696%    | 9.8586%    |
-| 48     | 720   | 0.4069%    | 23.5352%   |     | 99     | 1485  | 0.1667%    | 9.6890%    |
-| 49     | 735   | 0.3998%    | 23.1284%   |     | 100    | 1500+ | 9.5223%    | 9.5223%    |
-| 50     | 750   | 0.3929%    | 22.7286%   |     |        |       |            |            |
-
-**Reading the table:**
-- **Individual:** Maximum % of portfolio that can be in this specific bucket alone
-- **Cumulative:** Maximum % of portfolio that can be in this bucket OR higher (used for asset matching)
-- **Bucket 100:** The 9.52% cumulative includes the tail beyond 1,500 days — the structural/permanent holder base
-
 #### Key Checkpoints
 
 | Horizon | Bucket | Cumulative | ~% Gone | Interpretation |
-|---------|--------|------------|---------|----------------|
+|---|---|---|---|---|
 | **30 days** | 2 | 75.2% | 25% | Acute stress phase |
 | **90 days** | 6 | 54.6% | 45% | Peak stress; nearly half gone |
 | **180 days** | 12 | 44.8% | 55% | Post-acute; committed holders remain |
@@ -152,11 +121,10 @@ The parameters were fitted to match the aggressive end of empirical bank run res
 
 #### Two-Layer Capacity Calculation
 
-**Layer 1: Daily Lindy Measurement**
-Every day, measure USDS lot ages and calculate expected remaining duration to produce a "raw" liability distribution.
+**Layer 1: Daily Lindy Measurement.** Every day, measure USDS lot ages and calculate expected remaining duration to produce a "raw" liability distribution.
 
-**Layer 2: Apply Structural Caps**
-For each bucket from longest to shortest:
+**Layer 2: Apply Structural Caps.** For each bucket from longest to shortest:
+
 ```
 Raw Capacity = Lindy-measured liability amount for this bucket
 Cap = Max Cap % × Total Portfolio
@@ -179,7 +147,7 @@ Else:
 #### Conservative Rounding Rules
 
 | Side | Rule | Rationale |
-|------|------|-----------|
+|---|---|---|
 | **Liabilities** | Round DOWN to nearest bucket | A 40-day liability → bucket 2 (30 days). Conservative: assumes earlier redemption. |
 | **Assets** | Round UP to nearest bucket | An asset with 1,250-day SPTP → bucket 84 (1,260 days). Conservative: requires longer-duration liabilities. |
 
@@ -198,64 +166,54 @@ Cumulative Capacity at Bucket N = Σ (Effective Capacity for all buckets ≥ N)
 
 ---
 
-### Duration Capacity Reservation System
+## Capacity feeds Primebook `structbook`
 
-> **Note:** The tug-of-war mechanism and duration auctions described in this section are Phase 9+ features. Prior phases use manual, governance-directed duration matching allocations — see `accounting/tugofwar.md` for the algorithm details and phase dependencies.
+The Generator's structural-demand atoms produce `(structural-demand-capacity bucket-N <amount>)` per bucket. These flow into:
+- `structbook` matching: positions matched against structural USDS demand (per [`primebook-composition.md`](primebook-composition.md))
+- The matching mechanics: cumulative capacity per [`matching.md`](matching.md)
+- Smooth blending of matched/unmatched portions per the optimization-shaped sub-book pattern
+
+---
+
+## Capacity Reservation System (Phase 9+)
+
+> **Phase note:** The tug-of-war mechanism and duration auctions described below are **Phase 9+ features**. Prior phases use manual, governance-directed duration matching allocations.
 
 Duration Bucket capacity is allocated to Primes through a reservation system. Primes acquire reservations via daily auctions, then can resell them on a secondary market.
 
-#### Core Principles
+### Core Principles
 
-1. **Own-bucket priority is emergent** — Primes tug at their own bucket with distance 0 (no decay), giving them natural priority without a separate allocation phase (see `../accounting/tugofwar.md`)
+1. **Own-bucket priority is emergent** — Primes tug at their own bucket with distance 0 (no decay), giving them natural priority without a separate allocation phase
 2. **All capacity allocated via tug-of-war** — When Lindy doesn't match reservations, the tug-of-war mechanism redistributes capacity to Primes with unmet need
 3. **Full secondary market flexibility** — Time-sliced ownership, partial amounts, arbitrary durations
 
-#### Daily Cycle
+### Daily Cycle
 
 | Event | Frequency | Description |
-|-------|-----------|-------------|
+|---|---|---|
 | Lindy measurement | Daily | Measure USDS lot ages, calculate liability duration distribution |
 | Duration auctions | Daily | Auction unreserved capacity in each bucket |
 | Tug-of-war | Daily | Allocate all capacity (own-bucket priority emergent from distance-0 tugging) |
 | Settlement | Daily | Process deposits, redemptions, yield distribution |
 
-#### Primary Auction
+### V1 carve-outs
 
-Auctions occur when unreserved capacity exists at a bucket. Primes bid price-per-epoch for capacity amounts. Highest bidders win. Winners receive reservations starting next epoch.
+V1 simplifications (in lieu of the full reservation system):
+- **Manual governance-set capacity** initially (Lindy + structural caps from existing parameters; data-team scraper will replace later)
+- **Equal-split distribution** among the 3 Star Primes (1/3 each per bucket) — implemented as the "fake auction" pattern
+- **No tug-of-war** — capacity is just split, no redistribution
+- **No real auctions** — same interface as the eventual real auction will use; only the strategy changes later
 
-#### Secondary Market
-
-Reservation holders can sell portions of their ownership with time-sliced schedules. Buyers can immediately resell, enabling complex ownership structures.
-
-#### Capacity Allocation
-
-All capacity is allocated through tugging — there's no special "own bucket first" phase. Primes tug at their own bucket with distance 0 (no decay), giving them natural priority there. But if their bucket is empty and a neighbor is full, they can still effectively tug nearby buckets.
-
-**Phase 1: Tug-of-War**
-
-All Primes tug for capacity simultaneously:
-- Distance 0 (own bucket) = full tug strength, maximum effective value
-- Distance N = tug decays by 0.9^N (floor at 10%)
-- Tugging UP = effective value 1.0
-- Tugging DOWN = effective value = target/your bucket
-- Collisions resolved pro-rata
-- Multiple rounds until all needs met or capacity exhausted
-
-**Phase 2: Trading**
-
-After needs are met, Primes can trade up:
-- Tug at higher buckets with remaining excess
-- Release lowest-value capacity downward
-- Cascade until capacity finds a Prime that values it
-
-**See `accounting/tugofwar.md` for full algorithm details.**
-
-#### Capacity Duration Rules
-
-| How Acquired | Duration You Get |
-|--------------|------------------|
-| From own bucket (distance 0) | Your bucket's duration (full match) |
-| Tugged from higher bucket | Source bucket's duration (overkill but fine) |
-| Tugged from lower bucket | Source bucket's duration (creates gap → gap capital required) |
+The fake-auction approach lets the auction interface get built and exercised without committing to bid-evaluation logic prematurely. Same data flow, different strategy.
 
 ---
+
+## File map
+
+| Doc | Relationship |
+|---|---|
+| [`primebook-composition.md`](primebook-composition.md) | `structbook` and `termbook` consume bucket capacity for matching |
+| [`matching.md`](matching.md) | How capacity is consumed; credit-spread vs rate distinction |
+| [`asset-classification.md`](asset-classification.md) | SPTP split into credit-spread vs rate duration |
+| [`capital-formula.md`](capital-formula.md) | Final capital computation incorporates matched/unmatched blend |
+| [`open-questions.md`](open-questions.md) | USDS lot-age tracking infrastructure is one of the open items |

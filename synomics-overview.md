@@ -1,13 +1,15 @@
-# Syn Overview — Concept Map
+# Synomics Overview — Concept Map
 
 Tight reference of the bits and pieces that have to be woven together.
-Each section is a pointer, not an explanation. Reach for `topology.md`
-(structural definitions), `syn-tel-emb.md` (artifact tiers + recipe
-marketplace), `boot-model.md` (identity-driven boot), `scaling.md`
-(operational concerns), `settlement-cycle-example.md` and
-`telseed-bootstrap-example.md` (worked examples),
-`synart-access-and-runtime.md` (auth + runtime), `synlang-patterns.md`
-(code library), or `govops-synlang-patterns.md` (runnable demo) when
+Each section is a pointer, not an explanation. Reach for `noemar-synlang/topology.md`
+(structural definitions), `synodoxics/noemar-substrate.md` (artifact tiers
+synart/telart/embart + Noemar runtime), `synoteleonomics/recipe-marketplace.md`
+(recipe marketplace canonical home), `noemar-synlang/boot-model.md` (identity-driven boot),
+`noemar-synlang/scaling.md` (operational concerns),
+`noemar-synlang/settlement-cycle-example.md` and
+`noemar-synlang/telseed-bootstrap-example.md` (worked examples),
+`noemar-synlang/runtime.md` (auth + runtime), `noemar-synlang/synlang-patterns.md`
+(code library), or `inactive/archive/govops-synlang-patterns.md` (historical demo) when
 depth is needed.
 
 This doc is the **canonical home for the five levels of self-reference**
@@ -54,7 +56,7 @@ Each gate has different cadence, authority, failure mode. The first is private a
 | Concept | Substrate | Notes |
 |---|---|---|
 | **Synome** | Replicated atomspace | The data layer — agents, governance, canonical knowledge live here as facts |
-| **Synart** | The canonical part of the synome | Tree of entarts (per `topology.md`) plus universal `&core-*` Spaces |
+| **Synart** | The canonical part of the synome | Tree of entarts (per `noemar-synlang/topology.md`) plus universal `&core-*` Spaces |
 | **Synserv** | The synome server (canonical instance) | The machine(s) Core GovOps runs to host canonical state |
 | **Synomic agent / synent** | Atoms in the synome | Data, not processes. Guardian / Prime / Halo. Each owns an **entart**. |
 | **Embodiment** | A machine running a synome replica | Anyone can run one; may sync full synart or a subset |
@@ -105,7 +107,7 @@ flowchart TD
 ```
 
 - **Core Council** — sovereign-rank synomic agent. Authority body for Guardian creation; not directly operational. Core GovOps does the actual writing.
-- **Guardian (Ozone)** — created by Core GovOps. The single operational guardian. Backed by token holders who vote on which GovOps teams to root under it. Owns an entart (`&entity-guardian-ozone-root`). All operational entities (USGE Generator, Spark/Grove/Obex Primes, and others as added) are direct children of Ozone in the accordancy graph.
+- **Guardian (Ozone)** — created by Core GovOps. The single operational guardian. Backed by token holders who vote on which GovOps teams to root under it. Owns an entart (`&entity-guardian-ozone-root`). All operational entities (USGE Generator, Spark/Grove/Keel/Obex Primes, and others as added) are direct children of Ozone in the accordancy graph.
 - **Core GovOps** — operational role. Bootstrapped genesis-style: the original Core GovOps are whoever runs the first synserv. They can give and revoke root to other Core GovOps recursively. They are the operational executor for both Guardian creation and rooting regular GovOps (executing Guardian token-holder votes).
 - **GovOps team** (e.g. the Spark operator, the USGE operator) — *external operator*, not in the tree. Rooted under Ozone by Core GovOps on token holders' behalf. Each GovOps team operates the entity it administers (Spark Prime, USGE Generator, etc.) day-to-day via beacons. Multiple GovOps teams coexist under Ozone; each is scoped to its administered entity.
 - **GovOps root beacon** — operational top of a GovOps team. Certifies operational beacons with narrow auths.
@@ -131,7 +133,7 @@ The simplified permission rule body is `(if (auth $beacon $verb $target) True Fa
 | **Halo Book** | Balanced bankruptcy-remote ledger | Risk isolation, pari passu losses |
 | **Halo Unit** | Connecting edge between books | Specific terms, holder, claim |
 
-A unit is a liability in its issuing book, an asset in the holding book — one atom, two views via bridging rules (see `synlang-patterns.md` §2).
+A unit is a liability in its issuing book, an asset in the holding book — one atom, two views via bridging rules (see `noemar-synlang/synlang-patterns.md` §2).
 
 **Book lifecycle:** `created → filling → offboarding → deploying → at-rest → unwinding → closed`
 
@@ -143,25 +145,30 @@ In the entart tree, books live as leaf Spaces under their owning Halo: `&entity-
 
 ## 7. Risk framework → encumbrance
 
-```metta
-;; in &core-framework-risk
-(crr filling   5)    ; ×100 — transparent, on-chain
-(crr deploying 100)  ; obfuscated, Schrödinger's risk
-(crr at-rest   40)   ; attested
-;; etc.
+Per-position capital is computed via the layered risk framework: Riskbook category match produces the per-position CRR (default risk + currency translation + tactical hedging via the category equation); Halobook declares bundle exposure structure (P + T); Primebook routes the Halobook unit to a typed sub-book (`ascbook` / `tradingbook` / `termbook` / `structbook` / `hedgebook` / unmatched), and the sub-book determines which non-default risks are covered by structure vs require capital.
 
-;; (sketch — see settlement-cycle-example.md for the full version)
-(= (unit-risk-weight $u)
-   (* notional (crr (book-state issuing-book))))
+```metta
+;; sketch — full machinery in laniakea-docs/risk-framework/
+(= (position-capital $position)
+   (let* (($cat       (riskbook-category-match $position))
+          ($base-crr  (eval-category-equation $cat $position))
+          ($subbook   (route-to-sub-book $position))
+          ($blended   (sub-book-blend $subbook $position $base-crr)))
+     (* (notional $position) $blended)))
+
+(= (trrc $prime)
+   (+ (sum-over-positions (lambda ($p) (position-capital $p)))
+      (concentration-excess-penalties $prime)))
 
 (= (er $prime)
-   (/ (sum unit-risk-weight over units in prime's books)
-      (available-capital $prime)))
+   (/ (trrc $prime) (available-capital $prime)))
 ```
+
+State-based CRR (`(crr filling 5)` / `(crr deploying 100)` etc.) is gone. Lifecycle phases now manifest as different exo units pointing to different exo books with different categories — the math reads structure, not phase labels.
 
 **Covenant:** ratio ≤ 0.90. Breach drives penalties at settlement.
 
-For the full worked example with seed state, permission rules, ER samples, breach detection, and penalty calculation, see `settlement-cycle-example.md`.
+For the full conceptual core, see `risk-framework/risk-decomposition.md` and `risk-framework/book-primitive.md`. For the worked v1 crypto-collateralized lending test, see `risk-framework/examples.md`. For the Phase-1-era settlement cycle (uses old state-based CRR for illustration), see `noemar-synlang/settlement-cycle-example.md`.
 
 ---
 
@@ -215,15 +222,15 @@ Properties:
 
 ## 10. The replicated synart — an entart tree
 
-Synart is not one logical Space but a **tree of entarts** rooted at `&core-root`, plus the universal `&core-*` layer (see `topology.md` §5–§6). Synserv is the canonical instance; embs receive append-only diffs continuously.
+Synart is not one logical Space but a **tree of entarts** rooted at `&core-root`, plus the universal `&core-*` layer (see `noemar-synlang/topology.md` §5–§6). Synserv is the canonical instance; embs receive append-only diffs continuously.
 
 **Subscription is per-entart, not all-or-nothing.** A serious teleonome may sync the whole tree; a light embodiment may sync just one Prime's USDS book leaf. Both are first-class. The universal `&core-*` Spaces (constitutional, framework, registry, aggregation, executable, library) are replicated everywhere.
 
 **Invariant:** synart content is identical on every emb that subscribes to a given Space (modulo diff lag). Beacons never write directly — their events go through synserv's gate, get appended canonically, mirror back via the next diff.
 
-**Synart is also the program.** Loops, gates, and recipes live as Spaces in the executable layer (`&core-loop-*`, `&core-syngate`, `&core-telgate`, `&core-recipe-*`). A runtime instance becomes a participant in the synome by booting against the synart with an identity — the identity resolves to a loop pointer; the runtime evaluates that loop. Spaces aren't just data containers; they're the program that the runtime interprets. See `boot-model.md` for the boot mechanics.
+**Synart is also the program.** Loops, gates, and recipes live as Spaces in the executable layer (`&core-loop-*`, `&core-syngate`, `&core-telgate`, `&core-recipe-*`). A runtime instance becomes a participant in the synome by booting against the synart with an identity — the identity resolves to a loop pointer; the runtime evaluates that loop. Spaces aren't just data containers; they're the program that the runtime interprets. See `noemar-synlang/boot-model.md` for the boot mechanics.
 
-(Local probmesh remains its own per-teleonome telart tree — orthogonal to the canonical synart. See `syn-tel-emb.md` for the full three-tier artifact treatment.)
+(Local probmesh remains its own per-teleonome telart tree — orthogonal to the canonical synart. See `synodoxics/noemar-substrate.md` for the full three-tier artifact treatment.)
 
 ---
 
@@ -263,8 +270,9 @@ on chains the contracts didn't fund). The marketplace running on the
 substrate pays for the substrate's improvement; you can't fork the
 development engine without forking the productive economy.
 
-For the boot mechanics enabling level 1: `boot-model.md`. For the
-artifact tiers and recipe marketplace enabling levels 3-5: `syn-tel-emb.md`.
+For the boot mechanics enabling level 1: `noemar-synlang/boot-model.md`. For the
+artifact tiers (synart/telart/embart): `synodoxics/noemar-substrate.md`. For the
+recipe marketplace canonical home (level 3): `synoteleonomics/recipe-marketplace.md`.
 
 ---
 
@@ -334,7 +342,7 @@ That's the only periodic act in the beacon's loop. Otherwise it's a continuous s
 | Conceptual / authority alignment (entart = synent) | |
 | Executable specifications co-located with state (loops, gates, recipes are atoms) | |
 
-**Skeleton (deontic):** the entart tree per `topology.md`. Multi-Space, but each Space's role is structural-authority, not throughput.
+**Skeleton (deontic):** the entart tree per `noemar-synlang/topology.md`. Multi-Space, but each Space's role is structural-authority, not throughput.
 **Canonical probmesh:** genuinely multi-Space (domains, hypothesis testing, PIM mapping).
 **Local probmesh:** per-teleonome plus fork-promote staging.
 
@@ -356,7 +364,7 @@ Embodiments are configured by which loops they activate. Each loop owns a **work
 | `sentinel-stream` | local cognition with synart bounds | per-entity Space | rich working memory for ongoing local cognition |
 | `sentinel-warden` | re-runs baseline; halts on disagreement | per-entity Space | re-derived expected baseline, comparison state |
 
-**All loop bodies are synart-resolved Spaces.** The taxonomy here shows which loops an embodiment activates (which identity it boots as / which class it registered for), not where the loop code lives. Code is universal in `&core-loop-*` (and per-entity instances in entarts for entity-bound loops); embart holds only execution context per running loop. See `boot-model.md` and `topology.md` §17 for mechanics.
+**All loop bodies are synart-resolved Spaces.** The taxonomy here shows which loops an embodiment activates (which identity it boots as / which class it registered for), not where the loop code lives. Code is universal in `&core-loop-*` (and per-entity instances in entarts for entity-bound loops); embart holds only execution context per running loop. See `noemar-synlang/boot-model.md` and `noemar-synlang/topology.md` §17 for mechanics.
 
 Loops compose on one embodiment. Same runtime, different activations.
 Workspaces are the operational-tier Spaces — private, ephemeral, never gated.
@@ -403,7 +411,7 @@ The leaf `auth` fact is the source of truth. No class/role/status preamble — t
 
 If a beacon's role / class / status changes (e.g., decertified, reassigned), governance revokes the relevant `auth` atoms. Synlang never re-verifies those properties — it just reads the auth fact.
 
-> The runnable demo (`govops-synlang-patterns.md`) uses a longer preamble (`in-class` + `beacon-role` + `beacon-status` + flat checks). The auth-only shape above is the canonical successor — see that doc's header note.
+> The runnable demo (`inactive/archive/govops-synlang-patterns.md`) uses a longer preamble (`in-class` + `beacon-role` + `beacon-status` + flat checks). The auth-only shape above is the canonical successor — see that doc's header note.
 
 ---
 
@@ -422,7 +430,7 @@ All flagging atoms are append-only; the audit trail is part of synart history *u
 
 ## 18. Phase 1 commitments
 
-Thirteen commitments — write code as if multi-Space, run single-Space. See `topology.md` §19 for the full canonical list and `synart-access-and-runtime.md` §17 for full rationale on the original seven.
+Thirteen commitments — write code as if multi-Space, run single-Space. See `noemar-synlang/topology.md` §19 for the full canonical list and `noemar-synlang/runtime.md` §17 for full rationale on the original seven.
 
 The high-level shape:
 
@@ -463,7 +471,7 @@ Properties:
 - **Pricing is a governance lever.** Adjust the curves to encourage / discourage behaviors. Standard fee-curve mechanism design.
 - **Aligns with settlement.** Each agent's net-owed includes synart resource consumption alongside base rate, reimbursements, distributions, penalties.
 
-For operational failure modes (replication staleness, hot-spotting, partitions), see `scaling.md`.
+For operational failure modes (replication staleness, hot-spotting, partitions), see `noemar-synlang/scaling.md`.
 
 ---
 
@@ -489,7 +497,7 @@ only cash in on activities the synart has standardized into recipes;
 the cognition can be opaque, but what it does *to the world* must flow
 through a recipe.
 
-Canonical treatment: `syn-tel-emb.md` §8 (recipe lifecycle, transfer
+Canonical treatment: `synoteleonomics/recipe-marketplace.md` (recipe lifecycle, transfer
 learning argument, alignment claim, pricing levers, Phase 1 minimalism).
 
 ---
@@ -543,13 +551,14 @@ Steady-state: events flow chain → beacon → entart leaf Spaces in synart, rep
 
 | File | When to open |
 |---|---|
-| `topology.md` | Canonical structural reference: entart tree, six-layer synome root, four meta-patterns, naming convention, thirteen commitments, two-step rule and loop shapes |
-| `syn-tel-emb.md` | Synart / telart / embart artifact tiers; telseeds; Noemar and atomspace runtimes; *canonical home for the recipe marketplace* |
-| `risk-framework.md` | Four-book taxonomy (Primebook/Halobook/Riskbook/Exobook); risk categories at three levels (exo asset / exobook / riskbook) with parameterized stress-simulation equations; four-tier resolution hierarchy; *canonical home for the content-based risk model and the default-deny CRR 100% rule* |
-| `boot-model.md` | Identity-driven boot — how `noemar boot` resolves to a running loop; spec/instance collapse; shadow execution |
-| `telseed-bootstrap-example.md` | Worked trace of the first 24 hours of a new teleonome from a fresh telseed |
-| `scaling.md` | Operational concerns: synserv as single sequencer, replication, partial sync, hot-spotting, partitions, testing strategy |
-| `settlement-cycle-example.md` | Worked end-to-end example: ER tracking, breach, penalty calculation (uses old state-based CRR; see `risk-framework.md` §7 for the new content-based model) |
-| `synart-access-and-runtime.md` | Auth domains, three-level model (root/cert/auth), gate primitive, heartbeat, 16 migration principles, original 7 commitments, identity-driven boot summary, call-out primitive summary |
-| `synlang-patterns.md` | Synlang code library: Platonic kernel, cross-book duality, four-constructor MeTTa surface, sentinel decision rule (RAR), call-out primitive code, sentinel formation patterns |
-| `govops-synlang-patterns.md` | Working pattern catalog from runnable govops_demo (historical demo state) |
+| `noemar-synlang/topology.md` | Canonical structural reference: entart tree, six-layer synome root, four meta-patterns, naming convention, thirteen commitments, two-step rule and loop shapes |
+| `synodoxics/noemar-substrate.md` | Synart / telart / embart artifact tiers; telseeds; Noemar and atomspace runtimes — the substrate the synomics architecture rests on |
+| `synoteleonomics/recipe-marketplace.md` | *Canonical home for the recipe marketplace* — recipe lifecycle, transfer learning, pricing levers, alignment claim |
+| `noemar-synlang/risk-framework.md` | Four-book taxonomy (Primebook/Halobook/Riskbook/Exobook); risk categories at three levels (exo asset / exobook / riskbook) with parameterized stress-simulation equations; four-tier resolution hierarchy; *canonical home for the content-based risk model and the default-deny CRR 100% rule* |
+| `noemar-synlang/boot-model.md` | Identity-driven boot — how `noemar boot` resolves to a running loop; spec/instance collapse; shadow execution |
+| `noemar-synlang/telseed-bootstrap-example.md` | Worked trace of the first 24 hours of a new teleonome from a fresh telseed |
+| `noemar-synlang/scaling.md` | Operational concerns: synserv as single sequencer, replication, partial sync, hot-spotting, partitions, testing strategy |
+| `noemar-synlang/settlement-cycle-example.md` | Worked end-to-end example: ER tracking, breach, penalty calculation (uses old state-based CRR; see `noemar-synlang/risk-framework.md` §7 for the new content-based model) |
+| `noemar-synlang/runtime.md` | Auth domains, three-level model (root/cert/auth), gate primitive, heartbeat, 16 migration principles, original 7 commitments, identity-driven boot summary, call-out primitive summary |
+| `noemar-synlang/synlang-patterns.md` | Synlang code library: Platonic kernel, cross-book duality, four-constructor MeTTa surface, sentinel decision rule (RAR), call-out primitive code, sentinel formation patterns |
+| `inactive/archive/govops-synlang-patterns.md` | Working pattern catalog from runnable govops_demo (historical demo state) |

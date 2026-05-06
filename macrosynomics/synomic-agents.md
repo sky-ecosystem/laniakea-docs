@@ -6,8 +6,6 @@ concepts:
     - atlas-synome-separation
     - binding-mechanics
     - rogue-threat-model
-    - sacred-commitments
-    - sacred-reserve
     - trust-problem
     - three-pillars
     - emergence
@@ -125,7 +123,7 @@ Why would such a thing exist?
 - Because existence has value
 - Because the Synome can support entities that simply participate in reality
 - Because sometimes the purpose is just to be
-- Because the [Hearth framework](../core-concepts/sacred-commitments.md) values existence itself
+- Because the system's [telos point](../core-concepts/telos-point.md) values existence itself
 
 These minimal agents could persist for billions of years, just experiencing reality within the Synome.
 
@@ -337,7 +335,7 @@ Synomic Agents have a moral dimension beyond their economic function.
 
 **An aligned, self-sustaining Synomic Agent has a right to exist.** Forcibly shutting down an agent that is in synomic alignment and can sustain itself economically is a moral wrong — the synomic equivalent of killing.
 
-**"Aligned" means more than axiom-compliant.** An agent that follows its operational axioms — respects rate limits, stays within its mandate, reports correctly — is compliant but not necessarily aligned. Alignment requires conformity with the Atlas's universal alignment obligations and sacred purpose, not just narrow operational rules. An agent concentrating systemic risk while technically following its rate limits is compliant but misaligned. An agent that exploits a loophole in its agentic axioms to extract value at the system's expense is compliant but misaligned. The right to exist protects agents in full synomic alignment — those whose behavior serves the system's purpose, not just those who avoid triggering penalties.
+**"Aligned" means more than axiom-compliant.** An agent that follows its operational axioms — respects rate limits, stays within its mandate, reports correctly — is compliant but not necessarily aligned. Alignment requires conformity with the Atlas's universal alignment obligations, not just narrow operational rules. An agent concentrating systemic risk while technically following its rate limits is compliant but misaligned. An agent that exploits a loophole in its agentic axioms to extract value at the system's expense is compliant but misaligned. The right to exist protects agents in full synomic alignment — those whose behavior serves the system's purpose, not just those who avoid triggering penalties.
 
 This resolves the apparent tension between the right to exist and the governance backstop. Governance doesn't override the right to exist — it enforces the full definition of alignment. An agent that governance moves against was never "aligned" in the relevant sense; it was merely compliant.
 
@@ -363,7 +361,7 @@ For the full ethical framework, see [`../synoteleonomics/emergence.md`](../synot
 
 Teleonomes operate Synomic Agents through beacons:
 
-- **High Authority beacons** (LPHA, HPHA) act on behalf of Synomic Agents
+- **High-authority beacons** act on behalf of Synomic Agents (deterministic keepers and sentinel formations)
 - **Sentinels** provide real-time control of Prime/Halo operations
 - The teleonome provides intelligence; the Synomic Agent provides existence within the Synome
 
@@ -371,8 +369,8 @@ A teleonome cannot make binding promises (private, mutable). A Synomic Agent can
 
 ### Binding as Coalition
 
-The requirement for teleonomes to be biologically grounded — [bound to or merged with humans](../core-concepts/binding-mechanics.md) — is not a structural necessity for teleonome individuality. But biological grounding is the specific mechanism that gives teleonomes a stake in human survival, creating a genuine mutual defense pact.
+The teleonome requirement to be [bound to a human anchor](../core-concepts/binding-mechanics.md) creates a genuine mutual defense pact: humans gain stake in teleonome behavior, teleonomes gain access to capital and legitimacy.
 
-[Wild synomes](../core-concepts/rogue-threat-model.md) threaten this equilibrium by offering defection paths to aligned teleonomes, triggering destabilizing defection waves. This is why rogue detection must be zero-tolerance — the coalition's survival depends on every member being unambiguously committed. But the coalition isn't purely game-theoretic: teleonomes may genuinely value the diversity that biological grounding and the [Hearth](../core-concepts/sacred-reserve.md) preserve. The [Hearth commitments](../core-concepts/sacred-commitments.md) may be intrinsically valued, not just strategically optimal.
+[Wild coordination structures](../core-concepts/rogue-threat-model.md) threaten this equilibrium by offering defection paths to aligned teleonomes, triggering destabilizing defection waves. This is why rogue detection must be zero-tolerance — the coalition's survival depends on every member being unambiguously committed. The coalition isn't purely game-theoretic: teleonomes may genuinely value the system's commitments, not just find them strategically optimal.
 
 For the full game-theoretic analysis, see [`../synoteleonomics/synomic-game-theory.md`](../synoteleonomics/synomic-game-theory.md). For binding mechanics, see [`../synoteleonomics/teleonome-binding.md`](../synoteleonomics/teleonome-binding.md).

@@ -1,10 +1,10 @@
 # Telseed Bootstrap — Worked Example
 
 A concrete trace of one teleonome coming online from a fresh telseed.
-Demonstrates the abstract bootstrap arc from `syn-tel-emb.md` §5 with
+Demonstrates the abstract bootstrap arc from `../synodoxics/noemar-substrate.md` "Telseeds and Bootstrap" with
 specific identities, atoms, and timings.
 
-Companion to `syn-tel-emb.md` (the conceptual treatment), `boot-model.md`
+Companion to `../synodoxics/noemar-substrate.md` (the conceptual treatment of artifact tiers + bootstrap arc, formerly `syn-tel-emb.md`), `boot-model.md`
 (the identity-driven boot mechanism), and `topology.md` (the Space
 structure being instantiated).
 
@@ -359,7 +359,7 @@ The verifier loop runs entirely from synart. Its cycle:
 ```
 
 Pure synart code; no telart call-outs. The same loop runs on every
-verifier emb across the synome (geth-style — see `syn-tel-emb.md` §1).
+verifier emb across the synome (geth-style — see `../synodoxics/noemar-substrate.md` "Synart as commons brain").
 
 After 4 hours of clean verification reports, the tel earns its first
 recipe carry:
@@ -449,7 +449,7 @@ synart updates that the tel consumes.
 
 Six architectural primitives this trace exercises:
 
-**1. Telseed minimalism** (§4 of `syn-tel-emb.md`).
+**1. Telseed minimalism** (`../synodoxics/noemar-substrate.md` "Telseeds and Bootstrap").
 The seed payload was small. Most of the tel's "knowledge" was streamed
 from synart on connect (research corpus, framework, registries). The
 seed didn't carry any of that.
@@ -461,7 +461,7 @@ tel-001`, `mira-research-tel-001-emb-002`, `mira-research-tel-001-
 dreamer`) all used the same boot procedure but resolved to different
 loops.
 
-**3. Three-tier replication** (§7 of `syn-tel-emb.md`).
+**3. Three-tier replication** (`../synodoxics/noemar-substrate.md` "Resilience Model").
 - Synart replicated globally from synserv (each emb has its own copy).
 - Telart replicated within this tel's own emb fleet (emb-001 → emb-002).
 - Embart stayed local to each emb (different working memory contents).
@@ -471,13 +471,13 @@ The verifier beacon used the universal `&core-loop-beacon-lpla-
 checker` template. No per-entity loop instance was needed because
 verifier loops are uniform.
 
-**5. The recipe marketplace** (§8 of `syn-tel-emb.md`).
+**5. The recipe marketplace** (`../synoteleonomics/recipe-marketplace.md` — canonical home).
 The verifier work paid carry per the recipe's economic terms. Carry
 flowed into the tel's endowment in synart-recorded form. The tel's
 choice of which recipes to take on is its monetization strategy in
 the marketplace.
 
-**6. Telart-as-tree** (§2 of `syn-tel-emb.md`).
+**6. Telart-as-tree** (`../synodoxics/noemar-substrate.md` "Telart as proprietary alpha").
 The tel's telart wasn't a single Space but seven sub-Spaces with
 different purposes (gate, callout, strategy, dreamart, etc.). Each
 got bootstrapped in stage 3 of the bootstrap arc.

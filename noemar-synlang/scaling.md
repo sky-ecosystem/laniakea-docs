@@ -107,7 +107,7 @@ through.
 
 There's also a **second replication channel**: telart spread within a
 single teleonome's emb fleet. When a tel runs multiple embs (for
-resilience per `syn-tel-emb.md` §7), its telart contents must replicate
+resilience per `../synodoxics/noemar-substrate.md` "Resilience Model"), its telart contents must replicate
 across them. This channel is:
 
 | Property | Synart replication | Telart spread |
@@ -121,7 +121,7 @@ across them. This channel is:
 A tel running 3-5 embs has roughly tel-internal-fanout × telart-update-
 rate of bandwidth obligation on its private channel. This is separate
 from the bandwidth this tel pays for synart replication-out (per the
-pricing in `syn-overview.md` §19).
+pricing in `../synomics-overview.md` §19).
 
 The two channels can use the same physical network but have distinct
 authority models. Tel-internal traffic doesn't go through syngate; it
@@ -501,7 +501,7 @@ which side of the partition each role is on.
 
 ## 10. Migration and repartitioning
 
-From `synart-access-and-runtime.md` §15: Goertzel hardware locality is
+From `runtime.md` §15: Goertzel hardware locality is
 physics; repartitioning requires freezing the grid; the sweet spot is
 slowly-changing graphs. Repartitioning at *cognitive* timescales is
 fatal; at *governance* timescales it's a scheduled migration.
@@ -697,6 +697,31 @@ proposals before publication) generate inter-tel traffic that doesn't
 pass through synserv. Distributed; growing with tel population;
 needs its own routing/discovery story analogous to DNS or peer
 discovery in P2P systems.
+
+**j) Structural-demand scraper bandwidth.** Scrapers populating
+`&entity-generator-usge-structural-demand-scrapers` poll USDS, DAI,
+and sUSDS holder data to feed the Lindy duration model (per
+[`../risk-framework/duration-model.md`](../risk-framework/duration-model.md)).
+Load profile is similar to endoscrapers — chain-protocol-bound inflow,
+periodic recomputation of per-bucket capacity. Phase 1 uses manual
+governance-set capacity; the live scraper architecture comes online
+when the data infrastructure is ready (tracked as USDS lot-age
+tracking in [`../risk-framework/open-questions.md`](../risk-framework/open-questions.md)).
+The output (`(structural-demand-capacity bucket-N <amount>)`) feeds
+the Primebook `structbook` matching at every Prime, so it's a hub atom
+read frequently — replicate per the pattern in §7.
+
+**k) Per-pair FX stress profile load.** With the currency-frame
+distinction (per [`../risk-framework/currency-frame.md`](../risk-framework/currency-frame.md)),
+`&core-framework-currency-stress` and `&core-framework-fx-stress` hold
+per-currency stress profiles plus per-pair FX stress data. Per-pair
+because correlations matter (USDC↔USDT depeg correlation isn't
+symmetric across all pairs). Read profile: every Riskbook category
+equation that translates instruments to frame reads at least one stress
+profile per scenario. Hot-spot risk on these spaces is real;
+hub-replicate aggressively. V1 is single-Generator (USD frame) so
+cross-frame translation is minimal, but the architecture is ready for
+multi-Generator load.
 
 ---
 

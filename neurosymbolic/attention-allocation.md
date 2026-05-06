@@ -82,7 +82,7 @@ Start with coarse fudges — "finance stuff," "security stuff." Dreamers evolve 
 
 ## Evidence Dynamics Replace Artificial Economics
 
-> **Lift framing:** Attention patterns are themselves lift accumulating around the navigation problem. A pointer that consistently leads to useful context is paying rent in [lift](../lift.md) terms — making future cognition easier, accumulating positive evidence, earning more of the navigation layer's scarce token budget. A pointer that wastes context tokens is **false lift** — looks like useful navigation, fails under feedback, has to be detected and pruned. The maintenance cycle is exactly the "net lift after costs" optimization: not maximum attention patterns, but the joint allocation that achieves the best downstream reasoning given the resource budget.
+> **Lift framing:** Attention patterns are themselves lift accumulating around the navigation problem. A pointer that consistently leads to useful context is paying rent in [lift](../synodoxics/lift.md) terms — making future cognition easier, accumulating positive evidence, earning more of the navigation layer's scarce token budget. A pointer that wastes context tokens is **false lift** — looks like useful navigation, fails under feedback, has to be detected and pruned. The maintenance cycle is exactly the "net lift after costs" optimization: not maximum attention patterns, but the joint allocation that achieves the best downstream reasoning given the resource budget.
 
 OpenCog's ECAN used an artificial economy — conserved currency, rent, wages, homeostatic controls. The Synome doesn't need this because existing evidence dynamics produce the same behaviors:
 

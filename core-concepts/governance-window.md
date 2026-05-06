@@ -24,6 +24,5 @@ This is an attempt at Coherent Extrapolated Volition (CEV) to the best of our ab
 ## Relationships
 
 - **motivated-by:** [atlas-synome-separation](atlas-synome-separation.md) — the separation exists partly to keep the Atlas readable during the window
-- **motivates:** [sacred-commitments](sacred-commitments.md) — the window is when sacred commitments must be encoded correctly
 - **depends-on:** [crystallization-interface](crystallization-interface.md) — the window is about human participation at the crystallization interface
 - **protected-by:** [synomic-inertia](synomic-inertia.md) — once encoded during the window, inertia preserves the values

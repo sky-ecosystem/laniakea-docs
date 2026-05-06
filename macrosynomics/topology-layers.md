@@ -6,11 +6,11 @@
 The synome stratifies into four layers — three rigid, one variable — with the probmesh as a transverse alignment-argument substrate that crisscrosses all of them. This document captures the layering decisions and their implications for everything that follows.
 
 Companion to:
-- `topology.md` — structural treatment of the synome that this layering is being grafted onto
-- `syn-overview.md` — concept map, four-tier architecture, five levels of self-reference
-- `synart-access-and-runtime.md` — gate, constructors, runtime mechanics
-- `boot-model.md` — identity-driven boot, shadow execution
-- `syn-tel-emb.md` — artifact tiers, alignment-through-coalition story
+- [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) — structural treatment of the synome that this layering is being grafted onto
+- [`../synomics-overview.md`](../synomics-overview.md) — concept map, four-tier architecture, five levels of self-reference
+- [`../noemar-synlang/runtime.md`](../noemar-synlang/runtime.md) — gate, constructors, runtime mechanics
+- [`../noemar-synlang/boot-model.md`](../noemar-synlang/boot-model.md) — identity-driven boot, shadow execution
+- [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) — artifact tiers (synart/telart/embart), alignment-through-coalition story
 
 ---
 
@@ -77,7 +77,7 @@ Live in `&core-skeleton` (or possibly `&core-axioms` as a sibling — see Open Q
 
 The rigid shape of the synome — what space archetypes exist, what atoms each archetype is allowed to hold (interface), what connections exist between archetypes, what constructors can write to them. Lives in `&core-meta-topology`. **Sudo-only by design** — there is no smooth path to evolve it.
 
-The archetype-with-count pattern handles repeated instances (entarts, books, units) without combinatorial blowup. One archetype declaration; many populated instances. Same two-step pattern as universal templates + per-entity instances in `topology.md` §17, applied recursively to the topology itself.
+The archetype-with-count pattern handles repeated instances (entarts, books, units) without combinatorial blowup. One archetype declaration; many populated instances. Same two-step pattern as universal templates + per-entity instances in [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) §17, applied recursively to the topology itself.
 
 ### Population
 
@@ -130,7 +130,7 @@ Probabilistic logic — confidence values, evidence weights, alternatives consid
 
 ### Why this gives alignment architectural teeth
 
-Per `syn-tel-emb.md` §9 — "intelligence private, power regulated." With the probmesh-as-alignment-argument framing, this is enforced structurally: private cognition can do anything internally, but to *influence* the system beyond population, it has to translate into public probmesh arguments referencing telos.
+Per [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) (formerly `syn-tel-emb.md` §9) — "intelligence private, power regulated." With the probmesh-as-alignment-argument framing, this is enforced structurally: private cognition can do anything internally, but to *influence* the system beyond population, it has to translate into public probmesh arguments referencing telos.
 
 A teleonome with arbitrary intelligence has exactly two channels:
 1. Act within population (rate-limited, reversible)
@@ -180,7 +180,7 @@ A **frame** is a concrete instance of synome state. There's a **canonical frame*
 | Constructors | Run normally | Same constructors; write to shadow store |
 | Gate | Real | Frame-aware |
 
-Builds on shadow execution (`boot-model.md` §5), the double-mesh trick (`scaling.md` §10), and counterfactual simulation in `stl-base` (`trading/sentinel-network.md`). What's new in this framing: shadows are **first-class**, not an upgrade pattern. There's *always* a shadow available alongside live.
+Builds on shadow execution ([`../noemar-synlang/boot-model.md`](../noemar-synlang/boot-model.md) §5), the double-mesh trick ([`../noemar-synlang/scaling.md`](../noemar-synlang/scaling.md) §10), and counterfactual simulation in `stl-base` ([`../trading/sentinel-network.md`](../trading/sentinel-network.md)). What's new in this framing: shadows are **first-class**, not an upgrade pattern. There's *always* a shadow available alongside live.
 
 ### Useful frame operations
 
@@ -236,7 +236,7 @@ For each phase:
 - New axioms (if any) with rationale chains
 - New comments / pre-probmesh content
 
-The 13 Phase 1 commitments (`topology.md` §19) become topology constraints checked by automation rather than read by humans.
+The 13 Phase 1 commitments ([`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) §19) become topology constraints checked by automation rather than read by humans.
 
 ### Most important per-phase artifact
 
@@ -300,10 +300,10 @@ If a doc contradicts one of these, that's a doc bug, not a model bug.
 
 | Doc | Relationship |
 |---|---|
-| `topology.md` | Structural treatment of the synome — this layering is being grafted onto it |
-| `syn-overview.md` | Concept map; four-tier architecture, five levels of self-reference |
-| `synart-access-and-runtime.md` | Gate, constructors, runtime — operational substrate |
-| `boot-model.md` | Identity-driven boot, shadow execution — frame mechanics begin here |
-| `syn-tel-emb.md` | Artifact tiers, recipe marketplace, alignment-through-coalition story |
-| `risk-framework.md` | Four-book taxonomy, content-based risk; specific population shape |
-| `synomics/synodoxics/*` | Canonical home for probmesh detailed treatment |
+| [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) | Structural treatment of the synome — this layering is being grafted onto it |
+| [`../synomics-overview.md`](../synomics-overview.md) | Concept map; four-tier architecture, five levels of self-reference |
+| [`../noemar-synlang/runtime.md`](../noemar-synlang/runtime.md) | Gate, constructors, runtime — operational substrate |
+| [`../noemar-synlang/boot-model.md`](../noemar-synlang/boot-model.md) | Identity-driven boot, shadow execution — frame mechanics begin here |
+| [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) | Artifact tiers (synart/telart/embart) and the substrate; the recipe marketplace lives in [`../synoteleonomics/recipe-marketplace.md`](../synoteleonomics/recipe-marketplace.md) |
+| [`../noemar-synlang/risk-framework.md`](../noemar-synlang/risk-framework.md) | Four-book taxonomy, content-based risk; specific population shape (pending Phase 2 rewrite into `../risk-framework/`) |
+| [`../synodoxics/`](../synodoxics/README.md) | Canonical home for probmesh detailed treatment |

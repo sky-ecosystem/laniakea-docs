@@ -7,14 +7,16 @@
 
 ## Overview
 
-Operational Risk Capital (ORC) is capital posted by the entity that holds execution authority over a PAU (the guardian/Accordant — see Glossary: Guardian Role Mapping), covering the maximum damage that entity could cause before detection and shutdown. ORC is distinct from portfolio risk capital (CRR-based) — it addresses operational compromise, not market/credit risk.
+Operational Risk Capital (ORC) is capital posted by the entity that holds execution authority over a PAU (the guardian/Accordant — see Glossary: Guardian Role Mapping), covering the maximum damage that entity could cause before detection and shutdown.
+
+**ORC is a parallel track to portfolio risk capital** (CRR-based, computed via [`risk-decomposition.md`](risk-decomposition.md), [`book-primitive.md`](book-primitive.md), and the layer docs) — it addresses operational compromise, not market/credit risk. The two capital pools protect the Prime against different threat classes; both are required, additively.
 
 | Concept | Portfolio Risk Capital | Operational Risk Capital |
 |---------|----------------------|------------------------|
-| **What it covers** | Market, credit, and duration risk | Damage from compromised guardian |
-| **Sized by** | CRR formula (risk weights, FRTB, gap risk, duration matching) | Rate limits × detection window |
+| **What it covers** | Market, credit, duration, and liquidity risk | Damage from compromised guardian |
+| **Sized by** | CRR per [`risk-decomposition.md`](risk-decomposition.md) — five risk types blended through sub-book routing | Rate limits × detection window |
 | **Posted by** | Prime (from JRC/EJRC/SRC) | Guardian (Accordant to the Prime) |
-| **Framework** | `capital-formula.md` | This document |
+| **Framework** | [`capital-formula.md`](capital-formula.md) and the layer docs | This document |
 
 **Both are required.** A Prime needs portfolio risk capital to cover investment losses AND its guardian needs operational risk capital to cover compromise damage. These are independent, additive requirements.
 

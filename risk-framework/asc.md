@@ -116,8 +116,9 @@ Target state (Laniakea intent):
 
 ## Where this fits in the Risk Framework
 
-- ASC/DAB constrain liquidity posture and peg-defense readiness; they are complementary to risk-capital requirements (CRR/RRC).
-- Concentration and portfolio-risk controls live in `correlation-framework.md` and the capital modules; ASC determines “how fast can we buy” during peg defense, not how much capital buffers credit/market losses.
+- **Parallel track to portfolio risk capital.** ASC/DAB constrain liquidity posture and peg-defense readiness; they are complementary to risk-capital requirements (CRR/RRC), not folded into them.
+- **ASC-eligible holdings route to `ascbook`** — the Primebook sub-book whose product *is* immediate liquidity. See [`primebook-composition.md`](primebook-composition.md) §3 for the sub-book taxonomy. Eligibility is the structural prerequisite: deep peg-defense liquidity, < 15min convertibility.
+- **Concentration and portfolio-risk controls** live in [`correlation-framework.md`](correlation-framework.md) and the capital modules; ASC determines "how fast can we buy" during peg defense, not how much capital buffers credit/market losses.
 
 See also:
 - Whitepaper summary: `whitepaper/appendix-a-protocol-features.md`

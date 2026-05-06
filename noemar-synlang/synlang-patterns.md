@@ -2,7 +2,7 @@
 
 Working synlang code for the Synome's deontic skeleton. Code-heavy
 reference; cross-cuts conceptual material in `topology.md`,
-`syn-overview.md`, and `synart-access-and-runtime.md`.
+`../synomics-overview.md`, and `runtime.md`.
 
 What's in this doc:
 
@@ -14,16 +14,18 @@ What's in this doc:
 | 4 | Sentinel decision rule (RAR) | Risk-adjusted return as strategy in synlang |
 | 5 | The call-out primitive | The synart→telart bridge — how loops consult local cognition |
 | 6 | Sentinel formation patterns | Baseline / Stream / Warden as beacons-with-call-outs |
+| 7 | Tranche-rule patterns | Rule-bearing tranches (callable, conversion, step-up, triggered subordination) |
+| 8 | Projection-model declaration patterns | How categories declare projection models for complex positions |
 
 Working examples elsewhere:
 
 - `settlement-cycle-example.md` — full ER → penalty cycle (covers CRR / encumbrance / settlement)
 - `telseed-bootstrap-example.md` — first-24-hours trace of a new teleonome
-- `govops-synlang-patterns.md` — runnable demo's pattern catalog (gate, pipeline, attestation, beacon identity)
+- `../inactive/archive/govops-synlang-patterns.md` — runnable demo's pattern catalog (gate, pipeline, attestation, beacon identity); archived as historical demo
 - `topology.md` §16 — the two-step rule shape with `&self` portability
 - `topology.md` §17 — the two-step loop shape (universal template + per-entity instance)
 - `boot-model.md` — identity-driven boot mechanics for any loop
-- `syn-tel-emb.md` §8 — the recipe marketplace context for sentinel formations
+- `../synoteleonomics/recipe-marketplace.md` — the recipe marketplace context for sentinel formations (canonical home; formerly `syn-tel-emb.md` §8)
 
 ---
 
@@ -633,3 +635,173 @@ This is the structural realization of "intelligence private, power
 regulated" — synart envelope enforces bounds; call-outs admit cognition
 at designated points; the ratio between them is a per-recipe choice
 governance makes.
+
+---
+
+## 7. Tranche-rule patterns
+
+Per [`../risk-framework/book-primitive.md`](../risk-framework/book-primitive.md) §3, tranches generalize from "fixed claim" to "rule-bearing claim" — the seniority order is fixed at book creation but the *amount* of the claim can be rule-determined. The synlang patterns:
+
+### Static tranche (most common)
+
+```metta
+(book-tranche my-bond
+   (seniority 1)
+   (holder spark-halo)
+   (notional 1000000)                                    ; static
+   (denom usd))
+```
+
+### Rule-determined notional (callable bond, conversion option)
+
+```metta
+(book-tranche callable-tranche
+   (seniority 1)
+   (holder some-investor)
+   (notional-rule (callable-payoff $strike $expiry))     ; rule-determined
+   (denom usd))
+
+(= (callable-payoff $strike $expiry)
+   (case (>= now $expiry)
+     ((True (max 0 (- (book-state-of-issuer underlying-price) $strike)))
+      (False (par-value)))))
+```
+
+### Step-up coupon tranche
+
+```metta
+(book-tranche step-up-tranche
+   (seniority 2)
+   (holder some-investor)
+   (notional-rule (step-up-schedule $base-notional $step-table))
+   (denom usd))
+
+(= (step-up-schedule $base $schedule)
+   (let (($months-elapsed (months-since (book-creation-date))))
+     (* $base (lookup-rate $schedule $months-elapsed))))
+```
+
+### Triggered subordination
+
+```metta
+(book-tranche triggered-tranche
+   (seniority-rule (subordination-trigger $health-factor-threshold))
+   (holder some-investor)
+   (notional 5000000)
+   (denom usd))
+
+(= (subordination-trigger $threshold)
+   (case (< (book-health-factor) $threshold)
+     ((True 0)                                           ; becomes most-junior
+      (False 2))))                                       ; otherwise stays in original position
+```
+
+### Tranche rights (P + T declarations)
+
+Per [`../risk-framework/tranching.md`](../risk-framework/tranching.md) §4:
+
+```metta
+(tranche-rights spark-halo-senior-tranche
+   (redemption-rights (only-at-maturity))                ; P
+   (transfer-rights none)                                ; T
+   (liquidation-acceleration (on-health-factor-breach))) ; P
+```
+
+P and T declarations feed the Primebook sub-book router per [`../risk-framework/primebook-composition.md`](../risk-framework/primebook-composition.md).
+
+---
+
+## 8. Projection-model declaration patterns
+
+Per [`../risk-framework/projection-models.md`](../risk-framework/projection-models.md), categories declare projection models for complex positions that don't fit direct-tranche math. The synlang patterns:
+
+### Vanilla European call (Black-Scholes)
+
+```metta
+(risk-category-def vanilla-european-call
+   (level position-instrument)
+   (projection-model black-scholes
+      (variables strike expiry notional underlying-price implied-vol risk-free-rate)
+      (under-scenario $s
+         (let* (($u-stressed (apply-scenario $s underlying-price))
+                ($v-stressed (apply-scenario $s implied-vol)))
+           (compute-bs-pnl $u-stressed $v-stressed strike expiry notional))))
+   (model-uncertainty-haircut 0.0))                      ; well-validated
+```
+
+### Path-dependent option (Monte Carlo)
+
+```metta
+(risk-category-def asian-option
+   (level position-instrument)
+   (projection-model monte-carlo
+      (variables strike expiry notional underlying-process averaging-window)
+      (under-scenario $s
+         (let* (($paths (generate-stressed-paths $s underlying-process averaging-window 10000)))
+           (mean (map (lambda ($path) (asian-payoff $path strike notional)) $paths))))
+      (sample-size 10000))
+   (model-uncertainty-haircut 0.10))                     ; Monte Carlo error + path-dependency
+```
+
+### Callable bond (lattice)
+
+```metta
+(risk-category-def callable-bond
+   (level position-instrument)
+   (projection-model binomial-lattice
+      (variables coupon maturity call-schedule rate-process)
+      (under-scenario $s
+         (let* (($lattice (build-lattice $s rate-process maturity))
+                ($value (backward-induct $lattice coupon call-schedule)))
+           (- (par-value) $value))))
+   (model-uncertainty-haircut 0.05))                     ; well-established
+```
+
+### CDS (parametric)
+
+```metta
+(risk-category-def cds-position
+   (level position-instrument)
+   (projection-model parametric-credit
+      (variables reference-entity notional protection-period counterparty-rating)
+      (under-scenario $s
+         (let* (($default-prob (apply-credit-stress $s reference-entity))
+                ($lgd          (lgd-for-reference-entity reference-entity))
+                ($cp-survival  (counterparty-survival-prob $counterparty-rating $s))
+                ($expected-payoff (* $default-prob $lgd notional $cp-survival)))
+           (- (premium-paid) $expected-payoff))))
+   (model-uncertainty-haircut 0.05))
+```
+
+### Novel instrument (high uncertainty)
+
+```metta
+(risk-category-def some-novel-derivative
+   (level position-instrument)
+   (projection-model novel-stochastic-model
+      (variables ...)
+      (under-scenario $s ...))
+   (model-uncertainty-haircut 0.30))                     ; bleeding-edge → conservative
+```
+
+### Composing projection into Riskbook category
+
+A Riskbook category that holds projection-using positions invokes the model:
+
+```metta
+(risk-category-def options-portfolio
+   (level riskbook)
+   (composition-constraints (only-vanilla-options))
+   (equation-m2m
+      (sum-over (held-positions)
+         (lambda ($pos)
+            (let* (($cat (category-of $pos))
+                   ($projected-loss (project-with-model
+                                       (projection-model-of $cat)
+                                       $pos
+                                       (current-scenario))))
+              (* $projected-loss (+ 1.0 (model-uncertainty-haircut-of $cat)))))))
+   (resolution-tier simulation))
+```
+
+Categories without declared projections fall through to CRR 100% per default-deny.

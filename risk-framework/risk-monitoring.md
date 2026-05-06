@@ -74,6 +74,22 @@ Operational keepers performing their functions.
 **Oracle Freshness**
 Price feeds current and accurate.
 
+### Sub-book and Equity Metrics
+
+**Per-sub-book CRR**
+CRR aggregated by sub-book within each Primebook (`ascbook`, `tradingbook`, `termbook`, `structbook`, `hedgebook`, unmatched). Surfaces:
+- Concentration shifts (e.g., `tradingbook` growing as a fraction of total)
+- Matched-portion erosion (e.g., `structbook` matched-portion shrinking due to bucket capacity changes)
+- Hedge effectiveness drift (e.g., `hedgebook` residual rising as basis loosens)
+
+See [`primebook-composition.md`](primebook-composition.md) for the sub-book taxonomy.
+
+**Equity proximity**
+Distance to equity-tranche zero per book, per [`book-primitive.md`](book-primitive.md). Real-time alerting when any book (Riskbook, Halobook, Primebook, Genbook, Exobook) has equity approaching zero — the unwind trigger. Each book class must have a documented equity-feed mechanism (endoscraper / attestor / synserv computation).
+
+**Treatment-switch frequency**
+Rate of sub-book reclassifications per Prime per epoch. Sudden spikes may indicate gaming attempts (especially mid-stress); the crash-oracle (Phase 2+, per [`primebook-composition.md`](primebook-composition.md) §7) suspends switches during declared crash windows.
+
 ---
 
 ## Monitoring Infrastructure
@@ -146,7 +162,7 @@ Not all risks surface as threshold breaches.
 
 ### Escalation Path
 
-1. Automated detection (lpla-checker, warden sentinels)
+1. Automated detection (synserv verification, warden sentinels)
 2. Sentinel formation review
 3. Human operator notification (if needed)
 4. Governance notification (if needed)
@@ -175,7 +191,7 @@ The target encumbrance ratio is ≤90% (TRRC / TRC). Agents exceeding this thres
 - **Rate limit reduction** — automatic scaling of PAU rate limits proportional to overshoot
 - **New deployment freeze** — no new positions until ratio returns below threshold
 - **Mandatory deleveraging timeline** — escalating timeline to restore compliance (e.g., 7 days for minor breach, 48 hours for severe)
-- **Governance notification** — automatic escalation via lpla-checker alerts
+- **Governance notification** — automatic escalation via synserv verification alerts
 
 The enforcement mechanism should be calibrated to avoid pro-cyclical forced selling while maintaining capital discipline.
 

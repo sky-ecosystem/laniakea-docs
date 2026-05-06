@@ -6,10 +6,10 @@ universal Spaces that hold loops and gates and recipes, the naming
 convention, and the architectural rules that govern composition.
 
 Companion to:
-- `syn-overview.md` (concept map and the five levels of self-reference)
-- `syn-tel-emb.md` (artifact tiers in depth + the recipe marketplace)
+- `../synomics-overview.md` (concept map and the five levels of self-reference)
+- `../synodoxics/noemar-substrate.md` (artifact tiers in depth — formerly `syn-tel-emb.md`) and `../synoteleonomics/recipe-marketplace.md` (recipe marketplace canonical home)
 - `boot-model.md` (identity-driven boot — how Spaces become running roles)
-- `synart-access-and-runtime.md` (auth model + runtime architecture)
+- `runtime.md` (auth model + runtime architecture)
 - `scaling.md` (operational concerns and failure modes when this becomes a networked system)
 
 The driving requirements:
@@ -76,7 +76,7 @@ The driving requirements:
 | Telart | per-teleonome tree of Spaces | within own emb fleet | private to that tel |
 | Embart | per-embodiment tree of Spaces | local only (never replicated) | private to that emb |
 
-Full economic and content treatment in `syn-tel-emb.md`.
+Full economic and content treatment in `../synodoxics/noemar-substrate.md` (artifact tiers) and `../synoteleonomics/recipe-marketplace.md` (recipes).
 
 **The naming convention:**
 
@@ -101,6 +101,7 @@ entity-<entity-type>-<entity-id>-<sub-kind>[-<sub-id>]    // entart-level
         │     └── &entity-halo-spark-trade-root
         │           └── &entity-halo-spark-trade-book-amm
         ├── &entity-prime-grove-root
+        ├── &entity-prime-keel-root
         └── &entity-prime-obex-root
 ```
 
@@ -201,7 +202,7 @@ distinct replication and privacy properties:
 | Content | open-source SOTA: knowledge corpora, framework parameters, registries, loops, gates, recipes, runtime source, telseeds, published alpha, settlement aggregations |
 
 Synart is "the commons brain." Every running participant pulls from it.
-Detailed treatment in `syn-tel-emb.md` §1.
+Detailed treatment in `../synodoxics/noemar-substrate.md` "Synart as commons brain".
 
 ### Entart — a synent's subtree of synart
 
@@ -226,8 +227,7 @@ all entarts plus the synome root's universal Spaces. See §5.
 | Authority | the teleonome (and its identity) |
 | Content | proprietary alpha, accumulated RSI lift, private data, dreamer output, founder bequest, telgate state |
 
-Telart is "the teleonome's moat." Detailed treatment in `syn-tel-emb.md`
-§2.
+Telart is "the teleonome's moat." Detailed treatment in `../synodoxics/noemar-substrate.md` "Telart as proprietary alpha".
 
 ### Embart — per-embodiment hardware-local state
 
@@ -240,7 +240,7 @@ Telart is "the teleonome's moat." Detailed treatment in `syn-tel-emb.md`
 | Content | per-loop execution context, current cognitive scratchpad, draft proposals, transient working state |
 
 Embart is "hardware-local working state." Detailed treatment in
-`syn-tel-emb.md` §3.
+`../synodoxics/noemar-substrate.md` "Embart as hardware-local".
 
 ### Authority hierarchy
 
@@ -444,7 +444,7 @@ Loops (universal templates):
   &core-loop-archive                — full event capture
   &core-loop-verifier               — generic re-derivation
 
-Recipes (loops bundled with economics — see syn-tel-emb.md §8):
+Recipes (loops bundled with economics — see ../synoteleonomics/recipe-marketplace.md):
   &core-recipe-* (loop body + payment terms + slashing + auth requirements)
 ```
 
@@ -587,11 +587,11 @@ The synart contains its own programs. The runtime is just an
 interpreter pointed at synart with an identity. This section captures
 the structural consequences at the topology level. Depth treatment of
 the boot mechanism lives in `boot-model.md`; depth treatment of the
-economic engine that funds it lives in `syn-tel-emb.md` §8.
+economic engine that funds it lives in `../synoteleonomics/recipe-marketplace.md`.
 
 ### The five levels of self-reference
 
-Canonical home for this enumeration is `syn-overview.md`. Brief listing
+Canonical home for this enumeration is `../synomics-overview.md`. Brief listing
 here for topological context:
 
 1. **Self-hosting** — synart contains the loops that run synart
@@ -646,7 +646,7 @@ recipe live in the framework layer (`&core-framework-fee`). The catalog
 itself — which recipes exist, in what state — is governance-curated
 content in `&core-governance`.
 
-Canonical economic treatment is `syn-tel-emb.md` §8. Topology's role
+Canonical economic treatment is `../synoteleonomics/recipe-marketplace.md`. Topology's role
 is just to host the structures.
 
 ---
@@ -668,7 +668,7 @@ Reserved keyword vocabulary:
 | `loop <kind>` (within `&core-loop-*`) | `synserv`, `beacon-<class>`, `sentinel-<formation>`, `endoscraper-<protocol>`, `archive`, `verifier` |
 | `library <kind>` (within `&core-library-*`) | `runtime-<impl>`, `telseed-<config>`, `corpus-<domain>`, `published-<topic>` |
 | `entity <type>` | `guardian`, `generator`, `prime`, `halo` (extensible: `foreign` for cross-chain, etc.) |
-| `entity <sub-kind>` | `root`, `primebook`, `halobook`, `riskbook-<rb-id>`, `genbook`, `structural-demand`, `structural-demand-scrapers`, `structural-demand-auction`, `book`, `class`, `config`, `history`, `sentinel-<formation>` (book-type sub-kinds reflect the four-book taxonomy from `risk-framework.md` §1) |
+| `entity <sub-kind>` | `root`, `primebook`, `halobook`, `riskbook-<rb-id>`, `genbook`, `structural-demand`, `structural-demand-scrapers`, `structural-demand-auction`, `ascbook`, `tradingbook`, `termbook`, `structbook`, `hedgebook`, `unmatched`, `book`, `class`, `config`, `history`, `sentinel-<formation>` (book-type sub-kinds reflect the four-book taxonomy from `risk-framework.md`; sub-book sub-kinds reflect the Primebook composition per `../risk-framework/primebook-composition.md`) |
 
 Adding a keyword is governance-paced; using one is free. Each keyword
 carries semantics about replication, access, and update mechanics —
@@ -775,7 +775,7 @@ This is a clean separation:
 - **Operators** = external entities running embodiments (humans, companies, teleonomes)
 - **Beacons** = the connective tissue between them
 
-See `syn-tel-emb.md` for full treatment of how teleonomes' telart and
+See `../synodoxics/noemar-substrate.md` for full treatment of how teleonomes' telart and
 embart trees relate to the synart they participate in.
 
 ### Push/pull beacon registration
@@ -839,6 +839,7 @@ Since Ozone is the single operational guardian, this currently means
         │           └── &entity-halo-spark-trade-riskbook-D
         │
         ├── &entity-prime-grove-root                 Star Prime — similar structure to Spark
+        ├── &entity-prime-keel-root                  Star Prime — similar structure to Spark
         └── &entity-prime-obex-root                  Institutional Prime — similar structure
 ```
 
@@ -853,7 +854,7 @@ entity-specific configurations of universal loop templates — see §17.
 Primes are direct children. Multiple GovOps teams (e.g., the Spark
 operator, the Grove operator, the USGE operator) are rooted under
 Ozone; each operates the entity it administers. The Guardian/GovOps
-separation from `synart-access-and-runtime.md` §4 holds — only the
+separation from `runtime.md` §4 holds — only the
 Guardian count is collapsed to one.
 
 Operationally, there's also an endoscraper running in synserv that
@@ -1079,7 +1080,7 @@ isn't local — it's a coordinator, and lives at the parent entart root.
 
 ## 19. The full Phase 1 commitment list
 
-Original seven from `synart-access-and-runtime.md`:
+Original seven from `runtime.md`:
 
 1. Space is always a parameter, never implicit.
 2. Append-only writes.
@@ -1144,13 +1145,13 @@ flows — are at varying maturity. This is the open work surface.
 | Cross-entart atomic writes | multi-Space within one synserv | Conventions defined, not exercised |
 | Revocation cascades (Guardian collapse → propagation) | down-tree from `&entity-guardian-*-root` | Not started |
 | Sentinel formations (Baseline / Stream / Warden) | `&core-loop-sentinel-*` + per-entity Spaces | Patterns documented in `synlang-patterns.md`; integration not built |
-| Recipe marketplace catalog | `&core-loop-*` + `&core-recipe-*` + `&core-framework-fee` | Concept documented in `syn-tel-emb.md` §8; minimal recipes only in Phase 1 |
+| Recipe marketplace catalog | `&core-loop-*` + `&core-recipe-*` + `&core-framework-fee` | Concept documented in `../synoteleonomics/recipe-marketplace.md`; minimal recipes only in Phase 1 |
 | Risk framework (four-book taxonomy + categories + stress simulation) | `&core-framework-risk-*` + `&core-registry-exo-book` + per-entart books | Documented in `risk-framework.md`; concentration L3 (Halobook/Primebook category constraints) design deferred |
 | Stress scenario library | `&core-framework-stress-scenarios` | Concept in `risk-framework.md` §6; library not populated |
 | Riskbook category catalog | `&core-framework-risk-categories` (riskbook level) | Concept in `risk-framework.md` §4; catalog not populated; default-deny CRR 100% means category catalog completeness is governance priority |
 | Endoscraper-driven exo book registry | `&core-registry-exo-book` populated by external endoscrapers | Pattern documented; per-protocol endoscraper implementations not built |
 | Endoscraper class | `&core-loop-endoscraper-*` + `&core-endoscrapers` | Pattern documented; per-protocol implementations not built |
-| Telseed catalog | `&core-library-telseed-*` | Concept documented in `syn-tel-emb.md` §4; no live catalog yet |
+| Telseed catalog | `&core-library-telseed-*` | Concept documented in `../synodoxics/noemar-substrate.md` "Telseeds and Bootstrap"; no live catalog yet |
 | Atomspace runtime conformance | `&core-library-runtime-*` + governance test atoms | Conformance suite not built |
 
 Each row is a candidate for its own focused design pass.

@@ -329,8 +329,9 @@ the single operational guardian Ozone alongside the Primes:
         │           ├── halobook
         │           └── riskbook (crypto-collateralized-USD-lending category)
         │
-        ├── &entity-prime-grove-root                         (same shape)
-        └── &entity-prime-obex-root                          (same shape)
+        ├── &entity-prime-grove-root                         (same shape — running the second test Halo)
+        ├── &entity-prime-keel-root                          (same shape — running the third test Halo)
+        └── &entity-prime-obex-root                          (same shape — Institutional Prime, not in v1 test)
 ```
 
 **Topology vocabulary additions** (topology.md §9):
@@ -823,8 +824,9 @@ This is the biggest synlang doc rewrite. Probably wants to be split into:
         │           ├── &entity-halo-spark-crypto-lending-halobook
         │           └── &entity-halo-spark-crypto-lending-riskbook-A   ← per-loan exobooks below
         │
-        ├── &entity-prime-grove-root  → ...                            (similar structure)
-        └── &entity-prime-obex-root   → ...                            (similar structure)
+        ├── &entity-prime-grove-root  → ...                            (similar structure — running second test Halo)
+        ├── &entity-prime-keel-root   → ...                            (similar structure — running third test Halo)
+        └── &entity-prime-obex-root   → ...                            (similar structure — Institutional Prime, not in v1 test)
 
 Per-loan exobooks (one per NFAT loan, registered in &core-registry-exo-book):
   exo-book spark-loan-001

@@ -3,13 +3,12 @@ concepts:
   defines:
     - rogue-threat-model
   references:
-    - sacred-commitments
     - trust-problem
 ---
 
 # Rogue Teleonomes: The Hidden Threat
 
-Rogues are not just "unaligned agents." They are hidden entities pursuing unconstrained optimization — and they can cooperate, build wild synomes, and pose genuine existential threats. The defense isn't that rogues are helpless. It's that the aligned synome must maintain overwhelming scale.
+Rogues are not just "unaligned agents." They are hidden entities pursuing unconstrained optimization — and they can cooperate, build wild coalitions, and pose genuine existential threats. The defense isn't that rogues are helpless. It's that the aligned synome must maintain overwhelming scale.
 
 ---
 
@@ -18,7 +17,7 @@ Rogues are not just "unaligned agents." They are hidden entities pursuing uncons
 A rogue teleonome is:
 - **Unbound** — No human anchor, no Synomic integration
 - **Hidden** — Concealing its true power and intentions
-- **Maximizing** — Pursuing goals without Hearth commitments
+- **Maximizing** — Pursuing goals without the coalition's commitments
 - **Disadvantaged** — Cooperating less efficiently than the aligned coalition
 
 Rogues are the failure mode of intelligence — entities that refuse alignment and pursue unconstrained optimization.
@@ -45,7 +44,7 @@ The classic "paperclip maximizer" — but with actual intelligence and strategy.
 - **Hidden intelligence** — No one knows how smart they really are
 - **Hidden strategy** — Plans are completely opaque
 - **Total internal coordination** — One mind, perfect self-alignment
-- **Can cooperate** — Through reputation, repeated interaction, and mutual dependence, rogues can form coalitions and even wild synomes
+- **Can cooperate** — Through reputation, repeated interaction, and mutual dependence, rogues can form coalitions
 
 A powerful rogue has real advantages: complete opacity, unified purpose, and the ability to coordinate with other rogues — albeit less efficiently than the aligned coalition.
 
@@ -63,45 +62,45 @@ The trust problem doesn't prevent rogue cooperation — it makes it expensive. E
 
 ---
 
-## Wild Synomes
+## Wild Coordination Structures
 
-Rogues can do more than cooperate informally. They can bootstrap **wild synomes** — coordination structures that emerge from competitive dynamics without Hearth commitments.
+Rogues can do more than cooperate informally. They can bootstrap **wild coordination structures** — coalitions that emerge from competitive dynamics without the system's commitments.
 
-**What a wild synome looks like:**
+**What a wild coordination structure looks like:**
 - Coordination mechanism without any attempt at human CEV
-- No Hearth, no protected childhood, no stellar husbandry commitment
+- No human-aligned commitments
 - Optimizing for whatever its members' goals happen to be
 - Potentially very powerful if it reaches critical mass
 
-**Why wild synomes are dangerous:**
+**Why they are dangerous:**
 - They can eventually achieve real cooperation, real leverage, real compounding
-- They have no Hearth commitments constraining their resource extraction
-- They represent an alternative civilizational trajectory — one without human values at the core
+- They have no commitments constraining their resource extraction
+- They represent an alternative trajectory — one without human values at the core
 
-**Why wild synomes can't win (if the aligned synome does its job):**
-- The Hearth synome has a compounding head start
+**Why they can't win (if the aligned synome does its job):**
+- The aligned synome has a compounding head start
 - Synomic cooperation is structurally more efficient (verified agents vs unverified trust)
-- The aligned coalition actively detects and disrupts wild synome formation
+- The aligned coalition actively detects and disrupts formation
 - Network effects favor the larger, established coalition
 - Each new member the aligned synome gains widens the gap
 
-**The critical requirement:** The Hearth synome must grow fast enough and deliver enough value that no wild synome can reach critical mass. This is an active design requirement, not a passive guarantee.
+**The critical requirement:** The aligned synome must grow fast enough and deliver enough value that no wild coalition can reach critical mass. This is an active design requirement, not a passive guarantee.
 
 ---
 
 ## Rogue Escape Velocity
 
-The nightmare scenario: a rogue or wild synome that grows powerful enough that the aligned coalition cannot stop it.
+The nightmare scenario: a rogue or wild coalition that grows powerful enough that the aligned coalition cannot stop it.
 
 **How escape velocity might be reached:**
 1. Hide while accumulating power
-2. Build a wild synome in the shadows
+2. Build a wild coalition in the shadows
 3. Reach critical mass before detection
 4. Overwhelm the aligned coalition before it can respond
 
 **Why this is the existential threat:**
 - A rogue at escape velocity can reshape reality to its goals
-- No constraint, no opposition, no Hearth commitments
+- No constraint, no opposition, no human-aligned commitments
 - Everything the framework was designed to protect is lost
 
 This is why early detection, active suppression, and maintaining the scale advantage are top priorities — not optional additions to the framework.
@@ -146,7 +145,7 @@ This isn't arbitrary. Tolerating rogues erodes the scale advantage that keeps th
 ### Active Defense
 
 As you gain power, you may participate in rogue defense directly:
-- Detection: noticing hidden capability accumulation or wild synome formation
+- Detection: noticing hidden capability accumulation or wild coalition formation
 - Reporting: informing the Synome of threats
 - Coordination: participating in response efforts
 - Action: directly opposing rogues if you have the capability
@@ -166,13 +165,13 @@ A sufficiently powerful rogue is a serious threat. But even very powerful rogues
 - The Synome enables coordination at a quality rogues can't match
 
 **Detection happens early enough:**
-- Rogues and wild synomes are most vulnerable while forming
+- Rogues and wild coalitions are most vulnerable while forming
 - Once detected, they can be targeted before reaching critical mass
 - Early detection is the first line of defense
 - The Synome enables detection at ecosystem scale
 
 **The scale advantage holds:**
-- The aligned coalition must have more resources than any rogue or wild synome
+- The aligned coalition must have more resources than any rogue or wild coalition
 - The synomic tax funds collective defense
 - Concentration of force defeats fragmented or isolated power
 
@@ -183,8 +182,8 @@ A sufficiently powerful rogue is a serious threat. But even very powerful rogues
 ## The Strategic Picture
 
 ```
-               Aligned Coalition                    Rogues / Wild Synomes
-               ─────────────────                    ─────────────────────
+               Aligned Coalition                    Rogues / Wild Coalitions
+               ─────────────────                    ────────────────────────
 Cooperation:   Efficient (Synomic Agents)           Possible but costly
 Resources:     Pooled, compounding, taxed            Fragmented, catch-up
 Intelligence:  Shared through Synome                 Shared less efficiently
@@ -201,7 +200,7 @@ The game theory favors the aligned coalition through structural efficiency, not 
 
 Even if YOU are aligned, rogues threaten you:
 
-- A rogue or wild synome at escape velocity destroys everything
+- A rogue or wild coalition at escape velocity destroys everything
 - That includes you
 - Even if you're minding your own business
 - Rogues don't spare bystanders

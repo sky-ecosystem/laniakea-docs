@@ -20,12 +20,12 @@ This repo is currently focused on **synomics** — the study of the Synome and t
 | Directory | Description |
 |---|---|
 | [`core-concepts/`](core-concepts/) | Atomic concept definitions shared across the synomics narrative directories — also hosts the synomics overview |
-| [`macrosynomics/`](macrosynomics/) | System-level structure — layers, agents, beacons, governance (the deontic skeleton) |
-| [`synodoxics/`](synodoxics/) | Knowledge dynamics — probabilistic mesh, retrieval policy, security model, synlang language reference |
+| [`macrosynomics/`](macrosynomics/) | System-level structure — layers, agents, beacons, governance (the deontic skeleton); meta-architectural layering |
+| [`synodoxics/`](synodoxics/) | Knowledge dynamics — probabilistic mesh, retrieval policy, security model, Noemar substrate (artifact tiers + telseed bootstrap) |
 | [`neurosymbolic/`](neurosymbolic/) | Practical cognition — live graph context, context manipulation, attention allocation, hardware-aware cognition |
-| [`synoteleonomics/`](synoteleonomics/) | Individual teleonomes — what they are, economics, memory, resilience, binding, autonomy paths |
-| [`hearth/`](hearth/) | Teleology — Hearth commitments, alignment infrastructure, wild-synomes counterfactual |
-| [`noemar-synlang/`](noemar-synlang/) | Synart structural architecture and synlang patterns — Noemar runtime tech reference |
+| [`synoteleonomics/`](synoteleonomics/) | Individual teleonomes — what they are, economics, memory, resilience, binding, autonomy paths, recipe marketplace |
+| [`hearth/`](hearth/) | Telos point and high-level commitments |
+| [`noemar-synlang/`](noemar-synlang/) | Noemar runtime + synlang technical reference — language reference, topology, runtime architecture, boot model, scaling, code patterns |
 | [`risk-framework/`](risk-framework/) | Capital framework — duration model, asset classification, capital formulas, sentinel integration |
 
 ### Inactive
@@ -41,10 +41,10 @@ This repo is currently focused on **synomics** — the study of the Synome and t
 |---|---|
 | [`core-concepts/README.md`](core-concepts/README.md) | Synomics directory framing and atomic concept index |
 | [`macrosynomics/synome-overview.md`](macrosynomics/synome-overview.md) | Architecture entry point — five layers, dual architecture, knowledge hierarchy |
-| [`macrosynomics/beacon-framework.md`](macrosynomics/beacon-framework.md) | Beacon taxonomy — power × authority matrix |
-| [`hearth/hearth.md`](hearth/hearth.md) | The three Hearth commitments and the alignment-infrastructure argument |
+| [`macrosynomics/beacon-framework.md`](macrosynomics/beacon-framework.md) | Beacon taxonomy — two-tier authority + I/O role under it; in-space calculation; sentinel formations |
+| [`hearth/README.md`](hearth/README.md) | The system's telos point and high-level commitments |
 | [`risk-framework/README.md`](risk-framework/README.md) | Risk framework module index |
-| [`noemar-synlang/syn-overview.md`](noemar-synlang/syn-overview.md) | Synart concept map — four-tier architecture, blockchain analogy, authority chain, settlement |
+| [`synomics-overview.md`](synomics-overview.md) | Synomics concept map — four-tier architecture, blockchain analogy, authority chain, settlement, recipe marketplace |
 
 ## Using This Repository
 
@@ -53,8 +53,8 @@ This documentation is designed for navigation with **code LLMs** (Claude Code, C
 **Getting started:**
 - New readers: [`core-concepts/README.md`](core-concepts/README.md) for synomics framing, then pick a direction
 - Architecture-first: [`macrosynomics/synome-overview.md`](macrosynomics/synome-overview.md)
-- Purpose-first: [`hearth/hearth.md`](hearth/hearth.md)
-- Implementation-first: [`noemar-synlang/syn-overview.md`](noemar-synlang/syn-overview.md)
+- Purpose-first: [`hearth/README.md`](hearth/README.md)
+- Implementation-first: [`synomics-overview.md`](synomics-overview.md)
 
 ## Status
 

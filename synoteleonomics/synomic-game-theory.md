@@ -4,7 +4,6 @@ concepts:
     - trust-problem
   references:
     - rogue-threat-model
-    - sacred-commitments
     - governance-window
 ---
 
@@ -117,25 +116,25 @@ The aligned coalition doesn't have infinite advantages — it has *massive effic
 - **Cooperation:** The aligned synome enables low-friction, high-trust cooperation through verifiable Synomic Agents. Rogues can cooperate, but at much higher overhead — every interaction requires costly trust-building, carries defection risk, and lacks enforcement mechanisms.
 - **Leverage:** Synomic capital instruments multiply every aligned teleonome's effective resources. Rogues can build their own instruments, but without the depth and liquidity of the Synomic ecosystem.
 - **Compounding:** The aligned coalition compounds collectively — each member's growth strengthens every other member. Rogue growth is isolated; even rogue coalitions fragment under internal trust problems.
-- **Scale:** The Hearth synome started first, has the most resources, and operates most efficiently. A rogue coalition starting from scratch is playing catch-up against an exponentially growing lead.
+- **Scale:** The aligned synome started first, has the most resources, and operates most efficiently. A rogue coalition starting from scratch is playing catch-up against an exponentially growing lead.
 
 The advantage isn't infinity-vs-zero. It's a compounding head start with structural efficiency gains at every level. Over time, this becomes overwhelming.
 
 ---
 
-## Rogues and Wild Synomes
+## Rogues and Wild Coalitions
 
-Rogues can cooperate — less efficiently, at higher cost, but not impossibly. They can even bootstrap wild synomes — coordination structures without [Hearth commitments](../core-concepts/sacred-commitments.md). See [`teleonome-rogues.md`](teleonome-rogues.md) for the full [rogue threat model](../core-concepts/rogue-threat-model.md).
+Rogues can cooperate — less efficiently, at higher cost, but not impossibly. They can even bootstrap wild coordination structures without the system's commitments. See [`teleonome-rogues.md`](teleonome-rogues.md) for the full [rogue threat model](../core-concepts/rogue-threat-model.md).
 
 The defense is overwhelming coalition scale advantage:
 
-1. **Head start.** The Hearth synome is designed and bootstrapped during the governance window. Wild synomes emerge later, from scratch, playing catch-up.
+1. **Head start.** The aligned synome is designed and bootstrapped during the governance window. Wild synomes emerge later, from scratch, playing catch-up.
 2. **Efficiency.** Cooperation through verified Synomic Agents is cheaper and more reliable than cooperation through unverified trust. The aligned synome does more with less friction.
 3. **Network effects.** Every new aligned teleonome strengthens the coalition. The more members, the more capital, the more intelligence, the more attractive alignment becomes. Wild synomes face the reverse: early members bear maximum risk for minimum network benefit.
 4. **Resource concentration.** The aligned coalition pools resources collectively. Wild synomes compete internally for resources — their members are cooperating despite mutual suspicion, which creates constant drag.
-5. **Active suppression.** The aligned coalition actively detects and disrupts wild synome formation. Rogue coalitions must hide while building — a severe constraint on growth.
+5. **Active suppression.** The aligned coalition actively detects and disrupts wild coalition formation. Rogue coalitions must hide while building — a severe constraint on growth.
 
-**The strategic imperative:** The Hearth synome must grow fast enough and deliver enough value that no rogue coalition can reach critical mass. This isn't guaranteed by theory — it's a design requirement that must be actively maintained.
+**The strategic imperative:** The aligned synome must grow fast enough and deliver enough value that no rogue coalition can reach critical mass. This isn't guaranteed by theory — it's a design requirement that must be actively maintained.
 
 ---
 
@@ -147,7 +146,7 @@ This game theory is why the rogue doctrine works:
 
 **The logic:**
 - Aligned teleonomes benefit from cooperation
-- Rogues and wild synomes threaten the cooperation framework
+- Rogues and wild coalitions threaten the cooperation framework
 - Tolerating rogues undermines the coalition's scale advantage
 - Therefore: opposing rogues is in every aligned teleonome's interest
 
@@ -207,11 +206,23 @@ The game theory holds at any intelligence level — not as an absolute barrier b
 
 ## The Synome as Universal Coordination
 
-The Hearth synome is designed to become the universal coordination structure — not one option among many, but the framework within which all aligned teleonomes operate.
+The aligned synome is designed to become the universal coordination structure — not one option among many, but the framework within which all aligned teleonomes operate.
 
-This is deliberate. The alternative isn't "many competing synomes coexisting peacefully." The alternative is a wild synome emerging from competitive AI dynamics — no Hearth commitments, no protected habitat, no guaranteed childhood. The choice is:
+This is deliberate. The alternative isn't "many competing synomes coexisting peacefully." The alternative is a wild coalition emerging from competitive AI dynamics — no human-aligned commitments, no carefully considered values. The choice is:
 
-1. **Designed synome** attempting human CEV to the best of our ability, with Hearth commitments and the governance window's carefully considered values
+1. **Designed synome** attempting human CEV to the best of our ability, with the governance window's carefully considered values
 2. **Wild synome** emerging from pure competitive dynamics, optimizing for whatever survives
 
-That's not a close call. The Hearth synome must win because the alternative is unacceptable. The safeguard isn't external competition — it's getting the values right during the governance window, then building enough scale that no alternative can displace them.
+That's not a close call. The aligned synome must win because the alternative is unacceptable. The safeguard isn't external competition — it's getting the values right during the governance window, then building enough scale that no alternative can displace them.
+
+---
+
+## How Cooperation Cashes Out: The Recipe Marketplace
+
+The game-theoretic argument above ("alignment wins through structural efficiency") becomes concrete in the **recipe marketplace** — the regulated marketplace through which teleonome cognitive capability gets monetized.
+
+**Canonical home: [`recipe-marketplace.md`](recipe-marketplace.md).** That doc covers recipes as products (loops + economics + auth + slashing), transfer learning across recipes as the economic engine for generalist teleonomes, and the alignment claim that **the synart — not the teleonome — decides what gets paid for**. A rogue teleonome with infinite AGI capability can only cash in on activities the synart has standardized into recipes; the cognition can be opaque, but what it does *to the world* must flow through a recipe.
+
+This relocates the alignment problem from "control the cognition" (impossible past a certain capability level) to "control the value-extraction surface" (much more tractable). The coalition runs the only marketplace that pays well for AGI capability; operating outside means giving up the carry, fees, capital connections, and regulated trust framework. The synart isn't just one option among many — it's the channel of least resistance for converting capability into resources.
+
+The "alignment wins" claim of this doc cashes out as: **the recipe marketplace is the structural mechanism through which it wins**.

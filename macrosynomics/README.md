@@ -21,13 +21,19 @@ Start here for the structural foundation.
 How entities exist and act within the architecture.
 
 4. **[`synomic-agents.md`](synomic-agents.md)** — Synomic Agents as ledger-native entities. The spectrum from minimal Halos to mega capital allocators. Power through integration, joint-stock properties, autonomous lifeforms.
-5. **[`beacon-framework.md`](beacon-framework.md)** — Beacon taxonomy (power x authority matrix: LPLA/LPHA/HPLA/HPHA). Sentinel formations, BEAM hierarchy (pBEAM/cBEAM/aBEAM), lifecycle, naming conventions.
+5. **[`beacon-framework.md`](beacon-framework.md)** — Beacon taxonomy (two-tier authority + I/O role under it). Sentinel formations as a high-authority action subclass, BEAM hierarchy (pBEAM/cBEAM/aBEAM), in-space calculation, lifecycle, naming conventions.
 
 ### Implementation
 
 Connecting architecture to deployment.
 
 6. **[`short-term-actuators.md`](short-term-actuators.md)** — Phase 1 teleonome-less beacons. Beacon set + Synome-MVP + evolution pathway toward full teleonome-based operation.
+
+### Meta-Architectural Layering
+
+Higher-level frame for thinking about how the synome stratifies and evolves.
+
+7. **[`topology-layers.md`](topology-layers.md)** — Telos / axioms / topology / population stratification, plus the probmesh as transverse alignment-argument substrate. Sudo as the only path to change rigid layers; frames (canonical and shadow); comments as pre-probmesh content; phase deliverables as topology atom-sets.
 
 ---
 
@@ -46,9 +52,13 @@ synome-layers
     │
     ├──► beacon-framework
     │
-    └──► short-term-actuators
+    ├──► short-term-actuators
+    │         │
+    │    (Phase 1 → full architecture)
+    │
+    └──► topology-layers
               │
-         (Phase 1 → full architecture)
+         (meta-architecture: telos / axioms / topology / population)
 ```
 
 ---
@@ -59,6 +69,6 @@ synome-layers
 
 **[Synoteleonomics](../synoteleonomics/README.md)** describes the entities that inhabit the structures defined here.
 
-**[The Hearth](../hearth/README.md)** provides the purpose that drives both.
+**[The Hearth](../hearth/README.md)** holds the system's telos point and high-level commitments.
 
 Atomic concept definitions shared across all directories live in [`../core-concepts/`](../core-concepts/README.md). Narrative documents link to concept files for cross-references rather than re-explaining shared concepts.

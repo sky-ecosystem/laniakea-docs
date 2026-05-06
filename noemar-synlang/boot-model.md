@@ -7,10 +7,10 @@ identity is the entry point.** There's no separate "instantiation" or
 "install" step — booting Noemar against the synart with a given
 identity runs the loop that identity is registered for.
 
-Companion to `synart-access-and-runtime.md` (the `(run-forever)` shape
+Companion to `runtime.md` (the `(run-forever)` shape
 in §10 is the concrete instantiation of this abstract model for the
 synserv role), `topology.md` (where loops live structurally), and
-`syn-tel-emb.md` (the three-tier substrate this boot model runs on).
+`../synodoxics/noemar-substrate.md` (the three-tier substrate this boot model runs on; formerly `syn-tel-emb.md`).
 
 ---
 
@@ -405,7 +405,7 @@ opaque function calls from synlang's perspective. The pattern:
 So the *spec* is in synart and is the source of truth; the *impl* is
 fast-path; the *verifier* checks they agree. This generalizes the
 "functional core, imperative shell" pattern from
-`synart-access-and-runtime.md` §10.
+`runtime.md` §10.
 
 For new grounded primitives added to the runtime, governance
 obligations:
@@ -422,11 +422,11 @@ obligations:
 
 | Doc | What it covers, relative to this one |
 |---|---|
-| `synart-access-and-runtime.md` §10 | Concrete `(run-forever)` shape for the synserv role specifically — one application of the abstract boot model documented here |
-| `synart-access-and-runtime.md` §9 | Gate primitive details — boot resolves which gate to run via §6 above |
+| `runtime.md` §10 | Concrete `(run-forever)` shape for the synserv role specifically — one application of the abstract boot model documented here |
+| `runtime.md` §9 | Gate primitive details — boot resolves which gate to run via §6 above |
 | `topology.md` §6 (executable layer) | Where loop and gate Spaces live structurally; `&core-loop-*`, `&core-syngate`, `&core-telgate` |
 | `topology.md` §17 (two-step loop shape) | Universal template + per-entity instance pattern; expanded for loops here in §4 |
-| `syn-tel-emb.md` §6 | Atomspace runtimes — Noemar as one of multiple impls, runtime source in `&core-library-runtime-*` |
+| `../synodoxics/noemar-substrate.md` "Atomspace Runtimes" | Atomspace runtimes — Noemar as one of multiple impls, runtime source in `&core-library-runtime-*` |
 | `synlang-patterns.md` §5-§6 | Call-out primitive (for sentinel call-outs) and Sentinel formation patterns — running these uses this boot model |
 | `telseed-bootstrap-example.md` | Worked trace of the boot procedure for a fresh telseed instantiation |
 

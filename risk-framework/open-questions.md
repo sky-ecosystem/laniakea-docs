@@ -20,17 +20,17 @@ verify the claim (off-chain custody, off-chain contract terms,
 compliance facts).
 
 **Why deferred:** The cert/auth/beacon-class machinery already exists
-(per `synart-access-and-runtime.md`); the genuinely new design is the
+(per `../noemar-synlang/runtime.md`); the genuinely new design is the
 attestation atom schema and the reconciliation flow. No concrete
 attestor exists yet to drive the schema choice.
 
 **Forcing trigger:** Building the v1 crypto-collateralized lending
-test attestor (per `noemar-synlang/risk-framework-redesign-2026-05-03.md`
+test attestor (per `../inactive/archive/risk-framework-redesign-2026-05-03.md`
 §3.4). The test attestor is the first concrete instance and will
 shape the schema.
 
 **Cross-refs:** `noemar-synlang/beacons.md` (input beacon role
-includes attestor), `noemar-synlang/risk-framework-redesign-2026-05-03.md`
+includes attestor), `../inactive/archive/risk-framework-redesign-2026-05-03.md`
 §3.4.
 
 ---
@@ -50,7 +50,7 @@ include) and governance input (what disclosure level is acceptable).
 real deals are being categorized, the bucket boundaries are
 hypothetical.
 
-**Cross-refs:** `noemar-synlang/risk-framework-redesign-2026-05-03.md`
+**Cross-refs:** `../inactive/archive/risk-framework-redesign-2026-05-03.md`
 §3.5 (privacy approach for v1).
 
 ---
@@ -74,7 +74,7 @@ library curation effort that hasn't started.
 the moment governance has to defend a CRR number, the stress
 scenarios behind it become load-bearing.
 
-**Cross-refs:** `noemar-synlang/risk-framework-redesign-2026-05-03.md`
+**Cross-refs:** `../inactive/archive/risk-framework-redesign-2026-05-03.md`
 §3.6 (stress scenarios for v1), `noemar-synlang/risk-framework.md` §6
 (stress simulation as canonical equation type).
 
@@ -100,7 +100,7 @@ category cap, or when governance proposes a new category — both will
 force a calibration decision for that category.
 
 **Cross-refs:** `correlation-framework.md` §"How Caps Are Set" and
-"Open Questions"; `noemar-synlang/risk-framework-redesign-2026-05-03.md`
+"Open Questions"; `../inactive/archive/risk-framework-redesign-2026-05-03.md`
 Part 7 item 4 (concentration L3 deferred).
 
 ---
@@ -113,7 +113,7 @@ Includes scraping USDS, DAI (DAI→USDS migration), and sUSDS
 (savings-tier holders).
 
 **Why deferred:** v1 uses manual governance-set capacity (per
-`risk-framework-redesign-2026-05-03.md` §3.8 carve-out 1). Real-time
+`../inactive/archive/risk-framework-redesign-2026-05-03.md` §3.8 carve-out 1). Real-time
 Lindy is a Phase 2+ feature that requires the data infrastructure to
 exist first.
 
@@ -122,7 +122,7 @@ to be replaced with Lindy-driven dynamic allocations — likely when
 the v1 test scales beyond a small fixed allocation per Star Prime.
 
 **Cross-refs:** `duration-model.md` §"Two-Layer Capacity Calculation"
-(the Lindy layer requires this data), `noemar-synlang/risk-framework-redesign-2026-05-03.md`
+(the Lindy layer requires this data), `../inactive/archive/risk-framework-redesign-2026-05-03.md`
 §1.13 (structural demand scraping architecture) and §3.7 (Phase 1
 manual override).
 

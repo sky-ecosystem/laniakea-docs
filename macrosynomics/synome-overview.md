@@ -41,7 +41,7 @@ The [five-layer architecture](../core-concepts/five-layer-architecture.md) moves
 
 Knowledge accumulates in the [artifact hierarchy](../core-concepts/artifact-hierarchy.md): synart (shared) > telart (per teleonome) > embart (per embodiment). Higher-level knowledge is more authoritative.
 
-[Beacons](../core-concepts/beacon-framework.md) — classified by power × authority into LPLA/LPHA/HPLA/HPHA — are the regulated apertures through which teleonomes affect the world. See [`beacon-framework.md`](beacon-framework.md) for the full taxonomy.
+[Beacons](../core-concepts/beacon-framework.md) — classified by authority tier (low / high), with I/O role (input / action) underneath — are the regulated apertures through which teleonomes affect the world. See [`beacon-framework.md`](beacon-framework.md) for the full taxonomy.
 
 [Synomic Agents](atlas-synome-separation.md) (Primes, Halos, Generator, Guardian) are durable, ledger-native entities constrained by publicly visible rules — credible commitment devices enabling cooperation without trust.
 
@@ -102,3 +102,25 @@ The full architecture is built incrementally:
 | **Cognition runtime** | Noemar + Rule-Author Agent — synlang runtime with a working dreamer-actuator loop | [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) |
 
 Both pathways preserve the essential invariants while simplifying for practical deployment.
+
+---
+
+## Self-hosting
+
+The synart is more than a data layer — it's also the program. Loops, gates, recipes, and the runtime source itself live as atoms in synart. The runtime is just an interpreter pointed at synart with an identity.
+
+This collapses what would be three concepts elsewhere — the source code, the deployed binary, the running process — into one substrate plus an interpreter. The same boot procedure runs synserv, beacons, sentinels, archive embs, verifier embs — different identities resolve to different loops, but the runtime mechanism is uniform.
+
+**Five levels of self-reference** stack on this property:
+1. **Self-hosting** — synart contains the loops that run synart
+2. **Self-regulating** — synart contains the gates that regulate synart access
+3. **Self-paying** — synart contains the recipes that fund work on synart
+4. **Self-seeding** — synart contains the telseeds that birth new teleonomes
+5. **Self-improving** — synart contains the runtime source itself; recipe revenue funds substrate research; substrate research lands back in synart
+
+Canonical treatments:
+- [`../noemar-synlang/boot-model.md`](../noemar-synlang/boot-model.md) — identity-driven boot mechanics; how `noemar boot` resolves to a running loop; spec/instance collapse
+- [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) — Space layout including the executable layer (`&core-loop-*`, `&core-syngate`, `&core-telgate`) and library layer (`&core-library-runtime-*`, `&core-library-telseed-*`); the four meta-patterns; thirteen Phase 1 commitments
+- [`../synomics-overview.md`](../synomics-overview.md) §10.5 — canonical home for the five levels of self-reference enumeration
+
+The architectural consequence: there's no separate "code distribution" channel. Replication of the synart is replication of the running program. Subscribing to a synart slice means subscribing to the executable code of whatever roles you might run.

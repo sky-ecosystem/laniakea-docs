@@ -6,7 +6,7 @@ in-space computation. Phase 1 implementation will fill in concrete
 classes and per-protocol details.
 
 Companion to `listener-loops.md` (where the calculation now lives),
-`synart-access-and-runtime.md` (auth + identity), `boot-model.md`
+`runtime.md` (auth + identity), `boot-model.md`
 (identity-driven boot), `topology.md` §6 (executable layer), and
 `synlang-patterns.md` §6 (Sentinel formations as the high-power
 extreme of the action role).
@@ -47,9 +47,9 @@ calculate it themselves.
 ### Both roles share
 
 - Registered identity in `&core-registry-beacon` per `boot-model.md` §4
-- Gate-mediated submissions per `synart-access-and-runtime.md` §9
-- Auth scoped narrowly per the cert/auth chain (`syn-overview.md` §5)
-- Replay protection via nonces per `govops-synlang-patterns.md`
+- Gate-mediated submissions per `runtime.md` §9
+- Auth scoped narrowly per the cert/auth chain (`../synomics-overview.md` §5)
+- Replay protection via nonces per `../inactive/archive/govops-synlang-patterns.md` (historical demo)
 
 ---
 
@@ -90,7 +90,7 @@ Deferred to Phase 1:
 3. **Action-beacon authority scope** — Phase 1 has narrow,
    manually-authed beacons; later phases give Sentinel formations
    broader scope. The auth grant/revocation mechanics are settled
-   (`synart-access-and-runtime.md` §4-§7); the per-class scope
+   (`runtime.md` §4-§7); the per-class scope
    policies aren't.
 4. **Beacon-to-listener interaction** — does an input beacon's
    write trigger a listener loop directly, or always through synserv

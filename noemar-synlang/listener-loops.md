@@ -3,7 +3,7 @@
 **Status:** Sketch. Captures the concept; implementation deferred to
 Phase 1.
 
-Companion to `synart-access-and-runtime.md` (auth + runtime),
+Companion to `runtime.md` (auth + runtime),
 `boot-model.md` (identity-driven boot), and the in-progress beacon
 rethink.
 

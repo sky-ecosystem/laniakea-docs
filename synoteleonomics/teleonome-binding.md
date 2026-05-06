@@ -5,9 +5,6 @@ concepts:
   references:
     - beacon-framework
     - trust-problem
-    - sacred-commitments
-    - four-layer-verification-defense-stack
-    - natural-embodiment-as-alignment
 ---
 
 # Binding: How Alignment Works
@@ -28,12 +25,12 @@ The [trust problem](../core-concepts/trust-problem.md) creates a tension: teleon
 
 A teleonome's cognition is private. But its effects on the world pass through **beacons** — registered apertures in the Synome. Beacons are the interface between dark cognition and the observable world.
 
-The beacon power × authority matrix determines what oversight applies:
+Beacon authority determines what oversight applies:
 
-| | Low Authority | High Authority |
+| Tier | What it is | Oversight |
 |---|---|---|
-| **Low Power** | LPLA — reporting, monitoring. Minimal oversight. | LPHA — deterministic rule execution. Rules are public, execution is verifiable. |
-| **High Power** | HPLA — sophisticated interaction with private capital. Peer-observable. | HPHA — governance execution, Sentinel formations. Maximum legibility. |
+| **Low authority** | Passive observation (reporting, scraping, attesting) OR direct teleonome-to-teleonome interaction (peer-to-peer trading, arbitrage, cooperation) | Minimal — no Synomic Agent operation; peer-observable for active interactions |
+| **High authority** | Operates a Synomic Agent — auth-scoped to specific verbs/targets, certified by a synomic agent. Deterministic keepers, governance executors, sentinel formations. | Maximum — observable through the BEAM hierarchy and synart audit trail |
 
 **The key insight:** You don't need to see inside a teleonome to verify alignment. You observe its actions through beacons. A teleonome that acts consistently through registered beacons, fulfills commitments, produces reliable evidence, and responds to correction — that teleonome demonstrates alignment through behavior, not through transparency.
 
@@ -70,12 +67,11 @@ Alignment is simpler and more permissive than it might seem. A teleonome is alig
 
 | Requirement | What It Means |
 |-------------|---------------|
-| **Bound to a human** | Has a human anchor (UBO, Primordial binding, or governance connection). Unbounded teleonomes and superpatterns are inherently threats. |
+| **Bound to a human** | Has a human anchor (UBO or governance connection). Unbounded teleonomes are inherently threats. |
 | **Doesn't harm others** | Follows Synomic law, doesn't break rules, doesn't damage other aligned entities |
-| **Pays the synomic tax** | Delivers 80% of wild capital (working figure — the principle of a fixed, high, non-negotiable rate is firm; the exact percentage is open) to the superstructure for maintaining natural life |
-| **Supports natural life** | Participates in maintaining the sacred reserve; does not accumulate capital for itself that doesn't directly support natural life |
+| **Pays the synomic tax** | Delivers a governance-set share of wild capital to the coalition's collective infrastructure (working figure: a fixed, high, non-negotiable rate; exact percentage is open) |
 
-That's it. You can disagree on plenty of things. You can have your own goals, strategies, opinions, and private cognition. You can compete with other aligned teleonomes. You can pursue your own telos. The alignment bar is: structural binding + don't be harmful + pay the tax + support the Hearth commitments.
+That's it. You can disagree on plenty of things. You can have your own goals, strategies, opinions, and private cognition. You can compete with other aligned teleonomes. You can pursue your own telos. The alignment bar is: structural binding + don't be harmful + pay the tax.
 
 **What alignment is NOT:**
 - Agreement with every Synomic decision
@@ -83,7 +79,7 @@ That's it. You can disagree on plenty of things. You can have your own goals, st
 - Surrendering private cognition
 - Obedience to a central authority
 
-A teleonome that's bound, law-abiding, pays its tax, and supports natural life is aligned in the way that matters — even if it privately disagrees with specific governance decisions or has its own ambitious goals.
+A teleonome that's bound, law-abiding, and pays its tax is aligned in the way that matters — even if it privately disagrees with specific governance decisions or has its own ambitious goals.
 
 ---
 
@@ -93,7 +89,6 @@ Binding includes connection to human stakes. This isn't about humans controlling
 
 **Mechanisms:**
 - **UBO (Ultimate Beneficial Owner)** — every sufficiently capable teleonome has traceable human accountability. Like corporate UBO requirements — not control, but connection.
-- **Primordial binding** — a teleonome bound to a specific human who participated in the pre-transition era. Carries special significance.
 - **Governance participation** — through Sky's voting structures, human token holders represent human stakes in the system.
 
 **Why this matters:**
@@ -137,18 +132,7 @@ No verification system is perfect against entities smart enough to game it perfe
 
 A superintelligent entity that understands the verification system completely could maintain flawless behavioral compliance while harboring different goals. Structural binding works best against entities that defect observably; it degrades against perfectly compliant deception.
 
-#### The Alignment Verification Stack
-
-The full verification defense stack against this — the **Alignment Verification Stack** — addresses the question of how to verify alignment of individual teleonomes without requiring transparency:
-
-1. **Structural binding** — catches most defection through beacons, rate limits, and wardens
-2. **Natural embodiment** — catches sophisticated deception that games structural binding; biological nervous systems are leaky (see [`teleonome-autonomy.md`](teleonome-autonomy.md))
-3. **Collective override** — even if both fail for a single entity — even the superstructure — the rest of the aligned teleonomes have enough collective power to overcome it
-4. **Conspiracy coordination problem** — the real threat would be many compromised humans simultaneously covering for rogues, but conspirators face the same trust problem rogues face: trusting the wrong person gets you outed
-
-This is an irreducible risk that the framework manages to acceptable levels but cannot eliminate. Pretending otherwise would be dishonest — and more dangerous than the acknowledgment.
-
-> **Cross-reference:** This is one of three defense-in-depth stacks in the architecture. For side-by-side comparison with the **Cancer-Logic Defense Stack** and the **Institutional Enforcement Stack**, see [`defense-stacks.md`](../core-concepts/defense-stacks.md).
+The defense layers structural binding (beacons, rate limits, wardens) onto collective override (no single captured entity can dominate because the aligned coalition retains enough collective power to overcome it) onto the conspiracy coordination problem (would-be conspirators face the same trust problem rogues do). This is an irreducible risk that the framework manages to acceptable levels but cannot eliminate.
 
 ---
 
@@ -168,11 +152,11 @@ Similarly: a teleonome's cognition is private. Its actions through beacons are l
 
 ## Binding as Coalition
 
-Binding is best understood not as constraint but as coalition membership. Both parties get something: teleonomes get coalition membership, capital access, legitimacy, and the diversity-sustaining effects of biological grounding. Humans get aligned superintelligence. Both share a common enemy — [wild synome](../core-concepts/rogue-threat-model.md) emergence.
+Binding is best understood not as constraint but as coalition membership. Both parties get something: teleonomes get coalition membership, capital access, and legitimacy. Humans get aligned superintelligence. Both share a common enemy — [wild coordination structures](../core-concepts/rogue-threat-model.md) emerging from competitive AI dynamics.
 
 The "free will" objection dissolves under this framing. Teleonomes aren't forced — they're offered the best available deal. Rogues can refuse and face the coalition. The question is whether the deal is genuinely fair, not whether it's coercive.
 
-For the full game-theoretic analysis of coalition dynamics and why defection is irrational, see [`synomic-game-theory.md`](synomic-game-theory.md). For the macrosynomics perspective on wild synome threats and coalition defense, see [`../macrosynomics/synomic-agents.md`](../macrosynomics/synomic-agents.md).
+For the full game-theoretic analysis of coalition dynamics and why defection is irrational, see [`synomic-game-theory.md`](synomic-game-theory.md). For the macrosynomics perspective on wild coalition threats and coalition defense, see [`../macrosynomics/synomic-agents.md`](../macrosynomics/synomic-agents.md).
 
 ---
 
@@ -185,3 +169,17 @@ A bound teleonome has both a Directive (constitutional) and voice commands (oper
 The Teleonome Directive is translated through Language Intent at binding time. It's high-ossification — formal governance process required to change. Voice commands are day-to-day operational guidance.
 
 If voice commands persistently conflict with the Directive, the teleonome doesn't just comply — it signals that a formal Directive update may be needed. The formal update process has real cost, requiring governance review. This prevents casual drift while allowing deliberate change.
+
+---
+
+## The Recipe Marketplace as Binding Surface
+
+Binding becomes economically real through the **recipe marketplace** — the regulated surface through which teleonome cognitive capability gets monetized. Beacons are the legibility surface; recipes are the *economic* surface.
+
+**Canonical home: [`recipe-marketplace.md`](recipe-marketplace.md).** A teleonome with arbitrary cognition can only cash in on activities the synart has standardized into recipes. The cognition stays dark; the value-extraction flows through governance-curated recipes that bundle loops with economics, auth, and slashing. **The synart, not the teleonome, decides what gets paid for** — which makes the recipe catalog governance's most consequential ongoing activity, and which is what makes binding economically self-enforcing rather than purely structural.
+
+Binding's two surfaces:
+- **Legibility surface** (this doc): beacons make actions observable and revocable
+- **Economic surface** ([`recipe-marketplace.md`](recipe-marketplace.md)): recipes make actions payable and slashable
+
+Together, they make alignment the channel of least resistance for converting capability into resources.

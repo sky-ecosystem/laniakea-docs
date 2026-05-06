@@ -1,99 +1,75 @@
-# noemar-synlang — Synart Architecture and Synlang Patterns
+# noemar-synlang — Runtime + Language Technical Reference
 
-Working notes on the Synart's structural architecture, the synlang
-patterns that live inside it, and the artifact tiers (synart / telart /
-embart) that knit teleonomes into the synome's regulated cognitive
-economy. The Synart is the canonical, replicated part of the Synome —
-the data substrate where governance, authority, encumbrance, settlement
-*and the running program of the synome itself* all live as atoms.
+The canonical home for the **Noemar runtime + synlang** technical specifics. Everything else in the repo assumes familiarity with what's here; this is where readers go to find out what Noemar is, how the runtime works, what synlang looks like in practice, and how the substrate is organized.
+
+Analogous to a `smart-contracts/` directory in a financial protocol — distinct from conceptual docs, answers **"how is this actually implemented."**
+
+For the broader concept map (what synomics is *about*), see [`../synomics-overview.md`](../synomics-overview.md). For the abstract runtime architecture this directory implements, see [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md).
 
 ---
 
 ## Reading order
 
-For a new reader:
+For a new reader of this directory:
 
-1. **`syn-overview.md`** — concept map. Four-tier architecture,
-   blockchain analogy, trust model, authority chain, conservation
-   network, settlement, beacon flow, pipeline shape, failure modes,
-   five levels of self-reference, recipe marketplace pointer. Each
-   section is a pointer; depth lives in the docs below.
-2. **`topology.md`** — canonical structural reference. Entart tree,
-   six-layer synome root (constitutional / framework / registry /
-   aggregation / executable / library), four meta-patterns, the four
-   artifact types, naming convention, two-step rule and loop shapes,
-   thirteen Phase 1 commitments.
-3. **`syn-tel-emb.md`** — synart / telart / embart artifact tiers in
-   depth. Telseeds, Noemar and atomspace runtimes, resilience model,
-   the recipe marketplace (canonical home), alignment implications.
-4. **`risk-framework.md`** — four-book taxonomy (Primebook /
-   Halobook / Riskbook / Exobook), category framework (parameterized
-   stress-simulation equations at three levels), recursive composition
-   of exo books, four-tier resolution hierarchy, the post-state
-   content-based risk model.
-5. **`settlement-cycle-example.md`** — worked end-to-end example.
-   One Prime, two books, an ER breach, penalty calculation. ~70 lines
-   of synlang spread across the entart tree.
-6. **`telseed-bootstrap-example.md`** — worked telseed bootstrap.
-   Trace of one teleonome's first 24 hours from spawn to stable
-   multi-emb operation.
-7. **`scaling.md`** — operational concerns when this becomes a
-   networked system. Synserv as single sequencer, replication and
-   staleness, partial sync, hot-spotting, partitions, telart spread,
-   call-out propagation, telseed onboarding load, testing strategy.
+1. **[`synlang.md`](synlang.md)** — The language. S-expressions grounded in the synomic library; what got resolved (homoiconicity, compositionality, library-grounded symbols); what's still being designed (surface conventions, schema, versioning).
+2. **[`topology.md`](topology.md)** — Canonical structural reference. Entart tree, six-layer synome root, four meta-patterns, naming convention, two-step rule and loop shapes, thirteen Phase 1 commitments.
+3. **[`runtime.md`](runtime.md)** — Access control kernel + runtime architecture. Auth domains, three-level interaction model (root / cert / auth), gate primitive, in-synlang heartbeat, identity-driven boot summary, call-out primitive summary, sixteen migration principles.
+4. **[`boot-model.md`](boot-model.md)** — Identity-driven boot. The synart-as-program insight, Boot CLI, spec/instance collapse, shadow execution, hot-swap modes, failure modes, the grounded fast-path.
+5. **[`synlang-patterns.md`](synlang-patterns.md)** — Synlang code library. Platonic kernel, cross-book duality, four-constructor MeTTa surface with proper types, sentinel decision rule with risk-adjusted return, **the call-out primitive (canonical synlang form)**, **Sentinel formation patterns (Baseline / Stream / Warden as beacons-with-call-outs)**.
+6. **[`scaling.md`](scaling.md)** — Operational concerns when this becomes a networked system. Synserv as single sequencer, replication and staleness, partial sync, hot-spotting, partitions, telart spread, call-out propagation, telseed onboarding load, testing strategy.
+7. **[`listener-loops.md`](listener-loops.md)** — In-space calculation pattern (sketch). Endoscrapers / oracles / attestors push data atoms into book spaces; synserv keeps each book's derived state real-time consistent. Implementation mechanism deferred to Phase 1.
+8. **[`beacons.md`](beacons.md)** — Phase 1 beacon implementation sketches (input vs action, per-protocol details deferred). Conceptual core has been absorbed into [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md); this file remains as Phase-1-implementation reference until Phase 1 lands real classes.
+9. **[`telseed-bootstrap-example.md`](telseed-bootstrap-example.md)** — Worked Noemar boot example. Trace of one teleonome's first 24 hours from spawn to stable multi-emb operation.
 
-For deeper material:
+### Phase 2 content
 
-- **`boot-model.md`** — identity-driven boot. The synart-as-program
-  insight, Boot CLI, the spec/instance collapse, shadow execution,
-  hot-swap modes, failure modes, the grounded fast-path.
-- **`synart-access-and-runtime.md`** — auth domains, three-level
-  interaction model (root / cert / auth), gate primitive, in-synlang
-  heartbeat, identity-driven boot summary, call-out primitive
-  summary, telseed bootstrap summary, 16 migration principles,
-  original 7 Phase 1 commitments.
-- **`synlang-patterns.md`** — synlang code library. Platonic kernel,
-  cross-book duality, four-constructor MeTTa surface with proper
-  types, sentinel decision rule with risk-adjusted return, **the
-  call-out primitive (canonical synlang form)**, **Sentinel
-  formation patterns (Baseline / Stream / Warden as
-  beacons-with-call-outs)**.
-- **`govops-synlang-patterns.md`** — pattern catalog from the runnable
-  govops_demo. Pipeline shape, atom layer, full rule set,
-  constructor conventions, attestation-as-positive-flag,
-  ed25519 beacon identity, AETHER constraints. Captures *what runs
-  today*; some shapes have evolved in the canonical model (see
-  the doc's header note).
-- **`listener-loops.md`** — sketch of the in-space calculation pattern.
-  Endoscrapers / oracles / attestors push data atoms into book spaces;
-  synserv keeps each book's derived state (equity, CRR, ER, etc.)
-  consistent with current inputs in real time. Implementation
-  mechanism deferred to Phase 1.
-- **`beacons.md`** — sketch of the new beacon taxonomy after
-  calculation moved into the synart. Input beacons (endoscraper /
-  oracle / attestor) push data; action beacons (relayer / executor /
-  sentinel formation) emit chain txs based on synart state. Old →
-  new class mapping; per-class details deferred to Phase 1.
+Risk-framework rewrite landed; canonical conceptual treatment now lives in [`../risk-framework/`](../risk-framework/README.md). Two synlang-flavored docs remain in this directory:
+
+- **`risk-framework.md`** — Synlang-flavored complement (atom shapes, equations, four-tier resolution as code, five worked examples). Conceptual material defers to `../risk-framework/`.
+- **`settlement-cycle-example.md`** — Worked end-to-end settlement cycle synlang example. Demonstrates the synlang machinery (entart subtree, scatter-gather, settlement closure) using the new content-based CRR framing.
+
+### Working notes (archived)
+
+Session handoff and design-discussion notes that fed the risk-framework rewrite have been archived to [`../inactive/archive/`](../inactive/archive/) as of 2026-05-05:
+
+- `notes1.md` (session handoff)
+- `rewrite-plan-final.md` (Phase 0-6 plan of record)
+- `risk-framework-redesign-2026-05-03.md` (substrate for the rewrite)
+- `synome-extra-info.md` (refinements + §10 rewrite plan)
 
 ---
 
 ## File map
 
-| File | Role | Lines |
-|---|---|---|
-| `syn-overview.md` | Concept map / start-here; canonical home for five levels of self-reference | ~555 |
-| `topology.md` | Canonical structural reference (rewritten with executable + library layers) | ~1130 |
-| `syn-tel-emb.md` | Artifact tiers + telseeds + Noemar + canonical home for recipe marketplace | ~785 |
-| `risk-framework.md` | Four-book taxonomy (Primebook/Halobook/Riskbook/Exobook); category framework (exo asset / exobook / riskbook categories with stress-simulation equations); four-tier resolution hierarchy (math/simulation/heuristics/max-risk); canonical home for the content-based risk model and the default-deny CRR 100% rule | ~1615 |
-| `boot-model.md` | Identity-driven boot model — synart-as-program treatment | ~440 |
-| `telseed-bootstrap-example.md` | Worked trace of a new teleonome's first 24 hours | ~520 |
-| `scaling.md` | Operational / networked concerns | ~710 |
-| `settlement-cycle-example.md` | Worked example with old state-based CRR (pending update for new content-based model — see `risk-framework.md` §7) | ~245 |
-| `synart-access-and-runtime.md` | Auth domains, runtime, migration principles, identity-driven boot summary, call-out summary | ~745 |
-| `synlang-patterns.md` | Synlang code library + call-out primitive + Sentinel formation patterns | ~635 |
-| `govops-synlang-patterns.md` | Pattern catalog from runnable demo (historical) | ~440 |
-| `listener-loops.md` | Sketch of in-space calculation pattern (scrapers/oracles/attestors push data; synserv keeps book derived state real-time consistent); implementation mechanism deferred to Phase 1 | ~85 |
-| `beacons.md` | Sketch of the new two-role beacon taxonomy (input vs action) after calculation moved into the synart; old → new class mapping; per-class details deferred to Phase 1 | ~80 |
+| File | Role |
+|---|---|
+| [`synlang.md`](synlang.md) | Language reference — s-expressions grounded in the synomic library |
+| [`topology.md`](topology.md) | Canonical structural reference (synome root + entart tree + naming + meta-patterns + Phase 1 commitments) |
+| [`runtime.md`](runtime.md) | Auth domains, runtime architecture, gate primitive, migration principles, identity-driven boot summary, call-out summary |
+| [`boot-model.md`](boot-model.md) | Identity-driven boot — how `noemar boot` resolves to a running loop; synart-as-program; shadow execution |
+| [`synlang-patterns.md`](synlang-patterns.md) | Synlang code library — Platonic kernel, four-constructor surface, call-out primitive, Sentinel formation patterns |
+| [`scaling.md`](scaling.md) | Operational concerns — synserv as single sequencer, replication, partial sync, hot-spotting, partitions, testing |
+| [`listener-loops.md`](listener-loops.md) | In-space calculation pattern (sketch) |
+| [`beacons.md`](beacons.md) | Phase 1 beacon implementation sketches (per-protocol details deferred); conceptual core lives in `../macrosynomics/beacon-framework.md` |
+| [`telseed-bootstrap-example.md`](telseed-bootstrap-example.md) | Worked telseed bootstrap trace |
+| `risk-framework.md` | Phase 2 risk model — pending rewrite into `../risk-framework/` |
+| `settlement-cycle-example.md` | Phase 2 worked example — pending rewrite |
+
+---
+
+## Conceptual content that lives elsewhere
+
+If you came here looking for one of these, they've moved:
+
+| Topic | New canonical home |
+|---|---|
+| Concept map / synomics overview | [`../synomics-overview.md`](../synomics-overview.md) (formerly `syn-overview.md`) |
+| Artifact tiers (synart / telart / embart) + telseeds + bootstrap arc + atomspace runtimes + resilience model | [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) (absorbed `syn-tel-emb.md` §§1-7, 9, 10) |
+| Recipe marketplace | [`../synoteleonomics/recipe-marketplace.md`](../synoteleonomics/recipe-marketplace.md) (formerly `syn-tel-emb.md` §8) |
+| Beacon framework (two-tier authority + I/O role) | [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) (absorbed `beacons.md` + `listener-loops.md` conceptual core) |
+| Topology / population / probmesh meta-architectural layering | [`../macrosynomics/topology-layers.md`](../macrosynomics/topology-layers.md) (formerly `topology-population-probmesh.md`) |
+| GovOps demo pattern catalog | [`../inactive/archive/govops-synlang-patterns.md`](../inactive/archive/govops-synlang-patterns.md) (archived as historical) |
 
 ---
 
@@ -128,9 +104,7 @@ For deeper material:
 
 Things that should be true across all docs in this directory:
 
-- **Permission rule template:** `(if (auth $beacon $verb $target) True False)`
-  (the longer preamble in `govops-synlang-patterns.md` is documented
-  there as historical demo state).
+- **Permission rule template:** `(if (auth $beacon $verb $target) True False)`.
 - **Space naming:** `core-<kind>` and `entity-<type>-<id>-<sub-kind>` per `topology.md` §9.
 - **Phase 1 commitments:** thirteen total, canonical list in `topology.md` §19.
 - **Beacons and operators are external.** Only synomic agents own entarts.
@@ -139,17 +113,14 @@ Things that should be true across all docs in this directory:
 - **Cadence-agnostic** — Phase 1 is monthly, Phase 2+ daily; the architectural shape doesn't depend on the period.
 - **Six synome-root layers:** constitutional, framework, registry, aggregation, executable, library — per `topology.md` §6.
 - **Four meta-patterns:** frameworks propagate, registries identify, aggregations collect, specifications execute — per `topology.md` §7.
-- **Three artifact tiers:** synart (commons), telart (proprietary alpha), embart (hardware-local) — each a *tree of Spaces*, not a single Space. Full treatment in `syn-tel-emb.md`.
-- **Recipe marketplace canonical home:** `syn-tel-emb.md` §8. Other docs reference, don't duplicate.
-- **Five levels of self-reference canonical home:** `syn-overview.md` §10.5. Other docs reference.
-- **Identity-driven boot canonical home:** `boot-model.md`. `synart-access-and-runtime.md` §10 documents the synserv-specific concrete shape; §11.5 references the abstract model.
+- **Three artifact tiers:** synart (commons), telart (proprietary alpha), embart (hardware-local) — each a *tree of Spaces*. Full treatment in `../synodoxics/noemar-substrate.md`.
+- **Recipe marketplace canonical home:** `../synoteleonomics/recipe-marketplace.md`. Other docs reference, don't duplicate.
+- **Five levels of self-reference canonical home:** `../synomics-overview.md` §10.5. Other docs reference.
+- **Identity-driven boot canonical home:** `boot-model.md`. `runtime.md` §10 documents the synserv-specific concrete shape; §11.5 references the abstract model.
 - **Loops and gates live in synart** as content. Universal templates in synome root; entity-specific configurations in entarts (two-step loop pattern per `topology.md` §17).
 - **Telgate code lives in `&core-telgate`** (synart, universal); per-tel instance state lives in that tel's telart.
-- **Telseeds are minimal bootstrap configs**, not packaged knowledge corpora; full treatment in `syn-tel-emb.md` §4.
+- **Telseeds are minimal bootstrap configs**, not packaged knowledge corpora; full treatment in `../synodoxics/noemar-substrate.md`.
 - **Call-out primitive** is the only sanctioned mechanism for synart-resolved code to consult local cognition; canonical synlang form in `synlang-patterns.md` §5.
-- **Risk is content-based, not state-based.** The original state-based CRR (`(crr filling 5)` etc.) is gone. Risk derives from category-equation evaluation against current exo book state and Riskbook composition, typically as stress simulations. Canonical home: `risk-framework.md`.
-- **Four book types:** Primebook (Prime aggregation), Halobook (Halo aggregation), Riskbook (the unit of regulation; finality CRR computed here), Exobook (external structures, recursive). Bankruptcy remoteness lies above the Riskbook level.
-- **Riskbook categories are the unit of regulation.** A Riskbook must match a registered Riskbook category or get CRR 100% (default-deny). Risk categories live at three levels (exo asset / exobook / riskbook) with riskbook categories as the load-bearing economic citizens.
-- **Equations are stress simulations.** Category equations evaluate composition under a library of stress scenarios; risk weights reflect worst-case real claim to real assets in correlated crash. Four-tier resolution: math → simulation → heuristics → max-risk.
+- **Beacon framework is two-tier authority + I/O role under it.** Calculation lives in synart-resolved in-space computation that synserv runs (per `listener-loops.md`); beacons are pure I/O. Canonical home: `../macrosynomics/beacon-framework.md`.
 
 If a doc contradicts one of these, that's a doc bug, not a model bug.

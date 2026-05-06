@@ -1,19 +1,18 @@
 # Fractal Security Pattern
 
-> Growth with safeguards against cancer recurs at every scale of intelligent systems — from neural networks to cosmic infrastructure.
+> Growth with safeguards against cancer recurs at every scale of intelligent systems — from neural networks to large-scale AI infrastructure.
 
 **Also known as:** the fractal pattern, cancer prevention at every scale, AI-as-risk-management
 
 ## Definition
 
-The same fundamental operation — growth with safeguards against cancer — recurs fractally across all scales of intelligent systems. There is no discontinuous jump between the security model for a single neural network's training and the security model for cosmic-scale AI infrastructure. Each scale adds layers, but the core operation is identical: grow capability while preventing the growth from corrupting the system it's part of.
+The same fundamental operation — growth with safeguards against cancer — recurs fractally across all scales of intelligent systems. There is no discontinuous jump between the security model for a single neural network's training and the security model for large-scale AI infrastructure. Each scale adds layers, but the core operation is identical: grow capability while preventing the growth from corrupting the system it's part of.
 
 | Scale | Growth Mechanism | Cancer Safeguard |
 |-------|-----------------|------------------|
 | Neural network | Gradient descent | Regularization, early stopping |
 | Single teleonome | RSI, self-improvement | Multiple embodiments, guarded telart write access, ossification |
-| Synome | Evolutionary learning across teleonomes | Sacred commitments, power balance, hard-fork capability |
-| Superstructure | Cosmic-scale expansion | Sacred reserve, collective override |
+| Synome | Evolutionary learning across teleonomes | Telos-point commitments, power balance, hard-fork capability |
 
 This insight elevates cancer-logic prevention from a local architectural concern to a universal law of intelligent systems. "AI and risk management are the same thing at scale."
 
@@ -28,5 +27,3 @@ This insight elevates cancer-logic prevention from a local architectural concern
 ## Relationships
 
 - **defends-against:** [cancer-logic](cancer-logic.md) — the fractal pattern IS the defense against cancer at every scale
-- **scales-to:** [four-layer-enforcement-stack](four-layer-enforcement-stack.md) — the cosmic-scale instantiation of the pattern
-- **motivates:** [sacred-commitments](sacred-commitments.md) — sacred commitments are the Synome-scale cancer safeguard

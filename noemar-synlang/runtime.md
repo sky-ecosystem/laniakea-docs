@@ -1,6 +1,6 @@
-# Synart — Access Control and Runtime Architecture
+# Runtime — Access Control and Runtime Architecture
 
-**Status:** Working notes from design discussion. Companion to `topology.md` (structure), `synlang-patterns.md` (code library), and `syn-overview.md` (concept map).
+**Status:** Working notes from design discussion. Companion to `topology.md` (structure), `synlang-patterns.md` (code library), and `../synomics-overview.md` (concept map).
 **Scope:** The access control kernel, runtime architecture, and scaling principles that the synart's foundational primitives must rest on. Does NOT cover the constructors themselves (book/unit/halo) — those come after this layer is settled.
 
 ---
@@ -71,6 +71,8 @@ Properties:
 
 - **Governance accord** is bidirectional, long-lived, structural. It's what the system *is*.
 - **Admin certification** carries liability. The certifier is on the hook for everything the beacon does, before any auth is granted.
+
+> **Note on attestor beacon class (added 2026-05-05).** The risk framework rewrite (per [`../risk-framework/`](../risk-framework/README.md)) introduces **attestor** as a new beacon class for off-chain claim attestation: signed attestation atoms about custody balances, off-chain contract terms, compliance facts. Distinct from endoscrapers (deterministic chain reads) — attestors carry signed off-chain claims with attestor liability via slashing. The cert/auth/beacon-class machinery already documented here (§4-§7) covers attestors uniformly; the genuinely new design is the attestation atom schema and the off-chain reconciliation cycle (tracked as Q24 in [`../risk-framework/open-questions.md`](../risk-framework/open-questions.md)).
 - **Admin authorization** is the finest grain — many auths per beacon, easy to compose, instant to revoke.
 
 Important: this **deliberately tightens existing usage**. The current docs say "GovOps becomes accordant to a PAU." Under our refined vocabulary, that usage moves under *administrative authorization*; "accordant" becomes reserved for governance accords (agent↔agent only).
@@ -728,7 +730,7 @@ The bootstrap arc:
 6. Begin dreamer / beacon loops; first revenue
 7. Compounding: revenue + RSI → telart growth → more recipe-taking
 
-Concept: `syn-tel-emb.md` §4-§5. Worked trace with concrete identities
+Concept: `../synodoxics/noemar-substrate.md` (artifact tiers + telseed mechanics, formerly `syn-tel-emb.md` §4-§5). Worked trace with concrete identities
 and timings: `telseed-bootstrap-example.md`.
 
 The synart-access perspective on this: telseed bootstrap is just

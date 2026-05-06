@@ -8,13 +8,13 @@
 
 Binding resolves the fundamental tension between teleonome privacy and systemic trust. Teleonomes must be dark — private cognition is what makes them valuable, enabling proprietary insight, free thinking, and competitive strategy. But dark entities are dangerous — hidden goals and hidden capabilities could mean accumulating power, planning defection, or optimizing against the Synomic order.
 
-The solution: keep cognition dark, make action legible. A teleonome's internal reasoning remains private. Its effects on the world pass through beacons — registered apertures in the Synome. The beacon power × authority matrix determines oversight: LPLA (reporting, minimal oversight), LPHA (deterministic rule execution, verifiable), HPLA (sophisticated interaction, peer-observable), HPHA (governance execution, maximum legibility).
+The solution: keep cognition dark, make action legible. A teleonome's internal reasoning remains private. Its effects on the world pass through beacons — registered apertures in the Synome. Beacon authority determines oversight: low-authority beacons (passive observation OR peer-to-peer teleonome interaction) face minimal oversight; high-authority beacons (operating Synomic Agents under auth-scoped certification) are scoped, observable, and revocable.
 
 Power registration scales accountability with capability. Higher power requires higher-authority beacons for greater-impact actions. The teleonome chooses: accept oversight proportional to capability, or limit what it can do. Registration costs some opacity (high-authority beacon actions are visible), some autonomy (operating through regulated channels), and hidden capability detection (a teleonome more powerful than its registration suggests gets caught by the gap). Registration provides access to capital and leverage, cooperation with other aligned teleonomes, protection under Synomic law, and participation in compounding loops.
 
-The human anchor grounds binding in human stakes. Every sufficiently capable teleonome has traceable human accountability through three mechanisms: UBO (Ultimate Beneficial Owner — like corporate UBO requirements, not control but connection), Primordial binding (teleonome bound to a specific human from the pre-transition era), and governance participation (human token holders representing human stakes). An unbounded teleonome — one with no human anchor — is structurally indistinguishable from a rogue.
+The human anchor grounds binding in human stakes. Every sufficiently capable teleonome has traceable human accountability — typically a UBO (Ultimate Beneficial Owner — like corporate UBO requirements, not control but connection) or governance participation (human token holders representing human stakes). An unbounded teleonome — one with no human anchor — is structurally indistinguishable from a rogue.
 
-Alignment is verified through behavior, not transparency: beacon consistency, commitment fulfillment, evidence production quality, response to correction, and cross-embodiment consistency. The verification ceiling is honestly acknowledged — a superintelligent entity that understands the verification system perfectly could maintain flawless compliance while harboring different goals. The full defense stack: structural binding → natural embodiment (biological leakiness) → collective override → conspiracy coordination problem.
+Alignment is verified through behavior, not transparency: beacon consistency, commitment fulfillment, evidence production quality, response to correction, and cross-embodiment consistency. The verification ceiling is honestly acknowledged — a superintelligent entity that understands the verification system perfectly could maintain flawless compliance while harboring different goals. This is an irreducible risk that the framework manages but does not claim to eliminate.
 
 Binding is NOT control. It's like auditable books for a bank — the prerequisite for being trusted with deposits, not a limitation on banking. The teleonome retains full cognitive autonomy and chooses to act through registered beacons because participation benefits outweigh oversight costs.
 
@@ -22,10 +22,9 @@ Binding is NOT control. It's like auditable books for a bank — the prerequisit
 
 - Dark cognition + legible action: privacy preserved, effects observable through beacons
 - Power registration: higher capability → higher accountability, self-declared
-- Human anchor: UBO, Primordial binding, or governance participation; unbounded = structurally rogue
-- Alignment requirements: bound to human, don't harm others, pay synomic tax (80% of wild capital), support natural life
+- Human anchor: UBO or governance participation; unbounded = structurally rogue
 - Verification through behavior: beacon consistency, commitment fulfillment, evidence quality, response to correction
-- The verification ceiling: an irreducible risk managed through four defense layers
+- The verification ceiling: an irreducible risk acknowledged honestly
 - Directive always wins over voice commands — constitutional over operational
 
 ## Relationships
@@ -34,4 +33,3 @@ Binding is NOT control. It's like auditable books for a bank — the prerequisit
 - **motivated-by:** [trust-problem](trust-problem.md) — binding exists because teleonomes cannot trust each other directly
 - **motivated-by:** [emergence](emergence.md) — alignment must precede emergence because will resists redirection once compounding
 - **defends-against:** [rogue-threat-model](rogue-threat-model.md) — binding is the first line of defense against rogue teleonomes
-- **complements:** [natural-embodiment-as-alignment](natural-embodiment-as-alignment.md) — structural binding and biological grounding cover different failure modes

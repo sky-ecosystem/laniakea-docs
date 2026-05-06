@@ -5,8 +5,18 @@ Prime, demonstrating the load-bearing primitives: seed state across an
 entart subtree, auth grants, permission rules, derived encumbrance
 ratio, real-time event samples, covenant check, and penalty calculation.
 
+> **Reading note.** This doc focuses on the **synlang machinery** —
+> entart subtrees, auth grants, scatter-gather rules, settlement
+> closure. CRR values in §1 are illustrative scalars; in the new
+> content-based framework they come from Riskbook category equations
+> (per [`../risk-framework/risk-decomposition.md`](../risk-framework/risk-decomposition.md),
+> [`../risk-framework/riskbook-layer.md`](../risk-framework/riskbook-layer.md)).
+> See §3.5 below for the content-based pattern. For the canonical
+> end-to-end risk-framework example (the v1 crypto-collateralized
+> lending test), see [`../risk-framework/examples.md`](../risk-framework/examples.md).
+
 Companion to `topology.md` (the Space layout this uses) and
-`syn-overview.md`. Uses the synome root (`&core-*`) plus the
+`../synomics-overview.md`. Uses the synome root (`&core-*`) plus the
 entart tree (`&entity-*`) defined in `topology.md`.
 
 ---
@@ -121,6 +131,34 @@ an `auth` fact.
 
 Three reads from `&self` (the book leaf hosting the rule), one read
 from the universal `&core-framework-risk`. No cross-entart reach.
+
+### 3.5. Content-based version
+
+In the new content-based framework, the CRR scalar comes from a
+Riskbook category equation rather than a state lookup:
+
+```metta
+(= (unit-risk-weight $u)
+   (let* (($n   (match &self (unit-notional $u $n) $n))
+          ($rb  (riskbook-of-unit $u))
+          ($cat (find-matching-category $rb))
+          ($crr (eval-category-equation $cat $rb m2m)))
+     (* $n $crr)))
+```
+
+Where `find-matching-category` matches the Riskbook against
+`&core-framework-risk-categories` (per
+[`../risk-framework/riskbook-layer.md`](../risk-framework/riskbook-layer.md)
+§2) and `eval-category-equation` runs the four-tier resolution
+hierarchy (math / simulation / heuristic / max-risk per `risk-framework.md`
+§5). If no category matches, default-deny: CRR = 100%.
+
+Lifecycle phases (filling / deploying / at-rest) now manifest as
+**different exo units pointing to different exo books with different
+categories**, not as a state attribute on a single unit. The CRR
+values shown in §1 are placeholders for what category equations would
+produce — the synlang machinery downstream (scatter-gather, ER
+computation, settlement closure) is identical either way.
 
 ## 4. Prime ER — scatter-gather across book leaves
 

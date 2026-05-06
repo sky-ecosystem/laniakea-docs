@@ -11,8 +11,6 @@ concepts:
     - synomic-inertia
     - rsi
     - beacon-framework
-    - sacred-commitments
-    - four-layer-enforcement-stack
 ---
 
 # Security and Resources
@@ -306,7 +304,7 @@ The security-relevant properties of inertia:
 
 **Governance weight.** The cost of changing a high-inertia rule is proportional to the evidence behind it. Governance debates are naturally weighted: overturning a speculative pattern requires only modest counter-evidence, while overturning an axiomatic pattern requires extraordinary evidence — or governance action outside the evidence system entirely.
 
-**Temporal stability.** Over cosmic timescales, drift is the existential threat. Synomic inertia keeps the [Hearth commitments](../core-concepts/sacred-commitments.md) sacred across billions of years — not because they are locked by code, but because their evidence base is so massive that no perturbation can shift them.
+**Temporal stability.** Over long timescales, drift is the existential threat. Synomic inertia keeps load-bearing commitments durable — not because they are locked by code, but because their evidence base is so massive that no perturbation can shift them.
 
 **Progressive edge-case closure.** The longer the system operates, the more patterns accumulate, and the harder it becomes for truly novel harmful strategies to succeed. Evidence fills in gaps over time — strategies that have been tried and failed become negative evidence. The density of established patterns acts as an immune memory. Inertia progressively closes the vulnerability surface of the system as a whole.
 
@@ -330,7 +328,7 @@ Synomic inertia is robust against noise and accidental drift, but what about del
 
 **Operational defense: intent as asymmetric evidence.** The system must always consider the possibility of malicious intent behind evidence patterns. Suspiciously uniform confirmation, evidence that arrives too conveniently, patterns that benefit their source disproportionately — all warrant intent analysis. The key asymmetry: discovery of malicious intent is near-total reversal. Fabricated evidence is reclassified as counter-evidence, the artificially ossified pattern collapses, and the fabricator faces catastrophic consequences. This makes adversarial ossification a high-risk strategy — it works until caught, and getting caught is catastrophic. The system should be designed so that the expected cost of attempting adversarial ossification always exceeds the expected benefit.
 
-**Foundational limit: faith in the seed.** At the deepest level — Hearth commitments, core axioms — no operational defense suffices. The system rests on faith that the foundations were planted with good intent. No mechanism bootstraps out of a corrupted foundation, because the system's own inertia would protect the corruption. A bad axiom at (1,1) confidence is the one thing the architecture cannot self-correct. This is the sharpest argument for the governance window: the seed determines everything, the seed is being planted now, and the system's defense mechanisms will make a bad seed nearly impossible to remove later. The honest response is not to pretend this vulnerability doesn't exist, but to acknowledge it and devote maximum attention to getting the seed right while humans can still meaningfully participate.
+**Foundational limit: faith in the seed.** At the deepest level — telos point, core axioms — no operational defense suffices. The system rests on faith that the foundations were planted with good intent. No mechanism bootstraps out of a corrupted foundation, because the system's own inertia would protect the corruption. A bad axiom at (1,1) confidence is the one thing the architecture cannot self-correct. This is the sharpest argument for the governance window: the seed determines everything, the seed is being planted now, and the system's defense mechanisms will make a bad seed nearly impossible to remove later. The honest response is not to pretend this vulnerability doesn't exist, but to acknowledge it and devote maximum attention to getting the seed right while humans can still meaningfully participate.
 
 ---
 
@@ -357,9 +355,9 @@ The system will generate bad updates. RSI will propose changes that seem locally
 - Maintain audit trails of what changed and why
 - Plan for pattern recovery
 
-### Defense in Depth: The Cancer-Logic Defense Stack
+### Defense in Depth
 
-No single protection is enough. The following seven-layer model — the **Cancer-Logic Defense Stack** — addresses self-corruption and adversarial manipulation within a single teleonome or the Synome itself:
+No single protection is enough. The following seven-layer model addresses self-corruption and adversarial manipulation within a single teleonome or the Synome itself:
 
 ```
 Layer 1: Ossification (high-confidence patterns resist change)
@@ -372,8 +370,6 @@ Layer 7: Peer enforcement (other aligned entities can intervene)
 ```
 
 If one layer fails, the others still protect.
-
-> **Cross-reference:** This is one of three defense-in-depth stacks in the architecture. For side-by-side comparison with the **Institutional Enforcement Stack** and the **Alignment Verification Stack**, see [`defense-stacks.md`](../core-concepts/defense-stacks.md).
 
 ### Adversarial Soft Channels
 
@@ -400,10 +396,9 @@ The same fundamental operation — **growth with safeguards against cancer** —
 |-------|-----------------|------------------|
 | **Neural network** | Gradient descent | Regularization, early stopping |
 | **Single teleonome** | RSI, self-improvement | Multiple embodiments, guarded telart write access, ossification |
-| **Synome** | Evolutionary learning across teleonomes | Hearth commitments, power balance, hard-fork capability |
-| **Superstructure** | Cosmic-scale expansion | The Hearth, collective override (see [`../hearth/hearth.md`](../hearth/hearth.md)) |
+| **Synome** | Evolutionary learning across teleonomes | Telos-point commitments, power balance, hard-fork capability |
 
-There is no discontinuous jump between these scales. The security model for cosmic-scale AI is the same pattern as for a single teleonome's LoRA training — you add layers, but the operation is identical: grow capability while preventing the growth from corrupting the system it's part of.
+There is no discontinuous jump between these scales. The security model at any scale is the same pattern as for a single teleonome's LoRA training — you add layers, but the operation is identical: grow capability while preventing the growth from corrupting the system it's part of.
 
 **AI and risk management are the same thing at scale.** Teleonomes, superintelligence, alignment anchoring, preventing existential risk — it's all evolutionary learning and self-growth with safeguards preventing cancer. Even gradient descent can be understood as "doing random updates but with safeguards (loss function, regularization) that push toward alignment with the training objective."
 
@@ -449,10 +444,8 @@ The Synome's self-protection operates through layered enforcement. The inner lay
 
 Each layer watches for drift in the layer it governs. The Synome checks itself; the Core Council checks whether governance is following the Synome faithfully.
 
-The outer enforcement layers — the [four-layer enforcement stack](../core-concepts/four-layer-enforcement-stack.md) comprising physical enforcement infrastructure and collective teleonome override — belong to the teleological vision described in [`../hearth/hearth.md`](../hearth/hearth.md). Together, the full stack ensures no single point of capture can compromise the Hearth commitments.
-
 ### Immutability as Equilibrium
 
-The Hearth commitments aren't immutable because code prevents changing them. They're immutable because every entity that matters will fight to restore them if they drift.
+The system's load-bearing commitments aren't immutable because code prevents changing them. They're immutable because every entity that matters will fight to restore them if they drift.
 
 The Synome can be hard-forked. The infrastructure can be rebuilt. The commitments survive because the entities enforcing them genuinely hold them. This is a distributed equilibrium, not a technical lock — and it's stronger for it, because it doesn't depend on any single enforcement mechanism remaining intact.

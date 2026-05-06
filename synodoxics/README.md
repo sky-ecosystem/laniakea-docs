@@ -20,10 +20,15 @@ Start here for the knowledge dynamics.
 2. **[`retrieval-policy.md`](retrieval-policy.md)** — Invariants, principles, and degrees of freedom for querying the probabilistic mesh. Risk-gates-authority constraint.
 3. **[`security-and-resources.md`](security-and-resources.md)** — Cancer-logic as the primary threat. Ossification as the solution. Resource discipline, defense in depth, the update problem, adversarial soft channels, fractal security pattern.
 
-### Substrate and Language
+### Substrate
 
 4. **[`noemar-substrate.md`](noemar-substrate.md)** — The synlang runtime: Space, PLN truth values, the protocol system, the epistemic cycle, the emo concretized as the Rule-Author Agent. Where the architectural commitments cash out into a working substrate.
-5. **[`synlang.md`](synlang.md)** — The language itself: S-expressions grounded in the synomic library. Settled questions and evolving surface conventions. (The earlier hypergraph/notation/extensions research track is resolved by Noemar's design.)
+
+The language itself — synlang as a formal reference — lives in [`../noemar-synlang/synlang.md`](../noemar-synlang/synlang.md), alongside the rest of the Noemar runtime + synlang technical reference. Synodoxics provides the epistemic architecture and the substrate that interprets synlang; the language reference is in noemar-synlang.
+
+### Vocabulary
+
+6. **[`lift.md`](lift.md)** — Canonical home for the lift / meta-lift / weakness vocabulary used across the corpus. Lift is what cognition leaves behind when it makes future cognition easier; opaque grounded primitives need empirical lift around them; weakness gives net-lift-after-costs a cost-algebra. Substrate docs, neurosymbolic cognition, RSI, and teleonome economics all reference this rather than restating.
 
 ### Where Cognition Lives
 
@@ -37,13 +42,15 @@ The architectural commitment about how cognition works — symbolic-first, synla
 probabilistic-mesh
     ├──► retrieval-policy
     ├──► security-and-resources
-    └──► noemar-substrate ──► synlang
+    └──► noemar-substrate ──► ../noemar-synlang/  (runtime + language reference)
                   │
                   ▼
           ../neurosymbolic/  (cognition: architecture + mechanisms)
+
+lift  (vocabulary referenced by noemar-substrate, ../neurosymbolic/, ../core-concepts/rsi, ../synoteleonomics/teleonome-economics)
 ```
 
-`noemar-substrate.md` grounds the abstract epistemic architecture in its concrete runtime. `synlang.md` describes the language. The cognition loop that uses both lives next door in `../neurosymbolic/`.
+`noemar-substrate.md` grounds the abstract epistemic architecture in its concrete runtime. The synlang language reference and the rest of the runtime tech specifics live in `../noemar-synlang/`. `lift.md` is the cross-cutting vocabulary the whole stack leans on. The cognition loop that uses all three lives next door in `../neurosymbolic/`.
 
 ---
 
@@ -55,6 +62,6 @@ probabilistic-mesh
 
 **[Synoteleonomics](../synoteleonomics/README.md)** describes the entities that inhabit the structures macrosynomics defines and use the knowledge synodoxics governs. Teleonome memory, resilience, and economics all depend heavily on the probabilistic mesh and security model.
 
-**[The Hearth](../hearth/README.md)** provides the purpose — the Hearth commitments that the security model ultimately protects.
+**[The Hearth](../hearth/README.md)** provides the system's telos point and high-level commitments.
 
 Atomic concept definitions shared across all directories live in [`../core-concepts/`](../core-concepts/README.md).

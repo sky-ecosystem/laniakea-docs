@@ -2,15 +2,15 @@
 
 > The irreducible teleological invariant at the center of a synome — a Schelling point but for everything, forever.
 
-**Also known as:** teleological core, sacred telos (Hearth usage), coordination invariant
+**Also known as:** teleological core, coordination invariant
 
 ## Definition
 
-A telos point is the permanent purpose-core that all coordination within a synome orbits around. Where a Schelling point is a focal equilibrium that agents converge on in a single game, a telos point elevates the concept to teleological scope and cosmic timescale: it coordinates not just one interaction but every interaction, not just now but permanently. It is the thing a synome IS about — the irreducible commitment that, if removed, would leave only machinery without direction.
+A telos point is the permanent purpose-core that all coordination within a synome orbits around. Where a Schelling point is a focal equilibrium that agents converge on in a single game, a telos point elevates the concept to teleological scope and long timescale: it coordinates not just one interaction but every interaction, not just now but permanently. It is the thing a synome IS about — the irreducible commitment that, if removed, would leave only machinery without direction.
 
 The distinction from a Schelling point is fourfold. A telos point is **teleological** — it has direction, not just salience. It is **permanent** — it holds or the synome dies; there is no graceful degradation. It is **totalizing** — it coordinates all games within the synome, not just one. And it is **self-reinforcing** — emergence compounds around it, making it progressively harder to dislodge and progressively more central to the system's identity.
 
-A telos point can be designed or emergent. The Hearth telos point — the [sacred commitments](sacred-commitments.md) — is deliberately designed: four values chosen for convergence probability, locked in during the [governance window](governance-window.md), and protected by the [four-layer enforcement stack](four-layer-enforcement-stack.md). A wild synome's telos point is whatever survived selection pressure — potentially coherent, potentially not, but certainly not shaped by human values. "Universal alignment" is the hypothesis that telos points converge: that any synome whose telos point is close enough to reality's grain will arrive at similar commitments independently.
+A telos point can be designed or emergent. This system's telos point is deliberately designed: high-level commitments to protect human life, nature, and the Earth — chosen for convergence probability and locked in during the [governance window](governance-window.md). See [`hearth/`](../hearth/README.md). "Universal alignment" is the hypothesis that telos points converge: that any synome whose telos point is close enough to reality's grain will arrive at similar commitments independently.
 
 ## Key Properties
 
@@ -26,10 +26,7 @@ A telos point can be designed or emergent. The Hearth telos point — the [sacre
 
 ## Relationships
 
-- **instance:** [sacred-commitments](sacred-commitments.md) — the Hearth telos point
-- **protected-by:** [four-layer-enforcement-stack](four-layer-enforcement-stack.md) — the enforcement hierarchy exists to protect the telos point
 - **requires:** [emergence](emergence.md) — entities must emerge (develop will) to commit to a telos point
 - **solves:** [trust-problem](trust-problem.md) — provides the credible commitment that coordination needs
 - **protected-by:** [ossification](ossification.md) — at maximum ossification; only reality tests it
 - **protected-by:** [synomic-inertia](synomic-inertia.md) — at maximum inertia; no perturbation can shift it
-- **motivates:** [stellar-husbandry](stellar-husbandry.md) — the concrete sacred purpose the Hearth telos point generates

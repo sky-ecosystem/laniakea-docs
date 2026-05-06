@@ -238,7 +238,7 @@ The truth value mechanism creates a natural property: **synomic inertia** — th
 
 Inertia naturally throttles RSI: edge patterns evolve rapidly, core patterns evolve slowly. This gradient is not imposed by policy — it emerges from the evidence dynamics.
 
-For the full treatment — including ossification levels, negative inertia, institutional credibility implications, and temporal stability across cosmic timescales — see [`security-and-resources.md`](security-and-resources.md#synomic-inertia).
+For the full treatment — including ossification levels, negative inertia, institutional credibility implications, and long-timescale stability — see [`security-and-resources.md`](security-and-resources.md#synomic-inertia).
 
 ---
 

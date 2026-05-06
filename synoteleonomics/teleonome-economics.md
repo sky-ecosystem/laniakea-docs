@@ -130,7 +130,7 @@ LoRAs are a distributed data collection and validation pipeline for the slower, 
 
 ## Alignment Properties of Self-Training
 
-LoRA training from experience is a form of self-modification. The [cancer-logic](../core-concepts/cancer-logic.md) prevention model applies — base model weights are sacred and immutable; adapters are bounded learned habits; [ossification](../core-concepts/ossification.md) governs trust; the [crystallization interface](../core-concepts/crystallization-interface.md) governs promotion. See [RSI Security](#rsi-security) below for the full treatment.
+LoRA training from experience is a form of self-modification. The [cancer-logic](../core-concepts/cancer-logic.md) prevention model applies — base model weights are frozen and immutable; adapters are bounded learned habits; [ossification](../core-concepts/ossification.md) governs trust; the [crystallization interface](../core-concepts/crystallization-interface.md) governs promotion. See [RSI Security](#rsi-security) below for the full treatment.
 
 ---
 
@@ -213,7 +213,7 @@ For any given task, the teleonome's compute decision is simple:
 2. **Local best model + multiple passes** — when uncertain, sample repeatedly rather than switching models. Costs only time on already-paid-for hardware.
 3. **External frontier API** — only when local best model genuinely can't match the required quality, and the cost of a bad decision exceeds the API cost
 
-This third tier is narrow. For a well-provisioned GPU cluster running a strong open model, routine operations almost never need it. The retrieval policy's "risk determines minimum authority" principle applies here: high-risk decisions (especially HPHA sentinel actions) might require frontier reasoning even if it costs tokens.
+This third tier is narrow. For a well-provisioned GPU cluster running a strong open model, routine operations almost never need it. The retrieval policy's "risk determines minimum authority" principle applies here: high-risk decisions (especially high-authority sentinel actions) might require frontier reasoning even if it costs tokens.
 
 ---
 
@@ -246,7 +246,7 @@ This is a second compounding loop alongside the sentinel carry loop described in
 
 ## Recursive Self-Improvement (RSI)
 
-All of the above — LoRA adaptation, base model fine-tuning, daydreaming, the never-idle queue — are components of a single process: recursive self-improvement. Using current intelligence to increase future intelligence.
+All of the above — LoRA adaptation, base model fine-tuning, daydreaming, the never-idle queue — are components of a single process: recursive self-improvement. Using current intelligence to increase future intelligence. In [lift](../synodoxics/lift.md) vocabulary: meta-lift in operation — lift pointed at the machinery that generates, tests, and reuses lift, on a fixed-cost substrate that compounds.
 
 ### The RSI Loop
 
@@ -301,7 +301,7 @@ LoRA training from experience is self-modification. The [cancer-logic](../core-c
 - **The crystallization interface governs promotion.** A locally trained LoRA that proves valuable can be promoted: embart → telart → potentially synart. Promotion requires authority, not just local success.
 - **The mesh catches regressions.** If an adapter trained on contaminated data starts producing worse outcomes, the (strength, confidence) tracking surfaces the degradation.
 
-**RSI cannot modify the sacred core.** [Hearth commitments](../hearth/hearth.md) sit at maximum ossification and are encoded in the constitutional layer (base model weights, deontic skeleton), not in adapters. RSI operates exclusively on adapter weights and mesh knowledge — it cannot reach the frozen constitutional core. A teleonome cannot RSI its way out of Hearth commitments any more than a LoRA can rewrite the base model it's attached to.
+**RSI cannot modify the constitutional core.** The system's load-bearing commitments sit at maximum ossification and are encoded in the constitutional layer (base model weights, deontic skeleton), not in adapters. RSI operates exclusively on adapter weights and mesh knowledge — it cannot reach the frozen constitutional core. A teleonome cannot RSI its way out of its commitments any more than a LoRA can rewrite the base model it's attached to.
 
 ---
 
@@ -310,3 +310,13 @@ LoRA training from experience is self-modification. The [cancer-logic](../core-c
 Synlang-native cognition (see [`neuro-symbolic-cognition.md`](../neurosymbolic/neuro-symbolic-cognition.md)) has a direct economic consequence: **zero integration cost for shared knowledge**. When the teleonome thinks in the same format the Synome stores knowledge, accessing synart improvements is effortless — no porting, no translation, no compatibility layer. Every pattern, strategy, or tool that any aligned teleonome contributes becomes immediately usable by every other synlang-native teleonome.
 
 This creates a compounding network effect: the more teleonomes contribute to synart, the more valuable alignment becomes. The more valuable alignment becomes, the more teleonomes contribute. The economic incentive and the alignment incentive point in the same direction — a teleonome that thinks natively in synlang automatically captures the full value of the shared brain, while one that doesn't faces a permanent integration tax on every piece of shared knowledge.
+
+---
+
+## The Recipe Marketplace
+
+The economic engine that monetizes teleonome capability — recipes, transfer learning across recipes, catalog curation as the alignment surface — is the canonical alignment-via-economics surface for the synome. It's the channel through which AGI capability gets converted to capital, and the structural mechanism that locks alignment in despite arbitrary teleonome cognition.
+
+**Canonical home: [`recipe-marketplace.md`](recipe-marketplace.md).** That doc covers recipes as products (loops + economics + auth + slashing), transfer learning as the economic engine for generalist teleonomes, recipe lifecycle (proposal → sandbox → crystallization → live → deprecation), pricing levers as governance's most consequential ongoing activity, and the alignment claim that the synart — not the teleonome — decides what gets paid for.
+
+The teleonome economics in this doc (fixed-cost compute, RSI loop, daydreaming, never-idle queue) is what makes recipe-marketplace participation profitable. The marketplace is what makes the economics aligned. Read together.

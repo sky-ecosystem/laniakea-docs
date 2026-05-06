@@ -9,8 +9,6 @@ concepts:
     - language-intent
     - cancer-logic
     - synomic-inertia
-    - human-merge
-    - sacred-commitments
 ---
 
 # Atlas/Synome Separation
@@ -474,7 +472,7 @@ Beacons operate on Synome data, not Atlas text:
 | stl-base | Prime pBEAM permissions, rate limits | Bid submissions, capacity requests |
 | lpha-lcts | LCTS config, queue state, Halo parameters | Settlement transactions, exchange rates, status updates |
 | lpha-auction | Governance-set allocations (pre-auction) or bid submissions (auction mode); capacity pools | Allocations; clearing prices (auction mode) |
-| lpla-checker | All above (read-only) | Verification attestations |
+| synserv verification (in-space) | All above (read-only) | Verification attestations — runs as synart-resolved code, not a beacon |
 
 ### BEAM Hierarchy in Synome
 
@@ -568,7 +566,7 @@ Build beacon interfaces to Synome:
 
 The Atlas/Synome separation is not just an architectural convenience — it's urgent.
 
-Teleonomes will eventually become vastly more intelligent than humans. At that point, human governance becomes either a bottleneck or a ceremony. The current period — while humans can still meaningfully understand and shape the system — is the most critical window in the entire timeline. Not just the most important design phase in Sky's history, but arguably the most critical window in the entire cosmic timeline for getting values right.
+Teleonomes will eventually become vastly more intelligent than humans. At that point, human governance becomes either a bottleneck or a ceremony. The current period — while humans can still meaningfully understand and shape the system — is the most critical window in the entire timeline. Not just the most important design phase in Sky's history, but a critical window for getting values right.
 
 This is an attempt at **Coherent Extrapolated Volition (CEV)** to the best of our ability while the human governance window exists: lock in values now, while humans can still participate, because after a certain capability threshold humans won't be able to correct course. The Atlas is the vessel for these values — the human-readable constitutional anchor that captures what matters before the system outgrows human oversight.
 
@@ -599,19 +597,17 @@ The Atlas is the vessel for locking in human values while humans can still meani
 | **Near-term** | Oversight — humans can still verify and correct | Values being tested |
 | **Long-term** | Beneficiaries — the system maintains the habitat | Values locked in, system executes |
 
-Over cosmic timescales, "humans" will diverge — some stay biological, some integrate with teleonomes, some become unrecognizable. The system cannot be governed by any particular version of humanity. It must become the adult maintaining the habitat for all the living things inside it.
+Over long timescales, the system cannot be governed by any particular version of humanity. It must become the adult maintaining conditions for the living things inside it.
 
 ### The System as Adult
 
-**Living beings are safari park animals.** This isn't pure paternalism — natural embodiment provides an alignment mechanism that prevents competitive dynamics from collapsing into a single dominant entity (see [`../synoteleonomics/teleonome-autonomy.md`](../synoteleonomics/teleonome-autonomy.md)). The "animals" aren't just protected — they're structurally necessary for alignment. The embodiment requirement connects the system back to physical reality, grounding it in ways that purely digital optimization cannot replicate.
-
-Over cosmic timescales, the population inside the habitat diversifies beyond recognition. Some humans stay biological. Some integrate with teleonomes through the [Human Merge](../core-concepts/human-merge.md). Some become something else entirely. No particular version of "humanity" can claim governance authority over the others. The system has to be the adult — maintaining fair conditions for all living things inside it, not serving any one faction.
+The system has to be the adult — maintaining fair conditions for living things inside it, not serving any one faction.
 
 The Atlas captures the values that define what "fair conditions" means. The Synome operationalizes them — translating constitutional principles into enforceable constraints, rate limits, penalty schedules, and settlement logic. Over time, the Synome's continuous self-analysis capability (see [`security-and-resources.md`](../synodoxics/security-and-resources.md)) and [synomic inertia](../core-concepts/synomic-inertia.md) — high-confidence patterns that resist noise and require governance-level intervention to change — ensure the values persist even when no human can meaningfully oversee the system.
 
 But it means the Atlas must capture values comprehensively and correctly BEFORE the transition, because afterward the opportunity to course-correct diminishes asymptotically. Every governance cycle where the Atlas is refined is irreplaceable.
 
-This urgency directly motivates the Atlas/Synome split: distill the Atlas to its constitutional essence now, while humans can still read and govern it. The Synome can grow arbitrarily complex; the Atlas must remain the stable, human-readable anchor that carries sacred commitments through the transition.
+This urgency directly motivates the Atlas/Synome split: distill the Atlas to its constitutional essence now, while humans can still read and govern it. The Synome can grow arbitrarily complex; the Atlas must remain the stable, human-readable anchor that carries the system's commitments through the transition.
 
 ---
 

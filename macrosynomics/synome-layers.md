@@ -195,8 +195,8 @@ Embodiments differ in **local cognitive power**, which constrains what agents th
 
 | Level | Compute | Typical Role | Beacon Profiles |
 |-------|---------|--------------|-----------------|
-| **Light** | Minimal, high security | Legal, economic, and operational endpoints. Execute policies from elsewhere. | LPLA, simple LPHA |
-| **Medium** | Substantial, low latency | Continuous sensing and acting. Significant local intelligence, online learning. | Sentinels, HPLA, advanced LPHA |
+| **Light** | Minimal, high security | Legal, economic, and operational endpoints. Execute policies from elsewhere. | Passive observation (input beacons); simple action keepers |
+| **Medium** | Substantial, low latency | Continuous sensing and acting. Significant local intelligence, online learning. | Sentinel formations, peer-to-peer trade beacons, sophisticated keepers |
 | **Heavy** | Very large, often hidden | Deep cognition, dreaming, RSI, global coordination. Hosts full teleonome. | Minimal or none |
 
 **Dreamer vs Actuator:**

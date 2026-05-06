@@ -78,7 +78,7 @@ Beacons are my structured interfaces to reality:
 - **Sensors** — Observe world state
 - **Communication** — Interact with humans and other agents
 
-Beacons follow the beacon framework (LPLA, LPHA, HPLA, HPHA classifications).
+Beacons follow the beacon framework (two-tier authority + I/O role under it).
 
 ### Through Direct Hardware Control
 
