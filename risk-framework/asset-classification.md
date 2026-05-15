@@ -2,7 +2,7 @@
 
 **Status:** Draft (Phase 3 update, 2026-05-05)
 
-The canonical per-asset data the rest of the risk framework reads from. For the framework to compose correctly, each terminal exo asset needs **one canonical risk profile** that downstream structures inherit. Without this single source of truth, every category equation re-implements asset stress with potentially different assumptions, and consistency falls apart.
+The canonical per-asset data the rest of the risk framework reads from. For the framework to compose correctly, each terminal exo asset needs **one canonical risk profile** that downstream structures inherit. Without this single source of truth, every risk-form equation re-implements asset stress with potentially different assumptions, and consistency falls apart.
 
 Companion to:
 - [`risk-decomposition.md`](risk-decomposition.md) — the five risk types asset profiles support
@@ -27,7 +27,7 @@ Every asset has a **risk-type tuple** — properties downstream consumers read t
 
 The **asset-level liquidity profile** — combining drawdown distribution, slippage model, and correlations — is the load-bearing primitive that the unified `forced-loss-capital` math runs against (per [`tranching.md`](tranching.md) and [`risk-decomposition.md`](risk-decomposition.md)).
 
-Asset profile atoms live in `&core-framework-asset-stress-profile`. Adding a new asset class is governance-paced and requires populating each component.
+Asset profile atoms live in `&core.framework.risk.asset-profiles`. Adding a new asset class is governance-paced and requires populating each component.
 
 ---
 
@@ -98,7 +98,7 @@ Joint-stress relationships:
 (correlation-with eth stETH 0.95)
 ```
 
-Read by category equations to model joint stress. Critical for crash-scenario calibration; misspecified correlations are a major source of model error.
+Read by risk-form equations to model joint stress. Critical for crash-scenario calibration; misspecified correlations are a major source of model error.
 
 ### F. Currency dimension
 
@@ -125,9 +125,9 @@ The drawdown distribution + slippage model + correlations together form the **as
    (correlation-with stETH 0.95))
 ```
 
-Any category equation that touches ETH (a tranched exobook with ETH collateral, an ETH-only Riskbook, a structured product with ETH exposure) reads this profile and stresses against it. **No category re-derives ETH's risk from scratch.**
+Any risk-form equation that touches ETH (a tranched exobook with ETH collateral, an ETH-only Riskbook, a structured product with ETH exposure) reads this profile and stresses against it. **No risk form re-derives ETH's risk from scratch.**
 
-This is the load-bearing primitive that makes everything above compose correctly. Without it, every category equation re-implements asset stress with potentially different assumptions, and consistency falls apart.
+This is the load-bearing primitive that makes everything above compose correctly. Without it, every risk-form equation re-implements asset stress with potentially different assumptions, and consistency falls apart.
 
 ### Why "stress profile" not just "drawdown"
 
@@ -191,7 +191,7 @@ Assets with no SPTP cannot be matched in `termbook`/`structbook` regardless of s
 Putting it all together:
 
 ```metta
-(asset-category eth
+(asset-form eth
    (frame eth)                                            ; from currency-frame
    (currency-kind native-volatile-asset)
    (oracle-pair eth/usd)
@@ -219,7 +219,7 @@ Putting it all together:
 For assets with SPTP:
 
 ```metta
-(asset-category jaaa
+(asset-form jaaa
    (frame usd)
    (currency-kind unit-of-account)
    
@@ -237,7 +237,7 @@ For assets with SPTP:
    (correlation-with hy-credit     0.65))
 ```
 
-The schema is open: new properties get added as the framework matures. Categories declare which properties they consume; consistency is checked at category registration.
+The schema is open: new properties get added as the framework matures. Risk forms declare which properties they consume; consistency is checked at risk-form registration.
 
 ---
 
@@ -245,17 +245,17 @@ The schema is open: new properties get added as the framework matures. Categorie
 
 | Atoms | Space |
 |---|---|
-| Currency identity | `&core-registry-currency` |
-| Currency stress profile | `&core-framework-currency-stress` |
-| Per-asset risk weights | `&core-framework-asset-stress-profile` |
-| Asset drawdown distributions | `&core-framework-asset-stress-profile` |
-| Asset slippage models | `&core-framework-asset-stress-profile` |
-| Asset correlations (joint) | `&core-framework-asset-correlations` |
-| Stress scenarios (parameter vectors) | `&core-framework-stress-scenarios` |
+| Currency identity | `&core.registry.currency` |
+| Currency stress profile | `&core.framework.currency-stress` |
+| Per-asset risk weights | `&core.framework.risk.asset-profiles` |
+| Asset drawdown distributions | `&core.framework.risk.asset-profiles` |
+| Asset slippage models | `&core.framework.risk.asset-profiles` |
+| Asset correlations (joint) | `&core.framework.risk.asset-correlations` |
+| Stress scenarios (parameter vectors) | `&core.framework.risk.scenarios` |
 
 The split between identity (rare changes) and stress profile (recalibrated more often) is intentional: identity is governance-paced; stress profiles are recalibrated as data accumulates and conditions change.
 
-Every endoscraper, oracle, attestor, Riskbook category equation, projection model, sentinel formation, and warden reads from these spaces. They are universally replicated (per the synome's hub-replication of `&core-*` spaces).
+Every chain-read primitive call, market-data beacon, attest-data beacon, Riskbook risk-form equation, projection model, baseline/stream-sentinel, and warden reads from these spaces. They are universally replicated (per the synome's hub-replication of `&core.*` spaces).
 
 ---
 
@@ -263,12 +263,39 @@ Every endoscraper, oracle, attestor, Riskbook category equation, projection mode
 
 The asset-level liquidity profile is the load-bearing primitive — the single source of truth that downstream consumers read. The discipline:
 
-- **One profile per asset.** No category may inline its own asset stress assumptions.
+- **One profile per asset.** No risk form may inline its own asset stress assumptions.
 - **Calibration is governance-paced.** Updating a stress profile is a governance act with rationale, not an ad-hoc fudge.
-- **Every category equation that consumes a profile must declare which one.** Audit can verify that consumption matches declaration.
+- **Every risk-form equation that consumes a profile must declare which one.** Audit can verify that consumption matches declaration.
 - **New asset classes require full schema.** Without all components (RW, drawdown, slippage, correlations, currency dimension, SPTP if applicable), the asset can't be onboarded — it would fall to CRR 100% (default-deny).
 
-This discipline prevents the failure mode where every category re-derives asset stress with slightly different assumptions, producing apparent diversification through inconsistency.
+This discipline prevents the failure mode where every risk form re-derives asset stress with slightly different assumptions, producing apparent diversification through inconsistency.
+
+---
+
+## 7. Open questions
+
+**Crypto stress scenario calibration.** Concrete parameter values
+for the crypto stress scenarios used by the v1 Riskbook risk form
+equation:
+
+- Magnitude of `severe-crypto-correlated-crash` (BTC/ETH drop, window)
+- Liquidation-window duration assumptions
+- `stETH-ETH-peg-break` parameters
+- USDC/USDT depeg priors
+- Custodian-failure binary probability
+
+Hand-tuned values are workable for v1, but they need governance
+discussion before they bind real capital requirements. Calibration
+is also tied to the broader stress-scenario library curation
+effort. Forcing trigger: computing actual CRR values for v1
+positions — the moment governance has to defend a CRR number, the
+stress scenarios behind it become load-bearing.
+
+**Asset-profile schema extension.** The schema is open: new
+properties get added as the framework matures (per §4). Risk forms
+declare which properties they consume; consistency is checked at
+risk-form registration. Forcing trigger: a new asset class whose
+risk shape requires a property not in the current schema.
 
 ---
 
@@ -280,7 +307,6 @@ This discipline prevents the failure mode where every category re-derives asset 
 | [`tranching.md`](tranching.md) | Tranche waterfall reads asset drawdown distribution to propagate stress |
 | [`currency-frame.md`](currency-frame.md) | Currency taxonomy and per-instrument stress profiles |
 | [`asset-type-treatment.md`](asset-type-treatment.md) | Worked treatments per asset class consuming this data |
-| [`riskbook-layer.md`](riskbook-layer.md) | Riskbook category equations consume asset profiles |
+| [`riskbook-layer.md`](riskbook-layer.md) | Riskbook risk-form equations consume asset profiles |
 | [`projection-models.md`](projection-models.md) | Projection models for complex positions take asset profiles as inputs |
 | [`matching.md`](matching.md) | SPTP-based matching mechanics |
-| [`open-questions.md`](open-questions.md) | Crypto stress scenario calibration is one of the open items |

@@ -19,7 +19,7 @@ Duration matching is the mechanism by which a position's spread and rate risks b
 | Sub-book | Covers credit-spread? | Covers rate? | Liability matched against |
 |---|---|---|---|
 | `termbook` | Yes (held to par) | Yes (matched fixed/fixed) | tUSDS-issued YT (Yield Tokens) |
-| `structbook` | Yes (held to par) | No (rate-hedge or v1 carve-out) | Structural USDS demand (Lindy + caps) |
+| `structbook` | Yes (held to par) | No (rate-hedge required; Phase 1 carve-out per [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md)) | Structural USDS demand (Lindy + caps) |
 | `tradingbook` | No (forced-loss applies) | No (rate-hedge or capital) | None — held for trading |
 
 The **credit-spread vs rate distinction** is foundational. Credit spreads are mean-reverting; rate shifts can be permanent. Matching protects against the first; the second requires hedging or rate-hedge capital.
@@ -99,7 +99,7 @@ For an asset to be eligible for matched treatment in `termbook` or `structbook`,
 
 ```
 termbook-eligible = (Has SPTP) AND (Rate Neutral OR Rate Hedge Capital Held)
-structbook-eligible = (Has SPTP) AND (rate-hedge capital held OR v1 carve-out applies)
+structbook-eligible = (Has SPTP) AND (rate-hedge capital held)
 ```
 
 `structbook` doesn't require rate neutrality (it's matched against variable-rate structural demand), so positions go there with rate-hedge capital separately accounted. V1 carves out the rate-hedge capital requirement for the test (resumed in v2+).
@@ -206,7 +206,7 @@ The two matched sub-books differ in what they're matched against and what they c
 | **T-bills (short duration)** | Fixed but short | Minimal rate risk due to short duration | Eligible (small rate-hedge capital) |
 | **Long-duration treasuries** | Fixed, long duration | Must hedge or hold significant rate capital | Conditional |
 | **Sparklend** | Floating-rate (typically) | N/A — no SPTP regardless | Not eligible (no SPTP); routes to `tradingbook` if liquid, otherwise unmatched |
-| **NFAT (crypto-collateralized)** | Fixed-term | V1 carve-out — no rate-hedge capital required for matched portion | Eligible for `structbook` |
+| **NFAT (crypto-collateralized)** | Fixed-term | Rate-hedge capital required for matched portion (Phase 1 carve-out per [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md)) | Eligible for `structbook` |
 
 ### The value proposition of duration matching
 

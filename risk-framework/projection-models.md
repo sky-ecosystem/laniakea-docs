@@ -8,7 +8,7 @@ Companion to:
 - `book-primitive.md` — rules attached to books and projection models are complementary
 - `risk-decomposition.md` — projection-model risk is one capital dimension
 - `tranching.md` — directly-tranchable positions don't need projection models; everything else does
-- `riskbook-layer.md` — Riskbook category equations consume projection models
+- `riskbook-layer.md` — Riskbook risk-form equations consume projection models
 
 ---
 
@@ -63,7 +63,7 @@ project: (position, scenario) → stress-loss-number
 
 Where:
 - **Position** is the structural specification (notional, strike, expiry, terms, etc.)
-- **Scenario** is a coordinated stress case from `&core-framework-stress-scenarios` (e.g., severe-correlated-crash with all stress dimensions parameterized)
+- **Scenario** is a coordinated stress case from `&core.framework.risk.scenarios` (e.g., severe-correlated-crash with all stress dimensions parameterized)
 - **Stress-loss-number** is the dollar (or frame-currency) loss the position would realize under that scenario
 
 The projection function may be:
@@ -79,10 +79,10 @@ The contract is the same regardless of implementation: given a position and scen
 
 ## 3. Categories declare projection models
 
-Each category in `&core-framework-risk-categories` may declare a `projection-model` along with its composition constraints:
+Each category in `&core.framework.risk.forms` may declare a `projection-model` along with its composition constraints:
 
 ```metta
-(risk-category-def vanilla-european-call
+(risk-form-def vanilla-european-call
    (level position-instrument)
    (projection-model black-scholes
       (variables strike expiry notional underlying-price implied-vol risk-free-rate)
@@ -92,12 +92,12 @@ Each category in `&core-framework-risk-categories` may declare a `projection-mod
            (compute-bs-pnl $u-stressed $v-stressed strike expiry notional)))))
 ```
 
-The Riskbook category equation that holds this position invokes the projection model:
+The Riskbook risk-form equation that holds this position invokes the projection model:
 
 ```metta
 (= (riskbook-position-loss $position $scenario)
-   (let (($cat (category-of $position)))
-      (project-with-model (projection-model-of $cat) $position $scenario)))
+   (let (($form (form-of $position)))
+      (project-with-model (projection-model-of $form) $position $scenario)))
 ```
 
 **Default-deny applies:** categories without a declared projection-model get CRR 100%. The framework refuses to model what it doesn't have a projection for, rather than silently lowering the bar.
@@ -150,13 +150,13 @@ A projection model has uncertainty. Black-Scholes assumes log-normal returns; re
 This uncertainty should be **first-class in the framework's capital math**:
 
 ```metta
-(risk-category-def some-novel-derivative
+(risk-form-def some-novel-derivative
    (projection-model novel-stochastic-model
       ;; ... projection definition ...)
    (model-uncertainty-haircut 0.20))   ; 20% haircut on top of projected number
 ```
 
-The model-uncertainty haircut is a category-level parameter set by governance. Higher for newer / less-tested / more-parameterized models; lower for well-established / parsimonious / well-calibrated models. The haircut is applied as a multiplier on the projected number when computing capital.
+The model-uncertainty haircut is a risk-form-level parameter set by governance. Higher for newer / less-tested / more-parameterized models; lower for well-established / parsimonious / well-calibrated models. The haircut is applied as a multiplier on the projected number when computing capital.
 
 This makes the framework's epistemics first-class: it admits when it's less sure and reserves accordingly.
 
@@ -187,7 +187,7 @@ For each of these, the answer is: declare conservative defaults, willingness to 
 
 ## 7. One-line summary
 
-**Categories declare projection models — functions from (position, scenario) to stress-loss-number — that handle complex positions without dragging the math into the substrate; the substrate stays clean for the directly-modelable cases (asset holdings, tranches, linear claims) and lets sophisticated finance live in the projection layer; rules and projection models are complementary, not alternatives; projection-model uncertainty is a first-class capital dimension via category-level haircuts; categories without declared projections fall through to CRR 100% (default-deny).**
+**Risk forms declare projection models — functions from (position, scenario) to stress-loss-number — that handle complex positions without dragging the math into the substrate; the substrate stays clean for the directly-modelable cases (asset holdings, tranches, linear claims) and lets sophisticated finance live in the projection layer; rules and projection models are complementary, not alternatives; projection-model uncertainty is a first-class capital dimension via risk-form-level haircuts; risk forms without declared projections fall through to CRR 100% (default-deny).**
 
 ---
 
@@ -198,7 +198,7 @@ For each of these, the answer is: declare conservative defaults, willingness to 
 | `book-primitive.md` | Rules attached to books — complementary to projection models |
 | `risk-decomposition.md` | Projection-model risk is one capital dimension |
 | `tranching.md` | Tranche structures don't need projections; everything else does |
-| `riskbook-layer.md` | Riskbook category equations consume projection models |
+| `riskbook-layer.md` | Riskbook risk-form equations consume projection models |
 | `currency-frame.md` | Projections operate on stressed values that already include currency frame translation |
 | `asset-classification.md` | Asset-level stress profiles are inputs to projection models |
 | `capital-formula.md` | Projection outputs propagate into the per-position capital formula |

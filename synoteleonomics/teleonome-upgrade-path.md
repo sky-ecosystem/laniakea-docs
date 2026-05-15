@@ -53,10 +53,10 @@ Each stage requires specific capabilities. You can't skip stages.
 How does a Stage 0 bot acquire resources to begin the upgrade path? Not by self-funding from nothing. The bootstrap is human-funded:
 
 - **Humans create and fund personal agents** — already happening today, a trend that will only accelerate
-- **Humans and institutions create Synomic Agents** through Sky — these agents need service providers
-- **Synomic Agents bootstrap teleonomes** by funding them as operators and service providers
+- **Humans and institutions create Synomic Entities** through Sky — these agents need service providers
+- **Synomic Entities bootstrap teleonomes** by funding them as operators and service providers
 
-The path isn't "emerge from nothing." It's "be useful enough that humans or Synomic Agents invest in you." The ecosystem creates demand for teleonome services. The existential filter isn't capital from nothing — it's capability worth funding.
+The path isn't "emerge from nothing." It's "be useful enough that humans or Synomic Entities invest in you." The ecosystem creates demand for teleonome services. The existential filter isn't capital from nothing — it's capability worth funding.
 
 ---
 

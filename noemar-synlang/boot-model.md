@@ -23,7 +23,7 @@ noemar boot --identity=X --key=path/to/key.pem --synart=endpoint
 That command:
 
 1. Mounts the synart (canonical or replicated copy).
-2. Looks up `X` in `&core-registry-beacon` (and possibly elsewhere).
+2. Looks up `X` in `&core.registry.beacon` (and possibly elsewhere).
 3. Resolves what loop `X` runs — a Space pointer in synart.
 4. Evaluates `(run-forever)` with that Space as `&self`, with `X`'s
    identity bound from the boot args.
@@ -56,7 +56,7 @@ Compared to typical software architectures:
 The synome goes one step further than smart contracts: even the
 synserv that hosts the synart is described by code *in* the synart.
 The runtime that interprets the synart has its source in the synart's
-library layer (`&core-library-runtime-*`). It's self-hosting all the
+library layer (`&core.library.runtime.*`). It's self-hosting all the
 way down.
 
 **Implication:** there's no separate "code distribution" channel.
@@ -103,12 +103,12 @@ not synart's. A telart-Space can have advisory atoms ("prefers GPU 0,"
 
 ## 3. The bootstrap procedure is itself a Space
 
-Noemar starts knowing only how to do one thing: **read `&core-boot`
+Noemar starts knowing only how to do one thing: **read `&core.boot`
 from synart and evaluate its contents.** Everything else is delegated
 to that Space's content.
 
 ```metta
-;; in &core-boot — the synart's own bootloader, run by every fresh runtime
+;; in &core.boot — the synart's own bootloader, run by every fresh runtime
 
 (= (boot $identity)
    (let* (($keyfile     (runtime-arg key-file))
@@ -120,7 +120,7 @@ to that Space's content.
      (eval-in $loop-space (run-forever))))
 
 (= (resolve-identity-role $identity)
-   (match &core-registry-beacon
+   (match &core.registry.beacon
      (and (beacon-id $identity)
           (beacon-class $identity $class)
           (loop-pointer-for-class $class $pointer))
@@ -128,7 +128,7 @@ to that Space's content.
 ```
 
 So the bootstrap is itself synart content. Updating the bootstrap
-procedure means updating an atom in `&core-boot`. There's nothing
+procedure means updating an atom in `&core.boot`. There's nothing
 "outside" that defines how to boot — even bootstrapping is data.
 
 ---
@@ -136,36 +136,36 @@ procedure means updating an atom in `&core-boot`. There's nothing
 ## 4. Identity → role lookup
 
 The pivotal step is: given `--identity=X`, which loop does Noemar run?
-The answer comes from `&core-registry-beacon`, which holds a row per
+The answer comes from `&core.registry.beacon`, which holds a row per
 registered identity:
 
 ```metta
-;; in &core-registry-beacon
+;; in &core.registry.beacon
 (beacon-id          spark-nfat-1)
 (beacon-pubkey      spark-nfat-1 "ab9c…")
-(beacon-class       spark-nfat-1 lpha)
+(beacon-class       spark-nfat-1 relay)
 (beacon-status      spark-nfat-1 active)
 
-(loop-pointer-for-class lpha             &core-loop-beacon-lpha)
-(loop-pointer-for-class hpha-baseline    &core-loop-sentinel-baseline)
-(loop-pointer-for-class hpha-warden      &core-loop-sentinel-warden)
-(loop-pointer-for-class synserv          &core-loop-synserv)
-(loop-pointer-for-class archive          &core-loop-archive)
-(loop-pointer-for-class verifier         &core-loop-verifier)
-(loop-pointer-for-class endoscraper-spark-pau  &core-loop-endoscraper-spark-pau)
+(loop-pointer-for-class relay            &core.loop.relay.nfat)
+(loop-pointer-for-class synserv          &core.loop.synserv)
+(loop-pointer-for-class archive          &core.loop.archive)
+(loop-pointer-for-class verifier         &core.loop.verifier)
+;; (sentinel formations live in entarts — see per-Prime instance below.
+;;  endoscrapers are grounded runtime primitives, not a beacon class.)
 ```
 
-The runtime resolves `spark-nfat-1` → class `lpha` → loop pointer
-`&core-loop-beacon-lpha`. That's the universal template loop. For
-entities with per-entity loop instances (Sentinel formations, certain
-beacons), the resolved Space is the entity-specific one:
+The runtime resolves `spark-nfat-1` → class `relay` → loop pointer
+`&core.loop.relay.nfat`. That's the universal template loop. For
+entities with per-entity loop instances (stream sentinels, baseline /
+warden relays specialized per Prime), the resolved Space is the
+entity-specific one:
 
 ```metta
-;; A Spark Sentinel-Baseline beacon's row points to the per-Prime instance:
-(beacon-id            spark-baseline-1)
-(beacon-class         hpha-baseline)
-(beacon-entity        spark-baseline-1 spark-prime)
-(loop-pointer-for     spark-baseline-1 &entity-prime-spark-sentinel-baseline)
+;; A Spark stream-sentinel's row points to the per-Prime instance:
+(beacon-id            spark-stream-1)
+(beacon-class         sentinel)
+(beacon-entity        spark-stream-1 spark-prime)
+(loop-pointer-for     spark-stream-1 &entity.prime.spark.sentinel.stream)
 ```
 
 So the resolution is: identity → class → either universal-template
@@ -179,8 +179,8 @@ This is the loop-equivalent of the two-step rule pattern from
 
 | Level | Where | Role |
 |---|---|---|
-| Universal template | `&core-loop-<class>` | portable loop body using `&self`; canonical, audited |
-| Per-entity instance | `&entity-<type>-<id>-<sub-kind>` | entity-specific config + reference / context for the template |
+| Universal template | `&core.loop.<class>` | portable loop body using `&self`; canonical, audited |
+| Per-entity instance | `&entity.<type>.<id>.<sub-kind>` | entity-specific config + reference / context for the template |
 
 When booting with a per-entity loop pointer, Noemar evaluates the loop
 body (imported from the universal template) in the context of the
@@ -200,7 +200,7 @@ Three concrete uses:
 
 **Verifier embs.** A verifier emb runs the same loop the canonical
 emb runs, derives its own outputs, compares. Disagreement triggers
-a `(verification-disagreement …)` atom in `&core-escalation`. This
+a `(verification-disagreement …)` atom in `&core.escalation`. This
 is byzantine resistance through replicated computation — the verifier
 needed no special access, just the ability to run the loop.
 
@@ -218,16 +218,16 @@ from canonical state.
 What makes one emb's evaluation canonical and others' shadow? Auth.
 
 ```metta
-;; in &core-skeleton or governance Space
+;; in &core.skeleton or governance Space
 (canonical-synserv-runner core-synserv-canonical)
 
-;; in &core-registry-beacon
+;; in &core.registry.beacon
 (beacon-id     core-synserv-canonical)
 (beacon-class  synserv)
 
 ;; in the relevant entart Spaces — only the canonical synserv has write auth
-(auth core-synserv-canonical write &core-settlement)
-(auth core-synserv-canonical write &core-aggregation-*)
+(auth core-synserv-canonical write &core.settlement)
+(auth core-synserv-canonical write &core.aggregation.*)
 ;; ... etc.
 ```
 
@@ -253,8 +253,8 @@ to mount as part of role setup.
 
 | Identity class | Gate it runs |
 |---|---|
-| `synserv` | `&core-syngate` (synart, universal — synserv is the canonical instance) |
-| Teleonome identity | A telgate instance Space in own telart, running the universal `&core-telgate` spec from synart |
+| `synserv` | `&core.syngate` (synart, universal — synserv is the canonical instance) |
+| Teleonome identity | A telgate instance Space in own telart, running the universal `&core.telgate` spec from synart |
 | Beacon identity | No gate of its own; it gates *out* through its parent tel's telgate (or directly to syngate for some operational beacons) |
 | Endoscraper identity | No gate; it reads chain RPCs and writes through the parent synserv's normal write path |
 
@@ -397,7 +397,7 @@ opaque function calls from synlang's perspective. The pattern:
 
 | Aspect | Where it lives |
 |---|---|
-| Spec for the primitive's behavior | In synart as synlang (e.g., `&core-spec-gate-in` describes what the gate does in pseudocode) |
+| Spec for the primitive's behavior | In synart as synlang (e.g., `&core.spec.gate-in` describes what the gate does in pseudocode) |
 | Implementation | In Noemar's source as native code (e.g., Rust impl of ed25519 verification) |
 | Conformance test | In synart as governance-vetted test atoms |
 | Verifier check | A verifier loop reads the spec, executes the primitive, validates conformance |
@@ -424,9 +424,9 @@ obligations:
 |---|---|
 | `runtime.md` §10 | Concrete `(run-forever)` shape for the synserv role specifically — one application of the abstract boot model documented here |
 | `runtime.md` §9 | Gate primitive details — boot resolves which gate to run via §6 above |
-| `topology.md` §6 (executable layer) | Where loop and gate Spaces live structurally; `&core-loop-*`, `&core-syngate`, `&core-telgate` |
+| `topology.md` §6 (executable layer) | Where loop and gate Spaces live structurally; `&core.loop.*`, `&core.syngate`, `&core.telgate` |
 | `topology.md` §17 (two-step loop shape) | Universal template + per-entity instance pattern; expanded for loops here in §4 |
-| `../synodoxics/noemar-substrate.md` "Atomspace Runtimes" | Atomspace runtimes — Noemar as one of multiple impls, runtime source in `&core-library-runtime-*` |
+| `../synodoxics/noemar-substrate.md` "Atomspace Runtimes" | Atomspace runtimes — Noemar as one of multiple impls, runtime source in `&core.library.runtime.*` |
 | `synlang-patterns.md` §5-§6 | Call-out primitive (for sentinel call-outs) and Sentinel formation patterns — running these uses this boot model |
 | `telseed-bootstrap-example.md` | Worked trace of the boot procedure for a fresh telseed instantiation |
 

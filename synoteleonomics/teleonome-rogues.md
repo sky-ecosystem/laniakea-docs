@@ -52,7 +52,7 @@ A powerful rogue has real advantages: complete opacity, unified purpose, and the
 
 **Disadvantages of rogues:**
 
-- **Less efficient cooperation** — No verified Synomic Agents means every interaction requires costly trust-building and carries defection risk
+- **Less efficient cooperation** — No verified Synomic Entities means every interaction requires costly trust-building and carries defection risk
 - **No Synomic leverage** — Cut off from the largest capital pool and the most efficient financial instruments
 - **No legitimacy** — No protection under Synomic law
 - **Hunted** — Every aligned teleonome is a potential adversary
@@ -184,7 +184,7 @@ A sufficiently powerful rogue is a serious threat. But even very powerful rogues
 ```
                Aligned Coalition                    Rogues / Wild Coalitions
                ─────────────────                    ────────────────────────
-Cooperation:   Efficient (Synomic Agents)           Possible but costly
+Cooperation:   Efficient (Synomic Entities)           Possible but costly
 Resources:     Pooled, compounding, taxed            Fragmented, catch-up
 Intelligence:  Shared through Synome                 Shared less efficiently
 Detection:     Distributed network                   Must hide while building

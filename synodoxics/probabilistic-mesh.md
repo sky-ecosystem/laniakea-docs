@@ -143,6 +143,27 @@ Once crystallized, decisions are clean and deterministic — the system couldn't
 
 ---
 
+## The Hardening Pipeline — Three Gates
+
+Crystallization is the last of three gates that progressively harden content from raw observation to deontic rule. Together they describe the full evidence-to-rule pipeline:
+
+```
+Operational workspace ──Inform──▶ Local mesh ──Publication──▶ Canonical mesh ──Crystallization──▶ Deontic skeleton
+   (observations)                  (theories)                  (consensus)                          (laws)
+```
+
+| Gate | Source → Target | Mechanism | Cadence | Authority |
+|---|---|---|---|---|
+| **Inform** | Operational workspace → Local mesh | Private; the teleonome notices its own observations and builds theories | Continuous | Beacon-internal (no external review) |
+| **Publication** | Local mesh → Canonical mesh | Peer-review-shaped; alpha submitted, vetted, accepted into the shared encyclopedia | Scientific (slow) | Distributed review; governance-paced |
+| **Crystallization** | Canonical mesh → Deontic skeleton | Governance hardens `(s,c)` patterns into `(1,1)` rules | Rare, deliberate | Governance vote (legislation pace) |
+
+Each gate has a different failure mode. The first is private and continuous — failures here are local and self-correcting (bad theories die when actuators test them). The second filters telart→synart at the publication-vs-hold boundary (see [`noemar-substrate.md`](noemar-substrate.md)) and is where economic incentives intersect with epistemic standards. The third converts belief into authority and is the only gate that crosses the probabilistic/deontic boundary — its failure mode (cancer-logic, premature crystallization, governance capture) is structurally the most dangerous, which is why it is the slowest.
+
+Knowledge does not have to traverse all three gates. Most operational observations live and die in the workspace; most local theories never publish; most canonical patterns never crystallize. The pipeline describes the trajectory available to content that earns it.
+
+---
+
 ## RSI: Recursive Self-Improvement
 
 The synart and telart knowledge bases don't just store knowledge — they actively improve at **meta-level** tasks.

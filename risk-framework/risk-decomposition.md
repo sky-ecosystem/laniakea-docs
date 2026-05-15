@@ -75,7 +75,7 @@ These cover the dimensions along which a position's value can degrade between *n
 - **Concentration** is portfolio-level — the same scenario hitting multiple positions simultaneously. Not a property of any single position.
 
 **Separate parallel tracks** (NOT folded into CRR computation):
-- **ASC** (Actively Stabilizing Collateral) — peg-defense operational liquidity. See `asc.md`.
+- **ASC** (Actively Stabilizing Collateral) — peg-defense operational liquidity. See [`../roadmap/asc-transition.md`](../roadmap/asc-transition.md).
 - **ORC** (Operational Risk Capital) — guardian-posted, covers operator compromise. See `operational-risk-capital.md`.
 
 These aren't risks against position loss; they're operational obligations. Distinct from the five above.
@@ -171,14 +171,14 @@ Reading the matrix: a position landing in `termbook` has three of its four non-d
 
 ## 7. Default-deny CRR 100% as foundational pattern
 
-If a Riskbook's contents don't match any registered category in `&core-framework-risk-categories`, the Riskbook gets **CRR = 100%** on its issued units. CRR (Capital Ratio Requirement) 100% means every dollar of position requires a dollar of capital — no leverage, no preferential treatment.
+If a Riskbook's contents don't match any registered category in `&core.framework.risk.forms`, the Riskbook gets **CRR = 100%** on its issued units. CRR (Capital Ratio Requirement) 100% means every dollar of position requires a dollar of capital — no leverage, no preferential treatment.
 
 ```metta
 (= (riskbook-finality-crr $book)
-   (let (($matched-cat (find-matching-category $book)))
+   (let (($matched-cat (find-matching-form $book)))
      (case $matched-cat
        ((no-match  1.0)                                  ; CRR 100%
-        ($cat (eval-category-equation $cat $book))))))
+        ($form (eval-form-equation $form $book))))))
 ```
 
 This rule forces three things:
@@ -207,6 +207,6 @@ The same applies to **exobook categories** (Morpho market, custody account, etc.
 | `tranching.md` | How loss propagates through seniority structures (the mechanism behind unified gap-risk / FRTB-drawdown) |
 | `currency-frame.md` | How positions in different denominations translate to a common accounting frame |
 | `primebook-composition.md` | The sub-book taxonomy and routing that produces the coverage matrix in §6 |
-| `asset-classification.md` | Asset-level risk profiles that exobook category equations consume |
+| `asset-classification.md` | Asset-level risk profiles that exobook risk-form equations consume |
 | `correlation-framework.md` | Concentration amplification and category caps (the fifth risk type) |
 | `capital-formula.md` | Final CRR computation flow consuming all of the above |

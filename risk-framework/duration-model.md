@@ -17,10 +17,10 @@ Companion to:
 Structural demand for USDS holding lives in the **Generator's entart**:
 
 ```
-&entity-generator-usge-root
-  └── &entity-generator-usge-structural-demand
-        ├── &entity-generator-usge-structural-demand-scrapers   ← grounded scraper outputs
-        └── &entity-generator-usge-structural-demand-auction    ← capacity allocation
+&entity.generator.usge.root
+  └── &entity.generator.usge.structural-demand
+        ├── &entity.generator.usge.structural-demand.scrapers   ← grounded scraper outputs
+        └── &entity.generator.usge.structural-demand.auction    ← capacity allocation
 ```
 
 This is where:
@@ -28,7 +28,7 @@ This is where:
 - Lindy + structural-cap math computes per-bucket capacity
 - Auction (or fake-auction in v1) distributes capacity across Primes
 
-**Phase 1 manual-allocation carve-out:** v1 uses manual governance-set capacity (Lindy + structural caps from existing parameters; data-team scraper will replace later). Equal-split distribution across the 3 Star Primes (Spark/Grove/Keel) per bucket. Real-time scraping and auctions come online in later phases.
+For Phase 1 manual-allocation specifics (governance-set capacity, equal-split distribution among Stars, fake-auction pattern), see [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md).
 
 ---
 
@@ -175,11 +175,9 @@ The Generator's structural-demand atoms produce `(structural-demand-capacity buc
 
 ---
 
-## Capacity Reservation System (Phase 9+)
+## Capacity Reservation System
 
-> **Phase note:** The tug-of-war mechanism and duration auctions described below are **Phase 9+ features**. Prior phases use manual, governance-directed duration matching allocations.
-
-Duration Bucket capacity is allocated to Primes through a reservation system. Primes acquire reservations via daily auctions, then can resell them on a secondary market.
+Duration Bucket capacity is allocated to Primes through a reservation system. Primes acquire reservations via daily auctions, then can resell them on a secondary market. Full design in [`../accounting/duration-allocation.md`](../accounting/duration-allocation.md). For Phase 1 simplifications (manual capacity, equal-split distribution, fake-auction pattern), see [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md).
 
 ### Core Principles
 
@@ -196,15 +194,21 @@ Duration Bucket capacity is allocated to Primes through a reservation system. Pr
 | Tug-of-war | Daily | Allocate all capacity (own-bucket priority emergent from distance-0 tugging) |
 | Settlement | Daily | Process deposits, redemptions, yield distribution |
 
-### V1 carve-outs
+For Phase 1 simplifications (manual capacity, equal-split, fake-auction pattern), see [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md).
 
-V1 simplifications (in lieu of the full reservation system):
-- **Manual governance-set capacity** initially (Lindy + structural caps from existing parameters; data-team scraper will replace later)
-- **Equal-split distribution** among the 3 Star Primes (1/3 each per bucket) — implemented as the "fake auction" pattern
-- **No tug-of-war** — capacity is just split, no redistribution
-- **No real auctions** — same interface as the eventual real auction will use; only the strategy changes later
+---
 
-The fake-auction approach lets the auction interface get built and exercised without committing to bid-evaluation logic prematurely. Same data flow, different strategy.
+## Open questions
+
+**USDS lot-age tracking infrastructure.** How to track USDS lot
+ages in real time so the Lindy Duration Model can produce a current
+liability-duration distribution. Includes scraping USDS, DAI
+(DAI→USDS migration), and sUSDS (savings-tier holders). v1 uses
+manual governance-set capacity; real-time Lindy is a Phase 2+
+feature that requires the data infrastructure to exist first.
+Forcing trigger: when manual structural-demand allocations need to
+be replaced with Lindy-driven dynamic allocations — likely when the
+v1 test scales beyond a small fixed allocation per Star Prime.
 
 ---
 
@@ -216,4 +220,5 @@ The fake-auction approach lets the auction interface get built and exercised wit
 | [`matching.md`](matching.md) | How capacity is consumed; credit-spread vs rate distinction |
 | [`asset-classification.md`](asset-classification.md) | SPTP split into credit-spread vs rate duration |
 | [`capital-formula.md`](capital-formula.md) | Final capital computation incorporates matched/unmatched blend |
-| [`open-questions.md`](open-questions.md) | USDS lot-age tracking infrastructure is one of the open items |
+| [`../accounting/duration-allocation.md`](../accounting/duration-allocation.md) | Tug-of-war + OSRC and Duration auctions |
+| [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) | Phase 1 manual carve-outs |

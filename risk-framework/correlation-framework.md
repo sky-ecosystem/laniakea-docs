@@ -80,7 +80,7 @@ Categories are not mutually exclusive. An ETH-backed loan to a US-based borrower
    (cap-percent 0.10))                                     ; 10% of total portfolio
 ```
 
-Categories live in `&core-framework-concentration` (per [`asset-classification.md`](asset-classification.md) §5).
+Categories live in `&core.framework.risk.concentration` (per [`asset-classification.md`](asset-classification.md) §5).
 
 ### Exposure measure
 
@@ -131,7 +131,7 @@ Longer-duration assets take longer to normalize; very short durations still have
 
 Mechanically: if you are over-cap by `P`, then over time `T` you earn roughly `P` of in-cap capacity. That earned capacity comes from existing in-cap allocations, which pushes incumbents into partial penalty and triggers a "fight back" dynamic.
 
-The exact update function (EMA vs explicit per-epoch reallocation) is an open question (per [`open-questions.md`](open-questions.md)).
+The exact update function (EMA vs explicit per-epoch reallocation) is an open question — see §6.
 
 ---
 
@@ -170,7 +170,7 @@ For each scenario s:
 
 Subject to additional governance constraints (floors/ceilings per category, max change per update, policy overrides). Allows preferred composition while satisfying scenario constraints.
 
-The choice between Method A and Method B is one of the open questions (per [`open-questions.md`](open-questions.md)).
+The choice between Method A and Method B is one of the open questions — see §6.
 
 ### Governance controls
 
@@ -224,7 +224,12 @@ These outputs flow to sentinel-integration and risk-monitoring:
 
 ## 6. Open questions
 
-Tracked in [`open-questions.md`](open-questions.md):
+The cap-enforcement mechanism is settled; calibration methodology is
+deferred until concentration limits actually bind in practice.
+Premature calibration would lock in parameters that may not survive
+contact with real portfolios. Forcing trigger: when portfolio
+composition first approaches a category cap, or when governance
+proposes a new category — both will force a calibration decision.
 
 1. **Allocation update function** — EMA vs explicit per-epoch reallocation, where it lives (beacon vs on-chain vs governance process)
 2. **Multi-category assets without double counting** — binding category vs portfolio-wide max penalty
@@ -247,4 +252,3 @@ V1 implementation focuses on Genbook-level concentration with manual governance-
 | [`hedgebook.md`](hedgebook.md) | Hedges reduce capital but not concentration in v1 |
 | [`capital-formula.md`](capital-formula.md) | Excess penalty contributes to per-position capital |
 | [`risk-monitoring.md`](risk-monitoring.md) | Utilization metrics surface concentration approach |
-| [`open-questions.md`](open-questions.md) | Specific calibration questions tracked here |

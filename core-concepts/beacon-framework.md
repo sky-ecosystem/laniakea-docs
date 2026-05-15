@@ -12,10 +12,10 @@ The load-bearing classification axis is **authority**:
 
 | Tier | What it is |
 |---|---|
-| **High authority** | Certified by a synomic agent; auth-scoped to specific verbs/targets; operates a Synomic Agent (Prime / Halo / Generator / Guardian). Includes deterministic relayers, executors, and sentinel formations. |
-| **Low authority** | No Synomic Agent operation. Either passive observation (reporting, scraping, attesting) OR direct teleonome-to-teleonome interaction (peer-to-peer trading, arbitrage, cooperation). |
+| **High authority** | Certified by a synomic entity; auth-scoped to specific verbs/targets; operates a Synomic Entity (Prime / Halo / Generator / Guardian). Includes deterministic relayers, executors, and sentinel formations. |
+| **Low authority** | No Synomic Entity operation. Either passive observation (reporting, scraping, attesting) OR direct teleonome-to-teleonome interaction (peer-to-peer trading, arbitrage, cooperation). |
 
-Underneath authority, beacons divide by **I/O role** (input vs action — non-prescriptive working cut, not load-bearing). Input beacons (endoscraper / oracle / attestor) push data atoms into book spaces. Action beacons (relayer / executor / sentinel formation) emit chain transactions based on synart state. Calculation does not live in beacons — it lives in synart-resolved in-space computation that synserv runs against current input atoms.
+Underneath authority, beacons divide by **I/O role** (input vs action — non-prescriptive working cut, not load-bearing). Input beacons (`market-data-beacon` / `attest-data-beacon` / `patch-beacon`) push data atoms into book spaces; endoscraper is no longer a beacon class but a grounded runtime primitive (`(chain-read $contract $slot)`) callable from any rule. Action beacons (relay / sentinel) emit chain transactions based on synart state. Calculation does not live in beacons — it lives in synart-resolved in-space computation that synserv runs against current input atoms.
 
 Power-as-axis has retired. With cognition in synart, embodiment cognitive capability is no longer a load-bearing classification axis for beacons. Light/medium/heavy embodiment levels remain meaningful for hardware-aware cognition but don't classify beacons.
 
@@ -25,8 +25,8 @@ Power-as-axis has retired. With cognition in synart, embodiment cognitive capabi
 - All external action must flow through a registered beacon; unregistered action has no synomic legitimacy
 - Beacons are registered, scoped (authority envelope), anchored (physical infrastructure), observable, and revocable
 - **BEAMs** (Bounded External Access Modules) are on-chain authorized roles that make beacons high-authority in the smart-contract sense: pBEAM (process/execution), cBEAM (configuration), aBEAM (administration). Orthogonal to the beacon taxonomy.
-- **Sentinel formations** are a distinguished high-authority action subclass: Baseline (decision/execution), Stream (data ingestion/sensing), Warden (independent monitoring/risk enforcement), Principal (owner-operated direct control)
-- Sentinels are operationally dominant — they act faster than governance processes
+- **Sentinel formations** are an operating setup that pairs three high-authority classes: `baseline-{prime}` (relay; decision/execution), `warden-{prime}-{op}` (relay; independent monitoring/risk enforcement), and `stream-{prime}-{actor}` (sentinel; data ingestion/sensing with call-out density into operator telart). `principal-{owner}` is a separate sentinel variant for owner-operated direct control (no formation).
+- Stream-class sentinels carry call-out density and are operationally dominant — they act faster than governance processes; relays execute pre-agreed deterministic rules without call-outs.
 - Multi-beacon reality: a teleonome may operate many beacons; aggregation occurs only when necessary (risk thresholds, enforcement)
 
 ## Relationships

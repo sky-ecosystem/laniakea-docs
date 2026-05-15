@@ -47,7 +47,7 @@ In casual finance, "USD" usually means whatever you pay or receive in dollars �
 
 **Instrument** is what you concretely hold. USDC is a USD-frame instrument, but USDC ≠ USD. USDC has its own depeg risk: at $0.95 it's still "1 USDC" but its USD-frame value is $0.95, not $1.00. The instrument-to-frame mapping is the place where stress lives.
 
-**Why the distinction is structurally important.** A Prime can deploy USDT into a Halo unit. The Halo holds USDT positions; its Halobook is still USD-frame because the Generator (USDS Generator → USD frame) inherits down. The instrument flexibility (you can hold whatever stablecoin the Riskbook category accepts) doesn't break frame consistency (everything translates to USD with declared depeg stress).
+**Why the distinction is structurally important.** A Prime can deploy USDT into a Halo unit. The Halo holds USDT positions; its Halobook is still USD-frame because the Generator (USDS Generator → USD frame) inherits down. The instrument flexibility (you can hold whatever stablecoin the Riskbook risk form accepts) doesn't break frame consistency (everything translates to USD with declared depeg stress).
 
 Without this split, every book would have to commit to one specific instrument as its accounting unit, and changing instruments (or holding multiple) would force frame changes upstream. The split decouples the two: pick an instrument because it's operationally useful; the frame stays canonical.
 
@@ -91,7 +91,7 @@ Each currency declares:
    (correlation-with stETH 0.95))
 ```
 
-These atoms live in `&core-registry-currency` (identity) and `&core-framework-currency-stress` (stress profiles). The split is intentional: identity is ~immutable; stress profiles are recalibrated more often.
+These atoms live in `&core.registry.currency` (identity) and `&core.framework.currency-stress` (stress profiles). The split is intentional: identity is ~immutable; stress profiles are recalibrated more often.
 
 ---
 
@@ -142,7 +142,12 @@ When a Riskbook accepts USDC at "1.0 × USD with 5% depeg stress at the severe s
 - Alarms when realized depeg approaches modeled limits
 - Mechanism to update the stress profile and propagate the update downstream
 
-This is one of the open governance items tracked in `open-questions.md`. V1 uses hand-tuned conservative profiles without automated alarms.
+**Open:** cadence for stress-profile recalibration, alarms when
+realized depeg approaches modeled limits, and the mechanism for
+propagating profile updates downstream — all governance items.
+V1 uses hand-tuned conservative profiles without automated alarms.
+Forcing trigger: realized depeg of any tracked stablecoin
+approaches the modeled stress level.
 
 ---
 
@@ -183,5 +188,5 @@ A tranche may, in principle, be denominated in a frame different from its book �
 | `book-primitive.md` | The 6-tuple where `frame` lives as one component |
 | `tranching.md` | Tranche denominations (instruments) translate via frames |
 | `risk-decomposition.md` | Stress profiles for instruments (depeg, volatility) feed forced-loss math |
-| `riskbook-layer.md` | Where instrument-to-frame translation actually happens; Riskbook category equations consume per-currency stress profiles |
+| `riskbook-layer.md` | Where instrument-to-frame translation actually happens; Riskbook risk-form equations consume per-currency stress profiles |
 | `asset-classification.md` | Per-asset canonical stress profiles include their currency dimension |

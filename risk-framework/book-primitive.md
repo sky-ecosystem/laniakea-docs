@@ -159,9 +159,9 @@ This drives data infrastructure requirements at every book type:
 | Book type | Equity feed mechanism |
 |---|---|
 | Internal books (Riskbook, Halobook, Primebook, Genbook) | Computed from synart state — synserv re-derives equity from current input atoms |
-| On-chain exobooks (Morpho, Sparklend, etc.) | Endoscrapers compute equity from chain reads |
-| Off-chain exobooks (custody, ABF, real-world receivables) | Attestor-published numbers (signed, with slashing surface for proven-false attestations) |
-| Mixed-chain exobooks | Combination — endoscrapers for the on-chain portions, attestors for the off-chain portions |
+| On-chain exobooks (Morpho, Sparklend, etc.) | Synserv-run code calls the `chain-read` grounded primitive to compute equity from chain state |
+| Off-chain exobooks (custody, ABF, real-world receivables) | `attest-data` beacon writes (signed, with slashing surface for proven-false attestations) |
+| Mixed-chain exobooks | Combination — `chain-read` primitive for the on-chain portions, `attest-data` beacons for the off-chain portions |
 
 Each new asset class brought into the system requires a documented equity-feed mechanism at onboarding. This is the operational price of the equity invariant: it's not enough to *say* every book has equity; the system has to *know* it continuously.
 

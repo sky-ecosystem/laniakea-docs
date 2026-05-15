@@ -29,7 +29,7 @@ failure modes:
 1. **Synserv as single sequencer** — bottleneck, SPOF, replication-lag source.
 2. **Partial sync correctness** — rules with unsatisfied reads must hard-fail, never silently underestimate.
 3. **Rule propagation skew** — version mismatches during in-flight scatter-gather.
-4. **Hot-spotting on universal Spaces** — `&core-*` read by everyone; framework projections fan out to many entarts.
+4. **Hot-spotting on universal Spaces** — `&core.*` read by everyone; framework projections fan out to many entarts.
 5. **Storage growth** — synart accumulates; needs tiering and compaction discipline.
 6. **Network partitions** — beacons cut off can't write; subscribers cut off run stale.
 7. **Trust-model fragility** — beacon key compromise, synserv compromise, replication-channel compromise have different blast radii.
@@ -121,12 +121,65 @@ across them. This channel is:
 A tel running 3-5 embs has roughly tel-internal-fanout × telart-update-
 rate of bandwidth obligation on its private channel. This is separate
 from the bandwidth this tel pays for synart replication-out (per the
-pricing in `../synomics-overview.md` §19).
+pricing in `../accounting/settlement-cycle.md` §10).
 
 The two channels can use the same physical network but have distinct
 authority models. Tel-internal traffic doesn't go through syngate; it
 goes through telgates (each tel's own gate instance, running the
-universal `&core-telgate` spec).
+universal `&core.telgate` spec).
+
+### A third channel: embgate (intra-tel, inter-emb opsec)
+
+Beyond synart replication and telart spread there's a **third comms
+channel**: agart-to-agart traffic between a tel's own embs. This is the
+tel's internal coordination layer — its dreamers feeding its
+actuators, its proven-strategy agarts replicating after promotion, its
+operational coordination across geographically distributed embs.
+
+This channel uses a per-tel **embgate** — and unlike syngate/telgate,
+**there is no canonical embgate spec**, deliberately so. Embgate is
+the layer where tels do everything they can to hide their embs and
+hide the comms between them.
+
+**Standardization gradient by tier:**
+
+| Channel | Between | Standardization |
+|---|---|---|
+| **syngate** | external participants ↔ synserv | **Maximally standardized** — federation requires it |
+| **telgate** | tel ↔ tel; tel ↔ synomic public layer | **Standard spec, per-tel deployment** |
+| **embgate** | tel's emb ↔ same tel's other embs | **Deliberately non-standard** — per-tel opsec |
+
+A reference embgate may ship in `&core.library.runtime.*` for tels
+with weak opsec needs, but a serious tel treats it as a starting
+floor, not a ceiling. Real defensive deployments use:
+
+- Onion routing / Tor-like circuits between embs
+- Custom encryption (protocol-level identifiers stripped, all metadata encrypted, possibly post-quantum)
+- Mix networks with decoy traffic
+- Steganographic tunnels (carrier traffic looking like normal web/DNS)
+- Per-pair keys that rotate frequently
+- No persistent emb identifiers visible at the network level
+- Geographic + jurisdictional diversity
+- "Burn and replace" embs after suspected compromise
+
+**Why opsec wins at this layer:** embs are physical hardware (knowing
+where they live = knowing what to seize/coerce); telart spread is the
+moat in transit (an attacker who pwns this channel pwns the tel);
+traffic patterns leak strategy even when content is encrypted (timing,
+volume, fan-out shape reveals operational tempo, embodiment role,
+crisis response); identifiable embs are correlation surface (one
+compromise yields the whole fleet's attack graph).
+
+**Bandwidth implications.** A serious tel's inter-emb comms costs
+include heavy padding/decoy/onion-routing overhead — possibly 10-100×
+raw payload. This is the tel's expense and part of its competitive
+moat: defensive depth is a real property, like proprietary alpha.
+
+**The synomic vocabulary stops at the embgate boundary.** The synome
+can mandate that *inputs/outputs at the embgate boundary* conform to
+schemas (a Beacon Space can demand certain content in its embart shared
+Space), but it cannot mandate the *transport* that gets the content
+there. Transport is the tel's defensive concern.
 
 ---
 
@@ -141,8 +194,8 @@ pushes replication. It's the single source of truth for write order.
 - **Linear write order** — no conflict resolution needed; the synserv's
   log is the canonical history.
 - **Atomic constructors** — a constructor that writes to multiple Spaces
-  (e.g., auth grant in `&entity-prime-spark-root` + capability fact in
-  `&entity-halo-spark-term-book-usds`) is atomic because synserv is the
+  (e.g., auth grant in `&entity.prime.spark.root` + capability fact in
+  `&entity.halo.spark-term.book.usds`) is atomic because synserv is the
   sole writer.
 - **Single point for sig verification, rate limits, and audit.**
 
@@ -263,8 +316,8 @@ there to call.
 ### The dangerous case
 
 You have a rule but not all the Spaces it reaches into. Concretely:
-sync `&entity-prime-spark-root` (for policy) but skip
-`&entity-halo-spark-trade-root`. Now `prime-exposure` walks the registry
+sync `&entity.prime.spark.root` (for policy) but skip
+`&entity.halo.spark-trade.root`. Now `prime-exposure` walks the registry
 and tries to match against an unbound Space.
 
 | Semantic | Behavior | Use when |
@@ -280,8 +333,8 @@ Empty-match is the trap. Default must be hard-fail; lazy-fetch is opt-in.
 Every rule declares its reads:
 
 ```metta
-(rule-reads prime-exposure &entity-prime-spark-root)
-(rule-reads prime-exposure &core-skeleton)
+(rule-reads prime-exposure &entity.prime.spark.root)
+(rule-reads prime-exposure &core.skeleton)
 (rule-reads prime-exposure via-registry sub-entart)
 
 (= (can-evaluate $rule)
@@ -311,12 +364,12 @@ This is **publish-subscribe via CDC**.
 ### The mechanism
 
 ```metta
-;; master in &entity-prime-spark-root
+;; master in &entity.prime.spark.root
 (global-rule book-exposure-here
    (version 7)
    (targets via-registry sub-entart)
    (rule-deps unit-risk-weight crr-of)
-   (space-reads &self &core-skeleton))
+   (space-reads &self &core.skeleton))
 
 (= (book-exposure-here) <body-v7>)
 (rule-version book-exposure-here 7)
@@ -327,7 +380,7 @@ On v7→v8:
 1. Synserv writes new body + version atoms in master, retracts old.
 2. Walks the registry → list of target Spaces.
 3. For each target: retracts old projection, adds new projection plus
-   provenance: `(rule-source book-exposure-here &entity-prime-spark-root)`.
+   provenance: `(rule-source book-exposure-here &entity.prime.spark.root)`.
 4. Replication carries new atoms to subscribers.
 
 ### What can go wrong
@@ -384,33 +437,33 @@ itself a recipe parameter, not a fixed constant.
 The four-layer factoring puts a lot of read traffic on a small number
 of universal Spaces:
 
-- `&core-skeleton` — read on every rule that touches CRR, ER formulas, etc.
-- `&core-framework-*` — read whenever a framework parameter is consulted
-- `&core-registry-*` — read whenever an entart, beacon, or contract is looked up
-- `&core-root` — read whenever the synome tree is walked from the top
+- `&core.skeleton` — read on every rule that touches CRR, ER formulas, etc.
+- `&core.framework.*` — read whenever a framework parameter is consulted
+- `&core.registry.*` — read whenever an entart, beacon, or contract is looked up
+- `&core.root` — read whenever the synome tree is walked from the top
 
 These are exactly the Zipfian hub-atoms that DAS handles via hub
 replication. But replication has costs and bounds.
 
 ### Mitigations
 
-- **Hub replication.** Every cube/node carries a copy of `&core-*`
+- **Hub replication.** Every cube/node carries a copy of `&core.*`
   Spaces. Updates propagate to all replicas at governance pace
   (rare). Reads are always local.
-- **Aggressive caching at subscribers.** `&core-skeleton` doesn't change
+- **Aggressive caching at subscribers.** `&core.skeleton` doesn't change
   except at constitutional rewrites; aggressive caching is safe.
 - **Partial sync for non-universal-Spaces.** Light embodiments that
   only need their slice + skeleton don't pull the whole synart.
 
 ### What needs validation
 
-- **Update propagation time** to all replicas of `&core-skeleton`
+- **Update propagation time** to all replicas of `&core.skeleton`
   during a rare constitutional change. Should be governance-tolerable
   (minutes, not hours).
 - **Cache invalidation** on framework updates: every subscriber
   invalidates its cache when a framework's version atom changes.
 - **Hot-spot resilience:** simulate every entart simultaneously
-  reading `&core-framework-risk` during settlement; verify reads stay
+  reading `&core.framework.risk` during settlement; verify reads stay
   local.
 
 ---
@@ -424,9 +477,9 @@ default; others have natural retention boundaries.
 
 | Atom class | Retention | Volume profile |
 |---|---|---|
-| `&core-skeleton` | Permanent | small, bounded |
-| `&core-framework-*` | Permanent | small, bounded |
-| `&core-registry-*` | Permanent | linear in entities/beacons/contracts |
+| `&core.skeleton` | Permanent | small, bounded |
+| `&core.framework.*` | Permanent | small, bounded |
+| `&core.registry.*` | Permanent | linear in entities/beacons/contracts |
 | Entart roots | Permanent | bounded per entity |
 | Book leaf operational atoms | Bounded by lifecycle | big when active, prunable when book closes |
 | ER samples | Two-epoch rolling | large during epoch, small after settlement |
@@ -611,7 +664,7 @@ Five categories, each with concrete deliverables before Phase 1 launch.
 
 - Beacon sends submission → gate verifies → synserv constructs → atomspace updates → subscriber sees update.
 - Cross-Space writes within a constructor are atomic.
-- Two-phase settlement closes correctly: per-Prime → `&core-settlement`.
+- Two-phase settlement closes correctly: per-Prime → `&core.settlement`.
 
 ### Chaos
 
@@ -683,13 +736,14 @@ synart slices delta-cacheable at gateway; telseed configs declare
 sync set so synserv can predict; per-tel sync-rate limits during
 high-spawn windows.
 
-**h) Endoscraper bandwidth.** Endoscrapers (`topology.md` §6 executable
-layer) poll chain RPC endpoints at protocol-specific rates. Each
-endoscraper writes parsed events into `&core-endoscrapers` and forwards
-verified facts to entart leaves. Load profile: chain-protocol-bound
+**h) chain-read bandwidth.** Endoscraping is now a grounded runtime
+primitive (`(chain-read $contract $slot)`) — not a beacon class and not
+a dedicated Space. Rules call into it; the runtime polls chain RPC
+endpoints at protocol-specific rates governed by per-protocol metadata
+in `&core.protocol`. Parsed events are written directly into the entart
+leaves that subscribe to them. Load profile: chain-protocol-bound
 inflow, with reconciliation cost when matched against beacon
-submissions. Per-protocol endoscraper independence allows horizontal
-scaling.
+submissions. Per-protocol independence allows horizontal scaling.
 
 **i) Cross-tel telgate-to-telgate traffic.** Tels coordinating
 peer-to-peer (e.g., negotiating call-out service contracts, sharing
@@ -699,21 +753,21 @@ needs its own routing/discovery story analogous to DNS or peer
 discovery in P2P systems.
 
 **j) Structural-demand scraper bandwidth.** Scrapers populating
-`&entity-generator-usge-structural-demand-scrapers` poll USDS, DAI,
+`&entity.generator.usge.structural-demand.scrapers` poll USDS, DAI,
 and sUSDS holder data to feed the Lindy duration model (per
 [`../risk-framework/duration-model.md`](../risk-framework/duration-model.md)).
-Load profile is similar to endoscrapers — chain-protocol-bound inflow,
+Load profile is similar to chain-read calls — chain-protocol-bound inflow,
 periodic recomputation of per-bucket capacity. Phase 1 uses manual
 governance-set capacity; the live scraper architecture comes online
 when the data infrastructure is ready (tracked as USDS lot-age
-tracking in [`../risk-framework/open-questions.md`](../risk-framework/open-questions.md)).
+tracking in [`../risk-framework/duration-model.md`](../risk-framework/duration-model.md) Open questions).
 The output (`(structural-demand-capacity bucket-N <amount>)`) feeds
 the Primebook `structbook` matching at every Prime, so it's a hub atom
 read frequently — replicate per the pattern in §7.
 
 **k) Per-pair FX stress profile load.** With the currency-frame
 distinction (per [`../risk-framework/currency-frame.md`](../risk-framework/currency-frame.md)),
-`&core-framework-currency-stress` and `&core-framework-fx-stress` hold
+`&core.framework.currency-stress` and `&core.framework.fx-stress` hold
 per-currency stress profiles plus per-pair FX stress data. Per-pair
 because correlations matter (USDC↔USDT depeg correlation isn't
 symmetric across all pairs). Read profile: every Riskbook category

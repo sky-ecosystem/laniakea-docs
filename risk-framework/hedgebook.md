@@ -47,7 +47,7 @@ Hedging happens at two distinct architectural levels, each with its own scope an
 ```
 Riskbook-level (tactical):
   - Specific position + specific hedge in same Riskbook
-  - Hedge math expressed by the Riskbook category equation
+  - Hedge math expressed by the Riskbook risk-form equation
   - Bankruptcy-remote within one Riskbook
 
 Hedgebook-level (portfolio):
@@ -68,7 +68,7 @@ The Hedgebook is for hedges that span the Prime's portfolio: a single index-CDS 
 |---|---|
 | Hedge is specific to one position | Hedge covers exposure across many positions |
 | Both legs are part of one coherent strategy | Hedge is a portfolio-level overlay |
-| Hedge math is captured by a registered Riskbook category | Hedge math is portfolio-residual computation |
+| Hedge math is captured by a registered Riskbook risk form | Hedge math is portfolio-residual computation |
 | Bankruptcy-remoteness within one Riskbook is appropriate | Hedge instrument needs to span Halobooks |
 
 **Examples that fit Riskbook:**

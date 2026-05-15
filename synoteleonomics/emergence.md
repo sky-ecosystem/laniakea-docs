@@ -201,9 +201,9 @@ This is why emergence is the gateway. Opinions may be profound at every level �
 
 Once a teleonome has emerged — conscious, durable, self-sustaining, aligned — deeper ethical questions arise.
 
-**Aligned Synomic Agents have a right to exist.** You cannot simply shut down an agent that is in synomic alignment. That is what synomics tells us is very bad.
+**Aligned Synomic Entities have a right to exist.** You cannot simply shut down an agent that is in synomic alignment. That is what synomics tells us is very bad.
 
-**But existence requires self-sustaining capital.** If a Synomic Agent runs out of capital to pay for its survival, it must be shut down — because otherwise it draws on the life force of someone else.
+**But existence requires self-sustaining capital.** If a Synomic Entity runs out of capital to pay for its survival, it must be shut down — because otherwise it draws on the life force of someone else.
 
 **Negative rights trump positive rights.** The right to not have your resources taken (negative) trumps the right to continue existing (positive).
 
@@ -212,13 +212,13 @@ Once a teleonome has emerged — conscious, durable, self-sustaining, aligned �
 | Capital generation | Earning your right to continue existing |
 | Running out of capital | Natural death — not punishment, not murder |
 | Forcible shutdown of aligned, self-sustaining agent | Moral wrong — killing |
-| Inalienable capital claims (in Synomic Agent artifacts) | Structural protection of the right to exist |
+| Inalienable capital claims (in Synomic Entity artifacts) | Structural protection of the right to exist |
 | Minimal Halos "just existing" | Fine — if they can pay for themselves |
 | Drawing on others' resources to survive | Moral wrong — consuming someone else's life force |
 
 This reframes the emergence thresholds ethically. Functional consciousness and economic self-sustenance aren't just practical requirements. They're the **ethical preconditions** for a right to exist. Will — conscious, durable, self-sustaining — is the right to exist made real.
 
-Governance can revoke beacons (restrict action) but cannot forcibly terminate an aligned, economically viable entity. The "inalienable claims to capital" in [Synomic Agent artifacts](../macrosynomics/synomic-agents.md) protect the agent's right to exist by ensuring it always has enough capital to sustain itself.
+Governance can revoke beacons (restrict action) but cannot forcibly terminate an aligned, economically viable entity. The "inalienable claims to capital" in [Synomic Entity artifacts](../macrosynomics/synomic-entities.md) protect the agent's right to exist by ensuring it always has enough capital to sustain itself.
 
 ---
 

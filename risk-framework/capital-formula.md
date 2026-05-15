@@ -2,11 +2,11 @@
 
 **Status:** Draft (Phase 3 update, 2026-05-05)
 
-The downstream consumer of the layered risk model. Defines how Riskbook category equations, sub-book composition, hedge accounting, and concentration penalties combine into a single Total Required Risk Capital (TRRC) number per Prime.
+The downstream consumer of the layered risk model. Defines how Riskbook risk-form equations, sub-book composition, hedge accounting, and concentration penalties combine into a single Total Required Risk Capital (TRRC) number per Prime.
 
 Companion to:
 - [`risk-decomposition.md`](risk-decomposition.md) — the five risk types and the coverage matrix
-- [`riskbook-layer.md`](riskbook-layer.md) — Riskbook category match produces per-position CRR
+- [`riskbook-layer.md`](riskbook-layer.md) — Riskbook risk-form match produces per-position CRR
 - [`primebook-composition.md`](primebook-composition.md) — sub-book routing determines which risks are covered
 - [`hedgebook.md`](hedgebook.md) — hedge residuals contribute via the Hedgebook sub-book
 - [`correlation-framework.md`](correlation-framework.md) — concentration penalties (excess CRR 100%) layer on top
@@ -18,7 +18,7 @@ Companion to:
 Per-position computation flow:
 
 ```
-1. Look up position's Riskbook category equation
+1. Look up position's Riskbook risk-form equation
 2. Project asset stress through tranche waterfall (or projection model for non-tranched)
 3. Apply Halobook adjustment if any (P/T declarations affect routing)
 4. Route to Primebook sub-book based on structural eligibility
@@ -62,7 +62,7 @@ For static-treatment sub-books (`tradingbook`, `ascbook`, unmatched): uniform fo
 For each position held by a Prime:
 
 ```
-Step 1: Riskbook category match
+Step 1: Riskbook risk-form match
   → If matched: equation produces per-position CRR (default + currency translation + tactical hedging)
   → If no match: CRR = 100% (default-deny per risk-decomposition.md §7)
                  (and the rest of the flow is skipped)
@@ -191,13 +191,13 @@ Encumbrance Ratio:
 ER[p] = TRRC[p] / TRC[p]
 ```
 
-Where `TRC[p]` is Total Risk Capital actually held (JRC + EJRC + SRC, per `accounting/risk-capital-ingression.md`). Target: `ER ≤ 0.90`. Breach drives penalties at settlement.
+Where `TRC[p]` is Total Risk Capital actually held (JRC + EJRC + SRC, per [`../accounting/capital-stack.md`](../accounting/capital-stack.md)). Target: `ER ≤ 0.90`. Breach drives penalties at settlement.
 
 ---
 
 ## 5. Capital funding
 
-This formula outputs **TRRC** (Total Required Risk Capital). For how TRRC is funded across JRC/SRC tiers with ingression-adjusted recognition, see `accounting/risk-capital-ingression.md` (in `inactive/pre-synlang/`; pending its own synlang-native rewrite).
+This formula outputs **TRRC** (Total Required Risk Capital). For how TRRC is funded across JRC/SRC tiers with ingression-adjusted recognition, see [`../accounting/capital-stack.md`](../accounting/capital-stack.md).
 
 The ingression mechanism handles the time delay between commitment and recognition of external risk capital. Capital that has committed to back the Prime but hasn't yet ingressed counts at a discount; once ingressed, full notional applies.
 
@@ -211,7 +211,7 @@ For positions held via Term Halo books (NFATs), CRR varies by book phase:
 - **At Rest** — medium CRR (based on attested risk characteristics)
 - CRR increases if re-attestation is missed
 
-In the new framework, these phase-dependent CRRs are captured via the Riskbook category's equation, not as separate state-based CRR atoms. The category equation reads the book's current phase from synart state and applies the appropriate stress treatment per phase. See `smart-contracts/nfats.md` (in `inactive/pre-synlang/`) for the qualitative book-phase incentive structure. Numeric CRR calibration values for NFAT book-phases are pending.
+In the new framework, these phase-dependent CRRs are captured via the Riskbook risk form's equation, not as separate state-based CRR atoms. The risk-form equation reads the book's current phase from synart state and applies the appropriate stress treatment per phase. See `smart-contracts/nfats.md` (in `inactive/archive/`) for the qualitative book-phase incentive structure. Numeric CRR calibration values for NFAT book-phases are pending.
 
 ---
 
@@ -220,7 +220,7 @@ In the new framework, these phase-dependent CRRs are captured via the Riskbook c
 | Doc | Relationship |
 |---|---|
 | [`risk-decomposition.md`](risk-decomposition.md) | The five risk types and the coverage matrix |
-| [`riskbook-layer.md`](riskbook-layer.md) | Riskbook category match produces per-position CRR |
+| [`riskbook-layer.md`](riskbook-layer.md) | Riskbook risk-form match produces per-position CRR |
 | [`primebook-composition.md`](primebook-composition.md) | Sub-book routing determines which risks are covered |
 | [`hedgebook.md`](hedgebook.md) | Hedge residuals via Hedgebook category equation |
 | [`correlation-framework.md`](correlation-framework.md) | Concentration excess penalty |
@@ -228,4 +228,5 @@ In the new framework, these phase-dependent CRRs are captured via the Riskbook c
 | [`asset-classification.md`](asset-classification.md) | Asset-level stress profiles consumed by stress projection |
 | [`projection-models.md`](projection-models.md) | Projections for non-tranched complex positions |
 | [`asset-type-treatment.md`](asset-type-treatment.md) | Worked treatment per asset class |
-| [`examples.md`](examples.md) | Worked end-to-end TRRC computation in v1 test scenario |
+| [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) | Worked end-to-end TRRC computation in v1 NFAT scenario (see "Worked Example: A Single NFAT Loan") |
+| [`../roadmap/v1-principles.md`](../roadmap/v1-principles.md) | Principles distilled from the v1 carve-outs (matched / unmatched, default-deny, smooth blend) |

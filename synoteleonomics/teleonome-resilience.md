@@ -129,7 +129,7 @@ Cross-embodiment comparison surfaces problems:
 Aligned teleonomes are more resilient than rogues. This isn't philosophical — it's architectural.
 
 **What alignment provides:**
-- **The Synome as coordination infrastructure for recovery.** If a teleonome suffers catastrophic failure, other aligned teleonomes and Synomic Agents can assist in recovery, provide resources, or host backup telart.
+- **The Synome as coordination infrastructure for recovery.** If a teleonome suffers catastrophic failure, other aligned teleonomes and Synomic Entities can assist in recovery, provide resources, or host backup telart.
 - **Collective monitoring.** The aligned coalition detects threats that individual teleonomes might miss. Distributed anomaly detection at ecosystem scale.
 - **Resource access.** An aligned teleonome can draw on Synomic capital and infrastructure. A rogue must provision everything alone.
 

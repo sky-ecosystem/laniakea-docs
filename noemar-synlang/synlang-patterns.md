@@ -1,8 +1,8 @@
 # Synlang Patterns — Code Library
 
 Working synlang code for the Synome's deontic skeleton. Code-heavy
-reference; cross-cuts conceptual material in `topology.md`,
-`../synomics-overview.md`, and `runtime.md`.
+reference; cross-cuts conceptual material in `topology.md` and
+`runtime.md`.
 
 What's in this doc:
 
@@ -13,9 +13,9 @@ What's in this doc:
 | 3 | Four-constructor MeTTa surface | Typed `create-halo / create-class / create-book / issue-unit` |
 | 4 | Sentinel decision rule (RAR) | Risk-adjusted return as strategy in synlang |
 | 5 | The call-out primitive | The synart→telart bridge — how loops consult local cognition |
-| 6 | Sentinel formation patterns | Baseline / Stream / Warden as beacons-with-call-outs |
+| 6 | Relay and sentinel patterns | Two action classes by cognitive density; the formerly-formation roles collapse into relay (baseline / warden) + sentinel (stream / principal) |
 | 7 | Tranche-rule patterns | Rule-bearing tranches (callable, conversion, step-up, triggered subordination) |
-| 8 | Projection-model declaration patterns | How categories declare projection models for complex positions |
+| 8 | Projection-model declaration patterns | How risk forms declare projection models for complex positions |
 
 Working examples elsewhere:
 
@@ -92,7 +92,7 @@ buildable with them is something the system shouldn't allow.
 Halo stack falls out automatically: each layer's units are
 simultaneously liabilities below and assets above.
 
-This is also why the canonical `&entity-halo-<id>-book-<id>` leaf Space
+This is also why the canonical `&entity.halo.<id>.book.<bookid>` leaf Space
 is the right home for a unit atom: the same atom is read as "what this
 book owes" by the issuing-side bridging rule and "what some other book
 holds" by the holding-side rule — different reads at different points
@@ -259,7 +259,7 @@ invalid.
 The `&self` in the constructors above is whichever entart Space the
 constructor runs against. In production layout (per `topology.md` §11):
 
-- `create-halo` — writes identity atoms into a new `&entity-halo-<id>-root`, plus a `(sub-entart …)` registry atom into the parent Prime's root.
+- `create-halo` — writes identity atoms into a new `&entity.halo.<id>.root`, plus a `(sub-entart …)` registry atom into the parent Prime's root.
 - `create-class` — writes class atoms into the halo's root Space.
 - `create-book` — writes book identity into a new book leaf Space, plus a `(sub-space …)` registry atom into the halo's root.
 - `issue-unit` — writes unit atoms into the book's leaf Space.
@@ -271,8 +271,9 @@ See `topology.md` §12 for the registry pattern that connects these.
 ## 4. Sentinel decision rule with risk-adjusted return
 
 The Base Strategy is **rules in the synome**, not opaque code in a
-process. The same rules are read by `stl-base` (decide), `stl-warden`
-(verify), `stl-stream` (propose intent within), and used for
+process. The same rules are read by `baseline-{prime}` relay (decide),
+`warden-{prime}-{op}` relay (verify), `stream-{prime}-{actor}` sentinel
+(propose intent within bounds), and used for
 counterfactual carry simulation.
 
 ```synlang
@@ -303,9 +304,9 @@ counterfactual carry simulation.
 (= (hypothetical-rar $prime $from $to $delta)
    (let* (($cap     (capital-of $prime))
           ($lambda  (match &self (risk-aversion $prime $l) $l))
-          ($f-from  (match &core-framework-risk
+          ($f-from  (match &core.framework.risk
                       (and (book-state $from $s) (crr $s $f)) $f))
-          ($f-to    (match &core-framework-risk
+          ($f-to    (match &core.framework.risk
                       (and (book-state $to   $s) (crr $s $f)) $f))
           ($y-from  (match &self (book-yield $from $y) $y))
           ($y-to    (match &self (book-yield $to   $y) $y))
@@ -322,9 +323,9 @@ counterfactual carry simulation.
 
 (= (within-limit $prime $from $to $delta)
    (let (($cap (capital-of $prime))
-         ($f-from (match &core-framework-risk
+         ($f-from (match &core.framework.risk
                     (and (book-state $from $s) (crr $s $f)) $f))
-         ($f-to   (match &core-framework-risk
+         ($f-to   (match &core.framework.risk
                     (and (book-state $to   $s) (crr $s $f)) $f))
          ($limit  (match &self (encumbrance-limit $prime $l) $l)))
      (<= (/ (+ (encumbered $prime) (* $delta (- $f-to $f-from))) $cap)
@@ -399,7 +400,7 @@ When a synart-resolved loop hits a `(call-out …)`:
 ### Code shape
 
 ```metta
-;; in &core-loop-sentinel-baseline (synart, universal)
+;; in &core.loop.relay.baseline (synart, universal)
 (= (decide-allocation $market-state $entity)
    (let* (($candidates    (enumerate-rebalances $market-state))
           ($scored        (score-with-strategy $candidates))
@@ -468,29 +469,40 @@ Three properties distinguish it:
 
 ---
 
-## 6. Sentinel formations as beacons-with-call-outs
+## 6. Relay and sentinel patterns
 
-Sentinels are **beacons whose strategy includes designated call-outs**.
-The Baseline / Stream / Warden trio (HPHA subclass per synomics summary)
-all use the call-out primitive but with very different ratios of
-synart-determined behavior to local-cognition-driven behavior.
+The action-beacon taxonomy splits into two classes by cognitive
+density:
 
-### Baseline — synart-heavy with surgical call-outs
+- **Relay** — pure synart-resolved I/O, no call-outs. Deterministic strategy. Universal templates at `&core.loop.relay.<stem>`.
+- **Sentinel** — call-out density into operator telart. Per-operator strategy. Loop body lives in the operated entity's entart (no universal template).
+
+This collapses the legacy "Baseline / Stream / Warden formation" into
+three different classes:
+
+| Legacy role | New class | Why |
+|---|---|---|
+| Baseline | relay (stem `baseline-`) | Strategy is deterministic synart code post-noemar; no real cognitive density |
+| Warden | relay (stem `warden-`) | Verify+halt is deterministic synart re-derivation against chain state via grounded primitive |
+| Stream | sentinel (variant stream) | Genuinely requires local cognition for intent proposal |
+| Principal | sentinel (variant principal-sentinel) | Direct PAU control with discretionary cognition |
+
+The "formation" is no longer a beacon subclass — it's a deployment
+pattern: a `baseline-{prime}` relay + zero-or-more `stream-{prime}-{actor}`
+sentinels + ≥1 `warden-{prime}-{op}` relays all wired to one PAU. P1
+omits sentinels entirely — only deterministic relays, govops-controlled.
+
+### baseline-relay — fully deterministic
 
 ```metta
-;; in &core-loop-sentinel-baseline
+;; in &core.loop.relay.baseline (universal template)
 (= (heartbeat)
-   (let* (($entity      (match &self (entity-bound-to $e) $e))
-          ($market-state (snapshot-market $entity))
-          ;; deterministic candidate enumeration
-          ($candidates  (enumerate-allocations $market-state $entity))
-          ($scored      (score-deterministic $candidates))
-          ;; surgical call-out: only for the ranking decision
-          ($selected (call-out llm-rank
-                       (inputs $scored)
-                       (output-shape (allocation-id))))
-          ;; deterministic safety envelope
-          ($safe? (within-baseline-envelope $selected $entity)))
+   (let* (($entity     (match &self (entity-bound-to $e) $e))
+          ($chain-state (chain-read (target-pau $entity)))   ; grounded primitive
+          ($candidates (enumerate-allocations $chain-state $entity))
+          ;; deterministic ranking — no call-out
+          ($selected   (deterministic-rank $candidates $entity))
+          ($safe?      (within-baseline-envelope $selected $entity)))
      (case $safe?
        ((True  (gate-out (sign-and-emit $selected)))
         (False (audit-rejected $selected))))))
@@ -498,28 +510,29 @@ synart-determined behavior to local-cognition-driven behavior.
 
 | Property | Value |
 |---|---|
-| Synart-determined share | ~95% |
-| Call-out share | ~5% (just the ranking choice) |
-| Audit story | Almost everything verifiable; only the LLM ranking is non-deterministic |
-| Warden re-derivation | Wardens re-run with their own LLM; agree on structure, may disagree on rank choice |
+| Synart-determined share | 100% |
+| Call-out share | 0% |
+| Audit story | Fully verifiable — any warden re-runs the same synart |
+| Warden re-derivation | Identical answer expected (deterministic) |
 
-Baseline follows the **exact strategy** in synart. The call-out is a
-tightly-scoped consultation, not a delegation.
+The deterministic ranking is a synart-resolved function — could be
+priority-table lookup, RAR-optimization, governance-set bias, whatever
+the strategy specifies. The point is that it's verifiable.
 
-### Stream — synart-light with massive call-out
+### stream-sentinel — cognitive proposal
 
 ```metta
-;; in &core-loop-sentinel-stream
+;; in &entity.prime.spark.sentinel.{actor} (per-operator, NOT a universal template)
 (= (heartbeat)
-   (let* (($entity (match &self (entity-bound-to $e) $e))
-          ;; massive call-out: do all the thinking locally
-          ($proposal (call-out cognitive-propose
-                       (inputs (current-context $entity))
-                       (output-shape proposal-record)))
+   (let* (($entity     (match &self (entity-bound-to $e) $e))
+          ;; cognitive call-out into operator telart
+          ($proposal   (call-out cognitive-propose
+                         (inputs (current-context $entity))
+                         (output-shape proposal-record)))
           ;; synart-side boundary check
-          ($bounds (match &self (embart-bounds $b) $b))
-          ($within? (proposal-within-bounds $proposal $bounds))
-          ($formatted (format-for-baseline $proposal)))
+          ($bounds     (match &self (rti-bounds $b) $b))
+          ($within?    (proposal-within-bounds $proposal $bounds))
+          ($formatted  (format-for-baseline $proposal)))
      (case $within?
        ((True  (emit-to-baseline $formatted))
         (False (audit-out-of-bounds $proposal))))))
@@ -527,114 +540,125 @@ tightly-scoped consultation, not a delegation.
 
 | Property | Value |
 |---|---|
-| Synart-determined share | ~10% (boundary check + comm protocol) |
-| Call-out share | ~90% (the proposal itself) |
-| Audit story | Bounds enforcement verifiable; the proposal content is local cognition |
-| Warden re-derivation | N/A — Stream proposals are local-by-design; Wardens watch Baseline's response to stream input |
+| Synart-determined share | ~10% (bounds + comm protocol) |
+| Call-out share | ~90% (proposal cognition) |
+| Audit story | Bounds enforcement verifiable; proposal content is private cognition |
+| Holds PAU keys? | No — emits intent for baseline-relay to consume |
 
-Stream is the inverse of Baseline. Most behavior is local cognition;
-the synart part is just regulating communication and enforcing bounds.
+The sentinel loop lives in the entity's entart, not in `&core.loop.*` —
+strategy is per-operator and the cognitive substance lives in the
+operator's telart agart, off-corpus.
 
-### Warden — synart-heavy re-derivation
+### warden-relay — deterministic re-derivation
 
 ```metta
-;; in &core-loop-sentinel-warden
+;; in &core.loop.relay.warden (universal template)
 (= (heartbeat)
-   (let* (($entity      (match &self (entity-bound-to $e) $e))
-          ($market-state (snapshot-market $entity))
-          ($candidates  (enumerate-allocations $market-state $entity))
-          ($scored      (score-deterministic $candidates))
-          ;; same call-out as Baseline — but with this Warden's own LLM
-          ($selected (call-out llm-rank
-                       (inputs $scored)
-                       (output-shape (allocation-id))))
-          ;; what did Baseline actually do?
+   (let* (($entity         (match &self (entity-bound-to $e) $e))
+          ($chain-state     (chain-read (target-pau $entity)))
+          ($candidates     (enumerate-allocations $chain-state $entity))
+          ($expected       (deterministic-rank $candidates $entity))
+          ;; what did the baseline-relay actually do?
           ($baseline-action (latest-baseline-action $entity))
-          ;; do they agree?
-          ($agreement (action-agrees-with $baseline-action $selected
+          ($agreement (action-agrees-with $baseline-action $expected
                                           (tolerance loose))))
      (case $agreement
        ((agree            audit-clean)
         (disagree-minor   (audit-flag-soft))
-        (disagree-major   (gate-out (halt-baseline $entity)))))))
+        (disagree-major   (gate-out (freeze-beam $entity)))))))
 ```
 
 | Property | Value |
 |---|---|
-| Synart-determined share | ~95% |
-| Call-out share | ~5% (own LLM at same call-out site Baseline uses) |
-| Audit story | Re-runs the entire Baseline strategy; only the LLM ranking varies |
-| Triggers halt | When divergence from Baseline exceeds tolerance |
+| Synart-determined share | 100% |
+| Call-out share | 0% |
+| Audit story | Re-runs baseline's strategy deterministically; divergence is unambiguous |
+| Triggers halt | When baseline output diverges from expected past tolerance |
 
-Wardens halt Baselines when something looks wrong. The halt mechanism
-is itself a synart-mediated authority transfer — a Warden with halt
-auth retracts Baseline's `(beacon-status … active)` atom, freezing it
+Halt mechanism: a warden with freeze authority emits a BEAM freeze
+through gate-out. On chain, the baseline-relay's pBEAM stops working
 until governance review.
 
-### Formation interactions
+### Operating-setup interactions
 
 ```
-Stream → Baseline → on-chain action
-   │         │              │
-   │         │              ↓
-   │         │         endoscraper sees it
-   │         │              │
-   ↓         ↓              ↓
-Warden re-derivation against same inputs
+stream-sentinel (optional, cognitive, off-corpus)
    │
-   ↓
-agree → continue
-disagree → halt Baseline
+   │ intent within RTI
+   ▼
+baseline-relay (deterministic, holds PAU keys)
+   │
+   │ chain tx
+   ▼
+chain state (readable by anyone via (chain-read …))
+   ▲
+   │ re-derive
+   │
+warden-relay × N (independent, deterministic)
+   │
+   ▼
+agree → continue / disagree → freeze BEAM
 ```
 
-All inter-formation communication goes through synart-defined channels
-(`gate-out (emit-to-baseline …)`, `gate-out (halt-baseline …)`).
-There's no out-of-band communication between formations — every
-interaction is auditable.
+All inter-component communication goes through synart-defined channels
+(`gate-out (emit-to-baseline …)`, `gate-out (freeze-beam …)`). No
+out-of-band coordination — every interaction is auditable.
 
 ### The TTS bound
 
-Time-to-stop (TTS) is the window between Baseline doing something rogue
-and a Warden halting it. Synart code on both sides means TTS is fully
-measurable:
+Time-to-stop (TTS) is the window between baseline-relay doing something
+wrong and a warden-relay halting it. Because both are deterministic
+relays operating against the grounded chain-read primitive, TTS drops
+the call-out-latency term that the legacy formation model carried:
 
 ```
-TTS = (Warden's tick interval) + (call-out latency) + (halt propagation)
+TTS = (warden tick interval) + (warden synart re-derive latency) + (halt propagation)
 ```
 
-Each component has a bound; their sum is a structural constant per
-formation. Designing formations with low TTS is a governance lever for
-how dangerous Baselines are allowed to be.
+Each component has a bound; the sum is a per-setup structural constant.
+Designing setups with low TTS is governance's lever for how dangerous
+baselines are allowed to be.
 
 ### Per-entity instantiation
 
-Each Sentinel formation runs as a per-entity loop instance per the
-two-step loop pattern (`topology.md` §17):
+Relay loops follow the two-step loop pattern (`topology.md` §17) —
+universal template at `&core.loop.relay.<stem>`, per-entity config in
+the entity's entart:
 
 ```
-&core-loop-sentinel-baseline                        ← universal template
-&entity-prime-spark-sentinel-baseline               ← Spark's per-Prime instance
-&entity-prime-grove-sentinel-baseline               ← Grove's per-Prime instance
-&entity-halo-spark-term-sentinel-baseline           ← Spark Term Halo's per-Halo instance (if Halo runs one)
+&core.loop.relay.baseline                       ← universal template
+&entity.prime.spark.relay.baseline              ← Spark's per-Prime config
+&entity.prime.grove.relay.baseline              ← Grove's per-Prime config
+
+&core.loop.relay.warden                         ← universal template
+&entity.prime.spark.relay.warden.sentinelco     ← per-Prime per-operator config
+
+&core.loop.relay.nfat                           ← universal template
+&entity.halo.spark-term.relay.nfat              ← per-Halo config
 ```
 
-Each per-entity Space binds the universal template to that entity's
-configuration: which sub-entarts to consider, which markets, which
-risk parameters, which call-out services to invoke.
+Sentinel loops have **no universal template** — strategy is
+per-operator. Per-entity sentinel Space holds bounds + envelope-check +
+gate-out shape + call-out registry pointers:
 
-### Why this composes well
+```
+&entity.prime.spark.sentinel.horizonlabs        ← stream-sentinel for Spark (operator: HorizonLabs)
+&entity.folio.{owner}.sentinel-principal        ← principal-sentinel for a folio
+```
 
-The same call-out primitive supports all three formations and arbitrarily
-many in between (e.g., an LPHA beacon with one parameter call-out is
-"a tiny step toward Sentinel-Baseline shape"). The architecture is
-continuous: pure-spec deterministic beacons at one end, mostly-cognitive
-Streams at the other, and a wide middle where most useful sentinel
-formations live.
+### The architecture is continuous, not binary
+
+A relay with zero call-outs and a sentinel with massive call-out are
+endpoints of a continuum: any beacon could be designed with anywhere
+between 0% and 100% call-out density. The class split (relay = 0%,
+sentinel > 0%) is a useful regulatory cut, not a structural barrier.
+Most useful beacons sit at one of the two endpoints because the
+governance + audit + ORC machinery is calibrated for them.
 
 This is the structural realization of "intelligence private, power
 regulated" — synart envelope enforces bounds; call-outs admit cognition
 at designated points; the ratio between them is a per-recipe choice
-governance makes.
+governance makes when defining a new beacon class.
 
 ---
 
@@ -713,12 +737,12 @@ P and T declarations feed the Primebook sub-book router per [`../risk-framework/
 
 ## 8. Projection-model declaration patterns
 
-Per [`../risk-framework/projection-models.md`](../risk-framework/projection-models.md), categories declare projection models for complex positions that don't fit direct-tranche math. The synlang patterns:
+Per [`../risk-framework/projection-models.md`](../risk-framework/projection-models.md), risk forms declare projection models for complex positions that don't fit direct-tranche math. The synlang patterns:
 
 ### Vanilla European call (Black-Scholes)
 
 ```metta
-(risk-category-def vanilla-european-call
+(risk-form-def vanilla-european-call
    (level position-instrument)
    (projection-model black-scholes
       (variables strike expiry notional underlying-price implied-vol risk-free-rate)
@@ -732,7 +756,7 @@ Per [`../risk-framework/projection-models.md`](../risk-framework/projection-mode
 ### Path-dependent option (Monte Carlo)
 
 ```metta
-(risk-category-def asian-option
+(risk-form-def asian-option
    (level position-instrument)
    (projection-model monte-carlo
       (variables strike expiry notional underlying-process averaging-window)
@@ -746,7 +770,7 @@ Per [`../risk-framework/projection-models.md`](../risk-framework/projection-mode
 ### Callable bond (lattice)
 
 ```metta
-(risk-category-def callable-bond
+(risk-form-def callable-bond
    (level position-instrument)
    (projection-model binomial-lattice
       (variables coupon maturity call-schedule rate-process)
@@ -760,7 +784,7 @@ Per [`../risk-framework/projection-models.md`](../risk-framework/projection-mode
 ### CDS (parametric)
 
 ```metta
-(risk-category-def cds-position
+(risk-form-def cds-position
    (level position-instrument)
    (projection-model parametric-credit
       (variables reference-entity notional protection-period counterparty-rating)
@@ -776,7 +800,7 @@ Per [`../risk-framework/projection-models.md`](../risk-framework/projection-mode
 ### Novel instrument (high uncertainty)
 
 ```metta
-(risk-category-def some-novel-derivative
+(risk-form-def some-novel-derivative
    (level position-instrument)
    (projection-model novel-stochastic-model
       (variables ...)
@@ -784,23 +808,23 @@ Per [`../risk-framework/projection-models.md`](../risk-framework/projection-mode
    (model-uncertainty-haircut 0.30))                     ; bleeding-edge → conservative
 ```
 
-### Composing projection into Riskbook category
+### Composing projection into Riskbook risk form
 
-A Riskbook category that holds projection-using positions invokes the model:
+A Riskbook risk form that holds projection-using positions invokes the model:
 
 ```metta
-(risk-category-def options-portfolio
+(risk-form-def options-portfolio
    (level riskbook)
    (composition-constraints (only-vanilla-options))
    (equation-m2m
       (sum-over (held-positions)
          (lambda ($pos)
-            (let* (($cat (category-of $pos))
+            (let* (($form (form-of $pos))
                    ($projected-loss (project-with-model
-                                       (projection-model-of $cat)
+                                       (projection-model-of $form)
                                        $pos
                                        (current-scenario))))
-              (* $projected-loss (+ 1.0 (model-uncertainty-haircut-of $cat)))))))
+              (* $projected-loss (+ 1.0 (model-uncertainty-haircut-of $form)))))))
    (resolution-tier simulation))
 ```
 

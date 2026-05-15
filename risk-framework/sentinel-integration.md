@@ -4,48 +4,51 @@
 
 ## Connection to Sentinel
 
-The Risk Framework provides the calculations that sentinel formations and high-authority action beacons perform.
+The Risk Framework provides the calculations that Prime operating setups (baseline-relay + warden-relay + stream-sentinel) and other high-authority action beacons perform.
 
-For full sentinel specification, see `trading/sentinel-network.md`.
+For full sentinel specification, see `sentinel/sentinel-network.md`.
 For the broader beacon taxonomy (two-tier authority + I/O role), see [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md).
 
 ### Protocol-Level (Synserv-Run)
 
 | Component | Uses Risk Framework For |
 |-----------|-------------------------|
-| **synserv verification (in-space calculation)** | Calculating CRR per position, TRRC, TRC, Encumbrance Ratio; settlement cycle processing; LCTS generation handling. Calculation runs as synart-resolved code inside synserv against current input atoms (endoscraper / oracle / attestor writes). See [`../macrosynomics/beacon-framework.md` §4](../macrosynomics/beacon-framework.md#4-io-role-under-authority) and [`../../noemar-synlang/listener-loops.md`](../../noemar-synlang/listener-loops.md). |
+| **synserv verification (in-space calculation)** | Calculating CRR per position, TRRC, TRC, Encumbrance Ratio; settlement cycle processing; LCTS generation handling. Calculation runs as synart-resolved code inside synserv against current input atoms (chain-read primitive writes / market-data / attest-data). See [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) and [`../../noemar-synlang/listener-loops.md`](../../noemar-synlang/listener-loops.md). |
 
-### Prime-Side Sentinels
+### Prime-Side Operating Setup
 
-| Component | Uses Risk Framework For |
-|-----------|-------------------------|
-| **stl-base** | Risk monitoring during execution, deployment decisions |
-| **stl-warden** | Independent risk verification, halt triggers |
-
-### Folio-Side Sentinels
+A Prime's operating setup is the bundle of three beacon classes deployed together: baseline-relay (config-driven execution), warden-relay (independent verification + halt), and stream-sentinel (latency-bounded reactive responses). They are distinct classes — not a single "sentinel formation."
 
 | Component | Uses Risk Framework For |
 |-----------|-------------------------|
-| **stl-base-{folio}** | Risk monitoring during execution, deployment decisions (automated folios) |
-| **stl-warden-{folio}** | Independent risk verification, halt triggers (automated folios) |
-| **stl-principal-{owner}** | Direct control with structural protection only (principal control folios) |
+| **baseline-{prime}** (relay class) | Risk monitoring during execution, deployment decisions |
+| **warden-{prime}-{operator}** (relay class) | Independent risk verification, halt triggers |
+| **stream-{prime}-{actor}** (sentinel class, stream variant) | Latency-bounded reactive responses operating the Prime |
 
-> **Note:** Automated folios inherit formation-level protection identical to Primes — TTS is defined by the warden set, and ORC is sized accordingly. Principal control folios have no TTS (no wardens to shut them down) — risk is bounded by rate limits and PAU architecture alone, not by formation-level protections.
+### Folio-Side Operating Setup
+
+| Component | Uses Risk Framework For |
+|-----------|-------------------------|
+| **baseline-{folio}** (relay) | Risk monitoring during execution, deployment decisions (automated folios) |
+| **warden-{folio}-{operator}** (relay) | Independent risk verification, halt triggers (automated folios) |
+| **principal-{owner}** (sentinel class, principal variant) | Direct control with structural protection only (principal-control folios) |
+
+> **Note:** Automated folios inherit setup-level protection identical to Primes — TTS is defined by the warden set, and ORC is sized accordingly. Principal-control folios have no TTS (no wardens to shut them down) — risk is bounded by rate limits and PAU architecture alone, not by setup-level protections.
 
 ### Halo-Side Action Beacons
 
 | Component | Uses Risk Framework For |
 |-----------|-------------------------|
-| **lpha-lcts** | LCTS vault capacity management, redemption processing |
-| **lpha-nfat** | NFAT Facility operations, claim processing |
+| **lcts-{halo}** (relay) | LCTS vault capacity management, redemption processing |
+| **nfat-{halo}** (relay) | NFAT Facility operations, claim processing |
 
-These are high-authority action beacons (deterministic keepers), not sentinel formations. Prime-side `stl-base` / `stl-stream` / `stl-warden` formations come later and operate Primes; Halo execution remains keeper-driven.
+These are high-authority action beacons (deterministic keepers), not part of a Prime operating setup. Prime baseline/warden/stream beacons come later and operate Primes; Halo execution remains keeper-driven.
 
 ### Halo Reporting Beacons
 
 | Component | Uses Risk Framework For |
 |-----------|-------------------------|
-| **lpha-halo** | Reporting risk metrics for Halo Units (endoscraper-shaped or attestor-shaped depending on data source) |
+| **relay-{halo}** + **attest-data-{class}** | Reporting risk metrics for Halo Units. On-chain reads use the chain-read grounded primitive directly inside synserv-run code; off-chain reports come in as `attest-data` beacon writes. |
 
 ### Key Metrics (from Sentinel doc)
 
@@ -65,7 +68,7 @@ These are high-authority action beacons (deterministic keepers), not sentinel fo
 Sentinel formations that operate Prime Intent Vaults (PIVs) face **trading execution risk** in addition to portfolio risk. Unlike portfolio risk — which is managed through CRR, duration matching, and risk capital — PIV risk is managed through on-chain enforcement mechanisms:
 
 - **Delegated Intent Policy (DIP):** Per-vault policy defining allowed pairs, max slippage, per-intent notional caps, and per-window velocity limits. Enforced at fill time via a stateful vault hook.
-- **Per-window caps:** Hourly and daily notional limits bound trading throughput, capping worst-case losses from a malfunctioning or compromised stl-base.
+- **Per-window caps:** Hourly and daily notional limits bound trading throughput, capping worst-case losses from a malfunctioning or compromised baseline-relay.
 - **EIP-1271 validation:** Settlement contract validates maker authorization against the Prime Intent Vault, ensuring only authorized delegated signers can produce valid intents.
 - **Vault balance isolation:** Only the PIV balance is exposed to settlement; the full Prime PAU is not at risk.
 

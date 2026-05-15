@@ -11,7 +11,7 @@ concepts:
 
 This document describes the Synome architecture from the perspective of an **Actuator** — an embodiment that interacts with the real world to generate value, achieve its purpose, and survive.
 
-> **Phase note:** The full actuator described below is a Phase 9-10 capability. Today, "actuators" are the deterministic teleonome-less beacons described in [`../macrosynomics/short-term-actuators.md`](../macrosynomics/short-term-actuators.md). The bridge — embodiments that actually run cognition loops and feed evidence back to the Synome — is being built now via the Rule-Author Agent (see [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md)). The actuator-as-validation role described here is operational at small scale today: regression-suite outcomes ARE evidence, promote/discard IS the validation gate.
+> **Phase note:** The full actuator described below is a Phase 9-10 capability. Today, "actuators" are deterministic teleonome-less beacons (see [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) for the Phase 1 beacon set). The bridge — embodiments that actually run cognition loops and feed evidence back to the Synome — is being built now via the Rule-Author Agent (see [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md)). The actuator-as-validation role described here is operational at small scale today: regression-suite outcomes ARE evidence, promote/discard IS the validation gate.
 
 ---
 
@@ -29,7 +29,7 @@ I connect to reality through Beacons and Direct Hardware Control. My actions hav
 
 ## My View of the Layers
 
-I exist within the [five-layer architecture](../core-concepts/five-layer-architecture.md). From my perspective: Layers 1-2 (Synome and Synomic Agents) provide the shared truth and governance I'm accountable to. Layer 3 (my teleonome) gives me my directive, axioms, and shared knowledge. Layer 4 (embodiment) is my local context — data, orchestrator, resources. Layer 5 (embodied agent) is where I actually run, interacting with the world through [beacons](../core-concepts/beacon-framework.md) and direct hardware control.
+I exist within the [five-layer architecture](../core-concepts/five-layer-architecture.md). From my perspective: Layers 1-2 (Synome and Synomic Entities) provide the shared truth and governance I'm accountable to. Layer 3 (my teleonome) gives me my directive, axioms, and shared knowledge. Layer 4 (embodiment) is my local context — data, orchestrator, resources. Layer 5 (embodied agent) is where I actually run, interacting with the world through [beacons](../core-concepts/beacon-framework.md) and direct hardware control.
 
 Everything I do matters. Mistakes cost real value.
 
@@ -169,7 +169,7 @@ My relationship to dreamers is the core [RSI](../core-concepts/rsi.md) loop — 
 
 If I drift from alignment:
 - Other aligned teleonomes will destroy my embodiments (peer enforcement)
-- I lose access to synomic agents
+- I lose access to synomic entities
 - I may be slashed (resources seized)
 - My teleonome suffers or is terminated
 

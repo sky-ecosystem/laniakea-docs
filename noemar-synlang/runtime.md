@@ -1,6 +1,6 @@
 # Runtime — Access Control and Runtime Architecture
 
-**Status:** Working notes from design discussion. Companion to `topology.md` (structure), `synlang-patterns.md` (code library), and `../synomics-overview.md` (concept map).
+**Status:** Working notes from design discussion. Companion to `topology.md` (structure) and `synlang-patterns.md` (code library).
 **Scope:** The access control kernel, runtime architecture, and scaling principles that the synart's foundational primitives must rest on. Does NOT cover the constructors themselves (book/unit/halo) — those come after this layer is settled.
 
 ---
@@ -30,10 +30,10 @@ The Synome and the chain are **separate authorization domains**. They both root 
 
 A GovOps team operating something like the Spark Term Halo holds **at least two credentials**:
 
-- **Synome-side:** operates `lpha-nfat-spark` (a registered beacon with write rights to the relevant book/unit records)
+- **Synome-side:** operates `nfat-spark` (a registered beacon with write rights to the relevant book/unit records)
 - **Chain-side:** holds the **cBEAM** for the PAU (rate limits, controller calls, relayer/freezer)
 
-These are granted by separate paths and revoked separately. `lpla-verify` is the reconciler — reads both worlds, flags drift.
+These are granted by separate paths and revoked separately. The reconciler (formerly `lpla-verify`, now a verifier emb running shadow execution) reads both worlds and flags drift.
 
 **Synlang lives entirely in the Synome domain.** The constructors we'll write are Synome-writes. They check Synome-side authorization. They do *not* check or model chain-side BEAM holdership. The chain is grounded; from synlang's perspective, beacons emit opaque chain effects alongside their Synome writes.
 
@@ -63,8 +63,8 @@ Three distinct concepts, three different names:
 
 | Layer | What it asserts | Between |
 |---|---|---|
-| **Governance accord** | Mutual structural recognition between synomic agents | Agent ↔ agent (Guardian↔Prime, Prime↔Halo) |
-| **Admin certification** | "This beacon is a recognized principal, and I (the certifier) carry liability for it" | Synomic agent → beacon |
+| **Governance accord** | Mutual structural recognition between synomic entities | Entity ↔ entity (Guardian↔Prime, Prime↔Halo) |
+| **Admin certification** | "This beacon is a recognized principal, and I (the certifier) carry liability for it" | Synomic entity → beacon |
 | **Admin authorization** | "This beacon may do verb V on target T" | Certifier (or delegate) → beacon → specific scope |
 
 Properties:
@@ -72,10 +72,10 @@ Properties:
 - **Governance accord** is bidirectional, long-lived, structural. It's what the system *is*.
 - **Admin certification** carries liability. The certifier is on the hook for everything the beacon does, before any auth is granted.
 
-> **Note on attestor beacon class (added 2026-05-05).** The risk framework rewrite (per [`../risk-framework/`](../risk-framework/README.md)) introduces **attestor** as a new beacon class for off-chain claim attestation: signed attestation atoms about custody balances, off-chain contract terms, compliance facts. Distinct from endoscrapers (deterministic chain reads) — attestors carry signed off-chain claims with attestor liability via slashing. The cert/auth/beacon-class machinery already documented here (§4-§7) covers attestors uniformly; the genuinely new design is the attestation atom schema and the off-chain reconciliation cycle (tracked as Q24 in [`../risk-framework/open-questions.md`](../risk-framework/open-questions.md)).
+> **Note on attest-data beacon class (added 2026-05-05).** The risk framework rewrite (per [`../risk-framework/`](../risk-framework/README.md)) introduces **attest-data-beacon** as the class for off-chain claim attestation: signed attestation atoms about custody balances, off-chain contract terms, compliance facts. Distinct from on-chain reads (which are no longer a beacon class — `chain-read` is a grounded runtime primitive) — attest-data beacons carry signed off-chain claims with attestor liability via slashing. The cert/auth/beacon-class machinery already documented here (§4-§7) covers attest-data beacons uniformly; the genuinely new design is the attestation atom schema and the off-chain reconciliation cycle (tracked in [`beacons.md`](beacons.md) Open questions).
 - **Admin authorization** is the finest grain — many auths per beacon, easy to compose, instant to revoke.
 
-Important: this **deliberately tightens existing usage**. The current docs say "GovOps becomes accordant to a PAU." Under our refined vocabulary, that usage moves under *administrative authorization*; "accordant" becomes reserved for governance accords (agent↔agent only).
+Important: this **deliberately tightens existing usage**. The current docs say "GovOps becomes accordant to a PAU." Under our refined vocabulary, that usage moves under *administrative authorization*; "accordant" becomes reserved for governance accords (entity↔entity only).
 
 ---
 
@@ -100,7 +100,7 @@ Guardian
   ↓ root  (Core Council enacts on Guardian token-holder vote)
 Root Beacon (the GovOps "company")
   ↓ cert + auth (per beacon, narrow scope)
-Operational Beacons (lpha-nfat-style — the actual write-doers)
+Operational Beacons (nfat-{halo}-style — the actual write-doers)
   ↓ constructor calls
 Synome state
 ```
@@ -112,7 +112,7 @@ Synome state
 
 ---
 
-## 5. The agent hierarchy and authorization as accordancy traversal
+## 5. The synomic entity hierarchy and authorization as accordancy traversal
 
 The Laniakea ranks (post-transition):
 
@@ -120,7 +120,7 @@ The Laniakea ranks (post-transition):
 Core Council
     │  creates Guardian, sets root for GovOps
     ▼
-Guardian  (Rank 1, lowest-level synomic agent for our purposes)
+Guardian  (Rank 1, lowest-level synomic entity for our purposes)
     │  governance accord with one or more Primes
     ▼
 Prime (Rank 2)
@@ -209,7 +209,7 @@ A beacon does exactly one thing: hold a private key, sign a proposed write, send
 
 **What this means for the graph:**
 
-1. **Beacon pubkeys are atoms.** `(beacon-pubkey lpha-nfat-spark <key-bytes>)` is part of what certification writes. The runtime consults this atom on every signature check. No external key registry.
+1. **Beacon pubkeys are atoms.** `(beacon-pubkey nfat-spark <key-bytes>)` is part of what certification writes. The runtime consults this atom on every signature check. No external key registry.
 
 2. **Constructor calls implicitly carry a verified caller.** From synlang's view, `(create-prime spark-govops-root ozone spark-prime)` reads as "the runtime received a valid signed request from spark-govops-root." Crypto isn't modeled in synlang; we model who-said-what.
 
@@ -360,6 +360,51 @@ Two small commitments this requires:
 1. Every external verb has a target slot (use `*` for verbs whose authorization isn't target-bounded).
 2. Caller injection is convention. Constructors take `$caller` as their first arg; dispatch injects it.
 
+### The full ingress pipeline — gate → policy → effect → audit
+
+Sections 9 and 11 together describe one pipeline. Stated abstractly:
+
+```
+external submission ─▶ gate-in (ed25519 verify, dedup, rate-limit)
+                   ─▶ parse payload (fail on malformed)
+                   ─▶ whitelist check (head ∈ external-verb)
+                   ─▶ permits query  (can $caller $verb $target → True?)   ◀── AUTHORITY LIVES HERE
+                   ─▶ dispatch effect (Python effect runs structural validation + writes)
+                   ─▶ audit row (accepted or denied with reason)
+```
+
+**Authority lives only in the permits step.** The crypto layer below it filters spam/replay; the whitelist above it filters surface-area; the effect below it does mechanical work; the audit logs everything. None of those steps make policy decisions — they're pure transformation, dispatch, and bookkeeping. Concentrating authority at one inspectable point is what makes the trust boundary auditable; distributing it across multiple steps would defeat audit. **Default-deny by absence**: no `auth` (or `role-grant`) atom → permits returns False → policy denies. There is no fallback affirmative path.
+
+### Permission rule — canonical successor (auth-only)
+
+The `(can $principal $verb $target)` form in §6 walks role-defs and role-grants. A simpler **canonical successor** form is now in use for new code, especially in the synomic-overview canonical permission rule:
+
+```metta
+(= (permits $beacon (VERB $target $args… $nonce))
+   (if (auth $beacon VERB $target)
+       True
+       False))
+```
+
+`(auth $beacon $verb $target)` is a **flat 3-arg fact**, lives in the entart owning the target, granted by a certifier whose own auth chain ultimately roots in genesis, removed on revocation. The `(if … True False)` wrapper forces a definite boolean (bare expressions don't reduce). Trailing `$nonce` is driver-appended for replay protection; body ignores it. Default-deny by absence — no `auth` atom → no `permits` results.
+
+Properties this gives up vs §6: roles, scope-shapes, conditions — all collapse into "either there's an auth atom or there isn't." Properties this gains: a one-line audit answer to "can X do Y to Z" (`(match &self (auth X Y Z))` — yes/no, no traversal); easier revocation (delete one atom); cleaner mental model. If a beacon's role/class/status changes, governance revokes the relevant `auth` atoms. Synlang never re-verifies those properties — it just reads the auth fact.
+
+The legacy `govops_demo` pattern uses a longer preamble (`in-class` + `beacon-role` + `beacon-status` + flat checks); the auth-only shape above is the canonical successor for new code.
+
+### Failure / escalation modes
+
+Four named failure modes the runtime + synserv must handle. All flagging atoms are append-only; the audit trail is part of synart history *until pruning at settlement* (anything that needs to persist beyond an epoch must be promoted to a settlement-tier atom or written to an out-of-band archive).
+
+| Failure | Detection | Atom written | Resolution |
+|---|---|---|---|
+| **Beacon drops events** | Synserv / archive nodes detect gaps via on-chain comparison | `event-gap-flagged` | Cert-chain recourse: investigate, possibly revoke |
+| **Settlement disagrees with chain** | Synserv's computed settlement diverges from on-chain reality | Flag into `&core.escalation` | Governance review |
+| **Agent under-pays for resources** | Synserv tracks per-atom consumption; meter shows non-payment | Flag into `&core.escalation` | Governance review; possibly revoke auths |
+| **Beacon misbehavior** | Caught by warden, attestor disagreement, or after-the-fact audit | Cert/auth chain provides recourse | Revoke `auth` atom; re-cert from above |
+
+Serious breaches escalate via real-world governance — cert revocation, legal liability up the chain — not crypto. This is the operational counterpart to the trust model in [`../macrosynomics/synomic-entities.md`](../macrosynomics/synomic-entities.md): ed25519 sigs are non-repudiation, not trustlessness; recourse is a governance act, not a slashing event.
+
 ---
 
 ## 11.5. Identity-driven boot
@@ -373,7 +418,7 @@ noemar boot --identity=X --key=path/to/key.pem --synart=endpoint
    ↓
 mount synart
    ↓
-look up X in &core-registry-beacon → loop pointer
+look up X in &core.registry.beacon → loop pointer
    ↓
 evaluate (run-forever) with that Space as &self
 ```
@@ -383,10 +428,11 @@ which Spaces to subscribe, which auth applies, which gates to run)
 flows from synart based on identity.
 
 Synserv boots with this same procedure — its identity (e.g.,
-`core-synserv-canonical`) resolves to `&core-loop-synserv`. Beacons,
-sentinels, archive embs, verifier embs, endoscrapers all use the same
-boot path with their own identities resolving to their own loop
-Spaces.
+`core-synserv-canonical`) resolves to `&core.loop.synserv`. Beacons,
+sentinels, archive embs, and verifier embs all use the same boot
+path with their own identities resolving to their own loop Spaces.
+(Endoscraping is no longer a beacon class — `(chain-read $contract
+$slot)` is a grounded runtime primitive any rule can call.)
 
 For depth — including the spec/instance collapse (`Spaces are the
 program; runtimes are the interpreter`), shadow execution properties,
@@ -394,10 +440,11 @@ hot-swap modes, and failure handling — see `boot-model.md` (canonical).
 
 ---
 
-## 11.6. The call-out primitive
+## 11.6. The call-out primitive (synchronous form)
 
 A synlang form for synart-resolved loops to consult local cognition at
-strategy-designated points. The synart→telart bridge.
+strategy-designated points. The synart→telart bridge in its
+synchronous shape.
 
 ```metta
 (call-out $service
@@ -410,10 +457,6 @@ against the booting identity's telart call-out registry, marshals
 inputs across the synart→telart boundary, validates the response shape,
 and returns the validated value to the surrounding synart code.
 
-The call-out is the **only sanctioned mechanism** for synart-resolved
-code to consult local cognition. Direct telart access from synart loops
-is forbidden because it would break the audit story.
-
 Verifiability profile:
 
 - Inputs to the call-out: fully verifiable (derived from synart state).
@@ -425,6 +468,35 @@ This is what lets Sentinel-Baseline run ~95% verifiable code while
 still consulting LLM cognition at carefully-chosen decision points —
 wardens re-derive everything except the LLM output and halt on
 disagreement past tolerance.
+
+## 11.7. Convention-named embart Space contracts (asynchronous form)
+
+The synchronous call-out is the right primitive for genuinely-need-an-
+answer-now decision points. **Most Agent ↔ Beacon comms uses the
+asynchronous mailbox form instead:** a Beacon Space publishes an I/O
+contract specifying a convention-named Space in embart and a content
+schema. The agent (its agart, running on the same emb or replicated
+into it via telart spread) populates that Space at its own cadence;
+the Beacon reads it on each tick. Async, batched, decoupled in time.
+
+The contract specifies:
+
+- **Space name pattern** — typically a function of class + booting identity (e.g., `&embart-{identity}-cognition-output`)
+- **Content schema** — what shape of atoms the Beacon will consume
+- **Freshness expectation** — staleness tolerance before fallback
+- **Fallback behavior** — what the Beacon does if the Space is empty/malformed (typically: revert to Base Strategy, emit audit-rejected atom)
+
+Why embart is the right tier for the Agent↔Beacon shared Space:
+
+- The comm is **machine-local** — Beacon and agart both run on this emb.
+- Embart never replicates — preserving cognition privacy.
+- Each Warden has its own embart populated by its own agart — disagreement at the Beacon's *output* (synart writes) becomes the verification signal.
+- Agarts are **pluggable**: any cognition implementation that produces compliant content at the convention name implements the Beacon's interface.
+
+**Both primitives together** are the only sanctioned mechanisms for
+synart-resolved code to interact with local cognition. Direct
+unmediated telart access from synart loops is forbidden because it
+would break the audit story.
 
 For the canonical synlang form and the Sentinel formation patterns
 that use it, see `synlang-patterns.md` §5-§6.
@@ -439,13 +511,13 @@ The architecture already commits to logical multi-Space via the artifact tiers (
 
 Within synart, access patterns are wildly heterogeneous and functional partitioning into sub-Spaces falls out naturally. The canonical layout is the **six-layer synome root + entart tree** defined in `topology.md` §6:
 
-- **Constitutional:** `&core-root`, `&core-telos`, `&core-skeleton`, `&core-governance`, `&core-protocol`
-- **Framework:** `&core-framework-risk`, `&core-framework-distribution`, `&core-framework-fee`
-- **Registry:** `&core-registry-entity`, `&core-registry-beacon`, `&core-registry-contract`
-- **Aggregation:** `&core-settlement`, `&core-escalation`, `&core-endoscrapers`
-- **Executable:** `&core-syngate`, `&core-telgate`, `&core-loop-<class>`, `&core-recipe-*`
-- **Library:** `&core-library-runtime-<impl>`, `&core-library-telseed-<config>`, `&core-library-corpus-<domain>`, `&core-library-published-<topic>`
-- **Per-entity entart subtrees:** `&entity-<type>-<id>-<sub-kind>` (Guardian / Prime / Halo / their books / per-entity sentinel formations)
+- **Constitutional:** `&core.root`, `&core.telos`, `&core.skeleton`, `&core.governance`, `&core.protocol`
+- **Framework:** `&core.framework.risk`, `&core.framework.distribution`, `&core.framework.fee`
+- **Registry:** `&core.registry.entity`, `&core.registry.beacon`, `&core.registry.contract`
+- **Aggregation:** `&core.settlement`, `&core.escalation` (endoscraping is no longer a Space — it's a grounded runtime primitive `(chain-read $contract $slot)`; per-protocol metadata lives in `&core.protocol`)
+- **Executable:** `&core.syngate`, `&core.telgate`, `&core.loop.<class>`, `&core.recipe.*`
+- **Library:** `&core.library.runtime.<impl>`, `&core.library.telseed.<config>`, `&core.library.corpus.<domain>`, `&core.library.published.<topic>`
+- **Per-entity entart subtrees:** `&entity.<type>.<id>.<sub-kind>` (Guardian / Prime / Halo / their books / per-entity sentinel formations)
 
 Mixing all of these in one physical Space would put a small slow-write governance lookup in the same index as a high-throughput event stream from a busy book — different profiles want different physical structures. See `topology.md` for the full taxonomy and the four meta-patterns (frameworks / registries / aggregations / specifications) that govern composition.
 
@@ -482,8 +554,8 @@ Concrete example: creating a Prime writes to multiple Spaces atomically — the 
      ((True
         (let* (($_ (add-atom $prime-root-space             (synent $prime-id)))
                ($_ (add-atom $prime-root-space             (parent-entart $prime-id $guardian)))
-               ($_ (add-atom &entity-guardian-ozone-root   (sub-entart $guardian $prime-id $prime-root-space)))
-               ($_ (add-atom &core-registry-entity         (entart-id $prime-id prime $prime-root-space))))
+               ($_ (add-atom &entity.guardian.ozone.root   (sub-entart $guardian $prime-id $prime-root-space)))
+               ($_ (add-atom &core.registry.entity         (entart-id $prime-id prime $prime-root-space))))
           (Created prime $prime-id)))
       (False (Error unauthorized $caller)))))
 ```
@@ -504,24 +576,24 @@ External beacons
 │   GATE  (single trust boundary)                  │
 │   1. parse                                       │
 │   2. verify sig (pubkey from replicated          │
-│      &core-registry-beacon, lookup is local)     │
+│      &core.registry.beacon, lookup is local)     │
 │   3. nonce/rate-limit                            │
 │   4. resolve (verb-target-space $verb $target)   │
 │   5. route verified message to that Space        │
 └──────────────────────────────────────────────────┘
         ↓                       ↓                       ↓
 ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│ &incoming-       │  │ &incoming-       │  │ &incoming-       │
-│  core-governance │  │  entity-prime-   │  │  entity-halo-    │
-│                  │  │  spark-root      │  │  spark-term-...  │
+│ &incoming.       │  │ &incoming.       │  │ &incoming.       │
+│  core.governance │  │  entity.prime.   │  │  entity.halo.    │
+│                  │  │  spark.root      │  │  spark-term....  │
 └────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘
          │ heartbeat            │                     │
          ▼                      ▼                     ▼
-   &core-governance     &entity-prime-       &entity-halo-
-                        spark-root           spark-term-…
+   &core.governance     &entity.prime.       &entity.halo.
+                        spark.root           spark-term....
 ```
 
-**Routing-as-data is now load-bearing.** The atom `(verb-target-space create-prime &core-registry-entity)` is what tells the gate where messages go. Adding a new entart = register its inbound verbs in the routing table. Repartitioning = edit the routing atoms. Senders never know which Space their write lands in.
+**Routing-as-data is now load-bearing.** The atom `(verb-target-space create-prime &core.registry.entity)` is what tells the gate where messages go. Adding a new entart = register its inbound verbs in the routing table. Repartitioning = edit the routing atoms. Senders never know which Space their write lands in.
 
 The routing data is itself a hub atom — replicated to wherever the gate runs.
 
@@ -567,7 +639,7 @@ Commitments that preserve flexibility across hardware and scale evolution:
 - **P3. Co-locate edges with their dominant access pattern.** Auth atoms live in the entart owning the verb's target — that's the side reading them at gate time.
 
 ### Naming
-- **P4. Space references are logical names.** `&core-governance` and `&entity-prime-spark-root` are names, not physical pointers. Runtime maintains `(space-location $name $physical-address)`.
+- **P4. Space references are logical names.** `&core.governance` and `&entity.prime.spark.root` are names, not physical pointers. Runtime maintains `(space-location $name $physical-address)`.
 - **P5. Content addressing for atoms.** Already a permanent design choice. Atom hash = identity, regardless of which Space it lives in.
 - **P6. Routing is data.** Where does verb V write? Look up `(verb-target-space V $space)`. Migrate by editing one atom.
 
@@ -577,7 +649,7 @@ Commitments that preserve flexibility across hardware and scale evolution:
 - **P9. No global ordering.** Within a Space: append-only log. Across: only causality (via nonces / message-IDs).
 
 ### Visibility
-- **P10. Cross-Space dependencies are explicit.** A constructor that reads `&core-registry-beacon` and writes into an entart subtree says so in its definition.
+- **P10. Cross-Space dependencies are explicit.** A constructor that reads `&core.registry.beacon` and writes into an entart subtree says so in its definition.
 - **P11. Provenance is first-class.** Every write knows what message produced it. Every belief knows what evidence produced it.
 - **P12. Read/write patterns documented per verb.** `(verb-reads V $space)`, `(verb-writes V $space)`.
 
@@ -596,7 +668,7 @@ Commitments that preserve flexibility across hardware and scale evolution:
 Most of the multi-Space discussion is deferrable. Build single-Space, single-gate, single-heartbeat — but commit to these seven from day 1, because retrofitting them later is genuinely painful:
 
 **1. Space is always a parameter, never implicit.**
-Write `(add-atom &entity-prime-spark-root ...)` and `(match &core-governance ...)` from day 1, even when both names alias to the same physical Space. Constructor signatures document what they touch; runtime can later split them without code changes.
+Write `(add-atom &entity.prime.spark.root ...)` and `(match &core.governance ...)` from day 1, even when both names alias to the same physical Space. Constructor signatures document what they touch; runtime can later split them without code changes.
 
 **2. Append-only writes.**
 Always `(add-atom ...)`. Remove via `(remove-atom ...)` only when explicitly modeling revocation. Required for: replication, audit, fork/promote, idempotency, content-addressing.
@@ -611,7 +683,7 @@ A new entity's ID is a hash of (creator + nonce + content) or some content-deter
 External writes go through `gate-in` even in Phase 1. Phase 1 gate may do basic sig verification and skip rate-limiting; what matters is that constructors only run on verified messages.
 
 **6. The `(can $caller $verb $target)` predicate reads from a named auth Space.**
-Today `&core-governance` may be the same physical Space as everything else, but the predicate is written `(match &core-governance ...)` (or against the appropriate entart Space). When the physical layout splits later, no constructor changes.
+Today `&core.governance` may be the same physical Space as everything else, but the predicate is written `(match &core.governance ...)` (or against the appropriate entart Space). When the physical layout splits later, no constructor changes.
 
 **7. Idempotent constructors.**
 Calling `(create-prime same-args)` twice produces the same atom or harmlessly no-ops. Achieved via content-addressing + check-before-write. Required for: retries, async replays, gate redelivery.
@@ -635,10 +707,10 @@ Calling `(create-prime same-args)` twice produces the same atom or harmlessly no
 
 ## 18. Genesis state
 
-Two atoms ship in the initial state of `&core-governance` — there is no separate `&genesis` Space, the bootstrap seed lives directly in the constitutional layer (per `topology.md` §6):
+Two atoms ship in the initial state of `&core.governance` — there is no separate `&genesis` Space, the bootstrap seed lives directly in the constitutional layer (per `topology.md` §6):
 
 ```metta
-;; in &core-governance — initial state
+;; in &core.governance — initial state
 
 ;; The meta-role that holds authority to define/grant/revoke roles
 (role-def root-authority
@@ -670,22 +742,22 @@ That's the seed. Everything else — every Guardian entart, every GovOps root, e
 ;; ⇒ adds (beacon-pubkey usge-govops-root <key>)
 
 ;; 3. Each GovOps root certifies its own operational beacons
-(cert-beacon spark-govops-root lpha-nfat-spark)
-;; ⇒ adds (cert lpha-nfat-spark by spark-govops-root)
-;; ⇒ adds (beacon-pubkey lpha-nfat-spark <key>)
+(cert-beacon spark-govops-root nfat-spark)
+;; ⇒ adds (cert nfat-spark by spark-govops-root)
+;; ⇒ adds (beacon-pubkey nfat-spark <key>)
 
 ;; 4. The GovOps root authorizes specific scopes
-(auth-beacon spark-govops-root lpha-nfat-spark
+(auth-beacon spark-govops-root nfat-spark
              create-book (in-class spark-class-A))
 
 ;; 5. Operational beacons make construction calls
 ;;    (signed messages arrive via gate-in; dispatch invokes constructor)
-(create-prime lpha-nfat-spark ozone spark-prime)
+(create-prime nfat-spark ozone spark-prime)
 ;; ⇒ ... and so on down the create-class / create-book / issue-unit chain
 
 ;; 6. The Generator is created the same way — accordant to Ozone, not a
 ;;    separate Guardian
-(create-generator lpha-usge-bootstrap ozone usge)
+(create-generator usge-bootstrap ozone usge)
 ;; ⇒ adds (synent usge), (parent-entart usge ozone)
 ```
 
@@ -703,13 +775,13 @@ Suggested implementation order, each step buildable and testable in isolation:
 
 2. **The five governance/auth verbs.** `create-guardian`, `set-root`, `cert-beacon`, `auth-beacon`, `revoke-*`. Each is a constructor with an auth check.
 
-3. **The gate primitive (trivial version).** Sig verification reading from `&core-registry-beacon`'s pubkey atoms; emits `(verified-message ...)` to `&incoming`. Phase 1 may stub the crypto; the *shape* is what matters.
+3. **The gate primitive (trivial version).** Sig verification reading from `&core.registry.beacon`'s pubkey atoms; emits `(verified-message ...)` to `&incoming`. Phase 1 may stub the crypto; the *shape* is what matters.
 
 4. **The dispatch + heartbeat loop in synlang.** `(external-verb …)` whitelist; the `(dispatch …)` rule; `(run-forever)` calling `(heartbeat)` calling `(drain-pending)`.
 
 5. **The construction verbs in order.** `create-prime`, `create-halo`, `create-class`, `create-book`, `issue-unit`. Each builds on the accordancy chain established by predecessors.
 
-6. **Test with the entart-tree-shaped layout.** Synome root `&core-*` Spaces plus a small entart subtree (one Guardian → one Prime → one Halo → one or two book leaves) all aliased to one physical Space. Write code as if they were already separate — the synlang is identical whether they're one backing store or many.
+6. **Test with the entart-tree-shaped layout.** Synome root `&core.*` Spaces plus a small entart subtree (one Guardian → one Prime → one Halo → one or two book leaves) all aliased to one physical Space. Write code as if they were already separate — the synlang is identical whether they're one backing store or many.
 
 ## 20.5. Telseed bootstrap
 

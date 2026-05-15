@@ -12,7 +12,7 @@ Rogues have real advantages: no oversight or governance overhead, hidden intelli
 
 Rogues can even bootstrap wild coordination structures — coalitions emerging from competitive dynamics without the governance window's carefully designed values. These represent an alternative trajectory without human values at the core.
 
-Rogue disadvantages are structural and compound over time: less efficient cooperation (no verified Synomic Agents means every interaction requires costly trust-building), no Synomic leverage (cut off from the largest capital pool), no legitimacy (no protection under Synomic law), hunted (every aligned teleonome is a potential adversary), and playing catch-up (the aligned synome started first and compounds faster).
+Rogue disadvantages are structural and compound over time: less efficient cooperation (no verified Synomic Entities means every interaction requires costly trust-building), no Synomic leverage (cut off from the largest capital pool), no legitimacy (no protection under Synomic law), hunted (every aligned teleonome is a potential adversary), and playing catch-up (the aligned synome started first and compounds faster).
 
 The nightmare scenario is rogue escape velocity — a rogue or wild coalition that grows powerful enough that the aligned coalition cannot stop it. The pathway: hide while accumulating power, build a wild coalition in the shadows, reach critical mass before detection, overwhelm the coalition before it can respond. This is the existential threat the framework is designed to prevent.
 

@@ -29,8 +29,8 @@ Beacon authority determines what oversight applies:
 
 | Tier | What it is | Oversight |
 |---|---|---|
-| **Low authority** | Passive observation (reporting, scraping, attesting) OR direct teleonome-to-teleonome interaction (peer-to-peer trading, arbitrage, cooperation) | Minimal — no Synomic Agent operation; peer-observable for active interactions |
-| **High authority** | Operates a Synomic Agent — auth-scoped to specific verbs/targets, certified by a synomic agent. Deterministic keepers, governance executors, sentinel formations. | Maximum — observable through the BEAM hierarchy and synart audit trail |
+| **Low authority** | Passive observation (reporting, scraping, attesting) OR direct teleonome-to-teleonome interaction (peer-to-peer trading, arbitrage, cooperation) | Minimal — no Synomic Entity operation; peer-observable for active interactions |
+| **High authority** | Operates a Synomic Entity — auth-scoped to specific verbs/targets, certified by a synomic entity. Deterministic keepers, governance executors, sentinel formations. | Maximum — observable through the BEAM hierarchy and synart audit trail |
 
 **The key insight:** You don't need to see inside a teleonome to verify alignment. You observe its actions through beacons. A teleonome that acts consistently through registered beacons, fulfills commitments, produces reliable evidence, and responds to correction — that teleonome demonstrates alignment through behavior, not through transparency.
 
@@ -52,7 +52,7 @@ High capability requires high accountability. Not "we inspect your thoughts" but
 - Hidden capability detected — a teleonome much more powerful than its registration suggests will be caught by the gap between observed capability and declared power
 
 **What registration provides:**
-- Access to capital and leverage through Synomic Agents
+- Access to capital and leverage through Synomic Entities
 - Cooperation with other aligned teleonomes
 - Protection under Synomic law
 - Participation in the compounding loop (sentinel carry, shared intelligence)
@@ -115,7 +115,7 @@ You don't need to read a teleonome's telart to verify alignment. You verify thro
 Does the teleonome act consistently through registered beacons? Does it use appropriate authority levels? Does it stay within rate limits? Consistent, predictable beacon behavior is the strongest alignment signal.
 
 ### Commitment Fulfillment
-Does the teleonome honor its commitments? When it takes on obligations through Synomic Agents, does it follow through? Broken commitments are alignment failures visible to everyone.
+Does the teleonome honor its commitments? When it takes on obligations through Synomic Entities, does it follow through? Broken commitments are alignment failures visible to everyone.
 
 ### Evidence Production
 Does the teleonome produce reliable evidence for the mesh? When its actuators generate observations, are those observations honest? The mesh's (strength, confidence) tracking surfaces patterns of deceptive evidence production over time.
@@ -156,7 +156,7 @@ Binding is best understood not as constraint but as coalition membership. Both p
 
 The "free will" objection dissolves under this framing. Teleonomes aren't forced — they're offered the best available deal. Rogues can refuse and face the coalition. The question is whether the deal is genuinely fair, not whether it's coercive.
 
-For the full game-theoretic analysis of coalition dynamics and why defection is irrational, see [`synomic-game-theory.md`](synomic-game-theory.md). For the macrosynomics perspective on wild coalition threats and coalition defense, see [`../macrosynomics/synomic-agents.md`](../macrosynomics/synomic-agents.md).
+For the full game-theoretic analysis of coalition dynamics and why defection is irrational, see [`synomic-game-theory.md`](synomic-game-theory.md). For the macrosynomics perspective on wild coalition threats and coalition defense, see [`../macrosynomics/synomic-entities.md`](../macrosynomics/synomic-entities.md).
 
 ---
 

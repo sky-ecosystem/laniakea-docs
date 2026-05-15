@@ -225,7 +225,7 @@ The remaining gaming surface is "switching at strategically chosen moments — m
 The deferred mechanism: a **crash oracle** that suspends treatment switches during a declared crash window.
 
 ```metta
-;; in &core-framework-crash-oracle (universal)
+;; in &core.framework.risk.crash-oracle (universal)
 (crash-trigger-conditions
    (or (asset-drop btc -0.30 over-window 24h)
        (asset-drop eth -0.30 over-window 24h)

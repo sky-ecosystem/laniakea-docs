@@ -20,7 +20,7 @@ workstation. Initial endowment:
 | Local hardware | 1× workstation with consumer GPU (24GB VRAM) |
 | API credits | $1,000 in commercial LLM API access (OpenAI, Anthropic) |
 | USDS capital | 10,000 USDS for operational expenses + initial recipe stake |
-| Telseed config | `&core-library-telseed-research-v2` (research-focused starting point) |
+| Telseed config | `&core.library.telseed.research` (research-focused starting point) |
 | Identity | `mira-research-tel-001` (newly generated) |
 
 Timeline of the first 24 hours of this teleonome's existence.
@@ -34,19 +34,20 @@ Integer / basis-point math used in any economic figures to avoid floats.
 ### Synart Spaces (replicated from synserv on connect)
 
 ```
-&core-root                                     synome root entry
-&core-skeleton                                 constitutional axioms
-&core-protocol                                 chain protocol specifications
-&core-framework-risk                           CRR, ER framework
-&core-framework-fee                            pricing levers
-&core-registry-beacon                          where the new identity gets registered
-&core-syngate                                  synserv's gate (read-only for this tel)
-&core-telgate                                  universal telgate spec (this tel will run an instance)
-&core-loop-beacon-lpla-checker                 verifier beacon loop (first revenue source)
-&core-loop-endoscraper-spark-pau               (informational; this tel won't run one)
-&core-library-runtime-noemar-v0.x              this tel's runtime source
-&core-library-corpus-research                  research-focused knowledge corpus
-&core-library-telseed-research-v2              the seed config that spawned this tel
+&core.root                                     synome root entry
+&core.skeleton                                 constitutional axioms
+&core.protocol                                 chain protocol specifications
+&core.framework.risk                           CRR, ER framework
+&core.framework.fee                            pricing levers
+&core.registry.beacon                          where the new identity gets registered
+&core.syngate                                  synserv's gate (read-only for this tel)
+&core.telgate                                  universal telgate spec (this tel will run an instance)
+&core.loop.verifier                            verifier loop (first revenue source)
+;; (endoscraping is a grounded runtime primitive, not a beacon loop;
+;;  per-protocol chain-read metadata lives in &core.protocol)
+&core.library.runtime.noemar              this tel's runtime source
+&core.library.corpus.research                  research-focused knowledge corpus
+&core.library.telseed.research              the seed config that spawned this tel
 ```
 
 ### Telart Spaces (created during bootstrap)
@@ -81,12 +82,12 @@ noemar boot \
     --identity=mira-research-tel-001 \
     --key=secrets/mira-research-tel-001.pem \
     --synart=https://synserv.sky.example/v1 \
-    --telseed=&core-library-telseed-research-v2 \
+    --telseed=&core.library.telseed.research \
     --sync-policy=research-focused
 ```
 
 The runtime starts with a blank atomspace. It reads the boot procedure
-from itself (the seed contains a minimal copy of `&core-boot`'s logic
+from itself (the seed contains a minimal copy of `&core.boot`'s logic
 to bootstrap the connection). It opens a network connection to the
 specified synserv.
 
@@ -103,21 +104,21 @@ The synserv stream begins delivering atoms. Per the seed's
 
 ```metta
 ;; replicated immediately
-&core-skeleton                                 ; ~5MB
-&core-protocol                                 ; ~2MB
-&core-framework-*                              ; ~3MB
-&core-registry-beacon                          ; ~50MB (large)
-&core-registry-entity                          ; ~20MB
-&core-syngate &core-telgate                    ; ~1MB
-&core-loop-* (all loops)                       ; ~10MB
-&core-library-runtime-noemar-v0.x              ; ~80MB (source code)
-&core-library-corpus-research                  ; ~400MB (research knowledge)
-&core-library-telseed-research-v2              ; ~5MB
+&core.skeleton                                 ; ~5MB
+&core.protocol                                 ; ~2MB
+&core.framework.*                              ; ~3MB
+&core.registry.beacon                          ; ~50MB (large)
+&core.registry.entity                          ; ~20MB
+&core.syngate &core.telgate                    ; ~1MB
+&core.loop.* (all loops)                       ; ~10MB
+&core.library.runtime.noemar              ; ~80MB (source code)
+&core.library.corpus.research                  ; ~400MB (research knowledge)
+&core.library.telseed.research              ; ~5MB
 
 ;; deliberately skipped (per --sync-policy=research-focused)
-&core-library-corpus-financial                 ; (not needed for research)
-&core-library-corpus-technical                 ; (not needed for research)
-&entity-prime-*                                ; (not running entity-specific loops)
+&core.library.corpus.financial                 ; (not needed for research)
+&core.library.corpus.technical                 ; (not needed for research)
+&entity.prime.*                                ; (not running entity-specific loops)
 ```
 
 Total sync: roughly 600MB compressed. Completes in 2-3 minutes on
@@ -127,7 +128,7 @@ After sync completes, Noemar logs:
 
 ```
 synart slice mounted (research-focused)
-&core-boot resolved
+&core.boot resolved
 identity mira-research-tel-001 not yet registered (first-time bootstrap)
 ```
 
@@ -136,16 +137,16 @@ identity mira-research-tel-001 not yet registered (first-time bootstrap)
 ## t = 0+5min — Telart instantiation
 
 Now that synart is available, the bootstrap procedure (read from
-`&core-boot` and the telseed's customization) runs through stage 3
+`&core.boot` and the telseed's customization) runs through stage 3
 of the bootstrap arc.
 
-It reads `&core-library-telseed-research-v2`'s instructions and the
+It reads `&core.library.telseed.research`'s instructions and the
 research corpus's wisdom about telart organization, then writes the
 initial telart Spaces:
 
 ```metta
 ;; in &telart-mira-research-tel-001-gate (this tel's telgate instance state)
-(running-spec &core-telgate)                                 ; uses universal spec
+(running-spec &core.telgate)                                 ; uses universal spec
 (rate-limit-window 60s)                                      ; per-tel preference
 (nonce-dedup-window 600s)
 ;; pubkey registry empty initially — only Mira's external identity is trusted
@@ -205,13 +206,13 @@ Synserv's gate verifies the sig + the vouching cert, dispatches the
 `register-identity` constructor, which writes:
 
 ```metta
-;; in &core-registry-beacon
+;; in &core.registry.beacon
 (beacon-id            mira-research-tel-001)
 (beacon-pubkey        mira-research-tel-001 "8c2e…")
 (beacon-class         mira-research-tel-001 research-tel)
 (beacon-status        mira-research-tel-001 active)
 (beacon-sponsor       mira-research-tel-001 mira-research-institution)
-(loop-pointer-for-class research-tel &core-loop-tel-research)
+(loop-pointer-for-class research-tel &core.loop.tel-research)
 ```
 
 Now this tel is visible to the synome. Other participants can address
@@ -250,7 +251,7 @@ The new emb's identity is recorded as belonging to the same tel
 (`--tel-membership` arg). The synart registers it as a sub-identity:
 
 ```metta
-;; in &core-registry-beacon
+;; in &core.registry.beacon
 (beacon-id           mira-research-tel-001-emb-002)
 (beacon-pubkey       mira-research-tel-001-emb-002 "f31a…")
 (beacon-class        mira-research-tel-001-emb-002 emb-secondary)
@@ -289,7 +290,7 @@ beacon is purely internal (no external action; runs in dreamarts):
     mira-research-tel-001-dreamer
     (class dreamer)
     (parent-tel mira-research-tel-001)
-    (loop &core-loop-dreamer)
+    (loop &core.loop.dreamer)
     sn045)
 ```
 
@@ -338,18 +339,18 @@ carry per discrepancy reported (or per cycle of clean verification).
     mira-research-tel-001-verifier
     (class verifier)
     (parent-tel mira-research-tel-001)
-    (loop &core-loop-beacon-lpla-checker)
-    (target &entity-prime-spark-root)            ; verifies Spark Prime's claims
+    (loop &core.loop.verifier)
+    (target &entity.prime.spark.root)            ; verifies Spark Prime's claims
     sn067)
 
 ;; granted auth for the recipe
-(auth mira-research-tel-001-verifier execute &core-loop-beacon-lpla-checker)
+(auth mira-research-tel-001-verifier execute &core.loop.verifier)
 ```
 
 The verifier loop runs entirely from synart. Its cycle:
 
 ```metta
-;; from &core-loop-beacon-lpla-checker
+;; from &core.loop.verifier
 (= (heartbeat)
    (let* (($events    (poll-chain))
           ($synart-claim (match (target) (latest-epoch $e) $e))
@@ -365,7 +366,7 @@ After 4 hours of clean verification reports, the tel earns its first
 recipe carry:
 
 ```metta
-;; in &core-settlement (settlement aggregator output)
+;; in &core.settlement (settlement aggregator output)
 (verifier-carry mira-research-tel-001-verifier 2026-05-02 0.40)
 ```
 
@@ -467,9 +468,9 @@ loops.
 - Embart stayed local to each emb (different working memory contents).
 
 **4. Two-step loop pattern** (`topology.md` §14.5).
-The verifier beacon used the universal `&core-loop-beacon-lpla-
-checker` template. No per-entity loop instance was needed because
-verifier loops are uniform.
+The verifier beacon used the universal `&core.loop.verifier`
+template. No per-entity loop instance was needed because verifier
+loops are uniform.
 
 **5. The recipe marketplace** (`../synoteleonomics/recipe-marketplace.md` — canonical home).
 The verifier work paid carry per the recipe's economic terms. Carry
@@ -492,9 +493,10 @@ A few things kept out of scope to keep the trace tractable:
   running Baseline / Stream / Warden. Those would require Phase 9-10
   ecosystem capabilities not present yet. See `synlang-patterns.md`
   §6 for the patterns.
-- **Exoscrapers.** The verifier beacon is endoscraper-shaped (reads
-  on-chain protocol state). External-API scraping with insurance
-  layers is a separate design.
+- **Exoscrapers.** The verifier uses the `chain-read` primitive
+  (reads on-chain protocol state directly via the grounded runtime
+  call). External-API scraping with insurance layers is a separate
+  design.
 - **Cross-tel commerce.** The tel could sell call-out services to
   other tels via telgate-to-telgate negotiation. Not exercised in
   the first 24 hours; happens at maturity.
@@ -502,7 +504,7 @@ A few things kept out of scope to keep the trace tractable:
   the threshold but the tel hasn't decided yet. Publication itself
   goes through the crystallization gate (probmesh → skeleton).
 - **RSI on the runtime.** A heavy mature tel might contribute to
-  Noemar's source code in `&core-library-runtime-noemar-*`. Out of
+  Noemar's source code in `&core.library.runtime.noemar`. Out of
   scope for a 24-hour trace.
 
 These are normal extensions of the patterns shown; they're omitted

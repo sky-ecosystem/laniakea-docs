@@ -154,12 +154,12 @@ The Halobook issues a single endo unit upward to the Primebook. This unit carrie
 | **Frame** | Inherited from the Generator (USD for v1) |
 
 ```metta
-;; ──── &entity-halo-spark-credit-halobook ────
+;; ──── &entity.halo.spark-credit.halobook ────
 (book-type halobook)
 (book-category nfat-crypto-lending-fixed-term)
 (parent-primebook spark-primebook)
-(sub-riskbook spark-credit-riskbook-A &entity-halo-spark-credit-riskbook-A)
-(sub-riskbook spark-credit-riskbook-B &entity-halo-spark-credit-riskbook-B)
+(sub-riskbook spark-credit-riskbook-A &entity.halo.spark-credit.riskbook.A)
+(sub-riskbook spark-credit-riskbook-B &entity.halo.spark-credit.riskbook.B)
 (holds (endo-unit u-rb-a-bond) 1000000)
 (holds (endo-unit u-rb-b-bond) 2000000)
 (issues (endo-unit u-hb-bond) (notional 3000000))
@@ -217,4 +217,4 @@ The future catalog grows over time as Halos propose new structures and governanc
 | `primebook-composition.md` | The layer above; sub-books read U/P/T to route the Halobook unit |
 | `currency-frame.md` | Halobook inherits Generator's frame; doesn't translate |
 | `tranching.md` | Halobook holds Riskbook units which themselves may hold tranche claims |
-| `examples.md` | Worked v1 test uses `nfat-crypto-lending-fixed-term` |
+| [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) | Worked v1 NFAT example uses `nfat-crypto-lending-fixed-term` (see "Worked Example: A Single NFAT Loan") |

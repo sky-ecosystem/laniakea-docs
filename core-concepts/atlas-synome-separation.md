@@ -10,7 +10,7 @@ The Atlas/Synome separation resolves the fundamental tension between comprehensi
 
 The Atlas is embedded IN the Synome as its root node, not separate from it. It's the human-interpretable entry point to a machine-readable system. The Synome can grow arbitrarily complex; the Atlas stays manageable.
 
-This enables Synomic Agents (Primes, Halos) to be fully autonomous: they exist entirely within the Synome, cannot escape their constraints, and can operate without human oversight for individual decisions. The "Mini-Atlas" fractal pattern replicates this at every level — each entity with human stakeholders gets a human-readable summary of its relevant Synome nodes.
+This enables Synomic Entities (Primes, Halos) to be fully autonomous: they exist entirely within the Synome, cannot escape their constraints, and can operate without human oversight for individual decisions. The "Mini-Atlas" fractal pattern replicates this at every level — each entity with human stakeholders gets a human-readable summary of its relevant Synome nodes.
 
 ## Key Properties
 
@@ -19,7 +19,7 @@ This enables Synomic Agents (Primes, Halos) to be fully autonomous: they exist e
 - Synome: structured/typed data, unlimited, machine-verified through constraint checking
 - Verification model: humans verify Atlas reflects values; machines verify Synome conforms to Atlas
 - The Bridge: Atlas assertions map to Synome constraints (e.g., "encumbrance ratio target <= 90%" becomes a formal invariant)
-- Synomic Agents cannot deviate — protecting humans from each other, enabling cooperation without trust
+- Synomic Entities cannot deviate — protecting humans from each other, enabling cooperation without trust
 - Escalation to human reasonableness: 99% automated, 1% edge cases reach human judgment — "smart contracts with a backstop"
 
 ## Relationships

@@ -72,22 +72,7 @@ A graph database containing ALL operational data, structured for machine consump
 
 **Current Examples from Atlas:**
 
-From A.6 (Agent Scope):
-```
-Prime SubProxy Addresses:
-  Spark: 0x3300f198988e4C9C63F75dF86De36421f06af8c4
-  Grove: 0x1369f7b2b38c76B6478c0f0E66D94923421891Ba
-  Keel:  0x355CD90Ecb1b409Fdf8b64c4473C3B858dA2c310
-  Obex:  0x8be042581f581E3620e29F213EA8b94afA1C8071
-
-Core Operator Relayer Multisig: 0x8Cc0Cb0cfB6B7e548cfd395B833c05C346534795 (2/5)
-
-SLL Rate Limit Types (per chain):
-  LIMIT_USDS_MINT, LIMIT_USDS_BURN, LIMIT_USDS_TO_USDC,
-  LIMIT_USDC_TO_CCTP, LIMIT_USDC_TO_DOMAIN
-
-SLL Deployed Chains: Ethereum, Base, Arbitrum, Unichain, Optimism, Avalanche
-```
+From A.6 (Agent Scope): Prime SubProxy addresses, Core Operator Relayer multisigs, rate-limit type enumerations, and per-chain deployment lists currently sit as prose blocks inside the Atlas.
 → All moves to Synome as structured Agent Artifact nodes.
 
 From A.4 (Protocol Scope):
@@ -220,15 +205,15 @@ The Atlas is embedded IN the Synome, not separate from it. It's the human-interp
 
 ---
 
-## Synomic Agents: Autonomous Entities Tethered to the Synome
+## Synomic Entities: Autonomous Entities Tethered to the Synome
 
-The Synome structure enables a crucial property: **Synomic Agents can be fully autonomous**.
+The Synome structure enables a crucial property: **Synomic Entities can be fully autonomous**.
 
-**Analogy:** Synomic Agents correspond to **regulated businesses or joint-stock companies** — conservative, auditable, and designed to scale trustlessly. They are highly scalable because cooperation naturally converges on them as institutional shells.
+**Analogy:** Synomic Entities correspond to **regulated businesses or joint-stock companies** — conservative, auditable, and designed to scale trustlessly. They are highly scalable because cooperation naturally converges on them as institutional shells.
 
 ### What Makes This Possible
 
-A Synomic Agent (Prime, Halo, Generator, Guardian) exists entirely within the Synome:
+A Synomic Entity (Prime, Halo, Generator, Guardian) exists entirely within the Synome:
 
 | Property | Implication |
 |----------|-------------|
@@ -243,7 +228,7 @@ Because the agent cannot escape its constraints, it can operate without human ov
 
 **1. Protecting Humans from Each Other**
 
-Without autonomous Synomic Agents, rules hold only until someone powerful enough lobbies to break them. With autonomous agents:
+Without autonomous Synomic Entities, rules hold only until someone powerful enough lobbies to break them. With autonomous agents:
 - Encumbrance penalties apply regardless of who wants an exception
 - Settlement happens regardless of who benefits or loses
 - Rate limits hold regardless of market pressure
@@ -252,17 +237,17 @@ The agent isn't protecting humans because it's benevolent — it's protecting th
 
 **2. Enabling Cooperation Without Trust**
 
-Multiple parties (opaque to each other, potentially competing) can coordinate through Synomic Agents:
+Multiple parties (opaque to each other, potentially competing) can coordinate through Synomic Entities:
 
 ```
 Party A ──┐
-          ├───► Synomic Agent ◄───► Synome constraints
+          ├───► Synomic Entity ◄───► Synome constraints
 Party B ──┘     (neutral arbiter)
 ```
 
 - A cannot read B's strategy
 - B cannot read A's strategy
-- Both can verify the Synomic Agent follows rules
+- Both can verify the Synomic Entity follows rules
 - Both can trust outcomes without trusting each other
 
 This enables: sealed-bid auctions, multi-party settlement, cross-jurisdictional capital flows.
@@ -274,19 +259,23 @@ Agents are organized into four ranks based on their governance relationship to t
 | Rank | Agent Types | Governance Relationship |
 |------|-------------|------------------------|
 | **0** | Core Council | Sovereign |
-| **1** | Guardians, Core Controlled Agents, Recovery Agents | Directly regulated by Core Council |
-| **2** | Primes, Generators | Accordant to Ozone (the single operational Guardian) |
+| **1** | Guardians, Core Entities | Directly regulated by Core Council |
+| **2** | Primes, Generators, Oracle Entities, Sequencer Entities, Pylon Entities | Accordant to Ozone (the single operational Guardian) |
 | **3** | Halos, Folio Agents | Administered by a Prime |
 
-**Primes** (Rank 2) — Specialized, heavyweight Synomic Agents. Two subtypes: Star Primes (5: Spark, Grove, Keel, Star4, Star5) and Institutional Primes (1: Obex). Require transformation primitives, foundations, nested contributors.
+**Primes** (Rank 2) — Specialized, heavyweight Synomic Entities. Two subtypes: Star Primes (5: Spark, Grove, Keel, skybase, launch6) and Institutional Primes (1: Obex). Require transformation primitives, foundations, nested contributors.
 
-**Halos** (Rank 3) — General-purpose Synomic Agents. Can wrap any value and give it agency. Organized into **Halo Classes** (shared SC + legal infra) containing **Halo Units** (individual products). Three standard class types: Portfolio (LCTS), Term (NFAT), Trading (AMM). Examples: tranched Portfolio Halo (senior/junior sharing one PAU), NFAT Facility (same buybox, varying duration/size). Halos are the fractal layer — they proliferate.
+**Halos** (Rank 3) — General-purpose Synomic Entities. Can wrap any value and give it agency. Organized into **Halo Classes** (shared SC + legal infra) containing **Halo Units** (individual products). Three standard class types: Portfolio (LCTS), Term (NFAT), Trading (AMM). Examples: tranched Portfolio Halo (senior/junior sharing one PAU), NFAT Facility (same buybox, varying duration/size). Halos are the fractal layer — they proliferate.
 
 **Guardians** (Rank 1) — Perform privileged operations with collateral backing. Post escrow, face slashing for failures. Consolidate interpretation, governance participation, and operational execution. Operationally, **Ozone** is currently the single Guardian; USGE Generator and all Primes are direct children of Ozone, with separate GovOps teams administering each entity.
 
-**Core Controlled Agents** (Rank 1) — Tokenless agents directly administered by the Core Council. Manage legacy protocol positions (Morpho, Aave, SparkLend) as general-purpose Core Council operational vehicles.
+**Core Entities** (Rank 1) — Tokenless agents directly administered by the Core Council. A single umbrella type covering both legacy-asset management (general-purpose operational vehicles for legacy protocol positions: Morpho, Aave, SparkLend) and crisis-wrapper roles (temporary takeover when a Guardian collapses, dissolved after resolution).
 
-**Recovery Agents** (Rank 1) — Temporary crisis agents for Guardian collapse response. Take over the affected agent tree and dissolve after resolution.
+**Oracle Entities** (Rank 2) — Operate price/data feeds and admin oracle beacons. Accordant to Ozone.
+
+**Sequencer Entities** (Rank 2) — Run orderbook matching as regulated venues and host Rings as sub-structures inside their entart. Tokenless or limited-token; no collateral and no participation in any loss waterfall; trust enforced by revocability rather than slashing. Accordant to Ozone.
+
+**Pylon Entities** (Rank 2) — Take principal positions in derivatives, face Primes/Folios as customers, and contribute to per-Ring assurance funds for mutualized peer-default risk. Three-layer capital (regulatory minimum + voluntary extra capital + per-Ring pledges); tokenized with capital-weighted governance. Accordant to Ozone.
 
 **Folio Agents** (Rank 3) — Standardized supply-side holding structures controlled by a single principal. Operated via sentinel formations (automated) or directly by the principal (principal sentinel). Tokenless.
 
@@ -294,7 +283,7 @@ Agents are organized into four ranks based on their governance relationship to t
 
 The Synome provides what traditional smart contracts lack: **a path to human judgment for edge cases**.
 
-Regular smart contracts are "code is law" — no appeal, no reasonableness check. If the code produces an absurd outcome, too bad. Synomic Agents are different:
+Regular smart contracts are "code is law" — no appeal, no reasonableness check. If the code produces an absurd outcome, too bad. Synomic Entities are different:
 
 ```
 99% of cases              1% edge cases
@@ -305,7 +294,7 @@ Code resolves             Humans resolve
 No human involvement      Sky ensures reasonable outcome
 ```
 
-**Example: Escrow Synomic Agent**
+**Example: Escrow Synomic Entity**
 
 A dispute arises that the code can't resolve cleanly. Instead of defaulting to an arbitrary outcome:
 1. Agent flags the dispute
@@ -321,7 +310,7 @@ The escalation is expensive by design. This creates incentive to:
 
 But the path exists. Any edge case can ultimately reach human judgment.
 
-**This is what makes Synomic Agents "smart contracts with a backstop":**
+**This is what makes Synomic Entities "smart contracts with a backstop":**
 - The code handles the predictable
 - The Synome guarantees alignment with human values when the unpredictable happens
 - No outcome is ever truly "code said so, deal with it"
@@ -342,7 +331,7 @@ Every level of the Synome with human stakeholders should have a human-readable s
 
 ### Prime Mini-Atlases
 
-Each Prime Agent creates their own "mini-Atlas" to explain their Agent Artifact:
+Each Prime creates their own "mini-Atlas" to explain their Agent Artifact:
 
 **Audience:** Prime token holders, users of Prime services
 
@@ -361,23 +350,11 @@ Each Prime Agent creates their own "mini-Atlas" to explain their Agent Artifact:
 - **Approval threshold:** >50%
 - **"Publicly Held" gate:** Root Edit not operational until 2,000+ holders own 10%+ of genesis supply
 
-**Current Prime Agents needing Mini-Atlases:**
+**Current Primes needing Mini-Atlases:**
 
-*Star Primes:*
+*Star Primes:* Spark, Grove, Keel, skybase, launch6.
 
-| Prime | Focus | SubProxy |
-|-------|-------|----------|
-| Spark | DeFi: SLL (6 chains), SparkLend, Spark Savings | `0x3300...af8c4` |
-| Grove | Institutional: CLOs, RWA allocations | `0x1369...891Ba` |
-| Keel | Solana ecosystem, USDS adoption | `0x355C...2c310` |
-| Star4 | TBD | TBD |
-| Star5 | TBD | TBD |
-
-*Institutional Primes:*
-
-| Prime | Focus | SubProxy |
-|-------|-------|----------|
-| Obex | Agent incubator (Prime + Halo development) | `0x8be0...c8071` |
+*Institutional Primes:* Obex.
 
 ### Halo Mini-Atlases
 
@@ -394,19 +371,18 @@ For Halos with external participants (like Portfolio Halos with institutional in
 ### The Pattern
 
 ```
-Sky Atlas               → Describes Sky Core (A.0-A.5 + A.6 intro)
-  ├─ Spark Mini-Atlas        → Describes Spark Agent Artifact node
-  │    ├─ SLL docs           → Describes SLL Instance nodes
-  │    ├─ SparkLend docs     → Describes SparkLend Instance nodes
-  │    └─ Halo A docs        → Describes Halo A node
-  │         └─ Halo Class 1  → Shared PAU + sentinel + legal
+Sky Atlas                    → Describes Sky Core (A.0-A.5 + A.6 intro)
+  ├─ Prime Mini-Atlas        → Describes Prime Agent Artifact node
+  │    ├─ Instance docs      → Describe Instance nodes operated by the Prime
+  │    └─ Halo docs          → Describe Halo nodes administered by the Prime
+  │         └─ Halo Class    → Shared PAU + sentinel + legal
   │              ├─ Unit 1   → Senior tranche
   │              └─ Unit 2   → Junior tranche
-  ├─ Grove Mini-Atlas        → Describes Grove Agent Artifact node
-  │    └─ Halo B docs        → Describes Halo B node (NFAT Facility)
-  │         └─ Halo Class 1  → Shared buybox + lpha-nfat
-  │              ├─ NFAT 1   → 6mo term, 10M
-  │              └─ NFAT 2   → 12mo term, 25M
+  ├─ Prime Mini-Atlas        → Describes another Prime Agent Artifact node
+  │    └─ Halo docs          → Describes a Term-Halo node (NFAT Facility)
+  │         └─ Halo Class    → Shared buybox + nfat-{halo}
+  │              ├─ NFAT 1   → Term + size per facility
+  │              └─ NFAT 2   → Term + size per facility
   └─ ...
 ```
 
@@ -469,9 +445,9 @@ Beacons operate on Synome data, not Atlas text:
 
 | Beacon | Synome Data Consumed | Synome Data Written |
 |--------|---------------------|---------------------|
-| stl-base | Prime pBEAM permissions, rate limits | Bid submissions, capacity requests |
-| lpha-lcts | LCTS config, queue state, Halo parameters | Settlement transactions, exchange rates, status updates |
-| lpha-auction | Governance-set allocations (pre-auction) or bid submissions (auction mode); capacity pools | Allocations; clearing prices (auction mode) |
+| baseline-{prime} | Prime pBEAM permissions, rate limits | Bid submissions, capacity requests |
+| lcts-{halo} | LCTS config, queue state, Halo parameters | Settlement transactions, exchange rates, status updates |
+| auction-{x} | Governance-set allocations (pre-auction) or bid submissions (auction mode); capacity pools | Allocations; clearing prices (auction mode) |
 | synserv verification (in-space) | All above (read-only) | Verification attestations — runs as synart-resolved code, not a beacon |
 
 ### BEAM Hierarchy in Synome
@@ -483,7 +459,7 @@ pBEAM Node (Prime-level)
 │   ├── Interest_rate: {min, max, step, tau, current_value}
 │   └── ...
 ├── Authorized Operators[]
-│   ├── stl-base (automated)
+│   ├── baseline-{prime} (automated)
 │   └── Prime Multisig (manual)
 └── Last Update Timestamps{}
 
@@ -583,7 +559,7 @@ The transition between (1) and (2) is where course correction becomes difficult.
 
 ### What "Governance" Actually Is
 
-The governance window framing can mislead if "humans governing" is read as a town hall of humans deliberating. Even now, SKY governance is not naive human judgment. It is capital-weighted decisions by token holders — teleonomes, synomic agents, and humans — operating through structured processes (Executive Votes, Governance Polls, Aligned Delegate review). As the system matures, the entities participating in governance become increasingly capable, and the governance processes themselves become increasingly synomically structured.
+The governance window framing can mislead if "humans governing" is read as a town hall of humans deliberating. Even now, SKY governance is not naive human judgment. It is capital-weighted decisions by token holders — teleonomes, synomic entities, and humans — operating through structured processes (Executive Votes, Governance Polls, Aligned Delegate review). As the system matures, the entities participating in governance become increasingly capable, and the governance processes themselves become increasingly synomically structured.
 
 What makes the current window special is not that humans are the only decision-makers — they aren't — but that humans can still meaningfully *read* the Atlas, *understand* its implications, and *verify* that it reflects their values. This is the capability that diminishes: not the ability to vote, but the ability to evaluate what you're voting on.
 

@@ -21,7 +21,7 @@ Each asset class has a structural shape (direct holding, tranched exobook, proje
 |---|---|---|---|
 | Direct ETH/BTC | Terminal exoasset | `tradingbook` if liquid, else unmatched | No SPTP, no tranche structure |
 | Sparklend (overcollateralized lending) | Senior tranche of perpetual ETH-collateralized exobook | `tradingbook` if liquid, else unmatched | No SPTP (perpetual); standard tranche math |
-| NFAT (crypto-collateralized) | Senior tranche of fixed-term exobook | `structbook` (matched) | V1 carve-out: no rate-hedge capital |
+| NFAT (crypto-collateralized) | Senior tranche of fixed-term exobook | `structbook` (matched) | Rate-hedge capital required (Phase 1 carve-out per [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md)) |
 | JAAA (CLO AAA) | Senior tranche of CLO exobook | `termbook`/`structbook` matched, with FRTB drawdown for tradeable secondary market | Standard tranche math + secondary market liquidity |
 | Liquid TradFi (T-bills, MMF) | Direct holding, short SPTP | `termbook`/`structbook`/`tradingbook` | SPTP enables matching |
 | Vanilla options | Position with projection model (Black-Scholes) | Riskbook → sub-book per nature | Projection-model risk haircut |
@@ -80,9 +80,9 @@ Senior's risk = ETH liquidity stress, propagated through the junior cushion. Sta
 | Routing | `structbook` (active for v1 test) |
 | **Capital** | `Matched × RW + Unmatched × max(RW, Forced-Loss)` per [`capital-formula.md`](capital-formula.md) |
 
-V1 carve-out: no rate-hedge capital required for matched portion (resumed in v2+).
+For Phase 1 carve-out (no rate-hedge capital required for matched portion), see [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md).
 
-V1 test `crypto-collateralized-USD-lending` Riskbook category sketch:
+V1 test `crypto-collateralized-USD-lending` Riskbook risk form sketch:
 ```metta
 (book-category-def crypto-collateralized-USD-lending
    (frame usd)
@@ -114,7 +114,7 @@ V1 test `crypto-collateralized-USD-lending` Riskbook category sketch:
 | Routing | Matched portion → `termbook`/`structbook`; unmatched → `tradingbook` (FRTB drawdown applies) |
 | **Capital** | `Matched × RW + Unmatched × max(RW, FRTB)` per [`capital-formula.md`](capital-formula.md) |
 
-Note: JAAA modeling is **deferred for v1** due to recursive complexity (CLO of loans, with tranche subordination + active management + secondary market). The structural framing is in place; the full Riskbook category equation comes online once governance is ready to vet the recursive structure.
+Note: JAAA modeling is **deferred for v1** due to recursive complexity (CLO of loans, with tranche subordination + active management + secondary market). The structural framing is in place; the full Riskbook risk-form equation comes online once governance is ready to vet the recursive structure.
 
 ## Liquid TradFi (T-bills, MMF, STRB)
 
@@ -139,7 +139,7 @@ Short-duration T-bills have minimal rate risk and route to short-bucket matched 
 | Stress treatment | Black-Scholes stress projection per scenario (per [`projection-models.md`](projection-models.md)) |
 | Model uncertainty haircut | ~0% (Black-Scholes is well-validated for vanilla) |
 | Matching | Generally not (options don't have SPTP in the matching sense) |
-| Routing | Riskbook category-dependent — typically `tradingbook` for liquid; unmatched otherwise |
+| Routing | Riskbook risk form-dependent — typically `tradingbook` for liquid; unmatched otherwise |
 | **Capital** | Per the Black-Scholes projection × scenario weights, plus default capital |
 
 Path-dependent options (Asian, lookback, barrier) use Monte Carlo or analytic projections instead of Black-Scholes; categories may carry higher model-uncertainty haircuts.
@@ -156,13 +156,13 @@ Path-dependent options (Asian, lookback, barrier) use Monte Carlo or analytic pr
 | Routing | Per matching availability and Halobook structure |
 | **Capital** | Standard tranched-exobook capital math |
 
-Off-chain ABF requires attestor-driven onboarding for the exobook state (collateral value, debt outstanding, sponsor health). The attestor schema and reconciliation cycle are tracked in [`open-questions.md`](open-questions.md).
+Off-chain ABF requires attestor-driven onboarding for the exobook state (collateral value, debt outstanding, sponsor health). The attestor schema and reconciliation cycle are tracked in [`../noemar-synlang/beacons.md`](../noemar-synlang/beacons.md) Open questions.
 
 ## Hedge structures
 
 For positions composed with hedges:
 
-- **Tactical hedges** (specific position + specific hedge in one strategy) → live in one Riskbook with a category equation that knows the relationship (per [`riskbook-layer.md`](riskbook-layer.md) §5)
+- **Tactical hedges** (specific position + specific hedge in one strategy) → live in one Riskbook with a risk-form equation that knows the relationship (per [`riskbook-layer.md`](riskbook-layer.md) §5)
 - **Portfolio hedges** (broad-market hedges across diverse positions) → live in the Hedgebook (per [`hedgebook.md`](hedgebook.md))
 
 Currency hedges (e.g., USDC depeg hedge protecting USDC concentration across many Riskbooks) typically live in the Hedgebook.
@@ -189,8 +189,8 @@ The unifications are in [`tranching.md`](tranching.md) and [`risk-decomposition.
 |---|---|
 | [`book-primitive.md`](book-primitive.md), [`tranching.md`](tranching.md), [`currency-frame.md`](currency-frame.md) | Substrate primitives every asset class uses |
 | [`asset-classification.md`](asset-classification.md) | Per-asset canonical risk profiles consumed here |
-| [`riskbook-layer.md`](riskbook-layer.md) | Riskbook category equations for each asset class |
+| [`riskbook-layer.md`](riskbook-layer.md) | Riskbook risk-form equations for each asset class |
 | [`primebook-composition.md`](primebook-composition.md) | Sub-book routing decisions per asset class |
 | [`projection-models.md`](projection-models.md) | Projections for vanilla options and complex positions |
 | [`capital-formula.md`](capital-formula.md) | Per-position capital flow consuming the treatments here |
-| [`examples.md`](examples.md) | Worked v1 test scenario combining several asset classes |
+| [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) | Worked v1 NFAT example combining several asset classes (see "Worked Example: A Single NFAT Loan") |

@@ -13,52 +13,48 @@ Laniakea is Sky's infrastructure for **automated capital deployment at scale**. 
 
 ## Repo Layout
 
-This repo is currently focused on **synomics** — the study of the Synome and the entities that inhabit it — together with the risk framework and the Noemar runtime that underlies it. Synomics is the data-and-AI-governance layer of the Laniakea program. Earlier-phase material (whitepaper, smart contracts, accounting, roadmap, etc.) is preserved in `inactive/pre-synlang/` while the active synomics-native rewrite proceeds. See [`clean-up-plan.md`](clean-up-plan.md) for the rewrite sequence.
+This repo is currently focused on **synomics** — the study of the Synome and the entities that inhabit it — together with the risk framework and the Noemar runtime that underlies it. Synomics is the data-and-AI-governance layer of the Laniakea program. Earlier-phase material (whitepaper, accounting, roadmap, skychain, input-documents, forecast model) is preserved in `inactive/pre-synlang/` while the active synomics-native rewrite proceeds.
 
 ### Active
 
 | Directory | Description |
 |---|---|
 | [`core-concepts/`](core-concepts/) | Atomic concept definitions shared across the synomics narrative directories — also hosts the synomics overview |
-| [`macrosynomics/`](macrosynomics/) | System-level structure — layers, agents, beacons, governance (the deontic skeleton); meta-architectural layering |
+| [`macrosynomics/`](macrosynomics/) | System-level structure — layers, entities, beacons, governance (the deontic skeleton); meta-architectural layering |
 | [`synodoxics/`](synodoxics/) | Knowledge dynamics — probabilistic mesh, retrieval policy, security model, Noemar substrate (artifact tiers + telseed bootstrap) |
 | [`neurosymbolic/`](neurosymbolic/) | Practical cognition — live graph context, context manipulation, attention allocation, hardware-aware cognition |
 | [`synoteleonomics/`](synoteleonomics/) | Individual teleonomes — what they are, economics, memory, resilience, binding, autonomy paths, recipe marketplace |
-| [`hearth/`](hearth/) | Telos point and high-level commitments |
 | [`noemar-synlang/`](noemar-synlang/) | Noemar runtime + synlang technical reference — language reference, topology, runtime architecture, boot model, scaling, code patterns |
 | [`risk-framework/`](risk-framework/) | Capital framework — duration model, asset classification, capital formulas, sentinel integration |
+| [`accounting/`](accounting/) | Funding side — settlement cycle, capital stack (JRC/EJRC/SRC/MDC, ingression, Genesis Capital), isolated deployment, duration allocation, legacy transition |
+| [`smart-contracts/`](smart-contracts/) | On-chain contract architecture — PAU pattern, Configurator Unit, LCTS, NFATS, Diamond PAU, Yield Splitter, rate-limit attack analysis |
+| [`sentinel/`](sentinel/) | Sentinel Network — Baseline / Stream / Warden / Principal formations; TTS-priced ORC; Streaming Accord (absorbed former `trading/`) |
+| [`synomic-entities/`](synomic-entities/) | Per-type operational specs — Prime, Generator, Guardian (Ozone), Core Entity, Oracle / Sequencer / Pylon Entities, Folio, Halo (Portfolio / Term / Trading / Identity Network) |
+| [`growth-staking/`](growth-staking/) | Growth Staking — GF tiers, Reference Valuation (global P/E model), stUSDS borrow surface, Folio integration, agent-internal staking |
+| [`governance/`](governance/) | Practical voting and ratification — Core Council elections, SpellGuard, voting mechanics |
+| [`roadmap/`](roadmap/) | Phase-specific reality — Phase 1 spaces, short-term actuators, v1 test example, ASC transition, vocabulary and conventions |
 
 ### Inactive
 
 | Directory | Description |
 |---|---|
-| [`inactive/pre-synlang/`](inactive/pre-synlang/) | Earlier-phase docs (whitepaper, smart-contracts, accounting, roadmap, sky-agents, trading, governance-transition, growth-staking, skychain, input-documents, forecast_model) — being progressively rewritten synlang-native |
+| [`inactive/pre-synlang/`](inactive/pre-synlang/) | Remaining earlier-phase docs (whitepaper, accounting, roadmap, skychain, input-documents, forecast_model) — being progressively rewritten synlang-native. The pre-synlang `growth-staking/` source has been migrated; the active spec is at [`growth-staking/`](growth-staking/) (historical source preserved at `inactive/archive/growth-staking/`) |
 | [`inactive/archive/`](inactive/archive/) | Source material for the synomics rewrite (lift, lift-weakness, prior synomics summaries) |
-
-## Key Documents
-
-| Document | Description |
-|---|---|
-| [`core-concepts/README.md`](core-concepts/README.md) | Synomics directory framing and atomic concept index |
-| [`macrosynomics/synome-overview.md`](macrosynomics/synome-overview.md) | Architecture entry point — five layers, dual architecture, knowledge hierarchy |
-| [`macrosynomics/beacon-framework.md`](macrosynomics/beacon-framework.md) | Beacon taxonomy — two-tier authority + I/O role under it; in-space calculation; sentinel formations |
-| [`hearth/README.md`](hearth/README.md) | The system's telos point and high-level commitments |
-| [`risk-framework/README.md`](risk-framework/README.md) | Risk framework module index |
-| [`synomics-overview.md`](synomics-overview.md) | Synomics concept map — four-tier architecture, blockchain analogy, authority chain, settlement, recipe marketplace |
 
 ## Using This Repository
 
-This documentation is designed for navigation with **code LLMs** (Claude Code, Cursor, etc.). The information density and cross-references between documents make AI assistance valuable for efficiently traversing the content.
+This documentation is designed for navigation with **code LLMs** (Claude Code, Cursor, etc.). The entry point is [`summaries/`](summaries/) — read [`summaries/README.md`](summaries/README.md) first; it explains the three-layer structure (root README → summaries → detail files) and lists all 14 directory summaries to load as default context.
 
-**Getting started:**
-- New readers: [`core-concepts/README.md`](core-concepts/README.md) for synomics framing, then pick a direction
+Direct pointers for specific orientations:
 - Architecture-first: [`macrosynomics/synome-overview.md`](macrosynomics/synome-overview.md)
-- Purpose-first: [`hearth/README.md`](hearth/README.md)
-- Implementation-first: [`synomics-overview.md`](synomics-overview.md)
+- Purpose-first: [`core-concepts/telos-point.md`](core-concepts/telos-point.md)
+- Beacons: [`macrosynomics/beacon-framework.md`](macrosynomics/beacon-framework.md)
+
+Per-directory `README.md` files intentionally do not exist — the summaries serve that function.
 
 ## Status
 
-These documents are drafts under active development. The corpus is in a synlang-native rewrite (see [`clean-up-plan.md`](clean-up-plan.md)); content may change as the protocol evolves.
+These documents are drafts under active development. The corpus is in a synlang-native rewrite; content may change as the protocol evolves.
 
 ## Links
 

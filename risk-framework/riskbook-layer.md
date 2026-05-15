@@ -16,7 +16,7 @@ Companion to:
 ## TL;DR
 
 A Riskbook is:
-- A book matching a registered category in `&core-framework-risk-categories`
+- A book matching a registered category in `&core.framework.risk.forms`
 - The unit at which **default risk** is fully determined
 - The layer where **currency translation** to the Generator's frame happens
 - The boundary at which **bankruptcy remoteness** sits in the Sky stack
@@ -36,7 +36,7 @@ Riskbooks without a matching category get CRR 100% (default-deny). Halobooks abo
 | 4 | Currency translation |
 | 5 | Tactical hedging within a single Riskbook |
 | 6 | Bankruptcy remoteness as the Riskbook boundary |
-| 7 | The Riskbook category catalog as governance lever |
+| 7 | The Riskbook risk-form catalog as governance lever |
 | 8 | Examples |
 | 9 | One-line summary |
 
@@ -44,11 +44,11 @@ Riskbooks without a matching category get CRR 100% (default-deny). Halobooks abo
 
 ## 1. Why the Riskbook is the unit of regulation
 
-Of the four book types in the synome stack (Riskbook, Halobook, Primebook, Genbook), only the Riskbook is **regulated by category match**. The others aggregate; the Riskbook is where governance writes the actual capital math.
+Of the four book types in the synome stack (Riskbook, Halobook, Primebook, Genbook), only the Riskbook is **regulated by risk-form match**. The others aggregate; the Riskbook is where governance writes the actual capital math.
 
 Why this layer specifically:
 - **Composability requires a unit.** Halos can compose anything they want. The Riskbook is the granularity at which "what is this composition, and how risky is it?" gets answered.
-- **Categories require constraints.** A Riskbook category specifies what may be in the Riskbook, with what relationships and proportions. Without a category boundary, "this composition is recognized" has no meaning.
+- **Categories require constraints.** A Riskbook risk form specifies what may be in the Riskbook, with what relationships and proportions. Without a category boundary, "this composition is recognized" has no meaning.
 - **Bankruptcy remoteness needs a unit.** Cross-Riskbook netting is forbidden (per §6 below). That makes sense only if the Riskbook is the unit at which fates are linked.
 - **Hedging needs a unit.** Tactical hedges (CDS protecting an ABF claim, perp shorting an ETH spot exposure) only get capital relief when the offsetting positions are in the same Riskbook with a category that recognizes the hedge.
 
@@ -58,7 +58,7 @@ Halos compete on three skills, all rooted in Riskbook composition: **sourcing** 
 
 ## 2. Composition constraints define what a Riskbook can hold
 
-A Riskbook category isn't a label — it's a precise specification of what the Riskbook is allowed to hold. The `composition-constraints` clause is a synlang predicate over the Riskbook's contents that must evaluate to True.
+A Riskbook risk form isn't a label — it's a precise specification of what the Riskbook is allowed to hold. The `composition-constraints` clause is a synlang predicate over the Riskbook's contents that must evaluate to True.
 
 Examples:
 
@@ -70,10 +70,10 @@ Examples:
 | `morpho-lending` | Only exo units pointing to Morpho-shape Exobooks |
 | `crypto-collateralized-USD-lending` | Senior tranches of BTC/ETH/stETH-collateralized exobooks; denoms in (USDC, USDT) |
 
-These aren't sanity checks — they're **type constraints**. A Riskbook with the wrong composition fails category match and falls through to CRR 100%.
+These aren't sanity checks — they're **type constraints**. A Riskbook with the wrong composition fails risk-form match and falls through to CRR 100%.
 
 ```metta
-(risk-category-def abf-with-cds-cover
+(risk-form-def abf-with-cds-cover
    (level riskbook)
    (composition-constraints
       (and (count-of (units-where (asset-class abf-claim)) = 1)
@@ -125,7 +125,7 @@ The Riskbook also captures lots of capital efficiency through composition (CDS-p
 
 ## 5. Tactical hedging within a single Riskbook
 
-Tactical hedges sit at the Riskbook level: specific-vs-specific within one coherent strategy. The hedge math is expressed by the Riskbook category equation, which knows the relationship between the two legs.
+Tactical hedges sit at the Riskbook level: specific-vs-specific within one coherent strategy. The hedge math is expressed by the Riskbook risk-form equation, which knows the relationship between the two legs.
 
 Examples:
 - **ABF + CDS-on-same-ABF** — credit asset and its CDS coverage in one Riskbook. Equation: net loss = max(0, ABF default × loss − CDS counterparty-survival × CDS notional). Capital reflects counterparty residual, not naked credit.
@@ -153,7 +153,7 @@ This is intentional. Halos pay a real capital cost for the structural protection
 
 ---
 
-## 7. The Riskbook category catalog as governance lever
+## 7. The Riskbook risk-form catalog as governance lever
 
 The catalog of registered Riskbook categories is **governance's primary risk-shaping tool**. It defines what kinds of strategies the synome recognizes and prices.
 
@@ -167,9 +167,9 @@ What governance can do via the catalog:
 Halos that want a new strategy either:
 - Compose within an existing category
 - Lobby governance to add a new category (governance-paced; slow but durable)
-- Operate without category match (CRR 100%; high capital cost)
+- Operate without risk-form match (CRR 100%; high capital cost)
 
-The catalog is itself a synart artifact in `&core-framework-risk-categories`. Updates flow through governance crystallization (per the `crystallization-interface` concept). This makes the catalog a governance-paced resource: high-stakes, low-velocity, durable.
+The catalog is itself a synart artifact in `&core.framework.risk.forms`. Updates flow through governance crystallization (per the `crystallization-interface` concept). This makes the catalog a governance-paced resource: high-stakes, low-velocity, durable.
 
 ---
 
@@ -178,7 +178,7 @@ The catalog is itself a synart artifact in `&core-framework-risk-categories`. Up
 ### Pure ETH holding (math tier)
 
 ```metta
-(risk-category-def pure-eth-holding
+(risk-form-def pure-eth-holding
    (level riskbook)
    (composition-constraints
       (and (count-of (asset-class eth) >= 1)
@@ -193,7 +193,7 @@ A Riskbook holding only ETH. The math tier resolves trivially: notional × ETH r
 ### ABF with CDS cover (simulation tier)
 
 ```metta
-(risk-category-def abf-with-cds-cover
+(risk-form-def abf-with-cds-cover
    (level riskbook)
    (composition-constraints ...)
    (equation-m2m
@@ -215,7 +215,7 @@ The CDS effectively transforms a high-risk credit position (would be ~12% RW unh
 ### Crypto-collateralized USD lending (v1 test category)
 
 ```metta
-(risk-category-def crypto-collateralized-USD-lending
+(risk-form-def crypto-collateralized-USD-lending
    (level riskbook)
    (frame usd)
    (composition-constraints
@@ -241,9 +241,24 @@ The standard structured-product capital model — no special "gap risk" treatmen
 
 ---
 
-## 9. One-line summary
+## 9. Open questions
 
-**The Riskbook is the unit of regulation: it must match a registered category or get CRR 100% (default-deny); default risk and currency translation live here entirely; tactical hedging within a single coherent strategy earns capital relief through category-aware equations; bankruptcy remoteness sits at the Riskbook boundary, so cross-Riskbook netting is forbidden; the category catalog is governance's primary risk-shaping lever.**
+**Privacy buckets for v1 crypto-lending test.** Bucket boundaries
+and code lists for the v1 test's privacy-preserving onboarding —
+LTV bucket boundaries, term bucket boundaries, jurisdiction code
+list, custodian ID schema. Bucket choices ARE the regulatory
+surface: they define what governance approves at risk-form level.
+Choosing them needs operational input (what loans the test will
+actually include) and governance input (what disclosure level is
+acceptable). Forcing trigger: actual loan onboarding for the v1
+test — until real deals are being categorized, the bucket
+boundaries are hypothetical.
+
+---
+
+## 10. One-line summary
+
+**The Riskbook is the unit of regulation: it must match a registered risk form or get CRR 100% (default-deny); default risk and currency translation live here entirely; tactical hedging within a single coherent strategy earns capital relief through risk-form-aware equations; bankruptcy remoteness sits at the Riskbook boundary, so cross-Riskbook netting is forbidden; the risk-form catalog is governance's primary risk-shaping lever.**
 
 ---
 
@@ -258,4 +273,4 @@ The standard structured-product capital model — no special "gap risk" treatmen
 | `halobook-layer.md` | What sits above; pure aggregation; bundle exposure structure |
 | `correlation-framework.md` | Concentration limits sit one level higher (Primebook + Genbook) |
 | `capital-formula.md` | Riskbook RW propagates upward through the stack |
-| `examples.md` | Worked v1 test scenario uses the categories sketched in §8 |
+| [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) | Worked v1 NFAT scenario uses the categories sketched in §8 (see "Worked Example: A Single NFAT Loan") |

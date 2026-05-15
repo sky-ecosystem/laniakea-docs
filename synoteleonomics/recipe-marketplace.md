@@ -18,7 +18,7 @@ This document was formerly `noemar-synlang/syn-tel-emb.md` §8.
 
 ## A recipe is a product
 
-A recipe in `&core-loop-*` (or `&core-recipe-*` if factored separately) is more than a loop body. It packages:
+A recipe in `&core.loop.*` (or `&core.recipe.*` if factored separately) is more than a loop body. It packages:
 
 | Component | What it specifies |
 |---|---|
@@ -27,7 +27,7 @@ A recipe in `&core-loop-*` (or `&core-recipe-*` if factored separately) is more 
 | Auth requirements | What certs/auths the running identity needs (granted by which authority) |
 | Payment terms | Carry rate, fee schedule, distribution rewards, seigniorage participation |
 | Slashing conditions | What constitutes failure / misbehavior; what penalties apply |
-| Framework dependencies | Which `&core-framework-*` parameters this recipe consults |
+| Framework dependencies | Which `&core.framework.*` parameters this recipe consults |
 | Library dependencies | Which knowledge corpora / runtime versions / telseed compatibility |
 
 A teleonome shopping the catalog reads the package as a whole: "if I have AGI capability X at level Y, here's the regulated activity I can do, here's what I'll earn, here's what happens if I screw up."
@@ -85,7 +85,7 @@ sandbox testing       recipe runs in dreamarts; behavior observed
    ↓
 crystallization       governance vets and promotes (probmesh → skeleton)
    ↓
-live in catalog       recipe is now in &core-loop-* / &core-recipe-*
+live in catalog       recipe is now in &core.loop.* / &core.recipe.*
    ↓                  tels may take it on; carry flows
    ↓
 parameter tuning      governance adjusts pricing, slashing, etc. as needed
@@ -101,7 +101,7 @@ Each stage has different governance velocity. Crystallization is governance-pace
 
 ## Pricing levers
 
-Four primary levers, all governance-set facts (in `&core-framework-fee` and recipe-specific atoms):
+Four primary levers, all governance-set facts (in `&core.framework.fee` and recipe-specific atoms):
 
 | Lever | Direction |
 |---|---|
@@ -114,24 +114,9 @@ Setting these correctly is governance's most consequential ongoing activity. Get
 
 ---
 
-## Phase 1 has minimal recipes
+## Phase progression
 
-Phase 1 uses teleonome-less beacons (lpla-verify, lpha-relay, lpha-nfat, lpha-council) — all deterministic. There are no Sentinels yet.
-
-This means **Phase 1 has minimal recipes** because:
-
-1. Pure-spec deterministic recipes don't pay much (small carry; no edge to extract from cognitive lift).
-2. The high-paying recipes (Sentinel formations) aren't in the catalog yet; they're introduced in Phase 9-10.
-3. There are no teleonomes participating in the marketplace yet — beacon operators are GovOps companies running deterministic bots.
-
-The recipe catalog grows over time as new roles get added and the system becomes more capable of regulating cognitive work. The full marketplace arc spans roughly:
-
-- **Phase 1-3:** deterministic recipes only; humans operate beacons
-- **Phase 4-8:** factory stack adds new entity-creation recipes
-- **Phase 9-10:** Sentinel formations introduced; first cognitive recipes
-- **Beyond:** richer cognitive recipes; recipe diversity favoring generalism
-
-Designing the recipe surface NOW so it's ready when needed is critical governance work. The catalog at any given moment determines which capabilities flow where.
+The recipe catalog grows over time as new roles get added and the system becomes capable of regulating cognitive work. For the per-phase rollout (deterministic recipes first, factory stack, sentinel formations, richer cognitive recipes), see [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md). Designing the recipe surface NOW so it's ready when needed is critical governance work — the catalog at any given moment determines which capabilities flow where.
 
 ---
 
@@ -156,7 +141,7 @@ All of these are loop bodies in synart with attached economics. The shape is uni
 | Doc | Relationship |
 |----------|--------------|
 | [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) | Synart / telart / embart artifact tiers — the substrate the marketplace runs on |
-| [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) | Synome root layers including `&core-loop-*` and `&core-recipe-*` where recipes live |
+| [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) | Synome root layers including `&core.loop.*` and `&core.recipe.*` where recipes live |
 | [`../noemar-synlang/synlang-patterns.md`](../noemar-synlang/synlang-patterns.md) | Synlang code library — call-out primitive, sentinel formation patterns; what recipes are built from |
 | [`../noemar-synlang/scaling.md`](../noemar-synlang/scaling.md) | Operational concerns of running networked recipes |
 | [`teleonome-economics.md`](teleonome-economics.md) | Fixed-cost compute, RSI loop, daydreaming — the economics that motivate participating in recipes |

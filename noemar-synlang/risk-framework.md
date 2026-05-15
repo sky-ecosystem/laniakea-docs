@@ -14,10 +14,10 @@ The synlang-flavored complement to the canonical conceptual docs in [`../risk-fr
 > Read those first for conceptual context. This doc is the synlang-side reference for what the atoms look like in practice.
 
 Companion to:
-- [`topology.md`](topology.md) — Space layout: `&core-framework-risk-*` and `&core-registry-exo-book` live here
+- [`topology.md`](topology.md) — Space layout: `&core.framework.risk.*` and `&core.registry.exo-book` live here
 - [`synlang-patterns.md`](synlang-patterns.md) — the conservation-network framing (books as nodes, units as edges)
 - [`runtime.md`](runtime.md) — how exo book state gets pushed through the gate
-- [`settlement-cycle-example.md`](settlement-cycle-example.md) — worked settlement (uses old state-based CRR; pending update)
+- [`settlement-cycle-example.md`](settlement-cycle-example.md) — worked settlement
 
 ---
 
@@ -30,7 +30,7 @@ The risk model rests on these primitives (canonical treatment in `../risk-framew
 - **Equations are stress simulations**, not static formulas — evaluated against a library of governance-curated stress scenarios
 - **Four-tier resolution hierarchy** — math → simulation → heuristics → max-risk, falling through on failure
 - **Both M2M and HTM** propagate continuously up the stack; Primebook selects per-position via sub-book routing
-- **In-space calculation** — synserv runs category equations against current input atoms in real time
+- **In-space calculation** — synserv runs risk-form equations against current input atoms in real time
 
 This doc shows the **synlang shapes** for all of the above.
 
@@ -59,7 +59,7 @@ Each book type has specific atoms identifying its role in the stack. Books live 
 ### Primebook
 
 ```metta
-;; ──── &entity-prime-spark-primebook ────
+;; ──── &entity.prime.spark.primebook ────
 (book-type primebook)
 (parent-generator usge-generator-interface)
 (sub-halobook spark-credit-halobook ...)
@@ -79,12 +79,12 @@ Each book type has specific atoms identifying its role in the stack. Books live 
 ### Halobook
 
 ```metta
-;; ──── &entity-halo-spark-credit-halobook ────
+;; ──── &entity.halo.spark-credit.halobook ────
 (book-type halobook)
 (book-category nfat-crypto-lending-fixed-term)
 (parent-primebook spark-primebook)
-(sub-riskbook spark-credit-riskbook-A &entity-halo-spark-credit-riskbook-A)
-(sub-riskbook spark-credit-riskbook-B &entity-halo-spark-credit-riskbook-B)
+(sub-riskbook spark-credit-riskbook-A &entity.halo.spark-credit.riskbook.A)
+(sub-riskbook spark-credit-riskbook-B &entity.halo.spark-credit.riskbook.B)
 (holds (endo-unit u-rb-a-bond) 1000000)
 (holds (endo-unit u-rb-b-bond) 2000000)
 (issues (endo-unit u-hb-credit-bond) (notional 3000000))
@@ -99,7 +99,7 @@ Each book type has specific atoms identifying its role in the stack. Books live 
 ### Riskbook
 
 ```metta
-;; ──── &entity-halo-spark-credit-riskbook-A ────
+;; ──── &entity.halo.spark-credit.riskbook.A ────
 (book-type riskbook)
 (book-category abf-with-cds-cover)
 (parent-halobook spark-credit-halobook)
@@ -115,7 +115,7 @@ Each book type has specific atoms identifying its role in the stack. Books live 
 ### Exobook
 
 ```metta
-;; ──── &core-registry-exo-book entry ────
+;; ──── &core.registry.exo-book entry ────
 (exo-book sparklend-eth-pool-001
    (category overcollateralized-eth-lending))
 
@@ -138,14 +138,14 @@ The `seniority 0` tranche is the equity tranche per [`book-primitive.md`](../ris
 
 ---
 
-## 2. Category atom shapes (three types)
+## 2. Risk-form atom shapes (three types)
 
-All categories live in `&core-framework-risk-categories`. They share a common shape but apply at different levels.
+All risk forms live in `&core.framework.risk.forms`. They share a common shape but apply at different levels.
 
 ### Common shape
 
 ```metta
-(risk-category-def $name
+(risk-form-def $name
    (level <exo-asset | exobook | riskbook>)
    (variables [<named inputs needed at evaluation>])
    (equation-m2m  <synlang form taking variables → CRR>)
@@ -155,10 +155,10 @@ All categories live in `&core-framework-risk-categories`. They share a common sh
    (description "..."))
 ```
 
-### Type 1: Exo asset categories (terminal)
+### Type 1: Exo asset forms (terminal)
 
 ```metta
-(risk-category-def eth
+(risk-form-def eth
    (level exo-asset)
    (variables [])
    (equation-m2m (constant 0.25))
@@ -166,14 +166,14 @@ All categories live in `&core-framework-risk-categories`. They share a common sh
    (resolution-tier math)
    (description "Native ETH on Ethereum; market liquidation recourse"))
 
-(risk-category-def usdc
+(risk-form-def usdc
    (level exo-asset)
    (variables [])
    (equation-m2m (constant 0.05))
    (equation-htm (constant 0.04))
    (resolution-tier math))
 
-(risk-category-def treasury-bill-direct
+(risk-form-def treasury-bill-direct
    (level exo-asset)
    (variables [])
    (equation-m2m (constant 0.02))
@@ -183,12 +183,12 @@ All categories live in `&core-framework-risk-categories`. They share a common sh
 
 M2M is higher than HTM for nearly all assets — mark-to-market sensitivity exposes more volatility than buying-and-holding.
 
-### Type 2: Exobook categories (infrastructure)
+### Type 2: Exobook forms (infrastructure)
 
 These represent external structures the synome monitors. Equations walk into the Exobook's own assets/liabilities.
 
 ```metta
-(risk-category-def morpho-market
+(risk-form-def morpho-market
    (level exobook)
    (variables [(state $book) (collateralization-data $cdata) (liquidation-rules $rules)])
    (equation-m2m
@@ -201,7 +201,7 @@ These represent external structures the synome monitors. Equations walk into the
          (combiner take-worst)))
    (resolution-tier simulation))
 
-(risk-category-def morpho-vault
+(risk-form-def morpho-vault
    (level exobook)
    (variables [(state $book) (allocations $allocs)])
    (equation-m2m
@@ -209,17 +209,17 @@ These represent external structures the synome monitors. Equations walk into the
       ...)
    (resolution-tier simulation))
 
-(risk-category-def custody-major
+(risk-form-def custody-major
    (level exobook)
    (variables [(custodian $c) (counterparty-rating $cr) (jurisdiction $j)])
    (equation-m2m ...)
    (resolution-tier simulation))
 ```
 
-### Type 3: Riskbook categories (the load-bearing economic citizens)
+### Type 3: Riskbook forms (the load-bearing economic citizens)
 
 ```metta
-(risk-category-def abf-with-cds-cover
+(risk-form-def abf-with-cds-cover
    (level riskbook)
    (variables [(coverage-ratio $cr) (cds-counterparty-rating $cprat)])
    (composition-constraints
@@ -242,7 +242,7 @@ These represent external structures the synome monitors. Equations walk into the
          (combiner take-worst)))
    (resolution-tier simulation))
 
-(risk-category-def pure-eth-holding
+(risk-form-def pure-eth-holding
    (level riskbook)
    (variables [])
    (composition-constraints
@@ -252,7 +252,7 @@ These represent external structures the synome monitors. Equations walk into the
    (equation-htm (* (sum-of-notionals) (lookup-rw eth htm)))
    (resolution-tier math))
 
-(risk-category-def crypto-collateralized-USD-lending
+(risk-form-def crypto-collateralized-USD-lending
    (level riskbook)
    (frame usd)
    (composition-constraints
@@ -272,34 +272,34 @@ These represent external structures the synome monitors. Equations walk into the
    (resolution-tier simulation))
 ```
 
-The category catalog is governance-curated (per [`riskbook-layer.md`](../risk-framework/riskbook-layer.md) §7).
+The risk-form catalog is governance-curated (per [`riskbook-layer.md`](../risk-framework/riskbook-layer.md) §7).
 
 ---
 
 ## 3. Riskbook composition constraints in synlang
 
-A Riskbook category's `composition-constraints` clause is a synlang predicate over the Riskbook's contents. For category match, it must evaluate to True.
+A Riskbook risk form's `composition-constraints` clause is a synlang predicate over the Riskbook's contents. For risk-form match, it must evaluate to True.
 
 ```metta
-(= (find-matching-category $book)
+(= (find-matching-form $book)
    (case (collapse
-            (match &core-framework-risk-categories
-               (and (risk-category-def $cat (level riskbook) ...)
-                    (eval-composition-constraint $cat $book))
-               $cat))
+            (match &core.framework.risk.forms
+               (and (risk-form-def $form (level riskbook) ...)
+                    (eval-composition-constraint $form $book))
+               $form))
      ((empty       no-match)
-      (($cat) $cat)                                       ; exactly one match
-      (($cat1 $cat2 ...) (Error multiple-categories-match $book)))))
+      (($form) $form)                                       ; exactly one match
+      (($form1 $form2 ...) (Error multiple-forms-match $book)))))
 ```
 
-If multiple categories match, that's a category-design error: categories should be disjoint by composition. Governance is responsible for keeping the catalog clean.
+If multiple risk forms match, that's a risk-form-design error: risk forms should be disjoint by composition. Governance is responsible for keeping the catalog clean.
 
 Default-deny is enforced by `no-match`:
 
 ```metta
 (= (riskbook-finality-rw $book $treatment)
-   (let (($cat (find-matching-category $book)))
-     (case $cat
+   (let (($form (find-matching-form $book)))
+     (case $form
        ((no-match (notional-of-issued-units $book))         ; CRR = 100%
         ($c (* (notional-of-issued-units $book)
                (eval-equation $c $book $treatment)))))))
@@ -309,7 +309,7 @@ Default-deny is enforced by `no-match`:
 
 ## 4. Stress simulation patterns
 
-Stress scenarios live in `&core-framework-stress-scenarios`:
+Stress scenarios live in `&core.framework.risk.scenarios`:
 
 ```metta
 (stress-scenario-def severe-correlated-crash
@@ -338,7 +338,7 @@ Stress scenarios live in `&core-framework-stress-scenarios`:
 Categories declare which scenarios their equations apply:
 
 ```metta
-(risk-category-def abf-with-cds-cover
+(risk-form-def abf-with-cds-cover
    ...
    (m2m-scenarios [severe-correlated-crash credit-crisis liquidity-crisis])
    (htm-scenarios [severe-correlated-crash credit-crisis])
@@ -363,35 +363,35 @@ The simulation pattern:
 
 ## 5. Four-tier resolution as synlang code
 
-Each category equation declares its `resolution-tier`. The framework attempts the highest tier first; falls through on failure.
+Each risk-form equation declares its `resolution-tier`. The framework attempts the highest tier first; falls through on failure.
 
 ```metta
-(= (eval-equation $cat $book $treatment)
-   (case (resolution-tier-of $cat)
-     ((math       (eval-equation-tier1 $cat $book $treatment))
-      (simulation (eval-equation-tier2 $cat $book $treatment))
-      (heuristic  (eval-equation-tier3 $cat $book $treatment))
-      (max-risk   (eval-equation-tier4 $cat $book $treatment)))))
+(= (eval-equation $form $book $treatment)
+   (case (resolution-tier-of $form)
+     ((math       (eval-equation-tier1 $form $book $treatment))
+      (simulation (eval-equation-tier2 $form $book $treatment))
+      (heuristic  (eval-equation-tier3 $form $book $treatment))
+      (max-risk   (eval-equation-tier4 $form $book $treatment)))))
 ```
 
 ### Tier 1 (math) sketch
 
 ```metta
-(= (eval-equation-tier1 $cat $book $treatment)
-   (case (analytic-form-of $cat $treatment)
-     ((closed-form (apply-formula $cat $book))
-      (linear-system (solve-linear-system $cat $book))
+(= (eval-equation-tier1 $form $book $treatment)
+   (case (analytic-form-of $form $treatment)
+     ((closed-form (apply-formula $form $book))
+      (linear-system (solve-linear-system $form $book))
       (none Error))))
 ```
 
 ### Tier 2 (simulation) sketch
 
 ```metta
-(= (eval-equation-tier2 $cat $book $treatment)
-   (let (($scenarios (m2m-or-htm-scenarios $cat $treatment))
-         ($combiner (combiner-of $cat))
+(= (eval-equation-tier2 $form $book $treatment)
+   (let (($scenarios (m2m-or-htm-scenarios $form $treatment))
+         ($combiner (combiner-of $form))
          ($losses (collapse
-                    (map (lambda ($s) (simulate-loss $cat $book $s))
+                    (map (lambda ($s) (simulate-loss $form $book $s))
                          $scenarios))))
      (apply-combiner $combiner $losses)))
 ```
@@ -399,8 +399,8 @@ Each category equation declares its `resolution-tier`. The framework attempts th
 ### Tier 3 (heuristic) sketch
 
 ```metta
-(= (eval-equation-tier3 $cat $book $treatment)
-   (let* (($best-effort-rw (best-effort-estimate $cat $book $treatment))
+(= (eval-equation-tier3 $form $book $treatment)
+   (let* (($best-effort-rw (best-effort-estimate $form $book $treatment))
           ($depth (recursion-depth-of $book))
           ($depth-penalty (* $depth (depth-penalty-per-level)))
           ($cycle-penalty (case (cycle-detected $book)
@@ -414,7 +414,7 @@ Each category equation declares its `resolution-tier`. The framework attempts th
              (+ 1.0 $depth-penalty)))))
 ```
 
-Heuristic parameters live in `&core-framework-risk` (governance-tunable):
+Heuristic parameters live in `&core.framework.risk` (governance-tunable):
 
 ```metta
 (loop-penalty-multiplier 1.5)
@@ -426,7 +426,7 @@ Heuristic parameters live in `&core-framework-risk` (governance-tunable):
 ### Tier 4 (max-risk) — final fallback
 
 ```metta
-(= (eval-equation-tier4 $cat $book $treatment)
+(= (eval-equation-tier4 $form $book $treatment)
    (notional-of-issued-units $book))                     ; CRR = 100%
 ```
 
@@ -447,9 +447,9 @@ Loops happen in real DeFi composability — vaults of vaults, circular hypotheca
         (* (loop-penalty-multiplier) (best-effort-rw $book $treatment)))
      (True
         (let* (($visited' (add-to-set $book $visited))
-               ($cat (exobook-category $book))
-               ($child-rws (recurse-children $book $cat $treatment (+ $depth 1) $visited'))
-               ($raw-rw (eval-category-equation $cat $book $child-rws))
+               ($form (exobook-form $book))
+               ($child-rws (recurse-children $book $form $treatment (+ $depth 1) $visited'))
+               ($raw-rw (eval-form-equation $form $book $child-rws))
                ($depth-mult (+ 1.0 (* $depth (depth-penalty-per-level))))
                ($repeat-mult (case (repeated-terminals-across-paths $book)
                                 ((True (repeated-terminal-penalty))
@@ -483,9 +483,9 @@ Three places this manifests structurally:
 ```metta
 ;; 1. Riskbook without matching category
 (= (riskbook-finality-crr $book)
-   (case (find-matching-category $book)
+   (case (find-matching-form $book)
      ((no-match 1.0)                                       ; CRR 100%
-      ($cat (eval-equation $cat $book m2m)))))
+      ($form (eval-equation $form $book m2m)))))
 
 ;; 2. Exobook beyond max recursion depth
 (= (exobook-rw-bounded $book $depth)
@@ -495,9 +495,9 @@ Three places this manifests structurally:
 
 ;; 3. Exobook without matching category
 (= (exobook-rw $book $treatment)
-   (case (exobook-category $book)
+   (case (exobook-form $book)
      ((no-category 1.0)                                    ; CRR 100%
-      ($cat (eval-equation $cat $book $treatment)))))
+      ($form (eval-equation $form $book $treatment)))))
 ```
 
 For full conceptual treatment, see [`risk-decomposition.md`](../risk-framework/risk-decomposition.md) §7.
@@ -506,22 +506,22 @@ For full conceptual treatment, see [`risk-decomposition.md`](../risk-framework/r
 
 ## 8. Worked examples
 
-Five examples covering the model's expressive range. For the canonical end-to-end v1 test scenario, see [`../risk-framework/examples.md`](../risk-framework/examples.md).
+Five examples covering the model's expressive range. For the canonical end-to-end v1 test scenario, see [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) ("Worked Example: A Single NFAT Loan").
 
 ### Example A — Pure ETH Riskbook (terminal, math tier)
 
 ```metta
-;; in &core-framework-risk-categories
-(risk-category-def eth (level exo-asset) (m2m 0.25) (htm 0.20))
+;; in &core.framework.risk.forms
+(risk-form-def eth (level exo-asset) (m2m 0.25) (htm 0.20))
 
-(risk-category-def pure-eth-holding
+(risk-form-def pure-eth-holding
    (level riskbook)
    (composition-constraints (only-asset-class eth))
    (equation-m2m (* (sum-of-notionals) (lookup-rw eth m2m)))
    (equation-htm (* (sum-of-notionals) (lookup-rw eth htm)))
    (resolution-tier math))
 
-;; in &entity-halo-spark-eth-riskbook-A
+;; in &entity.halo.spark-eth.riskbook.A
 (book-type riskbook)
 (book-category pure-eth-holding)
 (holds eth-asset 1000)                                   ; 1000 ETH
@@ -540,26 +540,26 @@ riskbook-finality-rw(spark-eth-rb-A, m2m):
 
 ### Example B — Morpho lending Riskbook (Exobook recursion, simulation tier)
 
-A Halo holds a Morpho-vault exo unit. The Riskbook category invokes recursion through Morpho's structure.
+A Halo holds a Morpho-vault exo unit. The Riskbook risk form invokes recursion through Morpho's structure.
 
 ```metta
-(risk-category-def morpho-borrow-position
+(risk-form-def morpho-borrow-position
    (level exobook)
    (variables [(coll-value $cv) (debt $d) (liq-thresh $lt)])
    (equation-m2m (simulate-borrow-position-loss $cv $d $lt))
    (resolution-tier simulation))
 
-(risk-category-def morpho-market
+(risk-form-def morpho-market
    (level exobook)
    (equation-m2m (sum-children-weighted) (then-floor 0.30))
    (resolution-tier simulation))
 
-(risk-category-def morpho-vault
+(risk-form-def morpho-vault
    (level exobook)
    (equation-m2m (allocation-weighted-sum) (then-floor 0.35))
    (resolution-tier simulation))
 
-(risk-category-def morpho-lending
+(risk-form-def morpho-lending
    (level riskbook)
    (composition-constraints (units-pointing-to-morpho-vault-or-market))
    (equation-m2m (sum-over-units (lambda ($u) (* (notional $u) (exobook-rw (issuer $u) m2m)))))
@@ -609,7 +609,7 @@ riskbook-finality-rw(spark-defi-rb-B, m2m):
 ### Example C — ABF + CDS Riskbook (offsetting positions)
 
 ```metta
-(risk-category-def abf-with-cds-cover
+(risk-form-def abf-with-cds-cover
    (level riskbook)
    (composition-constraints
       (and (count-of (asset-class abf-claim)) = 1)
@@ -756,9 +756,9 @@ If a doc contradicts one of these, that's a doc bug.
 | Doc | Relationship |
 |---|---|
 | [`../risk-framework/`](../risk-framework/README.md) | Canonical conceptual treatment of the risk framework |
-| [`topology.md`](topology.md) | Where `&core-framework-risk-categories`, `&core-framework-stress-scenarios`, `&core-registry-exo-book` live structurally |
+| [`topology.md`](topology.md) | Where `&core.framework.risk.forms`, `&core.framework.risk.scenarios`, `&core.registry.exo-book` live structurally |
 | [`synlang-patterns.md`](synlang-patterns.md) | Conservation-network framing (books-as-nodes, units-as-edges) |
-| [`runtime.md`](runtime.md) | Auth, gates, telgate / syngate — how Halo govops pushes state through, how endoscrapers verify |
-| [`boot-model.md`](boot-model.md) | How endoscraper loops boot to populate exo book registry |
-| [`scaling.md`](scaling.md) | Hot-spotting on `&core-registry-exo-book`; endoscraper bandwidth; simulation computation cost |
-| [`settlement-cycle-example.md`](settlement-cycle-example.md) | Worked settlement (uses old state-based CRR; pending update) |
+| [`runtime.md`](runtime.md) | Auth, gates, telgate / syngate — how Halo govops pushes state through, how `chain-read` calls verify on-chain state |
+| [`boot-model.md`](boot-model.md) | How beacon and synserv loops boot; the `chain-read` grounded primitive (replacing the old endoscraper beacon class) lives in the runtime |
+| [`scaling.md`](scaling.md) | Hot-spotting on `&core.registry.exo-book`; `chain-read` call bandwidth; simulation computation cost |
+| [`settlement-cycle-example.md`](settlement-cycle-example.md) | Worked settlement |

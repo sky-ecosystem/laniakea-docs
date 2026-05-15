@@ -190,7 +190,7 @@ What survives in `risk-framework/`:
 - `tranching.md` (this doc) — the waterfall propagation
 - The `forced-loss-capital(asset-type)` term in `capital-formula.md`
 
-What gets archived (per `clean-up-plan.md` Phase 2):
+What was archived during the synomics rewrite:
 - `collateralized-lending-risk.md` — folded into `tranching.md`; "gap risk" no longer a separate concept
 - `market-risk-frtb.md` — folded into `tranching.md` / `asset-type-treatment.md`; "FRTB drawdown" no longer a separate concept (still appropriate for un-tranched holdings — direct positions in liquid assets — handled via the same machinery)
 

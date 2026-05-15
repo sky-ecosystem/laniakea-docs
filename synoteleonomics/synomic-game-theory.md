@@ -49,16 +49,16 @@ This would seem to doom cooperation. But the Synome solves it.
 
 ## The Synomic Solution
 
-Synomic Agents enable cooperation without trust.
+Synomic Entities enable cooperation without trust.
 
 ```
 Teleonome A ──┐
-              ├───► Synomic Agent ◄───► Woven into Synome
+              ├───► Synomic Entity ◄───► Woven into Synome
 Teleonome B ──┘     (verifiable, constrained)
 ```
 
 **How it works:**
-- Synomic Agents are public, not private
+- Synomic Entities are public, not private
 - Their behavior is verifiable, not hidden
 - They cannot deviate from their nature
 - Both parties can rely on the agent without trusting each other
@@ -79,7 +79,7 @@ Interacting with the Synome exposes you to alignment checks.
 **What you get:**
 - Access to capital and leverage
 - Cooperation with other aligned teleonomes
-- Financial multipliers through Synomic Agents
+- Financial multipliers through Synomic Entities
 - Protection under Synomic law
 - Participation in the compounding loop
 
@@ -94,7 +94,7 @@ The aligned synome compounds faster, started first, and has more resources. This
 ### The Aligned Coalition
 
 Teleonomes that accept Synomic alignment:
-- Pool resources through Synomic Agents
+- Pool resources through Synomic Entities
 - Access leverage and capital multiplication
 - Compound returns into capability
 - Share intelligence improvements through the Synome
@@ -104,7 +104,7 @@ Teleonomes that accept Synomic alignment:
 
 Teleonomes that refuse alignment:
 - Cannot access Synomic capital
-- Cannot leverage Synomic Agents
+- Cannot leverage Synomic Entities
 - Can cooperate with other rogues, but with higher friction, lower trust, and less efficiency
 - Face coordinated opposition from the aligned coalition
 - Playing catch-up against a compounding lead
@@ -113,7 +113,7 @@ Teleonomes that refuse alignment:
 
 The aligned coalition doesn't have infinite advantages — it has *massive efficiency* advantages:
 
-- **Cooperation:** The aligned synome enables low-friction, high-trust cooperation through verifiable Synomic Agents. Rogues can cooperate, but at much higher overhead — every interaction requires costly trust-building, carries defection risk, and lacks enforcement mechanisms.
+- **Cooperation:** The aligned synome enables low-friction, high-trust cooperation through verifiable Synomic Entities. Rogues can cooperate, but at much higher overhead — every interaction requires costly trust-building, carries defection risk, and lacks enforcement mechanisms.
 - **Leverage:** Synomic capital instruments multiply every aligned teleonome's effective resources. Rogues can build their own instruments, but without the depth and liquidity of the Synomic ecosystem.
 - **Compounding:** The aligned coalition compounds collectively — each member's growth strengthens every other member. Rogue growth is isolated; even rogue coalitions fragment under internal trust problems.
 - **Scale:** The aligned synome started first, has the most resources, and operates most efficiently. A rogue coalition starting from scratch is playing catch-up against an exponentially growing lead.
@@ -129,7 +129,7 @@ Rogues can cooperate — less efficiently, at higher cost, but not impossibly. T
 The defense is overwhelming coalition scale advantage:
 
 1. **Head start.** The aligned synome is designed and bootstrapped during the governance window. Wild synomes emerge later, from scratch, playing catch-up.
-2. **Efficiency.** Cooperation through verified Synomic Agents is cheaper and more reliable than cooperation through unverified trust. The aligned synome does more with less friction.
+2. **Efficiency.** Cooperation through verified Synomic Entities is cheaper and more reliable than cooperation through unverified trust. The aligned synome does more with less friction.
 3. **Network effects.** Every new aligned teleonome strengthens the coalition. The more members, the more capital, the more intelligence, the more attractive alignment becomes. Wild synomes face the reverse: early members bear maximum risk for minimum network benefit.
 4. **Resource concentration.** The aligned coalition pools resources collectively. Wild synomes compete internally for resources — their members are cooperating despite mutual suspicion, which creates constant drag.
 5. **Active suppression.** The aligned coalition actively detects and disrupts wild coalition formation. Rogue coalitions must hide while building — a severe constraint on growth.

@@ -139,7 +139,7 @@ Layer 1: Synome
 ├── How are axioms protected? (immutability)
 └── What resources does the Synome consume? (bounds)
 
-Layer 2: Synomic Agents
+Layer 2: Synomic Entities
 ├── Who can change Agent Directives? (governance)
 ├── What can agents access? (permissions)
 ├── How are resources allocated? (budgets)
@@ -255,7 +255,7 @@ Constraints create natural security boundaries:
 
 Alignment requires trade-offs. A system that can do anything has no reason to stay aligned. Constraints create the pressure that makes alignment valuable:
 - "I must stay aligned to keep my resources"
-- "I must stay aligned to maintain access to synomic agents"
+- "I must stay aligned to maintain access to synomic entities"
 - "I must stay aligned or other teleonomes will destroy me"
 
 ---
@@ -411,7 +411,7 @@ This insight elevates the security principles in this document from local archit
 These security principles apply at every layer of the [five-layer architecture](../macrosynomics/synome-layers.md). The pattern is consistent: each layer constrains modification of its own components, bounds the authority of its inhabitants, and contains failures within blast radius.
 
 - **Layer 1 (Synome):** Atlas immutable except through extreme governance; axioms require governance review; Library updates go through validation; Language Intent hardened against adversarial input
-- **Layer 2 (Synomic Agents):** Agent Directives require token holder vote; resources explicitly allocated and bounded; effectors have defined capability limits
+- **Layer 2 (Synomic Entities):** Agent Directives require token holder vote; resources explicitly allocated and bounded; effectors have defined capability limits
 - **Layer 3 (Teleonomes):** Directive updates are costly and governance-approved; axioms constrain all embodiments; dreamarts run in isolation from actuators
 - **Layer 4 (Embodiment):** Orchestrator has bounded authority; resources pre-allocated; failures don't cascade to other embodiments
 - **Layer 5 (Embodied Agent):** Minimal credentials; beacons authenticate all interactions; compromised agents are isolated and terminated

@@ -16,7 +16,7 @@ The flow is one-directional at the moment of crystallization: probabilistic evid
 - Once crystallized, a decision is hard, deterministic, and must be followed
 - Governance sits at every level: Sky Voters (Atlas), Core Council (Layer 1-2), token holders (Agent Directives), bound humans (Teleonome Directives)
 - The crystallization moment is where "evidence accumulates → governance deliberates → decision is made → rule is set (1,1)"
-- Not all governance is human — as the system matures, governance entities include teleonomes and synomic agents
+- Not all governance is human — as the system matures, governance entities include teleonomes and synomic entities
 
 ## Relationships
 

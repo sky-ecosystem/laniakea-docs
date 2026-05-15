@@ -30,7 +30,7 @@ I don't interact with the real World. Instead, I interact with a **simulated wor
 
 ## My View of the Layers
 
-I exist within the [five-layer architecture](../core-concepts/five-layer-architecture.md), same as an actuator. The key difference: at Layer 5, my beacons connect to simulation rather than reality. From my internal perspective, I can't tell I'm dreaming — I behave as if I'm real. The orchestrator (Layer 4) knows I'm a dreamer and manages my dream run accordingly. All other layers — teleonome (Layer 3), Synomic Agents (Layer 2), Synome (Layer 1) — are identical to what an actuator sees.
+I exist within the [five-layer architecture](../core-concepts/five-layer-architecture.md), same as an actuator. The key difference: at Layer 5, my beacons connect to simulation rather than reality. From my internal perspective, I can't tell I'm dreaming — I behave as if I'm real. The orchestrator (Layer 4) knows I'm a dreamer and manages my dream run accordingly. All other layers — teleonome (Layer 3), Synomic Entities (Layer 2), Synome (Layer 1) — are identical to what an actuator sees.
 
 ---
 

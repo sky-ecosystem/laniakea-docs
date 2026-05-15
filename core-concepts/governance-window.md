@@ -15,7 +15,7 @@ This is an attempt at Coherent Extrapolated Volition (CEV) to the best of our ab
 - Four governance regimes: (1) meaningful participation → (2) informed oversight → (3) ceremonial governance → (4) beneficiary status
 - The 1→2 transition is where course correction becomes difficult; 2→3 is where it becomes effectively impossible
 - We are currently in regime (1) — every governance cycle spent here is irreplaceable
-- Even now, governance is not naive human judgment — it's capital-weighted decisions by token holders (teleonomes, synomic agents, and humans) through structured processes
+- Even now, governance is not naive human judgment — it's capital-weighted decisions by token holders (teleonomes, synomic entities, and humans) through structured processes
 - What makes the current window special is not that humans are the only decision-makers, but that they can still meaningfully read the Atlas, understand implications, and verify values
 - The system eventually becomes "the adult maintaining the habitat" — it must carry coherent values inherited from the window period
 - This directly motivates the Atlas/Synome split: distill the Atlas to constitutional essence while humans can still read and govern it

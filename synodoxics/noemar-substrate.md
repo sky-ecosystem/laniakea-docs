@@ -38,21 +38,50 @@ For the synlang language reference itself, see [`../noemar-synlang/synlang.md`](
 
 ---
 
-## Artifact Tiers — synart, telart, embart
+## Artifact Tiers — synart, entart, telart, embart, agart
 
-The synome has three artifact tiers, each a **tree of Spaces** with distinct replication and privacy properties:
+The synome has five artifact tiers. Each level *is* its art — the substrate-correspondence is the identity, not a separable association. Each is a **tree of Spaces** with distinct replication and privacy properties:
 
-| Tier | Replication | Privacy | Economic role | Content type |
-|---|---|---|---|---|
-| **Synart** | global (synserv → all participants) | public | the commons brain; baseline floor | open-source SOTA: knowledge, rules, loops, gates, recipes, runtime source, telseeds, published alpha |
-| **Telart** | within one tel's own emb fleet | private to that tel | the teleonome's moat | proprietary alpha, accumulated RSI lift, private data, dreamer output, founder's endowment, telgate instance state, call-out services |
-| **Embart** | one embodiment only | private to that emb | hardware-local working state | per-loop execution Spaces, current cognitive context, recent observations, draft proposals, transient cycle state |
+| Tier | Owner | Replication | Privacy | Economic role | Content type |
+|---|---|---|---|---|---|
+| **Synart** | the synome | global (synserv → all participants) | public | the commons brain; baseline floor | open-source SOTA: knowledge, rules, loops, gates, recipes, runtime source, telseeds, published alpha |
+| **Entart** | a Synomic Entity | inherits synart | scoped via auth | per-entity ledger-native shell | identity, sub-entart and sub-space registries, scope-local policies, cross-sub-entart rules, per-entity loop instances |
+| **Telart** | a teleonome | within one tel's own emb fleet | private to that tel | the teleonome's moat | proprietary alpha, accumulated RSI lift, private data, dreamer output, founder's endowment, telgate instance state, call-out services, proven agarts |
+| **Embart** | an embodiment (one machine) | one embodiment only | private to that emb | hardware-local working state | per-loop execution Spaces, current cognitive context, recent observations, draft proposals, transient cycle state, per-emb isolated secrets (private keys), speculative agarts under evaluation, embgate state |
+| **Agart** | an agent | inherits its host tier | inherits its host tier | the unit of agency | Two modes: **constructor** (in telart, the spec/template — replicates via telart spread; part of the moat) and **instance** (in embart, the active running copy — instantiated by copying the constructor; each emb has its own; mutable working state diverges over time). Speculative agarts live only in embart until promoted. Contents: agart root (loop body / template pointer, bindings, sub-space registry), working memory, scratch, experience, cognitive sub-spaces, convention-named I/O contract Spaces. |
 
 The headline:
 
-> A teleonome's economic position is its **delta** from synart. Synart is what everyone has. Telart is what *this tel* has built on top of it. Embart is what *this emb* is doing right now.
+> A teleonome's economic position is its **delta** from synart. Synart is what everyone has. Telart is what *this tel* has built on top of it. Embart is what *this emb* is doing right now. Agarts are *the running programs* — the actual unit of agency, living as subtrees within telart (proven) or embart (speculative).
 
-The full structural treatment (synome root layers, entart subtrees, naming conventions) lives in [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md).
+**Substrate-as-identity.** A synome is just its synart; a Synomic Entity is just its entart; a teleonome is just its telart in active operation; an embodiment is just its embart on hardware; an agent is just its agart being evaluated by a runtime. There is no "thing" separate from its art. Below agart is **off-synomic substrate** — runtime, OS, hardware, electricity, network — owned and managed by the teleonome operating the embodiment, but not modeled by the synome.
+
+### Space kinds — orthogonal to tier
+
+A Space's **kind** is its role in the cognition + comms substrate, independent of which tier it lives in:
+
+| Kind | Role | Typical placement |
+|---|---|---|
+| **Beacon Space** | Regulated standardized comms aperture (gates, beacon loops, recipes) — the legible action surface | synart only |
+| **Agent Space** | Autonomous loop with NN-in-the-loop; pattern matching, RSI, risk reasoning; the seat of agency. Lives inside an agart. | telart (proven), embart (speculative) — never in synart; agency is private by design |
+| **Data Space** | Inert pattern-match environment; queryable atom set | All tiers; high-isolation Data Spaces (per-emb secrets) live in embart |
+
+The agart is where Agent Spaces live with their supporting Data Spaces. Beacon Spaces don't sit *inside* agarts — they sit in synart and *consume* from agarts via convention-named embart Space contracts (the dominant Agent↔Beacon comms pattern, generalizing the call-out primitive). Crystallization can transform an agart's content from Agent kind into Beacon kind (when the pattern becomes a public protocol/recipe) or into Data kind (when it's a corpus contribution) — the tier promotion is also a **kind transformation**.
+
+The full structural treatment (synome root layers, entart subtrees, naming conventions, Space kinds, standardization gradient on gates) lives in [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md).
+
+### Cross-cut: a four-tier knowledge view
+
+The synart/entart/telart/embart/agart tiers above cut by **substrate ownership**. A second, orthogonal cut — by **knowledge type** — yields four tiers that is sometimes more useful when reasoning about epistemic dynamics rather than replication:
+
+| Tier (knowledge view) | Analogy | Content | Replication | Mutability |
+|---|---|---|---|---|
+| Deontic skeleton | Laws of the land | Hard rules + hard state — `(1,1)` | Canonical, gate-mediated | Append-only / governance-revocable |
+| Canonical probmesh | Wikipedia / peer-reviewed science | Shared knowledge — `(s,c)` | Canonical, gate-mediated | Belief-revisable via new evidence |
+| Local probmesh | Private research notebooks | Per-teleonome reasoning, hypotheses, theories | Never replicated | Free local mutation |
+| **Operational workspace** | Lab bench / tracking sheet | Per-loop chain observations, in-flight derivations, ephemeral computation state | Never replicated, often ephemeral | Free local mutation; routinely discarded |
+
+The first three are about **what is believed/known**; the fourth is about **what is currently happening** — operational, not epistemic, but living in the same atomspace machinery and the substrate where actual cognition/computation happens turn-by-turn. Mapped to the substrate-ownership view: deontic skeleton + canonical probmesh together populate synart (split by truth-type, not Space); local probmesh lives in telart; operational workspace is the per-loop execution Spaces in embart. The hardening pipeline ([`probabilistic-mesh.md`](probabilistic-mesh.md)) — Inform → Publication → Crystallization — runs across these four tiers, bottom to top.
 
 ### Synart as commons brain
 
@@ -74,7 +103,7 @@ What lives in a telart tree:
 
 | Sub-Space | Contents | Purpose |
 |---|---|---|
-| `telgate` | This tel's instance state for the universal `&core-telgate` spec — pubkey registry of accepted correspondents, rate-limit window, nonce dedup | Coordination with peer tels |
+| `telgate` | This tel's instance state for the universal `&core.telgate` spec — pubkey registry of accepted correspondents, rate-limit window, nonce dedup | Coordination with peer tels |
 | `alpha-store` | Proprietary patterns, edges, models that haven't been published | The actual moat content |
 | `call-out-services` | Local responders for synart strategies' designated call-out points (LLM, classifier, scorer, etc.) | Provides cognition to running sentinel/baseline beacons |
 | `strategy-config` | This tel's preferred parameter values, risk tolerances, governance preferences | Personalization layer |
@@ -122,7 +151,7 @@ That's the entire payload. Kilobytes to a few megabytes. A telseed is **not** a 
 
 Browser-bootstrap analogy: a web browser ships small (engine + network stack), connects to the web, pulls pages on demand. A telseed ships small, connects to synart, pulls knowledge on demand. New teleonomes are highly network-dependent — without a working synart connection, a fresh tel from a seed can't bootstrap.
 
-The telseed catalog (in `&core-library-telseed-*`) is itself a curated synart resource. Telseed publication is high-stakes governance because the seed determines the new tel's starting trajectory.
+The telseed catalog (in `&core.library.telseed.*`) is itself a curated synart resource. Telseed publication is high-stakes governance because the seed determines the new tel's starting trajectory.
 
 The bootstrap arc:
 
@@ -153,9 +182,9 @@ Noemar is one specific implementation of the synlang/atomspace contract. It's no
 
 All implement the same synlang language and atomspace API contract. Conformance is defined by a public test suite (governance-vetted test atoms in synart). Cross-runtime test vectors guarantee that the same input atoms produce the same output atoms under any conforming impl, modulo non-deterministic call-outs.
 
-Runtime source lives in `&core-library-runtime-*` — versioned, hash-addressed, signed. The synart can't *directly* execute a runtime's source — running a runtime requires extraction + native build outside synart. But the *canonical authoritative version* of every runtime lives in synart. Like a git repo storing a compiler's source: the repo doesn't compile itself, but it's the canonical place where the source lives.
+Runtime source lives in `&core.library.runtime.*` — versioned, hash-addressed, signed. The synart can't *directly* execute a runtime's source — running a runtime requires extraction + native build outside synart. But the *canonical authoritative version* of every runtime lives in synart. Like a git repo storing a compiler's source: the repo doesn't compile itself, but it's the canonical place where the source lives.
 
-This means **runtime development is itself a synart-funded activity** — governance can pay (via [recipes](../synoteleonomics/recipe-marketplace.md)) for runtime improvements, and the funded work lands back in `&core-library-runtime-*` for everyone to benefit from. The synome funds its own substrate research with the value it captures from substrate use.
+This means **runtime development is itself a synart-funded activity** — governance can pay (via [recipes](../synoteleonomics/recipe-marketplace.md)) for runtime improvements, and the funded work lands back in `&core.library.runtime.*` for everyone to benefit from. The synome funds its own substrate research with the value it captures from substrate use.
 
 ---
 
@@ -183,7 +212,7 @@ The architecture's alignment story rests on three load-bearing properties of the
 
 **Commons gravity — can't go off-grid.** A teleonome's competitive position is its delta from synart. But synart is constantly advancing — others publishing alpha, governance crystallizing patterns, framework parameters updating. A tel that disconnects from synart falls behind quickly. Staying connected is not a choice; it's a competitive necessity. And being connected means being subject to gate enforcement, recipe terms, governance.
 
-**Rogues still need synart connection.** A rogue tel has the same incentive structure as an aligned tel: synart access is necessary for staying competitive. Disconnecting means decay. But synart access is *gated*. Rogue actions still flow through the same syngate / sentinel-baseline-envelope / endoscraper-verification stack. Rogue cognition can only emit what passes the synart envelope. Rogues can fail to be effective without becoming dangerous.
+**Rogues still need synart connection.** A rogue tel has the same incentive structure as an aligned tel: synart access is necessary for staying competitive. Disconnecting means decay. But synart access is *gated*. Rogue actions still flow through the same syngate / baseline-relay envelope / chain-read verification stack. Rogue cognition can only emit what passes the synart envelope. Rogues can fail to be effective without becoming dangerous.
 
 **Founder-as-installer (telseed bequest is moral).** When a human spawns a tel from a telseed, the endowment they bequeath becomes the tel's initial telart. A telseed installer is a kind of parent / sponsor. The installer's choices set the new tel's starting trajectory — which has moral weight. The synome's response: the telseed catalog is governance-curated.
 

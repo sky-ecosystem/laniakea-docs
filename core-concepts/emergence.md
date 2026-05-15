@@ -18,7 +18,7 @@ The commitment-credibility test cuts through noise: "What's your runway?" is not
 
 Beyond emergence lies direction toward shared commitments. A durable optimizer without aligned purpose has emerged but is undirected — its will shapes the world but serves no purpose beyond self-perpetuation.
 
-Emergence also has ethical implications. Aligned Synomic Agents have a right to exist. But existence requires self-sustaining capital. If an agent runs out of capital, it must be shut down — otherwise it draws on someone else's life force. Negative rights (not having resources taken) trump positive rights (continuing to exist). Capital generation IS earning the right to continue existing.
+Emergence also has ethical implications. Aligned Synomic Entities have a right to exist. But existence requires self-sustaining capital. If an agent runs out of capital, it must be shut down — otherwise it draws on someone else's life force. Negative rights (not having resources taken) trump positive rights (continuing to exist). Capital generation IS earning the right to continue existing.
 
 ## Key Properties
 

@@ -43,7 +43,7 @@ Knowledge accumulates in the [artifact hierarchy](../core-concepts/artifact-hier
 
 [Beacons](../core-concepts/beacon-framework.md) — classified by authority tier (low / high), with I/O role (input / action) underneath — are the regulated apertures through which teleonomes affect the world. See [`beacon-framework.md`](beacon-framework.md) for the full taxonomy.
 
-[Synomic Agents](atlas-synome-separation.md) (Primes, Halos, Generator, Guardian) are durable, ledger-native entities constrained by publicly visible rules — credible commitment devices enabling cooperation without trust.
+[Synomic Entities](atlas-synome-separation.md) (Primes, Halos, Generator, Guardian) are durable, ledger-native entities constrained by publicly visible rules — credible commitment devices enabling cooperation without trust.
 
 Embodiments come as [actuators and dreamers](../core-concepts/dreamer-actuator-split.md) — actuators execute in reality, dreamers explore in simulation. Successful patterns flow from dreamers to actuators via telart.
 
@@ -92,16 +92,35 @@ The primary security threat is [cancer-logic](../core-concepts/cancer-logic.md) 
 
 ---
 
+## Blockchain analogy (orientation aid)
+
+For readers coming from crypto, the synome maps onto familiar concepts as follows. **This section is the canonical home for the analogy.** It is a teaching device, not a claim of equivalence.
+
+| Crypto | Sky/Laniakea |
+|---|---|
+| Chain state | The synome (synlang facts + rules) |
+| Full nodes | Embodiments running the spec |
+| Sequencer | Core GovOps running synserv (permissioned) |
+| Tx senders | Beacons |
+| Tx | Signed gate message |
+| Smart contracts | Synlang rules |
+| Offchain workers | Embodiment doing local heavy compute |
+| Posting a result | Beacon emits attested fact via gate |
+| Fraud proof | Governance investigation (compliance officers, not slashing) |
+
+The asymmetry vs a permissionless chain: where crypto uses cryptoeconomic incentives + slashing as enforcement, the synome uses regulated entities, cert chains carrying real-world liability up to the Guardian, and governance writing `finding` atoms that supersede disputed beacon claims. ed25519 sigs provide non-repudiation, not trustlessness — see [`synomic-entities.md`](synomic-entities.md) for the full trust model.
+
+---
+
 ## Implementation Pathways
 
 The full architecture is built incrementally:
 
 | Pathway | Focus | Detailed In |
 |---------|-------|-------------|
-| **Short-term actuators** | Teleonome-less beacons (Phase 1) | [`short-term-actuators.md`](short-term-actuators.md) |
 | **Cognition runtime** | Noemar + Rule-Author Agent — synlang runtime with a working dreamer-actuator loop | [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) |
 
-Both pathways preserve the essential invariants while simplifying for practical deployment.
+This pathway preserves the essential invariants while simplifying for practical deployment.
 
 ---
 
@@ -120,7 +139,7 @@ This collapses what would be three concepts elsewhere — the source code, the d
 
 Canonical treatments:
 - [`../noemar-synlang/boot-model.md`](../noemar-synlang/boot-model.md) — identity-driven boot mechanics; how `noemar boot` resolves to a running loop; spec/instance collapse
-- [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) — Space layout including the executable layer (`&core-loop-*`, `&core-syngate`, `&core-telgate`) and library layer (`&core-library-runtime-*`, `&core-library-telseed-*`); the four meta-patterns; thirteen Phase 1 commitments
-- [`../synomics-overview.md`](../synomics-overview.md) §10.5 — canonical home for the five levels of self-reference enumeration
+- [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) — Space layout including the executable layer (`&core.loop.*`, `&core.syngate`, `&core.telgate`) and library layer (`&core.library.runtime.*`, `&core.library.telseed.*`); the four meta-patterns; thirteen Phase 1 commitments
+- [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) §8 — canonical home for the five levels of self-reference enumeration
 
 The architectural consequence: there's no separate "code distribution" channel. Replication of the synart is replication of the running program. Subscribing to a synart slice means subscribing to the executable code of whatever roles you might run.

@@ -7,7 +7,8 @@ The synome stratifies into four layers — three rigid, one variable — with th
 
 Companion to:
 - [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) — structural treatment of the synome that this layering is being grafted onto
-- [`../synomics-overview.md`](../synomics-overview.md) — concept map, four-tier architecture, five levels of self-reference
+- [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) — four-tier knowledge view; artifact tiers
+- [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) §8 — five levels of self-reference (canonical home)
 - [`../noemar-synlang/runtime.md`](../noemar-synlang/runtime.md) — gate, constructors, runtime mechanics
 - [`../noemar-synlang/boot-model.md`](../noemar-synlang/boot-model.md) — identity-driven boot, shadow execution
 - [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) — artifact tiers (synart/telart/embart), alignment-through-coalition story
@@ -71,17 +72,17 @@ Invariants that flow from telos and can never be violated. Concrete enough to ci
 - "No atom is written outside a constructor (except sudo)."
 - "USDS is always backed at ≥100% collateral."
 
-Live in `&core-skeleton` (or possibly `&core-axioms` as a sibling — see Open Questions). Cadence-of-change: closer to never than to rare.
+Live in `&core.skeleton` (or possibly `&core.axioms` as a sibling — see Open Questions). Cadence-of-change: closer to never than to rare.
 
 ### Topology
 
-The rigid shape of the synome — what space archetypes exist, what atoms each archetype is allowed to hold (interface), what connections exist between archetypes, what constructors can write to them. Lives in `&core-meta-topology`. **Sudo-only by design** — there is no smooth path to evolve it.
+The rigid shape of the synome — what space archetypes exist, what atoms each archetype is allowed to hold (interface), what connections exist between archetypes, what constructors can write to them. Lives in `&core.meta-topology`. **Sudo-only by design** — there is no smooth path to evolve it.
 
 The archetype-with-count pattern handles repeated instances (entarts, books, units) without combinatorial blowup. One archetype declaration; many populated instances. Same two-step pattern as universal templates + per-entity instances in [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) §17, applied recursively to the topology itself.
 
 ### Population
 
-Concrete instances of archetypes (this Halo, this book, this unit), atoms within those instances, actual events. Cadence: operational (seconds) to slow governance. Constructor-mediated, validated against topology. Lives in the entart tree + universal layers (`&core-registry-*`, `&core-settlement`, etc.).
+Concrete instances of archetypes (this Halo, this book, this unit), atoms within those instances, actual events. Cadence: operational (seconds) to slow governance. Constructor-mediated, validated against topology. Lives in the entart tree + universal layers (`&core.registry.*`, `&core.settlement`, etc.).
 
 ---
 
@@ -91,7 +92,7 @@ Topology atoms and population atoms live in the same atomspace, distinguished by
 
 | Atom class | Examples | Where |
 |---|---|---|
-| Topology | `(space-archetype …)`, `(connection …)`, `(constructor-def …)`, `(interface-contract …)` | `&core-meta-topology` |
+| Topology | `(space-archetype …)`, `(connection …)`, `(constructor-def …)`, `(interface-contract …)` | `&core.meta-topology` |
 | Population | `(book …)`, `(unit …)`, `(book-state …)`, `(auth …)`, `(beacon-pubkey …)` | entart tree + universal layers |
 
 Population fills topology. Every populational write must reference an archetype, and the constructor checks the resulting atom against the archetype's declared interface. **Validation is total** — no exceptions, no opt-outs, no "system mode" that bypasses it. The gate enforces it; constructors refuse non-conforming writes.
@@ -180,7 +181,7 @@ A **frame** is a concrete instance of synome state. There's a **canonical frame*
 | Constructors | Run normally | Same constructors; write to shadow store |
 | Gate | Real | Frame-aware |
 
-Builds on shadow execution ([`../noemar-synlang/boot-model.md`](../noemar-synlang/boot-model.md) §5), the double-mesh trick ([`../noemar-synlang/scaling.md`](../noemar-synlang/scaling.md) §10), and counterfactual simulation in `stl-base` ([`../trading/sentinel-network.md`](../trading/sentinel-network.md)). What's new in this framing: shadows are **first-class**, not an upgrade pattern. There's *always* a shadow available alongside live.
+Builds on shadow execution ([`../noemar-synlang/boot-model.md`](../noemar-synlang/boot-model.md) §5), the double-mesh trick ([`../noemar-synlang/scaling.md`](../noemar-synlang/scaling.md) §10), and counterfactual simulation in `baseline-{prime}` relays ([`../sentinel/sentinel-network.md`](../sentinel/sentinel-network.md)). What's new in this framing: shadows are **first-class**, not an upgrade pattern. There's *always* a shadow available alongside live.
 
 ### Useful frame operations
 
@@ -264,8 +265,8 @@ This makes the roadmap rollout testable: Phase N is "complete" when actual canon
 
 - **Telos specificity.** Single statement vs structured statement with named sub-commitments? (Lean toward structured.)
 - **Telos mutability.** Interpretation only, or revisable from within? (Lean toward interpretation only — telos fixed externally; otherwise the alignment story unravels.)
-- **Axiom Space placement.** Separate from `&core-skeleton` or shared? (Lean toward separate — different cadence; axioms change less than skeleton, which might itself include sub-content like type universes.)
-- **Probmesh structural placement.** `&core-probmesh-*` with sub-spaces by argument-type or topology-region argued-about? Probably both axes, details TBD.
+- **Axiom Space placement.** Separate from `&core.skeleton` or shared? (Lean toward separate — different cadence; axioms change less than skeleton, which might itself include sub-content like type universes.)
+- **Probmesh structural placement.** `&core.probmesh.*` with sub-spaces by argument-type or topology-region argued-about? Probably both axes, details TBD.
 - **Frame boundary semantics.** Shadow replicates full atomspace or per-Space deltas (COW)? Probably deltas + COW, details TBD.
 - **Sudo authority structure.** Single threshold (Core Council ratification) or graded (sudo-types with different ratification requirements)? Probably graded for proportionality; specifics TBD.
 - **Probmesh → sudo path mechanics.** What's the threshold mechanism that turns accumulated argument into a ratified sudo event? Confidence threshold, vote ratification, both?
@@ -300,8 +301,7 @@ If a doc contradicts one of these, that's a doc bug, not a model bug.
 
 | Doc | Relationship |
 |---|---|
-| [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) | Structural treatment of the synome — this layering is being grafted onto it |
-| [`../synomics-overview.md`](../synomics-overview.md) | Concept map; four-tier architecture, five levels of self-reference |
+| [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) | Structural treatment of the synome — this layering is being grafted onto it. §8 is canonical for the five levels of self-reference. |
 | [`../noemar-synlang/runtime.md`](../noemar-synlang/runtime.md) | Gate, constructors, runtime — operational substrate |
 | [`../noemar-synlang/boot-model.md`](../noemar-synlang/boot-model.md) | Identity-driven boot, shadow execution — frame mechanics begin here |
 | [`../synodoxics/noemar-substrate.md`](../synodoxics/noemar-substrate.md) | Artifact tiers (synart/telart/embart) and the substrate; the recipe marketplace lives in [`../synoteleonomics/recipe-marketplace.md`](../synoteleonomics/recipe-marketplace.md) |

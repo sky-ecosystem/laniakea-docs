@@ -61,7 +61,7 @@ This is self-referential by design. Language Intent needs the Library to transla
 
 ---
 
-## Layer 2: Synomic Agents
+## Layer 2: Synomic Entities
 
 The governance and operational layer. These are the running agents that make the system actually work.
 
@@ -71,45 +71,47 @@ The governance and operational layer. These are the running agents that make the
   - *Sky Voters* — Stakeholders who empower governance and align Atlas
   - *Core Council* — Guardian agents selected by Sky Voters that align Language Intent, Synomic Library, and the Effectors
 
-- **Effectors** — Operational outputs that instantiate Synomic Agents:
+- **Effectors** — Operational outputs that instantiate Synomic Entities:
   - *Stability* — Mechanisms for system stability
   - *Protocol* — Protocol-level operations
   - *Accessibility* — External accessibility interfaces
   - *Agent Primitives* — Base operational components
 
-- **Synomic Agent** — The formula for creating agents: Directives → Axioms + Resources = Agent
-  - *Agent Directives* — Human-readable instructions for each synomic agent, voted on by token holders. Translated through Language Intent (Layer 1) to ensure honest interpretation and resistance to prompt engineering.
+- **Synomic Entity** — The formula for creating agents: Directives → Axioms + Resources = Agent
+  - *Agent Directives* — Human-readable instructions for each synomic entity, voted on by token holders. Translated through Language Intent (Layer 1) to ensure honest interpretation and resistance to prompt engineering.
   - *Agentic Axioms* — Machine-readable rules derived from Agent Directives. The constitutional foundation that the agent's graph is organized around.
-  - *Synomic Agent Resources* — The resources (compute, credentials, capabilities) allocated to instantiate agents.
+  - *Synomic Entity Resources* — The resources (compute, credentials, capabilities) allocated to instantiate agents.
 
-- **Synomic Agent Types** — Instantiated by Agentic Axioms + Synomic Agent Resources, organized into a rank hierarchy based on governance relationship to the Core Council:
+- **Synomic Entity Types** — Instantiated by Agentic Axioms + Synomic Entity Resources, organized into a rank hierarchy based on governance relationship to the Core Council:
 
   | Rank | Agent Types | Governance Relationship |
   |------|-------------|------------------------|
   | **0** | Core Council | Sovereign |
-  | **1** | Guardians, Core Controlled Agents, Recovery Agents | Directly regulated by Core Council |
-  | **2** | Primes, Generators | Accordant to Ozone (the single operational Guardian) |
+  | **1** | Guardians, Core Entities | Directly regulated by Core Council |
+  | **2** | Primes, Generators, Oracle Entities, Sequencer Entities, Pylon Entities | Accordant to Ozone (the single operational Guardian) |
   | **3** | Halos, Folio Agents | Administered by a Prime |
 
   - *Guardians* (Rank 1) — Execute and guard specific tasks, post collateral
-  - *Core Controlled Agents* (Rank 1) — Core Council operational vehicles for legacy asset management; tokenless
-  - *Recovery Agents* (Rank 1) — Crisis agents activated when a Guardian collapses; temporary, tokenless
+  - *Core Entities* (Rank 1) — Tokenless Core Council operational vehicles. Single umbrella covering both legacy-asset management (Morpho, Aave, SparkLend positions) and crisis-wrapper roles (temporary takeover when a Guardian collapses, dissolved after resolution)
   - *Generators* (Rank 2) — Generate outputs (e.g., USDS)
   - *Primes* (Rank 2) — Capital allocation agents
+  - *Oracle Entities* (Rank 2) — Operate price/data feeds and admin oracle beacons
+  - *Sequencer Entities* (Rank 2) — Run orderbook matching as regulated venues and host Rings as sub-structures in their entart; tokenless, no collateral, trust by revocability
+  - *Pylon Entities* (Rank 2) — Take principal positions in derivatives, face Primes/Folios as customers, contribute to per-Ring assurance funds; tokenized, three-layer capital structure
   - *Halos* (Rank 3) — Regulated endpoint agents (investment products under Prime umbrella)
   - *Folio Agents* (Rank 3) — Standardized supply-side holding structures; tokenless, single owner (the principal)
 
 **Relationships:**
 
 - Synomic Axioms **instantiate** Sky Superagent
-- Effectors **instantiate** Synomic Agents
+- Effectors **instantiate** Synomic Entities
 - Agent Directives **translated by** Language Intent (Layer 1)
 - Agent Directives **create** Agentic Axioms
-- Agentic Axioms **instantiate** Synomic Agent Types
-- Synomic Agent Resources **instantiate** Synomic Agent Types
+- Agentic Axioms **instantiate** Synomic Entity Types
+- Synomic Entity Resources **instantiate** Synomic Entity Types
 - Sky Voters **align** Atlas and **select** Core Council
 - Core Council **aligns** Language Intent, Synomic Library, Stability, Protocol, Accessibility, and Agent Primitives
-- Synomic Agent Types **align** Layer 3 (Teleonomes)
+- Synomic Entity Types **align** Layer 3 (Teleonomes)
 
 ---
 
@@ -117,7 +119,7 @@ The governance and operational layer. These are the running agents that make the
 
 Aligned autonomous entities with their own missions. Instantiated by the Synomic Library (from teleonome seeds).
 
-**Analogy:** A Teleonome is best thought of as a **private person or private company** acting in the world. Its promises must always be discounted because internal rules and self-modification logic are private and mutable. Teleonomes are inherently less scalable than Synomic Agents due to private state, coordination overhead, and trust limits.
+**Analogy:** A Teleonome is best thought of as a **private person or private company** acting in the world. Its promises must always be discounted because internal rules and self-modification logic are private and mutable. Teleonomes are inherently less scalable than Synomic Entities due to private state, coordination overhead, and trust limits.
 
 **Components:**
 
@@ -138,7 +140,7 @@ Aligned autonomous entities with their own missions. Instantiated by the Synomic
 - Synomic Library **instantiates** the entire Teleonome layer
 - Teleonome Directive **translated by** Language Intent (Layer 1)
 - Teleonome Directive **creates** Teleonomic Axioms
-- Synomic Agent Types **align** Teleonomes
+- Synomic Entity Types **align** Teleonomes
 - Embodiment Interface **maps to** Layer 4
 - Resource Register **maps resources to** Layer 4
 
@@ -187,6 +189,12 @@ The actual running agent that interacts with the world.
 - Beacons and Hardware **interact with** World
 - World **returns evidence to** Synomic Library (L1)
 
+### Off-synomic substrate
+
+Below the embodied agent — strictly speaking, below the agart that the agent IS — sits **off-synomic substrate**: runtime, OS, hardware, electricity, network. This is owned and managed by the teleonome operating the embodiment, but **not modeled by the synome**. The synome's representational reach stops at the agart; below that is opaque physical infrastructure governed by the embodiment's operator and constrained only by the embodiment's stated power level (Light/Medium/Heavy).
+
+This is where structural invariant 3 ("all enforcement bottoms out in embodiments") actually grounds: the synome can revoke certs and auths, but the cryptographic keys, the hardware they run on, and the network the embodiment uses to reach synserv are off-synomic. Trust in an embodiment is ultimately trust in its operator's stewardship of that substrate.
+
 ---
 
 ## Embodiment Power Levels
@@ -223,7 +231,7 @@ Human-readable directives are the interface to AI systems at every level.
 | Level | Document | Who controls | What it governs |
 |-------|----------|--------------|-----------------|
 | Layer 1 | **Atlas** | Sky Voters | The entire Synome |
-| Layer 2 | **Agent Directives** | Token holders | Each synomic agent's behavior |
+| Layer 2 | **Agent Directives** | Token holders | Each synomic entity's behavior |
 | Layer 3 | **Teleonome Directive** | Bound human / stakeholders | The teleonome's foundational instruction |
 
 **How it works:**
