@@ -33,8 +33,8 @@ The fundamental scheduling question: **what does each component do while the oth
 
 The cognition loop has two main consumers of time:
 
-1. **GPU inference** — the emo's forward pass. Produces ops (query programs, action proposals). Duration depends on context length (prefill) and output length (decode).
-2. **CPU ops execution** — running graph queries, pattern matching, vector search, rendering results back into s-expressions. Duration depends on query complexity and graph size.
+1. **GPU inference** — the emo's forward pass. Produces ops (query programs, action proposals). Runtime depends on context length (prefill) and output length (decode).
+2. **CPU ops execution** — running graph queries, pattern matching, vector search, rendering results back into s-expressions. Runtime depends on query complexity and graph size.
 
 Neither should wait for the other.
 

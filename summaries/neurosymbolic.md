@@ -1,7 +1,7 @@
 # Neurosymbolic
 
 **Status:** target architecture (cognition-loop spec). Phase-1 instantiation lives in Noemar's Rule-Author Agent (`synodoxics/noemar-substrate.md`); higher embodiment power levels scale up the emo, not the loop structure.
-**Canonical home:** `laniakea-docs/neurosymbolic/`
+**Canonical home:** `lani/neurosymbolic/`
 
 ---
 

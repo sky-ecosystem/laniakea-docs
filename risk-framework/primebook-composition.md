@@ -80,7 +80,7 @@ Each sub-book is a **contract about which risks it covers**:
 | `ascbook` | Capital | Capital | n/a (cash-equivalent) | The product (must hold) |
 | `tradingbook` | Capital | Forced-loss | Hedged or rate-hedge capital | Forced-loss (FRTB captures it) |
 | `termbook` | Capital | **Covered** (held to par; matched fixed/fixed) | **Covered** (matched fixed/fixed via tUSDS YT) | **Covered** (no forced sale) |
-| `structbook` | Capital | **Covered** (held to par) | Capital required (rate-hedge or v1 carve-out) | **Covered** (no forced sale) |
+| `structbook` | Capital | **Covered** (held to par) | **Covered for SDR-matched P1 positions** | **Covered** (no forced sale) |
 | `hedgebook` | Capital | Capital adjusted for hedge | Capital adjusted for hedge | Capital adjusted for hedge |
 | Unmatched | Capital | Forced-loss | Forced-loss | Forced-loss |
 
@@ -108,7 +108,7 @@ TTM (term-to-maturity) units matched against tUSDS-issued YT (Yield Tokens). The
 
 ### `structbook` — matched against structural USDS demand
 
-TTM units matched against structural demand for USDS holding (per `duration-model.md`). Held to par; spread MTM and liquidity are covered. **Rate is NOT covered** because structural demand is variable-rate; the Prime must hedge or hold rate-hedge capital. (V1 carve-out: rate-hedge capital relaxed for the test.)
+TTM units matched against structural demand for USDS holding (per `sdr-model.md`). Held to par; spread MTM, rate, and liquidity are covered for the SDR-matched portion in P1. The risk form still outputs rate-CRR; `structbook` makes it non-binding only to the extent the position is matched. Unmatched portions carry the full forced-loss/rate treatment.
 
 ### `hedgebook` — cross-position hedge groups
 
@@ -135,8 +135,9 @@ Sub-books split into two operational modes:
 Position-level CRR formula in optimization sub-books:
 
 ```
-structbook position CRR = matched_portion × RW
-                        + unmatched_portion × max(RW, forced-loss-capital)
+structbook position CRR = matched_portion × default-CRR
+                        + unmatched_portion × max(default-CRR, forced-loss-capital)
+                        + unmatched_portion × rate-CRR
 
 hedgebook position CRR = hedged_portion × hedge_residual_CRR
                        + unhedged_portion × natural_sub_book_CRR
@@ -291,6 +292,6 @@ The Genbook holds Primeunits from all serving Primes, applies concentration caps
 | `riskbook-layer.md` | The regulated unit; CRR ultimately rolls up from here |
 | `hedgebook.md` | One of the sub-books, deserves its own treatment |
 | `matching.md` | termbook/structbook matching mechanics — credit-spread vs rate distinction |
-| `duration-model.md` | structural demand allocation (Lindy + structural caps) feeding `structbook` |
+| `sdr-model.md` | structural demand allocation (Lindy SDR + SDR policy overlay) feeding `structbook` |
 | `correlation-framework.md` | Concentration limits applied at Primebook + Genbook |
 | `capital-formula.md` | Final CRR computation flow integrating all sub-books |

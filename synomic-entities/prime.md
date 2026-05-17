@@ -131,7 +131,7 @@ For Growth Staking purposes, a Prime's Reference Value is `Net Capital Reserves 
 
 ## Related
 
-- [`README.md`](laniakea-docs/synomic-entities/README.md) — Rank hierarchy and entity index
+- [`README.md`](lani/synomic-entities/README.md) — Rank hierarchy and entity index
 - [`generator.md`](generator.md) — Source of credit lines
 - [`guardian.md`](guardian.md) — Ozone, the Guardian Primes are accordant to
 - [`creation-restructuring.md`](creation-restructuring.md) — Prime waiting period and Type 1/2 mechanics

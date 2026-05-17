@@ -63,7 +63,7 @@ Worth a quick cleanup pass at the start of the new session: update
 ### 3. Phase 1-2 docs are write-from-scratch
 
 The `synome-extra-info.md` §10 plan calls for these new files in
-`laniakea-docs/risk-framework/`:
+`lani/risk-framework/`:
 
 - `risk-decomposition.md`
 - `book-primitive.md`

@@ -1,7 +1,7 @@
 # Smart Contracts
 
 **Status:** mixed — PAU pattern + Configurator live (legacy); Diamond PAU placeholder; LCTS, NFATS, Yield Splitter draft target; rate-limit-attacks calibrated (SORL=25%, IRL=$100K adopted)
-**Canonical home:** `laniakea-docs/smart-contracts/`
+**Canonical home:** `lani/smart-contracts/`
 
 ---
 
@@ -98,7 +98,7 @@ Daily cadence: **Lock 13:00 UTC, Settle by 16:00 UTC**, immediate unlock. LOCKED
 
 ## §5. NFATS — Non-Fungible Allocation Token Standard
 
-Bespoke per-deal deployment between Primes and Halos. Each NFAT (ERC-721) is a **Halo Unit** (liability) — claim on a **Halo Book** (asset; balanced ledger; bankruptcy-remote boundary). **Onchain (NFAT):** custody, ownership, facility params, principal, depositor, mint timestamp. **Offchain (Synome):** APY, duration, payment schedule, maturity, book assignment, book contents (via attestor).
+Bespoke per-deal deployment between Primes and Halos. Each NFAT (ERC-721) is a **Halo Unit** (liability) — claim on a **Halo Book** (asset; balanced ledger; bankruptcy-remote boundary). **Onchain (NFAT):** custody, ownership, facility params, principal, depositor, mint timestamp. **Offchain (Synome):** APY, term / maturity, payment schedule, maturity date, book assignment, book contents (via attestor).
 
 **Halo Class = NFAT Facility = PAU + NFAT extensions** (queue, ERC-721 minting, redeem contract). Buybox = acceptable parameter ranges. Two beacons: **`nfat-{halo}`** (high-auth action/executor — claims from Prime queue, mints NFAT, changes book status, funds redemptions) and **`attest-data-{class}`** (high-auth input/attestor — posts risk attestations; cannot move capital).
 
@@ -221,4 +221,3 @@ Theft Multiplier = 3×, Surface Ratio R = N₂/N₁ = 3×. N₁ factors out — 
 | `nfats.md` | Full Halo class diagram; 12 detailed scenarios (bullet, partial, amortizing, secondary, late-funding, multi-prime, whitelist, default, etc.); book-lifecycle state machine; attestor flow diagram; payment patterns; RiverUSDS/ERC-7540 mapping; wrapped NFAT detail |
 | `fixed-rates.md` | Token-registry table; bucket-lifecycle ASCII; precise yield-attribution math; negative-yield (haircut) handling; PT/YT property table; YT transfer-hook options; venue-family rationale (Trading Halo AMM oracle-pricing argument; orderbook fixed-income parallel; third-party AMMs); 5 user stories; gas table |
 | `rate-limit-attacks.md` | Type 1 (Morpho donation) and Type 2 (Uniswap sandwich) attack timelines; profit models (MEV vs short); accumulation factor derivation; bootstrap-constraint table; harm-model derivation; sensitivity tables; bootstrap timeline day-by-day; mitigations table |
-

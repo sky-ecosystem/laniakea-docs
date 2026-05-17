@@ -70,7 +70,7 @@ Isolated deployment asset             EJRC received from Prime A
   → backed 1:1 by JRC or MDC            → ingressed via leverage curve
   → excluded from Prime A's TRRC        → contributes to Prime B's TRC
   → loss reduces Prime A's JRC          → quality: per ingression model
-    or MDC directly                       (synomic / non-synomic, duration)
+    or MDC directly                       (synomic / non-synomic, term commitment)
 ```
 
 ### Synlang form
@@ -84,7 +84,7 @@ The two sides express as paired atoms in their respective entart roots:
 
 ;; in &entity.prime.b.root
 (ejrc-ingressed $prime-b $source-prime-a $nominal $effective
-   (synomic? $bool) (duration-months $n))
+   (synomic? $bool) (commitment-term-months $n))
 ```
 
 Both atoms cross-reference each other; the link is auditable. Provenance — who originated the capital, through which isolated deployment it traveled, at which Prime it is currently ingressed — flows through a registry sub-Space (e.g., `&core.registry.cross-prime-flows`, registered at the appropriate sudo boundary) so multi-hop chains are traversable.
@@ -97,7 +97,7 @@ Quality attributes apply to the EJRC at Prime B per the standard ingression mode
 
 - **Synomic** — if the arrangement is governed by a synome-encoded framework between synomic entities: 2× multiplier on anchor / max
 - **Non-synomic** — bilateral arrangement without synome encoding: 1× multiplier
-- **Duration commitment** — the agreed uningression delay between the two Primes
+- **Commitment term** — the agreed uningression delay between the two Primes
 
 ### Prime A's exposure
 
@@ -140,7 +140,7 @@ All isolated deployments are recorded in the synome with:
 - Identity of the capital source (which Prime, which capital type)
 - Deployed-to target (asset, counterparty, or receiving Prime)
 - Amount and 1:1 mapping
-- Duration and exit terms (if applicable)
+- Commitment term and exit terms (if applicable)
 - For internal egression: link to the receiving Prime's EJRC ingression atom
 
 Multi-hop chains (Prime A → Prime B → Prime C) are fully traceable. Each hop creates a linked atom; loops and circular dependencies are detectable. The whole chain is auditable through entart subtree traversal.
@@ -262,7 +262,7 @@ When this doc says "tracked in the synome" it means specifically: atoms in the P
 
 | Doc | Relationship |
 |---|---|
-| [`README.md`](laniakea-docs/accounting/README.md) | Accounting directory index |
+| [`README.md`](lani/accounting/README.md) | Accounting directory index |
 | [`capital-stack.md`](capital-stack.md) | Leverage ingression model; isolated deployment is outside the ingression curve and reduces effective JRC for leverage |
 | [`settlement-cycle.md`](settlement-cycle.md) | Isolated deployment state settles on the daily cycle |
 | [`../risk-framework/book-primitive.md`](../risk-framework/book-primitive.md) | 6-tuple book structure; isolated positions are units linked across entarts |

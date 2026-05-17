@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-03
 **Status:** Working notes / design conversation summary
-**Scope:** Foundational redesign of the risk framework (laniakea-docs/risk-framework + noemar-synlang/risk-framework.md). Captures every architectural insight from the design conversation so context can be reconstructed if lost.
+**Scope:** Foundational redesign of the risk framework (lani/risk-framework + noemar-synlang/risk-framework.md). Captures every architectural insight from the design conversation so context can be reconstructed if lost.
 
 ---
 
@@ -468,7 +468,7 @@ Each has a clear later-phase replacement.
 
 ---
 
-## Part 4: Plan for editing risk-framework (laniakea-docs/risk-framework/)
+## Part 4: Plan for editing risk-framework (lani/risk-framework/)
 
 ### 4.1 New files to create
 
@@ -857,7 +857,7 @@ Add to topology.md §6:
 If someone needs to understand this redesign cold, recommended order:
 
 1. This document (`risk-framework-redesign-2026-05-03.md`) — the summary
-2. Then in laniakea-docs/risk-framework/ (after edits land): risk-decomposition.md → book-primitive.md → tranching.md → currency-frame.md → primebook-composition.md → hedgebook.md → projection-models.md → matching.md → capital-formula.md → asset-type-treatment.md → examples.md
+2. Then in lani/risk-framework/ (after edits land): risk-decomposition.md → book-primitive.md → tranching.md → currency-frame.md → primebook-composition.md → hedgebook.md → projection-models.md → matching.md → capital-formula.md → asset-type-treatment.md → examples.md
 3. In noemar-synlang/ (after edits land): topology.md → risk-framework.md → settlement-cycle-example.md (with new test as example)
 
 The conceptual heart is in the first 4 redesign docs (decomposition, book primitive, tranching, currency frame). Everything else specializes from those.

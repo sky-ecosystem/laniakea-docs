@@ -1,6 +1,6 @@
 # Cleanup TODO
 
-Tracker for deferred cleanup work across the laniakea-docs corpus. Items identified during summary review and the input-beacon rename pass (2026-05). Grouped by theme; rough sequence proposed in §0.
+Tracker for deferred cleanup work across the lani corpus. Items identified during summary review and the input-beacon rename pass (2026-05). Grouped by theme; rough sequence proposed in §0.
 
 ## §0 Suggested sequence
 
@@ -15,7 +15,7 @@ Most are independent, a few have order dependencies:
 7. **Pass G — Canonical-home claim integrity** (§7) is focused; light. Anytime.
 8. **Pass H — Final hygiene** (§8, §9, §10) is polish, last.
 
-Recommended order: C → A → D → E → F → G → B → H. (C done 2026-05-11. **A done 2026-05-13** — see §1 note. **D done 2026-05-15** by deletion of `legacy-state.md`; **Pass H2 also closed** by the same deletion.)
+Recommended order: C → A → D → E → F → G → B → H. (C done 2026-05-11. **A done 2026-05-13** — see §1 note. **D done 2026-05-15** by deletion of `legacy-state.md`; **Pass H2 also closed** by the same deletion. **E sample done 2026-05-16** — rules in §5; corpus-wide sweep is the open next step.)
 
 ---
 
@@ -25,7 +25,7 @@ The naming convention has been locked in and swept across the corpus. Canonical 
 
 - **Delimiter:** `.` for hierarchy between Space-name segments; `-` for compounds within one segment. Forces explicit disambiguation between phrase-names and real sub-hierarchies.
 - **Sigil:** `&` retained on every Space reference; non-Space identifiers (beacons, verbs) are dash-only, no sigil.
-- **Beacon-class taxonomy collapsed to 6 (plus synserv):** `market-data-beacon`, `attest-data-beacon`, `patch-beacon`, `relay`, `sentinel`, `synserv`. Endoscraper retired as a class — it is now a grounded runtime primitive (`(chain-read $contract $slot)`) accessible from any rule in any Space. Per-protocol metadata lives in `&core.protocol`.
+- **Beacon-class taxonomy collapsed to 6 (plus synserv):** `market-data-beacon`, `attest-data-beacon`, `patch-beacon`, `relay`, `sentinel`, `synserv`. Endoscraper retired as a class — it is now a grounded runtime primitive (`(chain-read $contract $slot)`) accessible from any rule in any Space. Per-protocol metadata lives in per-entart `protocol-registry` sub-Spaces in P1.
 - **Sentinel/relay reclassification:** what was "sentinel formation (Baseline / Stream / Warden / Principal)" is now three classes — `baseline-{prime}` (relay, deterministic), `warden-{prime}-{op}` (relay, deterministic halt monitor), `stream-{prime}-{actor}` (sentinel, variant stream), `principal-{owner}` (sentinel, variant principal-sentinel). Cognitive density is the load-bearing differentiator between relay (none) and sentinel (call-out density into operator telart).
 - **LPLA/LPHA/HPLA/HPHA prefixes stripped** on new identifiers. The four-letter codes encoded the retired power-axis. `hpla-` prefix survives only on legacy peer-to-peer trade beacon names (`hpla-trade-*`) as a stable handle.
 - **Versions move out of Space names** into atoms (e.g., `(runtime-version noemar 0.1.0)`).
@@ -46,7 +46,7 @@ The corpus has multiple overlapping name-spaces that have evolved piecemeal:
 - **Class taxonomies** — `market-data-beacon`, `attest-data-beacon`, `patch-beacon`, `endoscraper`, etc.
 - **Beacon instance identifiers** — used as the *subject* in registry atoms (e.g. `market-data-crypto-majors-chainlink`)
 - **Operational identifier prefixes** — legacy `lpha-`, `lpla-`, `hpha-`, `hpla-` (semantically empty after authority-axis retirement, but still appear on ~214 deployed beacon-name strings)
-- **Operational verbs** — `oracle-write-tick` → `market-data-write-tick` (partially renamed); many others
+- **Operational verbs** — `oracle-write-tick` → `market-data-write-memory`; many others
 - **Recipe / loop / framework Space sub-naming** — `&core-loop-<class>`, `&core-recipe-*`, `&core-framework-*`
 
 The principled question: which prefixes carry meaning, which are decoration, what is the canonical shape for each name-space?
@@ -101,7 +101,7 @@ Actions taken:
   - Q26 privacy buckets → `risk-framework/riskbook-layer.md` §9
   - Q27 crypto stress calibration → `risk-framework/asset-classification.md` §7
   - Correlation specifics → `risk-framework/correlation-framework.md` §6 (content already inline; cross-link to standalone removed)
-  - USDS lot-age tracking → `risk-framework/duration-model.md` Open questions
+  - USDS lot-age tracking → `risk-framework/sdr-model.md` Open questions
 - Updated all dangling cross-refs (asset-type-treatment.md, currency-frame.md, scaling.md, runtime.md) to point at new homes.
 - De-duplicated `macrosynomics/beacon-framework.md` ↔ `noemar-synlang/beacons.md`: canonical list lives in noemar-synlang/beacons.md; macrosynomics now points to it.
 - Promoted inline NFATS open items in `smart-contracts/nfats.md` (Prime→Facility onboarding mechanism, `nfat-{halo}` relay integration) into a dedicated Open Questions section.
@@ -120,28 +120,96 @@ Standardization note: most sections now follow a What / Why / Forcing trigger pa
 
 ---
 
-## §5 Detail-file token-bloat audit (Pass E)
+## §5 Detail-file token-bloat audit (Pass E) — sample done 2026-05-16
 
 The repo is designed for LLM consumption: root README + `summaries/` (all 14 files) is the default loaded context; detail files are paged in surgically. Per this design, detail files should be **pure reference** — formulas, atom shapes, worked examples, parameter tables, edge cases — and carry no orientation layer.
 
-Most detail files almost certainly have orientation duplication with their summary: status banners at the top, TL;DR / intro prose, section maps, Cross-references sections, Key vocabulary sections, File map sections. Each byte of this is waste because the LLM already has it from the summary.
+### Sample results (5 files, 2026-05-16)
 
-**Suggested action:**
+| File | Lines before | Lines after | Reduction | Bytes before | Bytes after |
+|---|---|---|---|---|---|
+| `risk-framework/capital-formula.md` | 232 | 147 | **37%** | 9,372 | 6,104 |
+| `synomic-entities/halo-term.md` | 243 | 200 | **18%** | 12,146 | 9,427 |
+| `smart-contracts/nfats.md` | 915 | 774 | **15%** | 44,110 | 37,606 |
+| `accounting/settlement-cycle.md` | 349 | 312 | **11%** | 21,422 | 18,482 |
+| `noemar-synlang/topology.md` | 1,467 | 1,312 | **11%** | 73,888 | 65,572 |
+| **Total** | **3,206** | **2,745** | **14%** | **160,938** | **137,191** |
 
-1. Pick the largest 3–5 detail files (by token weight) as a sample. Candidates: `smart-contracts/nfats.md`, `noemar-synlang/topology.md`, `risk-framework/capital-formula.md`, `accounting/settlement-cycle.md`, `synomic-entities/halo-term.md`.
-2. For each, identify orientation content (status banners, intro prose explaining what the doc is, section maps, cross-ref lists, glossary-style vocab definitions, doc-shape file maps).
-3. Strip orientation; keep only pure reference. Measure token reduction.
-4. From the sample, derive rules for the corpus-wide pass.
+The 20–40% prior was too optimistic for the corpus average: reference-dense files (heavy on tables, code blocks, ASCII diagrams) cap out around 10–15% because there's little orientation to remove. Files with original "Executive Summary + Why Exists + Comparison + Design Rationale" preambles (e.g. `nfats.md`) and pure-formula files with companion lists (e.g. `capital-formula.md`) hit 30%+. Realistic corpus-wide expectation: **10–20% average, with high variance**.
 
-Rules to apply (likely):
-- Drop status banners from detail files. Status lives in the summary.
-- Drop intro / TL;DR / "what this doc is" preambles. The summary's TL;DR + section map covers it.
-- Drop section maps at top of detail files. Headings serve the same function in a file already opened.
-- Drop Cross-references sections from detail files — or trim to *forward* pointers (deeper detail) only. Summary handles lateral cross-refs.
-- Drop Key vocabulary sections from detail files unless they introduce terms not in the summary.
-- Drop File map sections from detail files. The summary has it.
+### Rules derived from the sample
 
-After the sweep, detail files should typically be 20–40% lighter with no information loss for an LLM that has summaries loaded.
+**Strip-everywhere (no exceptions):**
+
+- **Top-of-doc status banners** (`**Status:** Draft`, `**Last Updated:** ...`). Status lives in the summary's Index column; per-section status notes inside the body are fine when status varies within a doc.
+- **Title-line definitional intros** (`"X is a Standard Halo Class that uses Y..."`). The summary's File map row already orients.
+- **"Companion to:" / "Related:" / "Related Documents:" lists at top or bottom**. Use inline forward pointers in body where the reference is actually relevant; the summary's File map and Cross-references carry the lateral structure.
+- **TL;DR / Executive Summary sections**. The summary IS this layer.
+- **Section maps / TOCs**. Headings in an already-opened file serve the same function.
+- **"Why X Exists" / "When to Use X" positioning sections**. Belongs in the summary if anywhere; remove from detail.
+- **"One-line summary" trailing sections**. Redundant with the summary's TL;DR.
+- **"Document Version: X" footers**. Unsourced; use git history.
+
+**Trim-aggressively:**
+
+- **"Design Rationale" / "Why we chose X over Y" sections**. These answer comparison-with-alternatives questions, not reference questions. Move to summary if load-bearing, drop otherwise.
+- **Per-section "Detailed treatment in [other doc]" taglines** that aren't actionable pointers. Replace with naked link or drop.
+- **"This doc is the canonical home for X"** meta-sentences. The summary's File map says this.
+
+**Keep:**
+
+- All formulas, code blocks, atom shapes, parameter tables, worked examples, ASCII architecture diagrams.
+- Per-section status notes (e.g., "Phase 1 carve-out: ...").
+- "Open Questions" / "Open Parameters" sections — reference content for active design work.
+- Inline forward pointers (`See [foo.md](foo.md) §3 for X`) where actually referenced from this point in the body.
+- Vocabulary translation tables (legacy → current) — they help readers of older corpus material map to current names.
+- "Key vocabulary" subsections only for terms NOT in the summary; if a term is unique to the detail file and load-bearing, consider promoting to summary.
+
+**Fix-as-you-go (incidentals encountered while stripping):**
+
+- Stale parenthetical file paths (e.g., `(in inactive/archive/)`) — verify and update or drop.
+- Legacy class names embedded in pseudocode (e.g., `(class lpha)`) — replace with current taxonomy (`relay`, `sentinel`, `market-data-beacon`, `attest-data-beacon`, `patch-beacon`).
+- Legacy "sentinel formation" terminology in current comments — replace with "operating setup" per `sentinel/` summary.
+- Four-letter quadrant codes (LPLA/LPHA/HPLA/HPHA) referenced as canonical taxonomy — drop or replace; keep only inside explicit legacy translation tables.
+
+### Process for running a strip pass
+
+1. **Read the file in full first.** Don't strip top-down sentence-by-sentence — load the whole file so you can see cross-section duplication (e.g. a top-of-doc TL;DR restated as a bottom-of-doc one-line summary, or a header tree duplicated inside an example section).
+2. **Cross-check against the summary explicitly.** If the summary's File map row already orients the reader on what the file contains, in-file framing is duplicative. If the summary's TL;DR already states a thesis, in-file restatements are duplicative. If the summary tells you which sections to expect (e.g. "12 scenarios", "ASCII diagram", "worked example"), treat those as load-bearing — they're the reason the file is paged in.
+3. **Measure before/after with `wc -l` and `wc -c`.** Bytes are the truer measure (line counts are noisy across code blocks vs prose). Record per-file and total deltas.
+4. **Choose Write vs Edit by file size and change shape.**
+   - **Write (fresh rebuild)** when changes are pervasive or you want to reflow numbering — cleaner result, no risk of an Edit leaving stale anchors. Works well for files under ~1000 lines.
+   - **Edit (surgical strips)** for files over ~1500 lines or where you only need to remove a few clean blocks plus targeted fixes. Edit is also safer if you're worried about silently dropping content during reconstruction.
+   - Files over ~25k tokens can't be Read in one call; chunk-read with offset/limit before stripping.
+5. **For Edit on large blocks:** anchor the `old_string` at clean heading boundaries — include the kept heading at the end of `old_string` and at the start of `new_string` so the match is unambiguous and the diff shows the kept context.
+6. **Stage incidental fixes as separate Edits**, not bundled into the strip. Easier to review, easier to revert if the strip is later contested.
+
+### Judgement heuristics
+
+- **Keep the title line** even after stripping the intro. Naming is reference, not orientation.
+- **Keep section-opening sentences when they frame the next chunk** (table, code block, diagram). Drop them when they just summarize what the section will show. Test: would removing this sentence leave the next artifact harder to parse without context? If yes, keep.
+- **Keep ASCII diagrams unconditionally.** Even if the summary mentions the same concept verbally, the visual is unique reference. Same for non-trivial code blocks and parameter tables.
+- **Keep worked examples and scenarios per summary's file map.** When the summary calls them out ("12 scenarios with X, Y, Z"), they're load-bearing.
+- **Keep "Key vocabulary" only for terms NOT already in the summary.** If a term is unique to the detail file AND load-bearing, flag it for promotion to the summary rather than keeping a duplicate definition in detail.
+- **Keep cross-section internal references** (`See §6 below`) — they aid navigation within the file. Drop external cross-references that duplicate the summary's File map and Cross-references.
+- **Don't fix incidentals beyond Pass E scope.** "Fix as you go" covers clear factual errors quickly resolved (broken paths, retired class names in pseudocode, stale terminology with an unambiguous current name). It does **not** extend to renaming sweeps that belong to Pass A's remainder (§1.1) or content rewrites that belong to a later pass — surface those as flagged-but-unfixed observations in the strip report instead.
+- **Don't chase a percentage target.** Reference-dense files should trim less; preamble-heavy files trim more. Trying to hit 20% on a topology-of-tables file means cutting reference content.
+
+### Incidental fixes performed inline during sample sweep
+
+- `risk-framework/capital-formula.md` §6: fixed stale `(in inactive/archive/)` parenthetical for `smart-contracts/nfats.md` (file is in active corpus, not archive).
+- `noemar-synlang/topology.md` §10 pseudocode: `(class lpha)` → `(class relay)`.
+- `noemar-synlang/topology.md` §11 tree comment: "per-Prime sentinel formations" → "per-Prime operating setup".
+- `noemar-synlang/topology.md` §20 pattern-families table: dropped "(LPLA / LPHA / HPLA / HPHA)" parenthetical from rate-limit row (quadrant codes retired per Pass A).
+
+### Next step: corpus-wide sweep — deferred
+
+Sample + rules are in place; the corpus-wide sweep is deliberately paused. Reasons:
+
+1. Pending content changes elsewhere — running a strip pass now would create merge friction with in-flight edits.
+2. The rules above are sample-derived; new bloat patterns will likely surface as those changes land. Hold the sweep until the rules have shaken out against more material.
+
+When picking up: apply the rules above (subject to revision) to all remaining detail files; skip files already in `inactive/`; trim depth varies by file shape — apply judgement per-file rather than chasing a percentage target.
 
 ---
 
@@ -211,8 +279,8 @@ Apply uniformly at section level where status varies within a doc. Update `summa
 ## §11 Other small items
 
 - **`trading/` references** — directory removed; 15 references across the corpus still point to it. Sweep: redirect to `sentinel/` where applicable, delete otherwise. Root `README.md` Active table still lists `trading/` as a top-level dir.
-- **Dangling `dir/README.md` links in root `README.md`** — 7 broken links in Key Documents (`core-concepts/README.md`, `risk-framework/README.md`, `synomic-entities/README.md`, `smart-contracts/README.md`, `trading/README.md`, `governance/README.md`, `roadmap/README.md`) plus one malformed (`trading/README.md` → `(laniakea-docs/sentinel/README.md)`). Per design intent, dir READMEs intentionally don't exist; the links should be deleted or repointed to `summaries/<dir>.md`. **Doing this now alongside §11 update.**
-- **Glossary / acronym registry** — ~30+ acronyms (TRRC, TRC, SORL, IRL, JRC, SRC, MDC, ABC, CCB, SBE, NRR, TMF, TTS, ORC, RTI, GF, DR, LDR, ASC, DAB, SPTP, HF, RW, CRR, PSM, NFAT, LCTS, PAU, BEAM, PT, YT…) defined inline in many files. Old whitepaper had `appendix-f-glossary.md`. Active corpus doesn't have a central glossary. Decide: add one, or formally point to per-doc Key Vocabulary sections.
+- **Dangling `dir/README.md` links in root `README.md`** — 7 broken links in Key Documents (`core-concepts/README.md`, `risk-framework/README.md`, `synomic-entities/README.md`, `smart-contracts/README.md`, `trading/README.md`, `governance/README.md`, `roadmap/README.md`) plus one malformed (`trading/README.md` → `(lani/sentinel/README.md)`). Per design intent, dir READMEs intentionally don't exist; the links should be deleted or repointed to `summaries/<dir>.md`. **Doing this now alongside §11 update.**
+- **Glossary / acronym registry** — ~30+ acronyms (TRRC, TRC, SORL, IRL, JRC, SRC, MDC, ABC, CCB, SBE, NRR, TMF, TTS, ORC, RTI, GF, DR, SDRR, ASC, DAB, SPTP, HF, RW, CRR, PSM, NFAT, LCTS, PAU, BEAM, PT, YT…) defined inline in many files. Old whitepaper had `appendix-f-glossary.md`. Active corpus doesn't have a central glossary. Decide: add one, or formally point to per-doc Key Vocabulary sections.
 - **"In flux" marker consistency** — content tagged "in flux," "TBD," "stub spec," "deferred," "open" with inconsistent vocabulary. Tighten to a small set (alongside §10 status ladder) so they're greppable.
 - **`trading/` → `sentinel/` migration note** — add a one-line history stub somewhere (probably root README) so git-blame and historical readers aren't confused.
 - **`summaries/core-concepts.md`** — telos-point definition now lives there (post-hearth merge); sweep for any remaining stale `hearth/` pointers in the corpus.

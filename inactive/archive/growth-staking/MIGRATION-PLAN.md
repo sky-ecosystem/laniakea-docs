@@ -2,7 +2,7 @@
 
 **Goal:** Migrate `growth-staking.md` into the active post-synlang corpus as a new top-level `growth-staking/` directory. Translate vocabulary, add a stUSDS section, add a synlang form section, update cross-references.
 
-**Output location:** `laniakea-docs/growth-staking/`
+**Output location:** `lani/growth-staking/`
 
 ---
 
@@ -61,7 +61,7 @@ These were settled in conversation; treat them as fixed. Don't re-debate.
 ## 3. Output structure
 
 ```
-laniakea-docs/
+lani/
 ├── growth-staking/                      ← new top-level directory
 │   ├── README.md                        ← directory index, scope, relations
 │   └── growth-staking.md                ← migrated + updated spec
@@ -293,7 +293,7 @@ Carry these forward as `(open)` lines in the writeup so the next governance pass
 
 ## 14. Sanity checks before declaring done
 
-- [ ] `grep -rn 'inactive/pre-synlang/growth-staking' laniakea-docs/` — should match only inside `inactive/` itself
+- [ ] `grep -rn 'inactive/pre-synlang/growth-staking' lani/` — should match only inside `inactive/` itself
 - [ ] No occurrence of `SGA`, `SCST`, `Folio Agent`, `Sky Agents`, `ESRC` in the new doc
 - [ ] `growth-staking/growth-staking.md` references resolve (`folio.md`, `prime.md`, etc.)
 - [ ] Top-level README's directory tables show `growth-staking/` under Active

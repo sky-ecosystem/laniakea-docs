@@ -1,7 +1,7 @@
 # Core Concepts
 
 **Status:** live (atomic vocabulary used across the corpus)
-**Canonical home:** `laniakea-docs/core-concepts/`
+**Canonical home:** `lani/core-concepts/`
 
 ---
 

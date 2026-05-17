@@ -1,7 +1,7 @@
 # Macrosynomics
 
 **Status:** Mixed — 5-layer model + Atlas/Synome split + beacon framework are live commitments; sentinel formations and topology-layering meta-architecture are target. Phase 1 reality is narrower (see `roadmap/`).
-**Canonical home:** `laniakea-docs/macrosynomics/`
+**Canonical home:** `lani/macrosynomics/`
 
 ---
 
@@ -110,7 +110,7 @@ A Synomic Entity is ledger-native, durable, public — woven *into* the synome r
 
 | Role | Classes |
 |---|---|
-| Input (push data atoms) | **market-data-beacon** (Oracle-Entity-admin'd off-chain market data — price/liquidity/funding ticks; lands at the Oracle Entity entart root) / **attest-data-beacon** (Oracle-Entity-admin'd signed off-chain claims about exobook state; lands inside specific exobook Spaces) / **patch-beacon** (govops-sudoed scaffold; the one input class **without a regulated framework**). Endoscraper is no longer a class — chain reads are a grounded runtime primitive accessible from any rule. |
+| Input (push data atoms) | **market-data-beacon** (Oracle-Entity-admin'd market-memory reducer outputs and current-state atoms; lands in the Oracle Entity entart) / **attest-data-beacon** (Oracle-Entity-admin'd signed claims about borrower admission, riskbook state, or exobook state; lands inside the relevant risk class / book Spaces) / **patch-beacon** (govops-sudoed scaffold; the one input class **without a regulated framework**). Endoscraper is no longer a class — chain reads are a grounded runtime primitive accessible from any rule. |
 | Action (emit chain txs from synart state) | `relay` (narrow per-target, deterministic) / `sentinel` (call-out density into operator telart; variants stream / principal). Sentinel formations bundle baseline-relay + warden-relay + stream-sentinel as one operating setup. |
 
 **Three new input beacon classes** replace retired `oracle` / `oracle-exsyn` / `attestor`. Market-data-beacons and attest-data-beacons differ in where atoms land (Oracle Entity entart root vs specific exobooks) and trust model (provider redundancy/dispute vs slashing-time verification). **Patch-beacons** are the one input class **without a regulated framework** — Guardian-sudoed, govops-certed, loop body + per-entity config sudoed inline at genesis. They scaffold over insyn coverage gaps (Phase 1: per-Prime exsyn-TRRC writes into each `&entity.prime.{id}.primebook`, replacing `oracle-exsyn`); designed to sunset as use cases migrate to insyn-native, but reusable for future scaffolds of this nature. Trust borne by govops directly. Instance identifiers were renamed in tandem with the class taxonomy: `oracle-{provider}` → `market-data-{provider}`, and `attestor-{class}` → `attest-data-{class}`.
@@ -140,7 +140,7 @@ Distinguished high-authority *action* subclass with continuous real-time control
 | **Warden** | Independent monitoring + risk enforcement; freeze/halt/escalate | Safety plane (override only) |
 | **Principal** | Owner-operated direct control of folio agents or standalone accounts | Outside formation pattern |
 
-Streams are the highest-leverage Teleonome activity (carry compounds private intelligence); regulated per §4. Phase 1 has no full sentinel formations — only relays controlled manually by govops; the Baseline / Stream / Warden bundle activates from Phase 9 (per-Prime `baseline-{prime}` relay deploying alongside `warden-{prime}-{op}` relays and `stream-{prime}-{actor}` sentinels) for OSRC + Duration auctions. Canonical formation spec: `trading/sentinel-network.md`.
+Streams are the highest-leverage Teleonome activity (carry compounds private intelligence); regulated per §4. Phase 1 has no full sentinel formations — only relays controlled manually by govops; the Baseline / Stream / Warden bundle activates from Phase 9 (per-Prime `baseline-{prime}` relay deploying alongside `warden-{prime}-{op}` relays and `stream-{prime}-{actor}` sentinels) for OSRC + SDR auctions. Canonical formation spec: `trading/sentinel-network.md`.
 
 ## §7 Topology layering meta-architecture
 
@@ -214,7 +214,7 @@ Punchline: **the synome funds its own substrate research with the value it captu
 | **Assurance fund** | Aggregate of member Pylons' per-Ring pledges; the Ring's mutualized default-absorption pool. |
 | **Beacon** | Synome-registered action aperture; classified by authority tier + I/O role. |
 | **High / Low authority** | Whether the beacon operates a Synomic Entity. |
-| **market-data-beacon** | Input class admin'd by an Oracle Entity; pushes price/liquidity/funding atoms to the entity's entart root. Replaces retired `oracle`. |
+| **market-data-beacon** | Input class admin'd by an Oracle Entity; pushes market-memory reducer outputs and current-state atoms to the entity's entart. Replaces retired `oracle`. |
 | **attest-data-beacon** | Input class admin'd by an Oracle Entity; pushes signed attestations into specific exobook Spaces. Replaces retired `attestor`. |
 | **patch-beacon** | Input class admin'd directly by govops via Guardian sudo; loop body + per-entity config sudoed inline at genesis. The one beacon class without a regulated framework; designed to sunset. Replaces retired `oracle-exsyn`. |
 | **In-space calculation** | Synart-resolved code synserv runs to keep derived book state consistent. |
@@ -257,4 +257,3 @@ Punchline: **the synome funds its own substrate research with the value it captu
 | `beacon-framework.md` | Per-keeper-class table (relay stems: `lcts-{halo}` / `nfat-{halo}` / `amm-{halo}` / `identity-{network}` / `auction-{x}` / `rate-{generator}` / `gov-{x}`) with Synomic Entity + function; full BEAM ↔ PAU diagram; complete naming-convention catalog; full beacon lifecycle (Registration → Authority Envelope → Activation → Monitoring → Revocation); Controllers (`ctl-bridge/extend/connect`) and Custodians (`cst-synome/erc/vault`); legacy LPLA/LPHA/HPLA/HPHA quadrant retirement notes; legacy → current beacon-name mapping; five Phase-1-deferred open questions; intra-coalition asymmetry regulation discussion; full agent↔beacon comms-via-convention-named-embart-Space pattern. Input-beacon table enumerates three classes (`market-data-beacon` / `attest-data-beacon` / `patch-beacon`); endoscraper is no longer a class but a grounded runtime primitive. `patch-beacon` is the one class without a regulated framework — Guardian-sudoed scaffold for insyn coverage gaps. |
 | `synomic-entities.md` | Full spectrum diagram (minimal Halo → Prime); inalienable-claims worked example; minimal-Halo "right to just exist" prose; joint-stock-properties mapping table; Halo class/book/unit hierarchy; 3-phase lifecycle (Creation / Operation / Termination — entity identity is immutable, so no transformation phase); the right-to-exist ethical framework with full compliant-vs-aligned distinction; binding-as-coalition framing. Prime table is `Prime | Type` with all six operational. Range-of-purpose table enumerates Folio, Core Entity, Oracle Entity, Sequencer Entity, Pylon Entity (with Ring coalitions hosted in Sequencer entarts), Prime, Generator. |
 | `topology-layers.md` | Cadence-of-change per layer; topology-derived population atoms pattern (routing tables, registry indexes); flag-day sudo procedure; freeze-early posture rationale; full standard-comment-shape catalog; per-phase topology-deliverable structure; eight architectural commitments enumerated; eight open questions (telos specificity/mutability, axiom space placement, probmesh structural placement, frame boundary semantics, sudo authority structure, probmesh→sudo path mechanics, axiom crystallization). |
-

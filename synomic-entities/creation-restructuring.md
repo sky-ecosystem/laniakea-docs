@@ -2,7 +2,7 @@
 
 How new Synomic Entities come into existence, and how existing ones reorganize. Both flows route through the **Guardian Accord** — the operational gatekeeping mechanism that brings new agents into the ecosystem.
 
-For the rank hierarchy and the per-type spec each new agent slots into, see the [`README`](laniakea-docs/synomic-entities/README.md). For Synomic Entity theory (why agents have inalienable claims, why integration eliminates the adversarial frame), see [`../macrosynomics/synomic-entities.md`](../macrosynomics/synomic-entities.md).
+For the rank hierarchy and the per-type spec each new agent slots into, see the [`README`](lani/synomic-entities/README.md). For Synomic Entity theory (why agents have inalienable claims, why integration eliminates the adversarial frame), see [`../macrosynomics/synomic-entities.md`](../macrosynomics/synomic-entities.md).
 
 ---
 
@@ -156,7 +156,7 @@ After:
 
 ## Related
 
-- [`README.md`](laniakea-docs/synomic-entities/README.md) — Rank hierarchy and entity index
+- [`README.md`](lani/synomic-entities/README.md) — Rank hierarchy and entity index
 - [`guardian.md`](guardian.md) — Ozone, the operational counterpart of Guardian Accords
 - [`prime.md`](prime.md) — Synomic Entity Primitives and the Prime waiting period
 - [`folio.md`](folio.md) — Folio auto-accord; entry point for new participants

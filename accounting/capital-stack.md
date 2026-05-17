@@ -19,7 +19,7 @@ This doc is the **TRC funding side** of the Prime capital math. The Risk Framewo
 | 2 | The universal ingression curve |
 | 3 | SRC ingression |
 | 4 | EJRC ingression |
-| 5 | Duration mechanics |
+| 5 | Commitment term mechanics |
 | 6 | Tokenized EJRC (normie TEJRC) |
 | 7 | MC-based total RC cap |
 | 8 | Genesis Capital |
@@ -141,15 +141,15 @@ Max theoretical effective SRC = 1.5 × JRC + 3 × JRC × π/4 ≈ **3.86 × effe
 
 ## 4. EJRC ingression
 
-EJRC ingression depends on two quality dimensions: **synomic status** and **duration commitment**.
+EJRC ingression depends on two quality dimensions: **synomic status** and **commitment term**.
 
 ### EJRC types
 
-| Type | Synomic | Duration | Mechanism |
+| Type | Synomic | Commitment Term | Mechanism |
 |---|---|---|---|
 | Normie TEJRC | No | Zero | LCTS token; anyone can participate |
-| Non-synomic duration | No | Yes | Bespoke; funds → SubProxy; ecosystem accord in entart |
-| Synomic duration | Yes | Variable | Bespoke between synomic entities; baseline sentinels interact |
+| Non-synomic term commitment | No | Yes | Bespoke; funds → SubProxy; ecosystem accord in entart |
+| Synomic term commitment | Yes | Variable | Bespoke between synomic entities; baseline sentinels interact |
 
 ### Quality dimensions
 
@@ -157,26 +157,26 @@ EJRC ingression depends on two quality dimensions: **synomic status** and **dura
 - Non-synomic: 1× multiplier
 - Synomic: 2× multiplier on anchor and max
 
-**Duration commitment** — how long capital is committed before exit:
-- Maximum useful duration: 24 months
-- Minimum threshold: 3 months (below this, no duration credit)
+**Commitment term** — how long capital is committed before exit:
+- Maximum useful term: 24 months
+- Minimum threshold: 3 months (below this, no term credit)
 - Linear scaling 3 → 24 months
 
 ### Anchor / max formula
 
 ```
-duration_multiplier = 1 + (months / 24)    for months ≥ 3
-duration_multiplier = 1                     for months < 3
+term_multiplier = 1 + (months / 24)    for months ≥ 3
+term_multiplier = 1                     for months < 3
 
 synomic_multiplier = 2    if synomic, 1 otherwise
 
-anchor = 1 × IJRC × synomic_multiplier × duration_multiplier
-max    = 3 × IJRC × synomic_multiplier × duration_multiplier
+anchor = 1 × IJRC × synomic_multiplier × term_multiplier
+max    = 3 × IJRC × synomic_multiplier × term_multiplier
 ```
 
 ### Ingression table
 
-| Type | Duration | Duration mult | Anchor | Max |
+| Type | Commitment Term | Term mult | Anchor | Max |
 |---|---|---|---|---|
 | Non-synomic | 0–3mo | 1.0 | 1× | 3× |
 | Non-synomic | 3mo | 1.125 | 1.125× | 3.375× |
@@ -191,16 +191,16 @@ max    = 3 × IJRC × synomic_multiplier × duration_multiplier
 
 ---
 
-## 5. Duration mechanics
+## 5. Commitment term mechanics
 
 EJRC can be structured two ways:
 
 | Structure | Mechanics | Exit |
 |---|---|---|
 | Perpetual until called | Runs indefinitely | Call → countdown → exit |
-| Fixed term | Agreed start-to-end duration | Auto-exits at end |
+| Fixed term | Agreed start-to-end commitment term | Auto-exits at end |
 
-**Synlang reframing:** duration commitments live as cert-bearing facts in the Prime's entart subtree. The capital provider's commitment, the agreed uningression delay, and the current countdown state are all atoms in `&entity.prime.{id}.root` (or a sub-Space the govops-prime beacon manages). The synlang reads these to compute `duration_multiplier` for ingression purposes and to enforce the exit countdown.
+**Synlang reframing:** term commitments live as cert-bearing facts in the Prime's entart subtree. The capital provider's commitment, the agreed uningression delay, and the current countdown state are all atoms in `&entity.prime.{id}.root` (or a sub-Space the govops-prime beacon manages). The synlang reads these to compute `term_multiplier` for ingression purposes and to enforce the exit countdown.
 
 ### Uningression delay
 
@@ -211,8 +211,8 @@ The countdown after exit is called. Agreed upfront; determines load (quality):
 | 24 months (max) | Lowest load, highest quality |
 | 12 months | Medium load |
 | 6 months | Higher load |
-| 3 months (min for credit) | Highest load with duration credit |
-| < 3 months | No duration credit |
+| 3 months (min for credit) | Highest load with term credit |
+| < 3 months | No term credit |
 
 If the agreed uningression delay is short, the perpetual phase load is as if you're always at that point in the countdown. Load is constant; capital doesn't get dumber as time passes.
 
@@ -231,7 +231,7 @@ TEJRC is the standard tokenized form of EJRC, accessible via LCTS.
 | Subscribe (ingression) | Prime pulls from LCTS SubscribeQueue at will; no rate limit on ingression |
 | Redeem (uningression) | Prime sets redemption rate (e.g., 20%/week max) + minimum fixed amount; rate changes require governance + long delay (TEJRC holder protection) |
 
-TEJRC is always **non-synomic** and **zero duration** — anchor = 1× IJRC, max = 3× IJRC. The lowest-quality EJRC, but the most accessible.
+TEJRC is always **non-synomic** and **zero term commitment** — anchor = 1× IJRC, max = 3× IJRC. The lowest-quality EJRC, but the most accessible.
 
 For LCTS queue mechanics, see `inactive/pre-synlang/smart-contracts/lcts.md` (pending its own synlang-native rewrite).
 
@@ -461,7 +461,7 @@ Total Risk Capital (TRC) = (Effective JRC + Effective SRC) × MC_multiplier
 Capital Adequacy: TRC ≥ TRRC
 ```
 
-Where TRRC comes from `risk-framework/capital-formula.md` (duration matching, gap risk, sub-book composition, concentration penalties).
+Where TRRC comes from `risk-framework/capital-formula.md` (SDR / term matching, gap risk, sub-book composition, concentration penalties).
 
 The encumbrance ratio target is `ER = TRRC / TRC ≤ 0.90`. Breach drives penalties at settlement (see [`settlement-cycle.md`](settlement-cycle.md) §6).
 
@@ -483,7 +483,7 @@ Both are capital-adequacy-relevant but evaluated alongside the portfolio TRC ade
 
 | Doc | Relationship |
 |---|---|
-| [`README.md`](laniakea-docs/accounting/README.md) | Accounting directory index |
+| [`README.md`](lani/accounting/README.md) | Accounting directory index |
 | [`settlement-cycle.md`](settlement-cycle.md) | Settlement reads `time-weighted-debt` against the JRC/SRC structure defined here |
 | [`isolated-deployment.md`](isolated-deployment.md) | Isolated deployment is outside the ingression curve; reduces effective JRC |
 | [`../risk-framework/capital-formula.md`](../risk-framework/capital-formula.md) | TRRC computation; this doc supplies the funding-side of `ER = TRRC / TRC` |

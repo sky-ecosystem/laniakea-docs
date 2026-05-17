@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-03
 **Status:** Plan of record. Supersedes Part 4–5 of `risk-framework-redesign-2026-05-03.md` and §10–§11 of `synome-extra-info.md`.
-**Scope:** Propagate the redesigned risk framework into canonical docs (`laniakea-docs/risk-framework/` + `noemar-synlang/`); cut working-notes content; resolve cross-doc inconsistencies.
+**Scope:** Propagate the redesigned risk framework into canonical docs (`lani/risk-framework/` + `noemar-synlang/`); cut working-notes content; resolve cross-doc inconsistencies.
 
 ---
 
@@ -30,7 +30,7 @@ Three implications:
 
 - **Keel:** confirm Spark/Grove/Keel/Obex are all accordant to Ozone (and update any "three Star Primes" example to four). Decision affects examples in `topology.md`, `syn-overview.md`, and the v1 test scenario.
 
-### Phase 1 — Conceptual core (laniakea-docs/risk-framework/, NEW)
+### Phase 1 — Conceptual core (lani/risk-framework/, NEW)
 
 Four short docs (~150–200 lines each), in dependency order:
 
@@ -39,7 +39,7 @@ Four short docs (~150–200 lines each), in dependency order:
 3. **`tranching.md`** — exoasset/exoliab · seniority + waterfall · P/T rights · re-framing overcollateralized lending (subsumes the old gap-risk + FRTB-drawdown duality)
 4. **`currency-frame.md`** — frame vs instrument · currency taxonomy · Riskbook as translation layer · v1 single-frame note
 
-### Phase 2 — Layer docs (laniakea-docs/risk-framework/, NEW)
+### Phase 2 — Layer docs (lani/risk-framework/, NEW)
 
 5. **`riskbook-layer.md`** — default + frame translation + tactical hedging
 6. **`halobook-layer.md`** — *bundle exposure structure* (general; not just liquidity) · P/T declarations
@@ -79,7 +79,7 @@ Each is a real edit pass, but most should *shrink*:
 
 The big lift is **`noemar-synlang/risk-framework.md`** (62KB / ~1600 lines, currently load-bearing for the four-book + categories model and uses old state-based CRR framing in the worked-example tail).
 
-**Recommended:** trim to ~25KB / ~600–800 lines, repositioned as the *synlang-flavored* treatment (atom shapes, equation forms, four-tier resolution as synlang code, 5 worked examples). Conceptual material defers to `laniakea-docs/risk-framework/`.
+**Recommended:** trim to ~25KB / ~600–800 lines, repositioned as the *synlang-flavored* treatment (atom shapes, equation forms, four-tier resolution as synlang code, 5 worked examples). Conceptual material defers to `lani/risk-framework/`.
 
 (Alternative: split into 4–5 files. Recommend against — adds navigation cost without saving lines.)
 
@@ -146,12 +146,12 @@ Phase 1 is highest-value first work. After Phase 2 lands, the canonical structur
 2. `risk-framework-redesign-2026-05-03.md` Parts 1–3 + 6–8 (substrate; will be deleted in Phase 4 but read before deletion if needed for context)
 3. `synome-extra-info.md` §1–§8 (refinements; same)
 4. `notes1.md` (session handoff; same)
-5. Existing `laniakea-docs/risk-framework/*.md` files (what's being rewritten)
+5. Existing `lani/risk-framework/*.md` files (what's being rewritten)
 6. Existing `noemar-synlang/risk-framework.md` (what's being trimmed)
 
 After Phase 1–2 land, the entry point shifts to:
 
 1. This document
-2. `laniakea-docs/risk-framework/risk-decomposition.md` → `book-primitive.md` → `tranching.md` → `currency-frame.md`
+2. `lani/risk-framework/risk-decomposition.md` → `book-primitive.md` → `tranching.md` → `currency-frame.md`
 3. Layer docs in dependency order
 4. Existing material as updated

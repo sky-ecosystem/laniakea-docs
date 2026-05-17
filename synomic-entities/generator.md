@@ -62,7 +62,7 @@ Primes also originate Prime-scoped risk capital (**TEJRC**, **TISRC**) via their
 
 ## Reference Value
 
-For Growth Staking purposes, the Generator is valued at `(Generator Revenue × Actual P/E + ISRC Book Value) / Tokens Outstanding`, where Generator revenue (USDS fees, USDS spread, risk capital fees, USDS duration income; the Generator keeps 95%, with 5% pass-through to Sky Core) runs through the global P/E model and ISRC holdings are valued at par. See [`../growth-staking/growth-staking.md`](../growth-staking/growth-staking.md) §4.3 for the full formula and §2 for the Generator governance token's GF (2.5×).
+For Growth Staking purposes, the Generator is valued at `(Generator Revenue × Actual P/E + ISRC Book Value) / Tokens Outstanding`, where Generator revenue (USDS fees, USDS spread, risk capital fees, USDS SDR income; the Generator keeps 95%, with 5% pass-through to Sky Core) runs through the global P/E model and ISRC holdings are valued at par. See [`../growth-staking/growth-staking.md`](../growth-staking/growth-staking.md) §4.3 for the full formula and §2 for the Generator governance token's GF (2.5×).
 
 ---
 
@@ -78,7 +78,7 @@ For Growth Staking purposes, the Generator is valued at `(Generator Revenue × A
 
 ## Related
 
-- [`README.md`](laniakea-docs/synomic-entities/README.md) — Rank hierarchy and entity index
+- [`README.md`](lani/synomic-entities/README.md) — Rank hierarchy and entity index
 - [`prime.md`](prime.md) — Recipients of Generator credit lines
 - [`../smart-contracts/architecture-overview.md`](../smart-contracts/architecture-overview.md) — Generator-layer PAU
 - [`../smart-contracts/lcts.md`](../smart-contracts/lcts.md) — srUSDS via LCTS

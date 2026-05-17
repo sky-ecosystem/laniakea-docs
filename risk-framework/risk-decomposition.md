@@ -159,7 +159,7 @@ Each layer of the book stack covers different risks. The Riskbook layer handles 
 | `ascbook` (peg-defense holdings) | Capital | Capital | n/a (cash-equivalent) | The product (must hold) |
 | `tradingbook` (liquid FRTB-style) | Capital | Forced-loss | Hedged or rate-hedge capital | Forced-loss (FRTB captures it) |
 | `termbook` (tUSDS-matched, Prime holds YT) | Capital | **Covered** (held to par) | **Covered** (matched fixed/fixed) | **Covered** (no forced sale) |
-| `structbook` (matched against structural demand) | Capital | **Covered** (held to par) | Capital required (rate-hedge or v1 carve-out) | **Covered** (no forced sale) |
+| `structbook` (matched against structural demand) | Capital | **Covered** (held to par) | **Covered for SDR-matched P1 positions** | **Covered** (no forced sale) |
 | `hedgebook` (cross-position hedge groups) | Capital | Capital adjusted for hedge | Capital adjusted for hedge | Capital adjusted for hedge |
 | Unmatched leftover | Capital | Forced-loss | Forced-loss | Forced-loss |
 

@@ -16,7 +16,7 @@ For Synomic Entity theory, see [`../macrosynomics/synomic-entities.md`](../macro
 | **Governance tokens** | None |
 | **Growth-asset status** | Excluded from Growth Staking — see [`../growth-staking/growth-staking.md`](../growth-staking/growth-staking.md) |
 | **Creation** | By Core Council governance action (no Guardian Accord required, since rank-1) |
-| **Duration** | Indefinite (halo mode) or temporary, dissolving after resolution (busted prime/halo mode) |
+| **Term** | Indefinite (halo mode) or temporary, dissolving after resolution (busted prime/halo mode) |
 | **Function** | Operational vehicle for Core Council functions — managing legacy positions or wrapping a failed Prime/Halo |
 | **Dependencies** | None at rank-1; in busted prime/halo mode, takes over the wrapped entity's downstream tree |
 
@@ -39,7 +39,7 @@ This is the function previously covered by "Core Halos." The wrapper applies the
 
 Beyond legacy assets, halo mode is also a general-purpose mechanism for any operational need the Core Council identifies — bridge-side custody, Core-Council-funded experiments, temporary asset holders for cross-Prime coordination.
 
-Halo-mode Core Entities are indefinite in duration and sunset per-asset as positions migrate or are wound down.
+Halo-mode Core Entities have an indefinite term and sunset per-asset as positions migrate or are wound down.
 
 **Transition paths.** Core Entities in halo mode have two natural exits:
 

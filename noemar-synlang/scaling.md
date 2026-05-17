@@ -754,16 +754,15 @@ discovery in P2P systems.
 
 **j) Structural-demand scraper bandwidth.** Scrapers populating
 `&entity.generator.usge.structural-demand.scrapers` poll USDS, DAI,
-and sUSDS holder data to feed the Lindy duration model (per
-[`../risk-framework/duration-model.md`](../risk-framework/duration-model.md)).
+and sUSDS holder data to feed the Lindy SDR model (per
+[`../risk-framework/sdr-model.md`](../risk-framework/sdr-model.md)).
 Load profile is similar to chain-read calls — chain-protocol-bound inflow,
-periodic recomputation of per-bucket capacity. Phase 1 uses manual
-governance-set capacity; the live scraper architecture comes online
-when the data infrastructure is ready (tracked as USDS lot-age
-tracking in [`../risk-framework/duration-model.md`](../risk-framework/duration-model.md) Open questions).
-The output (`(structural-demand-capacity bucket-N <amount>)`) feeds
-the Primebook `structbook` matching at every Prime, so it's a hub atom
-read frequently — replicate per the pattern in §7.
+periodic recomputation of per-bucket capacity. Phase 1 uses the scraped
+lot-age surface, Lindy SDR, and SDR policy overlay to emit effective SDR
+bucket capacity. The output (`(effective-sdr-bucket-capacity bucket-N
+<amount> <epoch>)`) feeds the Generator `sdr-auction` body, whose
+`(sdr-allocation ...)` atoms are read by Primebook `structbook`, so these
+are hub atoms read frequently — replicate per the pattern in §7.
 
 **k) Per-pair FX stress profile load.** With the currency-frame
 distinction (per [`../risk-framework/currency-frame.md`](../risk-framework/currency-frame.md)),

@@ -1,7 +1,7 @@
 # Growth Staking
 
 **Status:** speculative — entire mechanism activates **post-Phase-1**. Phase 1 emits real-time ER per Prime; staking rewards are not yet distributed via synserv. P/E parameters and GF values are sudo-set at the activation boundary.
-**Canonical home:** `laniakea-docs/growth-staking/`
+**Canonical home:** `lani/growth-staking/`
 
 ---
 
@@ -79,7 +79,7 @@ Actual P/E   = Center − Band + (score / 100) × (2 × Band)
 | **Halo** | `(Capital Reserves + Earnings × P/E) / Tokens` | Early-stage Halos qualify on observable active deployment, even pre-earnings |
 | **TEJRC** | On-chain redemption value | Directly backed at known ratio — no P/E |
 
-**SKY Core revenue lines** (standard P/E): USDS spread, USDS risk-capital fees, **stUSDS spread** (10% of borrower spread), Entity Upkeep (50 bps/yr — `accounting/entity-fees.md`), Guardian accord fees, USDS duration income, **5% of Generator revenue**. **SKY Special revenue:** entity creation fee token sales (5% of newly issued tokens).
+**SKY Core revenue lines** (standard P/E): USDS spread, USDS risk-capital fees, **stUSDS spread** (10% of borrower spread), Entity Upkeep (50 bps/yr — `accounting/entity-fees.md`), Guardian accord fees, USDS SDR income, **5% of Generator revenue**. **SKY Special revenue:** entity creation fee token sales (5% of newly issued tokens).
 
 ### 4.3 Synomic Entity token floor (asymmetric)
 

@@ -22,33 +22,15 @@ ASC is the sum of:
 
 ### Resting ASC (immediate buy support)
 
-Resting ASC must provide buy support at a price of at least **0.999 USD per USDS** (10 bps downside spread).
+Resting ASC must provide buy support at a price of at least **0.999 USD per USDS** (10 bps downside spread). To avoid “paper liquidity”: resting ASC must correspond to a **directly and atomically executable** bid/quote (onchain DEX position, live CEX orderbook order/quote) — or to a verifiable arrangement (including offchain market-making) that guarantees buy support within the allowed spread.
 
-To avoid “paper liquidity”, the working implementation assumption for Laniakea is:
-- Resting ASC must correspond to a **directly and atomically executable** bid/quote (e.g., an onchain DEX position or a live CEX orderbook order/quote), **or** to a verifiable arrangement (including offchain market-making) that guarantees such buy support within the allowed spread.
-
-**Current calculation inputs (implementation snapshot):**
-- USDC in LitePSM
-- USDC in PSM3 on Base/Arbitrum/Unichain/Optimism
-- Cash stablecoins in Curve paired with USDS
-- USDC in GUNI pools (0.01%, 0.05%)
-- Cash stablecoins in Uniswap paired with USDS
+**Current calculation inputs (implementation snapshot):** USDC in LitePSM; USDC in PSM3 on Base/Arbitrum/Unichain/Optimism; cash stablecoins in Curve paired with USDS; USDC in GUNI pools (0.01%, 0.05%); cash stablecoins in Uniswap paired with USDS.
 
 ### Latent ASC (convertible within 15 minutes)
 
-Latent ASC consists of cash stablecoins that do not qualify as resting ASC but can be converted into resting ASC.
+Latent ASC = cash stablecoins that don't qualify as resting but can be converted into resting ASC. To qualify: (1) verifiable onchain or through reputable APIs/oracles; (2) convertible into resting ASC within **15 minutes** under normal market conditions; (3) convert via a fully automated process that triggers when ASC falls below specified levels. **Cap:** ≤ **25%** of total ASC.
 
-To qualify as latent ASC, assets must:
-1. Be verifiable onchain or through reputable APIs/oracles
-2. Be convertible into resting ASC within **15 minutes** under normal market conditions
-3. Convert via a fully automated process that triggers when ASC falls below specified levels
-
-**Cap:** latent ASC may not exceed **25%** of total ASC.
-
-**Current calculation inputs (implementation snapshot):**
-- Cash stablecoins in Curve/Uniswap not paired with USDS
-- Cash stablecoins in SparkLend, Aave, Morpho
-- Cash stablecoins held in a Prime ALM Proxy
+**Current calculation inputs (implementation snapshot):** cash stablecoins in Curve/Uniswap not paired with USDS; cash stablecoins in SparkLend, Aave, Morpho; cash stablecoins held in a Prime ALM Proxy.
 
 ## Demand Absorption Buffer (DAB)
 
@@ -95,31 +77,25 @@ When ALM obligations are rented, the associated obligations for **ASC, DAB, and 
 
 ## Transition away from the PSM
 
-ASC is designed to become the primary liquidity management system, replacing Sky Core’s legacy ALM mechanisms over time.
+ASC is designed to become the primary liquidity-management layer, replacing Sky Core's legacy ALM mechanisms over time.
 
-Transitional state (legacy still active):
-- Sky Core manages and controls the PSM while ASC infrastructure is being fully deployed and operationalized.
-- Control of the LitePSM is being transitioned to Grove; post-transition, Grove manages the LitePSM as an ASC asset under ALM rules.
+**Transitional state** (legacy still active): Sky Core manages and controls the PSM while ASC infrastructure is deployed. Control of the LitePSM is being transitioned to Grove; post-transition, Grove manages the LitePSM as an ASC asset under ALM rules.
 
 ### PSM as an ASC asset (Grove operations)
 
-In the transition period, the PSM functions as a large, simple ASC reservoir and backstop:
-- Grove is expected to assume operational/accounting ownership of the PSM (with Sky retaining active oversight until full ASC implementation).
-- Grove pays the **Base Rate** on assets held in the PSM; if there are no better alternatives available, Grove can use the PSM to meet ASC requirements.
-- USDC in the PSM is treated as uniquely capital-efficient for peg liquidity (in current terms: no capital requirement vs alternative deployments that may require risk capital).
-- If better ASC options exist (e.g., Uniswap/Curve positions that still qualify), Grove can reduce or empty the PSM; if ASC obligations rise materially, PSM usage can increase.
-- The protocol can support “ASC point” economics where other actors rent/offer ASC capacity (conceptually aligned with ALM renting).
+In the transition period the PSM functions as a large, simple ASC reservoir and backstop:
+- Grove assumes operational/accounting ownership (Sky retains oversight until full ASC implementation).
+- Grove pays the **Base Rate** on PSM assets; can use PSM to meet ASC requirements if no better alternatives exist.
+- USDC in the PSM is uniquely capital-efficient for peg liquidity (no capital requirement vs alternative deployments).
+- Grove can reduce/empty the PSM if better ASC options exist (Uniswap/Curve positions); usage can increase if ASC obligations rise materially.
+- Protocol can support "ASC point" economics where other actors rent/offer ASC capacity (aligns with ALM renting).
 
-Target state (Laniakea intent):
-- ASC becomes the comprehensive ALM layer across Primes.
-- The legacy PSM becomes an implementation detail of Grove’s liquidity operations (potentially represented as a Grove-owned Halo/Unit), rather than the protocol’s primary peg mechanism.
+**Target state** (Laniakea intent): ASC becomes the comprehensive ALM layer across Primes; the legacy PSM becomes an implementation detail of Grove's liquidity operations (potentially a Grove-owned Halo/Unit), not the protocol's primary peg mechanism.
 
 ## Where this fits in the Risk Framework
 
 - **Parallel track to portfolio risk capital.** ASC/DAB constrain liquidity posture and peg-defense readiness; they are complementary to risk-capital requirements (CRR/RRC), not folded into them.
-- **ASC-eligible holdings route to `ascbook`** — the Primebook sub-book whose product *is* immediate liquidity. See [`../risk-framework/primebook-composition.md`](../risk-framework/primebook-composition.md) §3 for the sub-book taxonomy. Eligibility is the structural prerequisite: deep peg-defense liquidity, < 15min convertibility.
-- **Concentration and portfolio-risk controls** live in [`../risk-framework/correlation-framework.md`](../risk-framework/correlation-framework.md) and the capital modules; ASC determines "how fast can we buy" during peg defense, not how much capital buffers credit/market losses.
+- **ASC-eligible holdings route to `ascbook`** — the Primebook sub-book whose product *is* immediate liquidity. Sub-book taxonomy in [`../roadstart/risk-framework.md`](../roadstart/risk-framework.md) "Sub-book taxonomy + coverage matrix". Eligibility prerequisites: deep peg-defense liquidity, < 15min convertibility.
+- **Concentration and portfolio-risk controls** are a separate track from ASC — see [`../roadstart/risk-framework.md`](../roadstart/risk-framework.md) "Concentration framework". ASC determines "how fast can we buy" during peg defense, not how much capital buffers credit/market losses.
 
-See also:
-- Whitepaper summary: `../inactive/archive/whitepaper/appendix-a-protocol-features.md`
-This document is derived from the Sky Atlas Stability Scope (ALM / ASC / DAB sections).
+Derived from the Sky Atlas Stability Scope (ALM / ASC / DAB sections).

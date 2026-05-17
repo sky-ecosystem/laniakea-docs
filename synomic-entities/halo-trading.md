@@ -232,7 +232,7 @@ All flows through PAU rate limits: Prime → Halo allocation (SORL-governed); AM
 
 ## Launching a Trading Halo Unit
 
-| Step | Duration |
+| Step | Time / Window |
 |---|---|
 | 1. Parameter definition (asset pair, spread, position limits, settlement cycle) | 1 week |
 | 2. Verify Configurator onboarding (asset has approved inits) | — |

@@ -330,7 +330,7 @@ Once Q17 and items B/C/D are resolved:
 
 **Phase 1: Core conceptual docs (highest priority)**
 
-1. Write `risk-decomposition.md` (laniakea-docs/risk-framework/) — the conceptual root. Includes:
+1. Write `risk-decomposition.md` (lani/risk-framework/) — the conceptual root. Includes:
    - Five risk types
    - Teleological grounding (continue/liquidate decision)
    - Risk-types × layer × sub-book-coverage matrix

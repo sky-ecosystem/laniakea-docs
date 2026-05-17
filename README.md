@@ -7,7 +7,7 @@ Technical documentation for Sky Ecosystem and the Laniakea upgrade — a compreh
 Laniakea is Sky's infrastructure for **automated capital deployment at scale**. It introduces:
 
 - **Unified capital flow architecture** — Capital flows from Sky Core → Primes → Halos → end investments, with every flow rate-limited
-- **Scientific risk management** — Basel III-inspired framework determining capital requirements based on asset duration and forced realization probability
+- **Scientific risk management** — Basel III-inspired framework determining capital requirements based on asset maturity / SPTP and forced realization probability
 - **Autonomous operation** — Sentinel network operates infrastructure within governance-defined bounds, enabling 99% automation
 - **Daily settlement cycles** — Standardized daily cycles for auctions, distributions, and LCTS token settlement (lock 13:00 UTC, settle by 16:00 UTC)
 
@@ -25,8 +25,8 @@ This repo is currently focused on **synomics** — the study of the Synome and t
 | [`neurosymbolic/`](neurosymbolic/) | Practical cognition — live graph context, context manipulation, attention allocation, hardware-aware cognition |
 | [`synoteleonomics/`](synoteleonomics/) | Individual teleonomes — what they are, economics, memory, resilience, binding, autonomy paths, recipe marketplace |
 | [`noemar-synlang/`](noemar-synlang/) | Noemar runtime + synlang technical reference — language reference, topology, runtime architecture, boot model, scaling, code patterns |
-| [`risk-framework/`](risk-framework/) | Capital framework — duration model, asset classification, capital formulas, sentinel integration |
-| [`accounting/`](accounting/) | Funding side — settlement cycle, capital stack (JRC/EJRC/SRC/MDC, ingression, Genesis Capital), isolated deployment, duration allocation, legacy transition |
+| [`risk-framework/`](risk-framework/) | Capital framework — SDR model, asset classification, capital formulas, sentinel integration |
+| [`accounting/`](accounting/) | Funding side — settlement cycle, capital stack (JRC/EJRC/SRC/MDC, ingression, Genesis Capital), isolated deployment, SDR auction, legacy transition |
 | [`smart-contracts/`](smart-contracts/) | On-chain contract architecture — PAU pattern, Configurator Unit, LCTS, NFATS, Diamond PAU, Yield Splitter, rate-limit attack analysis |
 | [`sentinel/`](sentinel/) | Sentinel Network — Baseline / Stream / Warden / Principal formations; TTS-priced ORC; Streaming Accord (absorbed former `trading/`) |
 | [`synomic-entities/`](synomic-entities/) | Per-type operational specs — Prime, Generator, Guardian (Ozone), Core Entity, Oracle / Sequencer / Pylon Entities, Folio, Halo (Portfolio / Term / Trading / Identity Network) |

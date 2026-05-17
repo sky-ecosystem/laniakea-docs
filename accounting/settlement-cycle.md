@@ -1,16 +1,5 @@
 # Settlement Cycle
 
-**Status:** Draft (synlang-native rewrite)
-**Last Updated:** 2026-05-07
-
----
-
-## TL;DR
-
-Synserv runs a heartbeat that continuously derives **real-time ER per Prime** in synlang. At each settlement boundary (a governance fact: monthly in Phase 1, daily from Phase 3+), settlement closure runs as synart-resolved code: per-Prime net amounts are computed in parallel against each Prime's entart subtree (max debt fees − idle reimbursement − sUSDS spread profit − Sky Direct shortfall + breach penalty + synart resource fee), then a Phase 2 global aggregation sums everything into `&core.settlement` (TMF waterfall: treasury, ecosystem, etc.). The synlang shape doesn't change with cadence — only the epoch length and operational automation level do.
-
----
-
 ## 1. The settlement architecture
 
 Settlement is a property of the synserv heartbeat plus an epoch-boundary closure pass. Three things run together:
@@ -22,8 +11,6 @@ Settlement is a property of the synserv heartbeat plus an epoch-boundary closure
 | **Global aggregation** | After all per-Prime closures confirm | `&core.settlement` |
 
 The canonical synserv loop is `&core.loop.synserv`. It evaluates the heartbeat body — driving all derived state and emitting `(prime-er $prime $value $timestamp)` atoms continuously — and at the epoch boundary runs the closure rules that reduce the epoch's event log into per-Prime net amounts. The two-phase pattern (parallel per-Prime → sequential global aggregation) follows from data dependency: per-Prime computations are independent; aggregation needs all per-Prime outputs.
-
-This doc is the canonical home for the two-phase settlement closure, the cycle gantt, and the rolling two-epoch retention model.
 
 ---
 
@@ -116,7 +103,7 @@ Positive net = Prime owes; negative = Prime has profit. The result is written in
 
 ## 3. Real-time ER emission
 
-The heartbeat doesn't wait for an epoch boundary to publish ER. Per `roadmap/phase-1-spaces.md`, synserv emits `(prime-er $prime $value $timestamp)` continuously per heartbeat:
+The heartbeat doesn't wait for an epoch boundary to publish ER. Per [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md), synserv emits `(prime-er $prime $value $timestamp)` continuously per heartbeat:
 
 ```
 synserv heartbeat (evaluating &core.loop.synserv)
@@ -234,21 +221,21 @@ The penalty rate comes from `&core.framework.fee`. Penalty atoms feed Step 5 (`e
 
 In Phase 1, breach detection runs in synlang on the real-time ER stream; settlement actions remain manual. From Phase 2 onward, settlement closure writes a settlement record that Prime beacons execute on-chain; persistent late payment escalates via cert/auth chain (revoke auth atom, governance review).
 
-For the worked example (one Prime, one breach event, full closure), see [`noemar-synlang/settlement-cycle-example.md`](../noemar-synlang/settlement-cycle-example.md).
+For the worked example (one Prime, one breach event, full closure), see [`../noemar-synlang/settlement-cycle-example.md`](../noemar-synlang/settlement-cycle-example.md).
 
 ---
 
-## 7. OSRC and Duration submission flow
+## 7. OSRC and SDR submission flow
 
-OSRC and Duration capacity allocation feed into the same daily cadence (Phase 3+). Per the Phase 9+ design:
+OSRC and SDR capacity allocation feed into the same daily cadence (Phase 3+). Per the Phase 9+ design:
 - OSRC auctions (sealed-bid, uniform-price, daily) allocate srUSDS-backed capacity to Primes.
-- Duration auctions (sealed-bid, uniform-price, multi-epoch reservations allowed) allocate structural-demand-matching capacity to Primes.
+- SDR auctions (sealed-bid, uniform-price, multi-epoch reservations allowed) allocate structural-demand-matching capacity to Primes.
 
-Both run as **high-authority action beacons** submitting allocation atoms to the Generator's `&entity.generator.usge.structural-demand.auction` Space. Matching is synart-resolved code — not a separate beacon class.
+Both run as **high-authority action beacons** submitting allocation atoms to Generator auction Spaces (`&entity.generator.usge.sdr-auction` for SDR, `&entity.generator.usge.osrc-auction` once OSRC is added). Matching is synart-resolved code — not a separate beacon class.
 
-In Phase 1 the auction is a sudo-set "fake auction" — governance writes per-Prime per-bucket allocations directly. The architecture is the same; the bid-matching code simply isn't invoked. See [`duration-allocation.md`](duration-allocation.md) for full design and Phase 1 carve-out.
+In Phase 1 the `sdr-auction` body is a synserv-triggered ownership-weighted temporary SDR auction. It writes the same `(sdr-allocation $prime $bucket $amount $epoch)` atoms that later real SDR auctions write; the bid-matching code simply is not invoked. See [`sdr-auction.md`](sdr-auction.md) for full design and Phase 1 carve-out.
 
-Auction submission is an `auction-{x}` relay-class beacon (per `macrosynomics/beacon-framework.md`). It submits allocation atoms; the matching engine itself is synserv-run code.
+Auction submission is an `auction-{x}` relay-class beacon (per [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md)). It submits allocation atoms; the matching engine itself is synserv-run code.
 
 ---
 
@@ -268,7 +255,7 @@ A Prime that fails to settle on time:
 - Persistent lateness escalates via the cert/auth chain — revoke the offending beacon's auth atoms, re-cert from above, ultimately legal recourse via the Guardian.
 - All escalation events are append-only synart history pruned at the next settlement; serious breaches are written to a settlement-tier atom or external archive before pruning.
 
-Failure modes (replication staleness, hot-spotting, partitions) live in [`noemar-synlang/scaling.md`](../noemar-synlang/scaling.md).
+Failure modes (replication staleness, hot-spotting, partitions) live in [`../noemar-synlang/scaling.md`](../noemar-synlang/scaling.md).
 
 ---
 
@@ -321,29 +308,5 @@ The fee enters Step 5 (`epoch-net-owed`) like any other amount the Prime owes. P
 - Penalty rate calibration for daily cadence (Phase 3+)
 - Settlement cadence sudo-set in `&core.framework.fee` — exact phase-boundary timing tied to baseline-relay (per-Prime `baseline-{prime}`) deployment readiness
 - Bid modification policy (can a Prime cancel a bid before lock? — Phase 9+ auction question)
-- Reservation duration limits in epochs (Phase 9+ Duration auction)
+- Reservation term limits in epochs (Phase 9+ SDR auction)
 - Emergency procedures for systemic settlement failure (network outage, oracle compromise) — handled by failover (`canonical-synserv-runner` reassignment per `roadmap/roadmap-ideas.md`) plus mature-state sudo escape hatch
-
----
-
-## File map
-
-| Doc | Relationship |
-|---|---|
-| [`README.md`](laniakea-docs/accounting/README.md) | Accounting directory index |
-| [`capital-stack.md`](capital-stack.md) | TRC funding side; settlement Step 1 reads Genbook unit notional set up here |
-| [`duration-allocation.md`](duration-allocation.md) | OSRC + Duration auctions feeding the per-epoch capacity that settlement consumes |
-| [`../risk-framework/capital-formula.md`](../risk-framework/capital-formula.md) | TRRC computation that ER divides into; Step 5 of the per-Prime closure consumes ER samples derived against TRRC |
-| [`../noemar-synlang/settlement-cycle-example.md`](../noemar-synlang/settlement-cycle-example.md) | Worked synlang ER → breach → penalty trace for one Prime over one epoch |
-| [`../noemar-synlang/listener-loops.md`](../noemar-synlang/listener-loops.md) | In-space calculation pattern (synserv-run code, not a beacon class) |
-| [`../noemar-synlang/runtime.md`](../noemar-synlang/runtime.md) | Gate primitive, heartbeat shape, auth model |
-| [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) | Two-tier authority + I/O role; §11 legacy-name glossary |
-| [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) | Phase 1 ER pipeline, structural-demand auction Space, real-time ER emission |
-| [`../growth-staking/growth-staking.md`](../growth-staking/growth-staking.md) | Growth Staking reward / forfeiture distribution path through `&core.settlement` (§9b) |
-| [`../noemar-synlang/scaling.md`](../noemar-synlang/scaling.md) | Replication, partial sync, hot-spotting, partitions |
-
----
-
-## One-line summary
-
-**Settlement is the synserv heartbeat publishing real-time ER per Prime continuously, plus an epoch-boundary closure pass that runs the five-step per-Prime computation in synlang (debt fees − idle reimbursement − sUSDS spread profit − Sky Direct shortfall + breach penalty + synart resource fee) in parallel across Primes, then aggregates into `&core.settlement` (TMF waterfall) — with cadence as a governance fact (monthly Phase 1 → daily Phase 3+) the synlang doesn't care about.**

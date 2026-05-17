@@ -1,106 +1,155 @@
 # Attestor Atom Schema — Custodial-Crypto
 
-**Status:** Resolved for the Phase 1 `custodial-crypto` risk class (2026-05-14). Resolves [`p1-design-followups.md`](p1-design-followups.md) §1.1 for this risk class only.
+**Status:** Resolved for the Phase 1 `custodial-crypto` risk class (updated 2026-05-17).
 
-**Scope:** Custodial-crypto riskbooks (and via them, all exobooks bundled in those riskbooks). Opaque-RWA risk classes (legacy HVB-style, no on-chain visibility) need a richer numeric attestation schema and are out of scope here — not a Phase 1 risk class.
+**Scope:** Custodial-crypto borrower admission, riskbook admission, and individual exobook term verification. Opaque-RWA risk classes (legacy HVB-style, no on-chain visibility) need a richer numeric attestation schema and are out of scope here.
 
 ---
 
-## 1. The reframe — why the attestation is boolean
+## 1. The reframe
 
 For custodial-crypto, every quantitative CRR input is **insyn**:
 
 | Input | Source |
 |---|---|
-| Collateral asset + amount | `chain-read` on the borrower's visible on-chain account |
-| Debt outstanding, LT, liquidation bonus, derived LTV | `chain-read` on the loan contract |
-| Price, order-book depth, volatility history | `market-data-beacon` (Crypto Majors Oracle) |
+| Collateral asset + amount | `chain-read` on the borrower's collateral account |
+| Debt outstanding, LT, liquidation bonus, derived LTV | `chain-read` on the loan/configurator contracts |
+| Price, liquidity, volatility, impact, liquidation-overhang history | Crypto Majors market-memory oracle |
 
-The borrower's crypto holdings sit in a visible on-chain account; the loan terms are on-chain. Nothing quantitative needs an attestor.
+The attestor is therefore not an oracle of loan facts. It is a legal / operational / credit underwriter of what the chain cannot show — its output is admission/term verification: borrower setup (disbursement + collateral account, custody, legal framework) acceptable, Configurator / aBEAM whitelist path completed, riskbook shared structure underwritten, exobook maturity / TTM and cash-conversion terms enforceable.
 
-So the attestor is **not** an oracle of loan facts. It is a **legal / operational / credit underwriter** of the things the chain cannot show — and its output is **boolean**. It signs that:
+No `assets-attested`, no `debt-outstanding`, no 24h market refresh — those fields are insyn or irrelevant to the attestor cadence.
 
-- the legal structure of the deal is sound and enforceable,
-- the borrower is a real company in normal credit standing,
-- the custodian's licensing / insurance / regulatory status is current.
+---
 
-The original `phase-1-spaces.md` "Attestation model" sketch carried `assets-attested`, `debt-outstanding`, and a 24h `refresh-due`. All three are wrong-headed under this reframe: the first two are now insyn, and the cadence is credit-review-paced, not market-paced. This schema drops them.
+## 2. Account Vocabulary
 
-## 2. Where the attestation sits
+The durable pair is:
 
-Custodial-crypto has two legs; the attestation lives on the first.
+| Term | Meaning |
+|---|---|
+| **disbursement account** | Borrower-controlled Ethereum address that receives loan principal from the Halo PAU. |
+| **collateral account** | Linked account the exobook tracks and expects to be able to liquidate against; attestors verify legal claim, custody setup, and account binding. |
 
-**Leg 1 — Borrower ↔ Halo (no instrument).** The Halo PAU sends USDC/USDT out to the borrower. The only record is synome book atoms: the exobook holds the collateral reference (the borrower's on-chain account, `chain-read`) as its asset side, the disbursed principal as the senior tranche (liability), and borrower equity as the junior tranche. The riskbook holds that senior tranche as its asset (cross-book duality on a plain tranche atom — no ERC-721). **The `riskbook-attestation` atom lives in the riskbook Space and gates whether the riskbook (and all exobooks bundled in it) rolls up.** One attestation per riskbook — the attestor signs the shared structural facts (legal framework, borrower(s), custodian) covering every exobook in that riskbook. Construction of a riskbook around homogeneous structural facts is the v1 discipline that makes this scoping work.
+Disbursement-account onboarding matches onboarding into the Configurator smart contract. It is not a loose address field.
 
-**Leg 2 — Halo ↔ Prime (NFAT instrument).** The Prime deploys capital into the Halo; `record-unit` mints an NFAT (= Halo Unit) into the Prime's PAU. The NFAT is the liability of the halobook and the asset of the primebook. This leg is downstream of the attestation and unaffected by it.
+---
 
-Rollup path: `exobook → riskbook → halobook → (NFAT) → primebook → ER`.
+## 3. Borrower Admission
 
-## 3. Schema
+Borrower admission lives at the per-halo risk-class level (class-specific permission to do custodial-crypto business with this borrower). The Halo relay handles pBEAM/cBEAM PAU execution but cannot whitelist a new borrower alone — Halo govops coordinates with Core Council so the aBEAM/configurator path admits the borrower/account setup, then the class-accordant attestor posts the first-contact attestation.
+
+```metta
+;; in &entity.halo.{halo-id}.custodial-crypto
+(custodial-borrower-admission {borrower-id}
+   (attestor              {attest-data-{halo-id}-id})
+   (timestamp             T)
+   (refresh-due           T+{borrower-review-cadence})
+   (status                ok)                    ; ok | watch | blocked
+   (disbursement-account  ethereum {addr})
+   (collateral-account    ethereum {addr})
+   (claims
+      (configurator-whitelist-current true)
+      (legal-framework-enforceable    true)
+      (account-binding-valid          true)
+      (custody-setup-current          true)
+      (borrower-credit-standing       normal))   ; normal | watch | impaired
+   (scope-ref             {borrower-setup-hash})
+   (sig                   "..."))
+```
+
+If borrower admission is missing, stale, blocked, or scope-mismatched, no exobook for that borrower can roll up.
+
+---
+
+## 4. Riskbook / Exobook Attestation
+
+The riskbook attestation gates shared legal / custody / credit structure for a homogeneous bundle — it does not certify every loan-level variable by implication. v1 discipline: construct riskbooks around homogeneous structural facts, then attach per-exobook attestations for variables that differ per loan. The main P1 exobook-level fact is maturity / TTM; the risk form uses certified term only after the funding transaction confirms.
 
 ```metta
 ;; in &entity.halo.{halo-id}.riskbook.{rbk-id}
 (riskbook-attestation {rbk-id}
-   (attestor      {attest-data-{halo-id}-id})  ; per-halo attestor; cert chain in &core.registry.beacon
+   (attestor      {attest-data-{halo-id}-id})
    (timestamp     T)
-   (refresh-due   T+{review-cadence})          ; credit-review paced; governance-set per halo class
-   (underwriting  pass)                        ; pass | fail — gates the riskbook (and all exobooks under it)
-   (claims                                     ; itemized liability surface; slashing attaches per claim
-      (legal-structure-enforceable  true)      ; loan docs valid + enforceable; governing law sound
-      (borrower-credit-standing     normal)    ; normal | watch | impaired
-      (custodian-compliance-current true))     ; custodian licensing / insurance / regulatory status current
-   (scope-ref     {structural-config-hash})    ; content hash over the riskbook's structural config (exobook composition + per-exobook loan terms, borrower(s), custodian, collateral-account binding, collateral asset type)
+   (refresh-due   T+{review-cadence})
+   (underwriting  pass)                        ; pass | fail
+   (claims
+      (legal-structure-enforceable  true)
+      (borrower-credit-standing     normal)
+      (custodian-compliance-current true))
+   (scope-ref     {structural-config-hash})
    (sig           "..."))
 ```
 
-## 4. Field semantics
+```metta
+;; in &entity.halo.{halo-id}.exobook.{loan-id}
+(exobook-term-attestation {loan-id}
+   (attestor      {attest-data-{halo-id}-id})
+   (timestamp     T)
+   (refresh-due   T+{review-cadence})
+   (underwriting  pass)                        ; pass | fail
+   (claims
+      (term-enforceable           true)
+      (maturity-T                 {maturity-T})
+      (ttm-days-at-funding        {ttm-days})
+      (cash-conversion-path-valid true))
+   (scope-ref     {exobook-term-config-hash})
+   (sig           "..."))
+```
 
-- **`underwriting`** — the admission gate. `pass` admits the riskbook (and all exobooks under it) to rollup; `fail` excludes the riskbook (default-deny).
-- **`claims`** — the discrete facts the attestor signs under liability, itemized so slashing magnitude can be calibrated per claim (§7). `legal-structure-enforceable` and `custodian-compliance-current` are boolean. `borrower-credit-standing` is three-state: `normal` is unremarkable; `watch` and `impaired` are signals the risk form may consume (§9) — `watch` as a CRR uplift, `impaired` as exclusion. This is the one field beyond pure-boolean, and it is there because borrower creditworthiness is genuinely part of what the attestor underwrites.
-- **`scope-ref`** — content hash over the riskbook's *structural* config (its exobook composition, plus per-exobook loan terms, borrower identity, custodian, collateral-account binding, collateral asset type). It binds the boolean to a specific configuration: "I underwrote *this*." A change that moves outside the underwritten structural config forces re-attestation; market state (price, scheduled amortization, LTV drift) does not. Adding or removing an exobook in the riskbook also forces re-attestation. The exact set of structural predicates is the surviving open sub-question (§8).
-- **`refresh-due`** — see §5.
-- No `assets-attested`, no `debt-outstanding` — those are insyn (`chain-read`), not attested.
-
-## 5. Refresh cadence
-
-Credit-review-paced, not market-paced. The attestor underwrites slow-moving facts (legal structure, borrower credit, custodian compliance); none of them move with price. `review-cadence` is governance-set per halo class — indicatively on the order of a quarter, definitely not the 24h the original sketch carried. A single cadence per attestation atom in v1; per-claim cadences (e.g. a faster touch on `borrower-credit-standing`) are a possible later refinement, deferred.
-
-## 6. Default-deny gate
-
-Consistent with v1-principle #10. A riskbook does **not** roll up (and neither do any of its exobooks) if its attestation is:
-
-- `(underwriting fail)`, or
-- stale — `now > refresh-due`, or
-- missing.
-
-In any of these cases the risk form excludes the riskbook's positions and the Prime's structbook cannot account for them. This is the integrity discipline that keeps attestors honest and prevents stale legal/credit facts from poisoning the rollup.
-
-## 7. Slashing surface
-
-The `claims` block *is* the slashing surface. The synome cannot verify these facts directly — that is the whole point of the attestor — so slashing is reactive: if a position sours and post-mortem shows a claim was false at attestation time (legal structure unenforceable, borrower already impaired, custodian insurance lapsed), the attestor is slashed. Itemizing the claims lets slashing magnitude scale per claim. The magnitudes themselves are not set here — they belong to the Oracle Entity stub-spec (clean-todo Pass B).
-
-## 8. Open sub-question (surviving)
-
-**`scope-ref` granularity.** The *principle* is settled — `scope-ref` covers structural configuration, not market state. What remains open is the exact list of riskbook + exobook atom predicates that count as "structural" (and therefore re-attestation-forcing). Candidate set: riskbook composition (which exobooks are bundled), plus per-exobook loan terms (LT, liquidation bonus, maturity, governing law), borrower identity, custodian identity, collateral-account binding, collateral asset type. Forcing trigger: building the v1 attestor.
-
-The privacy-bucket question (how to expose loan-level data in aggregate without revealing individual positions) **largely dissolves** for custodial-crypto: the boolean attestation carries no loan-level numbers, so there is nothing to bucket. Privacy is automatic.
-
-## 9. Downstream consequences
-
-**§1.2 — risk-form signature.** The attestation is an **admission gate, not a data source**. The risk form's inputs are `chain-read` (collateral, debt, terms) + `market-data` (price, liquidity, vol) + the boolean gate. The risk form never reads numbers *out of* the attestation; it only checks `underwriting = pass` and may branch on `borrower-credit-standing`.
-
-**§1.3 — CORE integration.** CORE's inputs (LTV, LT, liquidation bonus, collateral asset, borrow value, order-book depth, price history, HHI) are now **entirely insyn** — `chain-read` + `market-data`, zero attestor dependency. The integration question collapses to purely "where does CORE's math run" (A integrate / B proxy / C rebuild), not "how does CORE get its inputs."
-
-**§1.4 — atom-level walkthrough.** The trace's first step is the boolean gate check on each riskbook before any quantitative rollup of its exobooks.
+`scope-ref` binds the riskbook attestation to shared structural config: borrower identity, disbursement/collateral accounts, custodian, collateral asset type, and legal setup. `exobook-term-attestation.scope-ref` binds the per-exobook term, maturity, funding path, and cash-conversion path. Market state is not part of either scope-ref.
 
 ---
 
-## File map
+## 5. Exobook Staged Lifecycle
+
+The exobook and exo units can be created before funds are sent. In this staged/pre-send state, the exobook contains reserved USDC / USDS / USDT still sitting in the Halo PAU. The money is operationally on the way out under the relay's strategy, but it is not yet a funded borrower exposure and not yet SDR-matchable term exposure.
+
+```text
+borrower admission ok
+  -> create exobook + exo units in staged/pre-send state
+  -> reserve PAU cash
+  -> term attestation verifies intended maturity / TTM
+  -> relay sends funds to disbursement account
+  -> funding tx confirms
+  -> exobook state becomes funded/active
+  -> certified maturity/TTM becomes official for risk and SDR matching
+```
+
+If the send or attestation fails, the reserve unwinds back to ordinary PAU cash.
+
+---
+
+## 6. Default-Deny Gate
+
+A borrower or riskbook does not roll up if its required attestation is:
+
+- `fail` / `blocked`,
+- stale (`now > refresh-due`),
+- missing,
+- or scope-mismatched.
+
+In those cases the risk form excludes the positions and the Prime's structbook cannot account for them. This keeps stale legal/credit facts from poisoning the rollup.
+
+---
+
+## 7. Slashing Surface
+
+The `claims` blocks are the slashing surface. The synome cannot directly verify these facts at the time of attestation, so slashing is reactive: if a position sours and post-mortem shows a claim was false at attestation time, the attestor is slashed. Itemizing the claims lets slashing magnitude scale per claim. Magnitudes belong to the Oracle Entity stub-spec, not this atom schema.
+
+---
+
+## 8. Downstream Consequences
+
+The risk form's inputs are `chain-read` + market-memory atoms + these boolean gates — it never reads loan numbers out of attestations. CORE (calibration/reference) is also entirely insyn-fed, zero attestor dependency. Binding P1 risk form: [`custodial-crypto-risk-form.md`](custodial-crypto-risk-form.md).
+
+---
+
+## File Map
 
 | Doc | Relationship |
 |---|---|
-| [`p1-design-followups.md`](p1-design-followups.md) | §1.1 is resolved by this doc (custodial-crypto risk class only) |
-| [`phase-1-spaces.md`](phase-1-spaces.md) | "Attestation model" section now carries the boolean schema (per the 2026-05-15 topology redesign); the attestor loop lives at `&entity.halo.{id}.custodial-crypto.attest-data` per the per-halo risk class structure |
-| [`phase-1-overview.md`](phase-1-overview.md) | Orientation entry point — the Attestor Oracle front anchors here |
-| [`../risk-framework/riskbook-layer.md`](../risk-framework/riskbook-layer.md) | §8 example risk form (the equation that consumes the boolean gate) |
-| [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) | `attest-data-beacon` class; the attestor's beacon |
+| [`phase-1-spaces.md`](phase-1-spaces.md) | Topology and worked P1 flow |
+| [`custodial-crypto-risk-form.md`](custodial-crypto-risk-form.md) | Risk form that consumes these gates |
+| [`market-memory-oracle.md`](market-memory-oracle.md) | Market inputs consumed by the risk form |
+| [`../roadstart/big-picture.md`](../roadstart/big-picture.md) | `attest-data-beacon` class — see "Beacon taxonomy" section |

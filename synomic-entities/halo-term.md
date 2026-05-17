@@ -1,31 +1,5 @@
 # Term Halo
 
-A Term Halo is a Standard Halo Class that uses **NFATS** (Non-Fungible Allocation Token Standard) for bespoke, individual capital deployment deals. Unlike Portfolio Halos (which use LCTS for pooled, fungible positions), Term Halos treat each deal as a distinct, non-fungible position with its own terms.
-
-For the Class / Book / Unit architecture, see [`halo-classes.md`](halo-classes.md). For the NFAT contract spec, see [`../smart-contracts/nfats.md`](../smart-contracts/nfats.md).
-
----
-
-## Term vs Portfolio
-
-| Aspect | Portfolio | Term |
-|---|---|---|
-| Token standard | LCTS (pooled, fungible) | NFATS (individual, non-fungible) |
-| Terms | Same for all participants | Bespoke per deal |
-| Beacon | `lcts-{halo}` | `nfat-{halo}` + `attest-data-{class}` |
-| Position type | Shares in a pool | Claim on specific deployment |
-| Transferability | Queue-based, generation-locked | NFT — transferable, optionally collateralizable |
-
-### When to use Term Halos
-
-- Asset manager partnerships with negotiated terms
-- Deals where each depositor has different yield, duration, conditions
-- Situations requiring transferable positions (secondary market, collateralization)
-- Regulated contexts where counterparty identity matters
-- Complex structured products with varying tranches
-
----
-
 ## Two-Beacon Pattern
 
 A Term Halo is operated by two high-authority beacons. Neither can act alone on deployment — the attestor must post an attestation before the Halo can transition a book.
@@ -65,13 +39,11 @@ ATTESTOR                          SYNOME                          HALO
     │                                │  ◀────────────────────────────│
 ```
 
-`attest-data-{class}` is an attest-data beacon (class `attest-data-beacon`, admin'd by an Oracle Entity); `nfat-{halo}` is a relay beacon (class `relay`). For the canonical taxonomy, see [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md).
-
 ---
 
 ## Class Structure
 
-A Term Halo organizes into Halo Classes — each Class is an **NFAT Facility** that defines a buybox of acceptable deal parameters. Within a Class, **Halo Units** (NFATs) represent the liability side and **Halo Books** the asset side.
+Each Halo Class is an **NFAT Facility** defining a buybox of acceptable deal parameters. Within a Class, **Halo Units** (NFATs) are the liability side and **Halo Books** the asset side.
 
 ```
 HALO CLASS: Senior Secured Facility
@@ -101,7 +73,7 @@ Units on different books: fully isolated
 
 | Parameter | Example |
 |---|---|
-| Duration range | 6-24 months |
+| Term range | 6-24 months |
 | Size range | 5M-100M per NFAT |
 | APY range | 8-15% |
 | Counterparties | Approved Primes only |
@@ -121,7 +93,7 @@ Any deal within the buybox can be executed by `nfat-{halo}` without additional g
 
 ## Book Lifecycle
 
-Books progress through phases with different transparency and capital requirements. The full lifecycle and CRR incentive structure is in [`halo-classes.md`](halo-classes.md). The phases for Term Halos:
+Full lifecycle and CRR incentive structure in [`halo-classes.md`](halo-classes.md). Term Halo phases:
 
 | Phase | Action | CRR Impact |
 |---|---|---|
@@ -218,7 +190,7 @@ Both operate PAUs and are rate-limited. A full operating setup (baseline-relay +
 
 ## Launching a Term Halo
 
-| Step | Duration |
+| Step | Time / Window |
 |---|---|
 | 1. Define buybox (parameter ranges, counterparty requirements, asset types) | 1-2 weeks |
 | 2. Legal framework (Halo Artifact, recourse) | 2-4 weeks (reuses templates) |
@@ -226,18 +198,3 @@ Both operate PAUs and are rate-limited. A full operating setup (baseline-relay +
 | 4. Configure beacons (`nfat-{halo}`, `attest-data-{class}`) | Days |
 | 5. Governance approval (Halo Artifact Edit) | ~1 week |
 | **Total** | **4-8 weeks** |
-
----
-
-## Related
-
-- [`halo-classes.md`](halo-classes.md) — Class / Book / Unit architecture; book lifecycle
-- [`halo-portfolio.md`](halo-portfolio.md) — LCTS-based alternative
-- [`halo-trading.md`](halo-trading.md) — AMM-based alternative
-- [`prime.md`](prime.md) — Primes that allocate to Term Halos
-- [`../smart-contracts/nfats.md`](../smart-contracts/nfats.md) — NFAT standard
-- [`../smart-contracts/architecture-overview.md`](../smart-contracts/architecture-overview.md) — PAU pattern
-- [`../sentinel/sentinel-network.md`](../sentinel/sentinel-network.md) — Operating-setup context (operate Primes that allocate to Term Halos)
-- [`../risk-framework/halobook-layer.md`](../risk-framework/halobook-layer.md) — Halobook in the risk framework
-- [`../risk-framework/asset-type-treatment.md`](../risk-framework/asset-type-treatment.md) — NFAT capital treatment
-- [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) — Beacon class taxonomy (relay / attest-data-beacon / etc.)

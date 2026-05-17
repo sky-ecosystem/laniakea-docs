@@ -22,7 +22,7 @@ Variable-rate yield tokens (sUSDS earning SSR, srUSDS earning SSR + risk premium
 - **Fixed-rate exposure**: Lock in a known yield for a known period (buy PT at a discount)
 - **Leveraged variable-rate exposure**: Amplify exposure to rate changes (buy YT)
 - **Rate speculation**: Express a view on whether rates will rise or fall
-- **Duration matching**: Match fixed liabilities with fixed-rate assets
+- **Fixed/fixed maturity matching**: Match fixed liabilities with fixed-rate assets
 
 Without a splitting mechanism, the only way to get fixed-rate exposure in the Sky ecosystem is through bespoke OTC deals. The Yield Splitter makes this self-service and composable.
 
@@ -535,7 +535,7 @@ A Prime's external junior risk capital holders want fixed-rate exposure.
 **Scenario:** Someone creates a bucket with a 10-year maturity.
 
 - Functionally identical to a shorter maturity, just with more time for yield to accrue
-- PT trades at a steeper discount (higher implied rate for longer duration)
+- PT trades at a steeper discount (higher implied rate for longer maturity)
 - No protocol-level restriction on maturity length
 
 ---

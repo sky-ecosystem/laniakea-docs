@@ -2,29 +2,37 @@
 
 **Status:** Draft (Phase 3 update, 2026-05-05)
 
-How positions consume duration capacity from `structbook` and `termbook`. Preserves the load-bearing insight from prior versions: **duration matching protects against credit spread risk, not interest rate risk**. Reframed as smooth optimization across sub-book treatment, not binary matched/unmatched flags.
+How positions consume SDR capacity from `structbook` and term capacity from `termbook`. Preserves the load-bearing insight from prior versions: hold-to-par matching protects against credit-spread risk; the P1 structural-demand resource (SDR) additionally covers rate exposure for the matched `structbook` portion by making the position hold to maturity against structural demand. Reframed as smooth optimization across sub-book treatment, not binary matched/unmatched flags.
 
 Companion to:
 - [`primebook-composition.md`](primebook-composition.md) — `termbook` and `structbook` are the optimization-shaped sub-books that consume matching
-- [`duration-model.md`](duration-model.md) — bucket capacity that matching draws from
-- [`asset-classification.md`](asset-classification.md) — SPTP split into credit-spread vs rate duration
+- [`sdr-model.md`](sdr-model.md) — bucket capacity that matching draws from
+- [`asset-classification.md`](asset-classification.md) — SPTP split into credit-spread pull-to-par horizon vs interest-rate duration
 - [`risk-decomposition.md`](risk-decomposition.md) — coverage matrix; what each sub-book covers
 
 ---
 
 ## TL;DR
 
-Duration matching is the mechanism by which a position's spread and rate risks become "covered by structure" rather than capital. The architectural placement:
+Hold-to-par matching is the mechanism by which a position's spread and rate risks become "covered by structure" rather than capital. The architectural placement:
 
 | Sub-book | Covers credit-spread? | Covers rate? | Liability matched against |
 |---|---|---|---|
 | `termbook` | Yes (held to par) | Yes (matched fixed/fixed) | tUSDS-issued YT (Yield Tokens) |
-| `structbook` | Yes (held to par) | No (rate-hedge required; Phase 1 carve-out per [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md)) | Structural USDS demand (Lindy + caps) |
+| `structbook` | Yes (held to par) | Yes for SDR-matched P1 positions; future forms may require explicit rate hedge if the liability match does not cover rate | Structural USDS demand (SDR) |
 | `tradingbook` | No (forced-loss applies) | No (rate-hedge or capital) | None — held for trading |
 
-The **credit-spread vs rate distinction** is foundational. Credit spreads are mean-reverting; rate shifts can be permanent. Matching protects against the first; the second requires hedging or rate-hedge capital.
+The **credit-spread vs rate distinction** is foundational. Credit spreads are mean-reverting; rate shifts can be permanent. The risk form still calculates rate-CRR. The P1 `structbook` treatment makes rate-CRR non-binding for the SDR-matched portion; unmatched portions still carry rate-CRR.
 
 Matching itself is **continuous**, not binary. The optimization-shaped sub-books (`structbook`, `termbook`, `hedgebook`) blend matched and unmatched portions smoothly as capacity shifts.
+
+In P1, total SDR capacity is produced in `&entity.generator.usge.structural-demand`: lot-age surface → Lindy SDR bucket capacity → SDR policy overlay → effective SDR bucket capacity. `structbook` reads current-epoch Prime SDR allocation atoms from `&entity.generator.usge.sdr-auction`:
+
+```metta
+(sdr-allocation $prime $bucket $amount $epoch)
+```
+
+That atom shape is the stable contract. The P1 ownership-weighted temporary SDR auction and later real auction/tug systems write the same shape, so `structbook` matching logic does not depend on allocation provenance. Previous epochs are historical; there is no carry-forward or durable reservation right in the P1 read path.
 
 ---
 
@@ -33,7 +41,7 @@ Matching itself is **continuous**, not binary. The optimization-shaped sub-books
 | § | Topic |
 |---|---|
 | 1 | Rate risk vs credit spread risk (the foundational distinction) |
-| 2 | Duration matching eligibility |
+| 2 | Matching eligibility |
 | 3 | Rate hedging requirement |
 | 4 | Smooth optimization (matched + unmatched blend) |
 | 5 | Termbook vs Structbook |
@@ -43,7 +51,7 @@ Matching itself is **continuous**, not binary. The optimization-shaped sub-books
 
 ## 1. Rate risk vs credit spread risk
 
-Duration matching protects against **credit spread risk**, not **interest rate risk**. This distinction is fundamental.
+Hold-to-par matching protects against **credit spread risk**, not **interest rate risk**. This distinction is fundamental.
 
 ### Why the distinction matters
 
@@ -87,28 +95,29 @@ Duration matching protects against **credit spread risk**, not **interest rate r
 
 ---
 
-## 2. Duration matching eligibility
+## 2. Matching eligibility
 
 For an asset to be eligible for matched treatment in `termbook` or `structbook`, it must satisfy **both** conditions:
 
-1. **Has stressed pull-to-par** (per [`asset-classification.md`](asset-classification.md) §3) ≤ matched liability tier duration
-2. **Is rate-neutral relative to SSR** (only required for `termbook`):
+1. **Has stressed pull-to-par** (per [`asset-classification.md`](asset-classification.md) §3) ≤ matched liability bucket tenor
+2. **Has a rate treatment**:
    - Asset is floating-rate (natural hedge), OR
    - Asset is hedged via swap/derivative, OR
-   - Prime holds rate-hedging capital for unhedged fixed-rate portion
+   - Prime holds rate-hedging capital for unhedged fixed-rate portion, OR
+   - In P1, the position is SDR-matched in `structbook`, which makes computed rate-CRR non-binding for the matched portion
 
 ```
 termbook-eligible = (Has SPTP) AND (Rate Neutral OR Rate Hedge Capital Held)
-structbook-eligible = (Has SPTP) AND (rate-hedge capital held)
+structbook-eligible = (Has SPTP) AND (SDR allocation available)
 ```
 
-`structbook` doesn't require rate neutrality (it's matched against variable-rate structural demand), so positions go there with rate-hedge capital separately accounted. V1 carves out the rate-hedge capital requirement for the test (resumed in v2+).
+The risk form always outputs rate-CRR. `structbook` does not delete the risk; it determines whether the rate-CRR is binding. In P1, SDR-matched portions treat rate, spread, and liquidity as covered by the liability match; default remains binding.
 
 ---
 
 ## 3. Rate hedging requirement
 
-All Prime fixed-rate exposure must be rate-hedged for `termbook` placement.
+All Prime fixed-rate exposure must have an explicit rate treatment. `termbook` requires rate neutrality or rate-hedge capital. `structbook` in P1 treats SDR-matched fixed-term exposure as rate-covered for the matched portion; unmatched exposure still requires rate capital.
 
 ### Methods
 
@@ -116,7 +125,7 @@ All Prime fixed-rate exposure must be rate-hedged for `termbook` placement.
 |---|---|---|
 | **Floating-rate assets** | Asset yield tracks market rates naturally | Preferred for CLOs (most are floating-rate) |
 | **Interest rate swaps** | Swap fixed receipts for floating | Convert fixed-rate bonds to floating exposure |
-| **Duration matching** | Match asset duration to liability duration (only works for `termbook` with tUSDS YT counterparty) | When tUSDS market exists |
+| **Fixed/fixed maturity matching** | Match fixed-rate asset maturity to fixed-rate liability maturity (only works for `termbook` with tUSDS YT counterparty) | When tUSDS market exists |
 | **Rate hedging capital** | Hold extra capital to cover expected rate loss | When hedging instruments unavailable or costly |
 
 ### Rate hedging capital calculation
@@ -124,11 +133,11 @@ All Prime fixed-rate exposure must be rate-hedged for `termbook` placement.
 If a Prime holds unhedged fixed-rate exposure, it must hold capital to cover the expected loss from rate movements:
 
 ```
-Rate Hedge Capital = Fixed Rate Exposure × Duration × Expected Rate Volatility × Confidence Multiplier
+Rate Hedge Capital = Fixed Rate Exposure × Interest-Rate Duration × Expected Rate Volatility × Confidence Multiplier
 ```
 
 **Example:**
-- $100M fixed-rate bonds, 3-year duration
+- $100M fixed-rate bonds, 3-year interest-rate duration
 - Expected rate volatility: 200bps at 95% confidence
 - Rate Hedge Capital = $100M × 3 × 2% × 1.65 = $9.9M
 
@@ -143,11 +152,12 @@ Earlier framing treated matching as **binary**: a position was either matched (r
 The optimization-shaped sub-books (per [`primebook-composition.md`](primebook-composition.md) §4) blend matched and unmatched portions smoothly:
 
 ```
-structbook position CRR = matched_portion × RW
-                        + unmatched_portion × max(RW, forced-loss-capital)
+structbook position CRR = matched_portion × default-CRR
+                        + unmatched_portion × max(default-CRR, forced-loss-capital)
+                        + unmatched_portion × rate-CRR
 ```
 
-When duration capacity shrinks (e.g., bucket capacity allocated elsewhere, Lindy shifts, redemptions surge):
+When SDR capacity shrinks (e.g., bucket capacity allocated elsewhere, Lindy shifts, redemptions surge):
 - `matched_portion` shrinks
 - `unmatched_portion` grows
 - Blended CRR rises smoothly
@@ -156,11 +166,11 @@ No binary "transition" event. Capital requirement updates continuously. This dis
 
 ### Cumulative capacity matching
 
-An asset can match against its required bucket AND all higher buckets (per [`duration-model.md`](duration-model.md)).
+An asset can match against its required bucket AND all higher buckets (per [`sdr-model.md`](sdr-model.md)).
 
 **Example:**
-- Hold $500M JAAA (SPTP = 1,260 days, requires bucket 84)
-- Cumulative duration capacity at bucket 84+: $300M
+- Hold $500M JAAA (SPTP = 1,260 days, requires bucket 42 under the 30-day bucket system)
+- Cumulative SDR capacity at bucket 42+: $300M
 
 | Portion | Amount | Treatment | CRR | Capital |
 |---|---|---|---|---|
@@ -168,7 +178,7 @@ An asset can match against its required bucket AND all higher buckets (per [`dur
 | Unmatched | $200M | unmatched / tradingbook (forced-loss) | 10% | $20M |
 | **Total** | $500M | — | — | **$35M** |
 
-As duration capacity grows (longer-duration liabilities accumulate or redemption pressure eases), more of each position can be matched, reducing overall capital requirements. Natural incentive alignment — sticky liabilities enable more efficient capital deployment.
+As SDR capacity grows (stickier liabilities accumulate or redemption pressure eases), more of each position can be matched, reducing overall capital requirements. Natural incentive alignment — sticky liabilities enable more efficient capital deployment.
 
 ---
 
@@ -187,13 +197,12 @@ The two matched sub-books differ in what they're matched against and what they c
 
 ### `structbook` — structural-demand matched
 
-- Matched against structural USDS demand (per [`duration-model.md`](duration-model.md))
-- Variable-rate liability → does NOT cover rate risk
-- Held to par → covers liquidity and credit-spread MTM
+- Matched against structural USDS demand (per [`sdr-model.md`](sdr-model.md))
+- SDR match in P1 covers rate, liquidity, and credit-spread MTM for the matched portion
 - Default capital still required
-- Rate-hedge capital required for fixed-rate positions (carved out for v1)
+- Rate-CRR still computed; it is non-binding only for the matched portion
 
-`structbook` is the active sub-book for v1's crypto-collateralized lending test. `termbook`, `tradingbook`, `ascbook`, `hedgebook` have schema slots but hold nothing in v1.
+`structbook` is the active sub-book for v1's custodial-crypto lending test. `termbook`, `tradingbook`, `ascbook`, `hedgebook` have schema slots but hold nothing in v1.
 
 ---
 
@@ -203,15 +212,15 @@ The two matched sub-books differ in what they're matched against and what they c
 |---|---|---|---|
 | **JAAA (CLO AAA)** | Floating-rate (SOFR + spread) | Natural hedge | Eligible for both `termbook` and `structbook` |
 | **Fixed-rate corporate bonds** | Fixed-rate | Must swap to floating or hold rate capital | Conditional |
-| **T-bills (short duration)** | Fixed but short | Minimal rate risk due to short duration | Eligible (small rate-hedge capital) |
-| **Long-duration treasuries** | Fixed, long duration | Must hedge or hold significant rate capital | Conditional |
+| **T-bills (short TTM)** | Fixed but short | Minimal rate risk due to low interest-rate duration | Eligible (small rate-hedge capital) |
+| **Long-maturity treasuries** | Fixed, long maturity | Must hedge or hold significant rate capital | Conditional |
 | **Sparklend** | Floating-rate (typically) | N/A — no SPTP regardless | Not eligible (no SPTP); routes to `tradingbook` if liquid, otherwise unmatched |
-| **NFAT (crypto-collateralized)** | Fixed-term | Rate-hedge capital required for matched portion (Phase 1 carve-out per [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md)) | Eligible for `structbook` |
+| **NFAT (custodial-crypto)** | Fixed-term | Rate-CRR computed by the risk form; SDR matching makes it non-binding for matched portion | Eligible for `structbook` |
 
-### The value proposition of duration matching
+### The value proposition of hold-to-par matching
 
-With rate risk properly hedged, duration matching allows Primes to:
-- **Avoid hedging credit spread risk** on long-duration variable-rate assets
+With rate risk properly hedged, hold-to-par matching allows Primes to:
+- **Avoid hedging credit spread risk** on long-maturity variable-rate assets
 - **Take credit spread exposure** for yield while managing capital efficiently
 - **Wait out temporary credit dislocations** without forced sales
 
@@ -224,8 +233,8 @@ This is the core value: matching lets Primes capture credit spread (compensated,
 | Doc | Relationship |
 |---|---|
 | [`primebook-composition.md`](primebook-composition.md) | `termbook` and `structbook` are the matched sub-books |
-| [`duration-model.md`](duration-model.md) | Bucket capacity feeds matching |
-| [`asset-classification.md`](asset-classification.md) | SPTP split into credit-spread vs rate duration |
+| [`sdr-model.md`](sdr-model.md) | Bucket capacity feeds matching |
+| [`asset-classification.md`](asset-classification.md) | SPTP split into credit-spread pull-to-par horizon vs interest-rate duration |
 | [`risk-decomposition.md`](risk-decomposition.md) | Coverage matrix shows what each sub-book covers |
 | [`hedgebook.md`](hedgebook.md) | Rate-hedging at portfolio level (alternative to per-position rate-hedge capital) |
 | [`capital-formula.md`](capital-formula.md) | Per-position capital integrates matched + unmatched blend |

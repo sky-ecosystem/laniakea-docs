@@ -13,7 +13,7 @@ Operational Risk Capital (ORC) is capital posted by the entity that holds execut
 
 | Concept | Portfolio Risk Capital | Operational Risk Capital |
 |---------|----------------------|------------------------|
-| **What it covers** | Market, credit, duration, and liquidity risk | Damage from compromised guardian |
+| **What it covers** | Market, credit, maturity-mismatch, and liquidity risk | Damage from compromised guardian |
 | **Sized by** | CRR per [`risk-decomposition.md`](risk-decomposition.md) — five risk types blended through sub-book routing | Rate limits × detection window |
 | **Posted by** | Prime (from JRC/EJRC/SRC) | Guardian (Accordant to the Prime) |
 | **Framework** | [`capital-formula.md`](capital-formula.md) and the layer docs | This document |
@@ -101,7 +101,7 @@ Both capital pools protect the Prime, but against different risks:
 ```
 Prime Capital Requirements:
   Portfolio Risk Capital (CRR-based)
-    └── Covers: market losses, credit events, duration mismatches
+    └── Covers: market losses, credit events, maturity / SDR mismatches
     └── Sized by: capital-formula.md
     └── Funded by: IJRC + EJRC + SRC (ingression-adjusted)
 
@@ -165,7 +165,7 @@ PIV capital is isolated from the Prime's main PAU by design — the vault holds 
 
 See `trading/sky-intents.md` for the full PIV specification and security model.
 
-> **Forward reference:** For broader trading execution risk — settlement failure, stale oracle prices, counterparty default between match and settlement — a dedicated risk framework module is planned. See the "Planned Modules" section in the [`risk-framework/README.md`](laniakea-docs/risk-framework/README.md).
+> **Forward reference:** For broader trading execution risk — settlement failure, stale oracle prices, counterparty default between match and settlement — a dedicated risk framework module is planned. See the "Planned Modules" section in the [`risk-framework/README.md`](lani/risk-framework/README.md).
 
 ---
 

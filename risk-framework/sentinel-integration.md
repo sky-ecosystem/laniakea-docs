@@ -13,7 +13,7 @@ For the broader beacon taxonomy (two-tier authority + I/O role), see [`../macros
 
 | Component | Uses Risk Framework For |
 |-----------|-------------------------|
-| **synserv verification (in-space calculation)** | Calculating CRR per position, TRRC, TRC, Encumbrance Ratio; settlement cycle processing; LCTS generation handling. Calculation runs as synart-resolved code inside synserv against current input atoms (chain-read primitive writes / market-data / attest-data). See [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) and [`../../noemar-synlang/listener-loops.md`](../../noemar-synlang/listener-loops.md). |
+| **synserv verification (in-space calculation)** | Calculating CRR per position, TRRC, TRC, Encumbrance Ratio; settlement cycle processing; LCTS generation handling. Calculation runs as synart-resolved code inside synserv against current input atoms (chain reads / market-memory reducer outputs / attest-data). See [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) and [`../../noemar-synlang/listener-loops.md`](../../noemar-synlang/listener-loops.md). |
 
 ### Prime-Side Operating Setup
 
@@ -65,7 +65,7 @@ These are high-authority action beacons (deterministic keepers), not part of a P
 
 ## PIV / Trading Execution Risk
 
-Sentinel formations that operate Prime Intent Vaults (PIVs) face **trading execution risk** in addition to portfolio risk. Unlike portfolio risk — which is managed through CRR, duration matching, and risk capital — PIV risk is managed through on-chain enforcement mechanisms:
+Sentinel formations that operate Prime Intent Vaults (PIVs) face **trading execution risk** in addition to portfolio risk. Unlike portfolio risk — which is managed through CRR, hold-to-par matching, and risk capital — PIV risk is managed through on-chain enforcement mechanisms:
 
 - **Delegated Intent Policy (DIP):** Per-vault policy defining allowed pairs, max slippage, per-intent notional caps, and per-window velocity limits. Enforced at fill time via a stateful vault hook.
 - **Per-window caps:** Hourly and daily notional limits bound trading throughput, capping worst-case losses from a malfunctioning or compromised baseline-relay.

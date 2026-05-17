@@ -54,7 +54,7 @@ Outputs: `report.txt` (markdown), `dashboard.html` (interactive).
 
 | Doc | Relationship |
 |---|---|
-| [`README.md`](laniakea-docs/accounting/README.md) | Accounting directory index |
+| [`README.md`](lani/accounting/README.md) | Accounting directory index |
 | [`settlement-cycle.md`](settlement-cycle.md) | The synlang-native settlement architecture this model projects against |
 | [`capital-stack.md`](capital-stack.md) | ABC growth and TMF retention this model tracks |
 | [`../inactive/pre-synlang/forecast_model/`](../inactive/pre-synlang/forecast_model/) | Source code, scenarios, and forecast spec |

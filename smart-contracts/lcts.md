@@ -542,7 +542,7 @@ Throughout: the generation is LOCKED during the daily lock window, and ACTIVE ou
 **Scenario:** User needs funds during LOCKED.
 
 - Withdrawals/exits are blocked until after settlement/unlock.
-- Lock duration is bounded (≤3 hours on the daily schedule).
+- Lock period is bounded (≤3 hours on the daily schedule).
 
 ### Multiple Locked Generations
 

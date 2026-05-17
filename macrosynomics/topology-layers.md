@@ -189,7 +189,7 @@ Builds on shadow execution ([`../noemar-synlang/boot-model.md`](../noemar-synlan
 - `frame-rebase` — replay real events into a forecast to test calibration
 - `frame-diff` — compare population atoms across frames
 
-The forecast model in `laniakea-docs/forecast_model/` becomes a specific shadow-frame configuration, not a separate system.
+The forecast model in `lani/forecast_model/` becomes a specific shadow-frame configuration, not a separate system.
 
 ### Sudo events use frames for safety
 

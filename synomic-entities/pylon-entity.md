@@ -303,7 +303,7 @@ See [`creation-restructuring.md`](creation-restructuring.md).
 ## Open Questions
 
 - **Per-Pylon floor and Cover-N targets.** Specific calibration: what's the 8%-of-risk-margin analog for Sky's risk model? Cover-2 default, with Cover-3 for systemic Rings?
-- **Pledge-rebalancing friction parameters.** Exact lockup duration for pledge decreases and full Ring exits. CME's 5-business-day analog under daily settlement; what's right under Sky's faster cadence?
+- **Pledge-rebalancing friction parameters.** Exact lockup period for pledge decreases and full Ring exits. CME's 5-business-day analog under daily settlement; what's right under Sky's faster cadence?
 - **Customer abstraction.** Are Pylon customers represented as on-synome accounts, or off-synome (Pylon holds aggregate positions on behalf of off-synome users)? Hybrid?
 - **Cross-margin product spec.** Standardized template for Pylon-offered cross-Ring margin offset products? Or fully bilateral / unregulated at the customer relationship layer?
 - **Liquidation mechanics.** What's the synomic equivalent of CME's "Cessation of Trading" + "Auction Liquidation" sequence within a Ring?

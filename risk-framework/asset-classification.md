@@ -141,12 +141,12 @@ For assets that mature or converge to a known value, **Stressed Pull-to-Par** is
 
 ### Why stressed pull-to-par
 
-Normal pull-to-par (or WAL for amortizing assets) assumes typical prepayment and amortization patterns. But the scenario where asset duration matters for capital is precisely the stress scenario:
+Normal pull-to-par (or WAL for amortizing assets) assumes typical prepayment and amortization patterns. But the scenario where pull-to-par timing matters for capital is precisely the stress scenario:
 - During crises, prepayments slow dramatically (borrowers can't refinance)
 - Amortization continues but reinvestment into new loans slows
 - Pull-to-par extends, sometimes significantly
 
-Using unstressed duration would be like stress-testing a lifeboat in calm seas. Duration matching validity must hold during stress.
+Using an unstressed pull-to-par horizon would be like stress-testing a lifeboat in calm seas. SPTP matching validity must hold during stress.
 
 ### SPTP calculation
 
@@ -164,16 +164,16 @@ The stress modifier is derived from historical worst-case prepayment slowdowns f
 | T-bills | To maturity | 1.0× | To maturity | Fixed maturity, no extension risk |
 | Money market ETF | Near-zero | 1.0× | Near-zero | Daily liquidity, stable NAV |
 
-**Key insight:** the stress modifier should reflect the *same* stress scenario that drives liability outflows. If a credit crisis causes both duration extension and depositor flight, the stressed pull-to-par ensures the asset-liability match remains valid under that scenario.
+**Key insight:** the stress modifier should reflect the *same* stress scenario that drives liability outflows. If a credit crisis causes both pull-to-par extension and depositor flight, the stressed pull-to-par ensures the asset-liability match remains valid under that scenario.
 
-### SPTP refinement: spread duration vs rate duration
+### SPTP refinement: spread pull-to-par horizon vs interest-rate duration
 
 V1 carries a refinement deferred from prior versions: SPTP should split into two components:
 
 | Component | What it measures | Covered in |
 |---|---|---|
-| **Credit-spread duration** | Time to convergence under spread stress (mean-reverting) | `termbook` and `structbook` cover this |
-| **Rate duration** | Time to convergence under rate stress (potentially permanent regime shift) | Only `termbook` (matched fixed/fixed) covers this; `structbook` doesn't |
+| **Credit-spread pull-to-par horizon** | Time to convergence under spread stress (mean-reverting) | `termbook` and `structbook` cover this |
+| **Interest-rate duration** | Sensitivity / cash-flow drag horizon under rate stress (potentially permanent regime shift) | Only `termbook` (matched fixed/fixed) covers this; `structbook` doesn't outside the P1 SDR carve-out |
 
 Both values per position. For v1 NFATs both equal the nominal term (no stress modifier — fixed-term contracts).
 
@@ -230,8 +230,8 @@ For assets with SPTP:
    (slippage-model ...)
    
    ;; SPTP refinement
-   (sptp credit-spread 1260)                              ; days; from credit-spread duration
-   (sptp rate          1260)                              ; days; from rate duration
+   (sptp credit-spread 1260)                              ; days; from credit-spread pull-to-par horizon
+   (sptp rate          1260)                              ; days; from interest-rate duration
    
    (correlation-with us-treasuries 0.30)
    (correlation-with hy-credit     0.65))
@@ -255,7 +255,7 @@ The schema is open: new properties get added as the framework matures. Risk form
 
 The split between identity (rare changes) and stress profile (recalibrated more often) is intentional: identity is governance-paced; stress profiles are recalibrated as data accumulates and conditions change.
 
-Every chain-read primitive call, market-data beacon, attest-data beacon, Riskbook risk-form equation, projection model, baseline/stream-sentinel, and warden reads from these spaces. They are universally replicated (per the synome's hub-replication of `&core.*` spaces).
+In the target framework, every chain-read primitive call, market-memory reducer, attest-data beacon, Riskbook risk-form equation, projection model, baseline/stream-sentinel, and warden reads from these canonical framework spaces. In P1 the canonical framework spaces do not exist yet; the `custodial-crypto` risk class carries the relevant per-halo risk-form copy, and the Crypto Majors Oracle emits market-memory reducer outputs into `&entity.oracle.crypto-majors.ticks`.
 
 ---
 
@@ -279,7 +279,7 @@ for the crypto stress scenarios used by the v1 Riskbook risk form
 equation:
 
 - Magnitude of `severe-crypto-correlated-crash` (BTC/ETH drop, window)
-- Liquidation-window duration assumptions
+- Liquidation-window assumptions
 - `stETH-ETH-peg-break` parameters
 - USDC/USDT depeg priors
 - Custodian-failure binary probability

@@ -61,7 +61,7 @@ A Halo Class is the unit of smart contract infrastructure and default terms. It 
 |---|---|
 | **PAU** | Single Controller + ALMProxy + RateLimits shared by all Units in the Class |
 | **High-authority beacons** | `lcts-{halo}` (relay) for Portfolio Classes; `nfat-{halo}` (relay) + `attest-data-{class}` (attest-data-beacon, Oracle-Entity-owned) for Term Classes; `amm-{halo}` (relay) for Trading; `identity-{network}` (relay) for Identity Network |
-| **Legal Buybox** | Acceptable parameter ranges — duration, size, APY, asset types, counterparty requirements |
+| **Legal Buybox** | Acceptable parameter ranges — term / maturity, size, APY, asset types, counterparty requirements |
 | **Queue Contract** | Where capital enters (Primes deposit here) |
 | **Redeem Contract** | Where capital exits (Halo deposits returned funds here) |
 | **Factory Template** | All Units deployed from the same pre-audited template |
@@ -70,7 +70,7 @@ A Halo Class is the unit of smart contract infrastructure and default terms. It 
 
 The Class sets the default terms and constraints all Units and Books within it must respect:
 
-- **Parameter ranges** (the buybox): durations, sizes, yields, asset types
+- **Parameter ranges** (the buybox): terms / maturities, sizes, yields, asset types
 - **Counterparty requirements**: which Primes can participate, qualifications needed
 - **Recourse mechanisms**: default behavior, Fortification Conserver authority
 - **Operational rules**: beacon operation, rate limits, reporting
@@ -130,7 +130,7 @@ A Halo Unit is the connecting tissue between books. Within a Halo book, it appea
 | **Fungibility** | Fungible within the pool | Non-fungible — each NFAT has unique terms |
 | **Terms** | Same for all participants | Bespoke per deal (within buybox) |
 | **Transferability** | Non-transferable (internal accounting) | Transferable (optionally whitelist-restricted) |
-| **What varies per Unit** | Seniority, yield, capacity, queue config | Duration, size, APY, counterparty, conditions |
+| **What varies per Unit** | Seniority, yield, capacity, queue config | Term / maturity, size, APY, counterparty, conditions |
 
 Trading Halo Units use AMM pool shares (LCTS-shaped); Identity Network Halos do not issue capital-deployment Units in the standard sense (they are Special Halo types).
 
@@ -268,7 +268,7 @@ For Growth Staking purposes, a Halo's governance token is valued at `(Capital Re
 
 ## Related
 
-- [`README.md`](laniakea-docs/synomic-entities/README.md) — Rank hierarchy and entity index
+- [`README.md`](lani/synomic-entities/README.md) — Rank hierarchy and entity index
 - [`halo-portfolio.md`](halo-portfolio.md) — Portfolio Halo (LCTS-based)
 - [`halo-term.md`](halo-term.md) — Term Halo (NFAT-based + book lifecycle)
 - [`halo-trading.md`](halo-trading.md) — Trading Halo (AMM-based)

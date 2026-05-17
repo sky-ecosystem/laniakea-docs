@@ -1,7 +1,7 @@
 # Synoteleonomics
 
 **Status:** mostly target architecture (Phase 9–10 surface). Today's running instance is the Rule-Author Agent on Noemar — first closed dreamer/actuator loop, scaled down. Recipe marketplace, multi-embodiment teleonomes, RSI loops, and binding-via-beacons are the *target* the operational stack is building toward.
-**Canonical home:** `laniakea-docs/synoteleonomics/`
+**Canonical home:** `lani/synoteleonomics/`
 
 ---
 

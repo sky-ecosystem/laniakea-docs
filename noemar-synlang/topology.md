@@ -1,144 +1,5 @@
 # Topology — Spaces, Entarts, Artifacts, and the Self-Hosting Synart
 
-Defines the structure of the canonical synome: how Spaces are organized
-across artifact tiers, what lives at synome root vs in entarts, the
-universal Spaces that hold loops and gates and recipes, the naming
-convention, and the architectural rules that govern composition.
-
-Companion to:
-- `../synodoxics/noemar-substrate.md` (artifact tiers in depth — formerly `syn-tel-emb.md`) and `../synoteleonomics/recipe-marketplace.md` (recipe marketplace canonical home)
-- `boot-model.md` (identity-driven boot — how Spaces become running roles)
-- `runtime.md` (auth model + runtime architecture)
-- `scaling.md` (operational concerns and failure modes when this becomes a networked system)
-
-The driving requirements:
-
-- **Modular sync.** A teleonome can subscribe to any subset of the
-  synart; serious teleonomes sync everything; light embodiments may sync
-  one Prime's USDS book. Both are first-class.
-- **Locality.** Rules and loops execute close to the atoms they read.
-- **Composable.** Adding new entities or universal Spaces shouldn't
-  require schema rewrites.
-- **Future-proof.** The structure outlives any specific Phase 1
-  implementation.
-- **Self-hosting.** The synart contains its own loops, gates, recipes,
-  runtime source, and bootstrap procedure. Programs and data share one
-  substrate.
-
----
-
-## TL;DR — the architecture in one page
-
-**The seven load-bearing decisions:**
-
-1. **Spaces are grounded atoms with a uniform API.** Name them in synlang
-   from day 1; the binding from logical name → physical backend is a
-   runtime concern.
-2. **Spaces hold data, rules, AND programs.** Loops, gates, and recipes
-   are first-class atoms in synart, replicated alongside state. The
-   synart is the program that the runtime interprets.
-3. **Synart is a tree of entarts plus universal Spaces.** Each synomic
-   entity (Guardian, Prime, Halo) owns an **entart** — a subtree rooted
-   at its own root Space. The synome root holds universal Spaces in six
-   structured layers.
-4. **Synome root has six layers.** Constitutional, framework, registry,
-   aggregation, executable, library — each with consistent mechanics
-   within and characteristic update cadences across.
-5. **Operators and beacons are external.** Only synomic entities own
-   entarts. Beacons are connective tissue between external operators
-   and the entart tree; teleonomes are external too.
-6. **Local-by-default, scatter-gather for global.** Cross-Space rules
-   and loops ship a portable `&self`-body to each target, run locally,
-   aggregate small results.
-7. **Rules and loops ride with data.** Both are atoms; both replicate
-   to subscribers through the same channel as state. Partial-sync
-   teleonomes stay current automatically; identity-driven boot picks
-   them up at evaluation time.
-
-**The synome root layers:**
-
-| Layer | Representative Spaces |
-|---|---|
-| Constitutional | `&core.root`, `&core.telos`, `&core.skeleton`, `&core.governance`, `&core.protocol` |
-| Framework | `&core.framework.risk`, `&core.framework.distribution`, `&core.framework.fee` |
-| Registry | `&core.registry.entity`, `&core.registry.beacon`, `&core.registry.contract` |
-| Aggregation | `&core.settlement`, `&core.escalation` |
-| Executable | `&core.syngate`, `&core.telgate`, `&core.loop.<class>` |
-| Library | `&core.library.runtime.<impl>`, `&core.library.telseed.<config>`, `&core.library.corpus.<domain>`, `&core.library.published.<topic>` |
-
-**The five artifact types** — each level *is* its art:
-
-| Artifact | Owner | Tree shape | Replication | Privacy |
-|---|---|---|---|---|
-| Synart | the synome | synome root + entart subtrees | global (synserv → all participants) | public |
-| Entart | a Synomic Entity (synent) | one synent's subtree of synart | inherits synart replication | scoped via auth |
-| Telart | a teleonome | per-teleonome tree of Spaces | within own emb fleet | private to that tel |
-| Embart | an embodiment | per-embodiment tree of Spaces | local only (never replicated) | private to that emb |
-| Agart | an agent | per-agent subtree (loop body, working memory, scratch, experience, I/O contracts) | inherits its host tier | inherits its host tier |
-
-Agarts live as subtrees within telarts (proven) or embarts (speculative, dreamer-generated). The substrate-correspondence is the identity: each level *is* its art, not merely "associated with" it.
-
-Full economic and content treatment in `../synodoxics/noemar-substrate.md` (artifact tiers) and `../synoteleonomics/recipe-marketplace.md` (recipes).
-
-**The naming convention:**
-
-```
-core-<kind>[-<topic>...]                                  // synome-level
-entity-<entity-type>-<entity-id>-<sub-kind>[-<sub-id>]    // entart-level
-```
-
-**An entart tree (Ozone single-guardian topology, Spark expanded):**
-
-```
-&core.root
-  └── &entity.guardian.ozone.root              ← single operational guardian
-        ├── &entity.generator.usge.root        ← USDS Generator
-        ├── &entity.prime.spark.root
-        │     ├── &entity.prime.spark.relay.baseline   ← per-Prime sentinel formations
-        │     ├── &entity.prime.spark.sentinel.stream
-        │     ├── &entity.prime.spark.relay.warden
-        │     ├── &entity.halo.spark-term.root
-        │     │     ├── &entity.halo.spark-term.book.usds
-        │     │     └── &entity.halo.spark-term.book.cnys
-        │     └── &entity.halo.spark-trade.root
-        │           └── &entity.halo.spark-trade.book.amm
-        ├── &entity.prime.grove.root
-        ├── &entity.prime.keel.root
-        └── &entity.prime.obex.root
-```
-
-**Thirteen Phase 1 commitments** (§20) — hygiene that makes scaling free.
-
----
-
-## Section map
-
-| § | Topic | Core idea |
-|---|---|---|
-| 1 | Hyperon Spaces basics | Spaces as grounded atoms; data + rules + programs; gate ≠ Space boundary |
-| 2 | Taxonomy mapping | Synome / telart / embart aligns with Hyperon's split |
-| 3 | The four artifact types | Synart, entart, telart, embart — trees of Spaces with distinct replication |
-| 4 | Four sharding axes | Authority / tenant / temperature / cadence — orthogonal |
-| 5 | The entart concept | Synart's tree-of-entarts structure |
-| 6 | Synome root: six layers | Constitutional / framework / registry / aggregation / executable / library |
-| 7 | Four meta-patterns | Frameworks propagate; registries hold identity; aggregations collect; specifications execute |
-| 8 | The self-hosting architecture | Synart contains its own programs; identity boots roles; five levels of self-reference |
-| 9 | Naming convention | `core-<kind>` and `entity-<type>-<id>-<sub-kind>` keyword vocabulary |
-| 10 | Operators and beacons external | Not entart owners; connective tissue |
-| 11 | Example: Spark's entart family | Full tree with sentinel + book Spaces |
-| 12 | Registry pattern | `(sub-entart …)` and `(sub-space …)` |
-| 13 | Asymmetry rule | Parent → child only; peers via common ancestor |
-| 14 | Local consistency | Each Space self-complete for some purpose |
-| 15 | Local-by-default | Scatter-gather for cross-Space; push code to data |
-| 16 | Two-step rule shape | Portable `&self` body + global declaration |
-| 17 | Two-step loop shape | Universal template + per-entity instance |
-| 18 | Aggregator design | Trivial / concat / sketch classes |
-| 19 | Phase 1 commitments | Thirteen total |
-| 20 | Pattern families to build | What's sketched, what's open |
-| 21 | One-line summary | Whole architecture compressed |
-
----
-
 ## 1. What's load-bearing about Hyperon Spaces
 
 Five facts from the Hyperon model do most of the work:
@@ -895,7 +756,7 @@ verbs) are dash-separated, no sigil — visually distinct.
 | `core.loop.<class>` | `synserv`, `relay.<stem>`, `market-data`, `attest-data`, `archive`, `verifier` (no `endoscraper` — that's a grounded primitive; no `sentinel` — sentinels live in entarts) |
 | `core.library.<sub-type>.<impl>` | `runtime.<impl>`, `telseed.<config>`, `corpus.<domain>`, `published.<topic>` |
 | `entity.<type>` | `guardian`, `generator`, `prime`, `halo`, `oracle`, `folio`, `core`, `sequencer`, `pylon` (extensible) |
-| `entity.<...>.<sub-kind>` | `root`, `primebook`, `halobook`, `riskbook`, `exobook`, `genbook`, `structural-demand` (compound), `structbook`, `tradingbook`, `termbook`, `ascbook`, `hedgebook`, `config`, `sentinel` (the in-entart sentinel binding Space) |
+| `entity.<...>.<sub-kind>` | `root`, `primebook`, `halobook`, `riskbook`, `exobook`, `genbook`, `structural-demand` (compound), `auction`, `structbook`, `tradingbook`, `termbook`, `ascbook`, `hedgebook`, `config`, `sentinel` (the in-entart sentinel binding Space) |
 
 Sub-ids of book types nest as their own level: `&entity.halo.spark-term.book.A1` (where `A1` is the book id under sub-kind `book`).
 
@@ -965,9 +826,8 @@ Entart-level:
 &entity.guardian.ozone.root                   Ozone — single operational guardian
 &entity.generator.usge.root                   USDS Generator entart root
 &entity.generator.usge.genbook                Genbook — Primeunits in, USDS out
-&entity.generator.usge.structural-demand      structural-demand subtree
-&entity.generator.usge.structural-demand.scrapers
-&entity.generator.usge.structural-demand.auction
+&entity.generator.usge.structural-demand      lot-age surface + effective SDR bucket capacity
+&entity.generator.usge.sdr-auction            SDR allocation atoms / auction body
 &entity.oracle.crypto-majors.root             Crypto Majors Oracle entart root
 &entity.oracle.book-attestation.root          Book Attestation Oracle entart root
 &entity.prime.spark.root                      Spark Prime's entart root
@@ -1059,7 +919,7 @@ embart trees relate to the synart they participate in.
 
 ```
 1. Push: beacon proposes itself
-   (beacon-pending beacon-X (pubkey "ab9c…") (operator soter-govops) (class lpha))
+   (beacon-pending beacon-X (pubkey "ab9c…") (operator soter-govops) (class relay))
 
 2. Pull: governance accepts
    (beacon-accepted beacon-X)
@@ -1093,15 +953,14 @@ Since Ozone is the single operational guardian, this currently means
         │
         ├── &entity.generator.usge.root              USDS Generator entart root
         │     ├── &entity.generator.usge.genbook     Genbook — holds Primeunits, issues USDS
-        │     └── &entity.generator.usge.structural-demand
-        │           ├── &entity.generator.usge.structural-demand.scrapers
-        │           └── &entity.generator.usge.structural-demand.auction
+        │     ├── &entity.generator.usge.structural-demand
+        │     └── &entity.generator.usge.sdr-auction
         │
         ├── &entity.prime.spark.root                 Prime auth, policies, halo registry, cross-halo rules
         │     │
         │     ├── &entity.prime.spark.primebook      Prime's aggregation book; holds Halobook units; issues to Genbook
         │     │
-        │     ├── &entity.prime.spark.relay.baseline    per-Prime sentinel formations
+        │     ├── &entity.prime.spark.relay.baseline    per-Prime operating setup
         │     ├── &entity.prime.spark.sentinel.stream       (each holds entity-specific config +
         │     ├── &entity.prime.spark.relay.warden        reference to universal loop template)
         │     │
@@ -1434,7 +1293,7 @@ flows — are at varying maturity. This is the open work surface.
 | State machines | per-entart leaf Spaces | Old demo covers Book lifecycle; broader pattern abstractable |
 | Attestation gates / two-beacon patterns | per-entart leaf Spaces | Old demo covers single-actor; multi-beacon split not built |
 | Crystallization commits (mesh → skeleton promotion) | `&core.library.published.*` → `&core.skeleton` | Not started |
-| Rate limits & enforcement caps (LPLA / LPHA / HPLA / HPHA) | per-entart roots | Not started |
+| Rate limits & enforcement caps | per-entart roots | Not started |
 | Cross-entart atomic writes | multi-Space within one synserv | Conventions defined, not exercised |
 | Revocation cascades (Guardian collapse → propagation) | down-tree from `&entity.guardian.*.root` | Not started |
 | Relay class (baseline / warden / nfat / lcts / amm / ...) | `&core.loop.relay.<stem>` + per-entity Spaces in entarts | Templates documented in `synlang-patterns.md`; P1 govops relays manually controlled |
@@ -1449,19 +1308,3 @@ flows — are at varying maturity. This is the open work surface.
 | Atomspace runtime conformance | `&core.library.runtime.*` + governance test atoms | Conformance suite not built |
 
 Each row is a candidate for its own focused design pass.
-
----
-
-## 21. The one-line summary
-
-**Synart is a tree of entarts plus a six-layer synome root holding
-universal Spaces — constitutional axioms and chain protocol;
-parameterized framework shapes; flat identity registries; aggregation
-outputs; the executable layer of loops/gates/recipes that *are* the
-synome's program; and the library layer of runtimes/telseeds/corpora/
-published alpha that's the open-source commons. Four meta-patterns
-(frameworks propagate, registries identify, aggregations collect,
-specifications execute); operators and beacons are external; per-entity
-loop instances reference universal templates via the two-step pattern;
-the whole stack is self-hosting, with identity-driven boot resolving
-which loop Space a runtime evaluates as `&self`.**

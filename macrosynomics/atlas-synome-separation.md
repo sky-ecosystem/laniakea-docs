@@ -265,7 +265,7 @@ Agents are organized into four ranks based on their governance relationship to t
 
 **Primes** (Rank 2) — Specialized, heavyweight Synomic Entities. Two subtypes: Star Primes (5: Spark, Grove, Keel, skybase, launch6) and Institutional Primes (1: Obex). Require transformation primitives, foundations, nested contributors.
 
-**Halos** (Rank 3) — General-purpose Synomic Entities. Can wrap any value and give it agency. Organized into **Halo Classes** (shared SC + legal infra) containing **Halo Units** (individual products). Three standard class types: Portfolio (LCTS), Term (NFAT), Trading (AMM). Examples: tranched Portfolio Halo (senior/junior sharing one PAU), NFAT Facility (same buybox, varying duration/size). Halos are the fractal layer — they proliferate.
+**Halos** (Rank 3) — General-purpose Synomic Entities. Can wrap any value and give it agency. Organized into **Halo Classes** (shared SC + legal infra) containing **Halo Units** (individual products). Three standard class types: Portfolio (LCTS), Term (NFAT), Trading (AMM). Examples: tranched Portfolio Halo (senior/junior sharing one PAU), NFAT Facility (same buybox, varying term/size). Halos are the fractal layer — they proliferate.
 
 **Guardians** (Rank 1) — Perform privileged operations with collateral backing. Post escrow, face slashing for failures. Consolidate interpretation, governance participation, and operational execution. Operationally, **Ozone** is currently the single Guardian; USGE Generator and all Primes are direct children of Ozone, with separate GovOps teams administering each entity.
 
@@ -431,7 +431,7 @@ This happens through:
 | "JRC absorbs losses before SRC" | `loss_order = [tip_jrc, remaining_jrc, src, backstop]` |
 | "Rate changes limited by BEAM tau" | `∀ param: time_since_last_change(param) ≥ param.tau` |
 | "srUSDS queues process at Settlement" | `∀ queue: process_on(queue) = settlement_timestamp` |
-| "Penalty escalates with duration" | `penalty_rate = f(shortfall_duration)` per schedule |
+| "Penalty escalates with shortfall age" | `penalty_rate = f(shortfall_period)` per schedule |
 
 The Atlas describes intent; the Synome encodes implementation.
 

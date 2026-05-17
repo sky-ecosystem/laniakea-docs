@@ -1,6 +1,6 @@
 # Riskbook Layer
 
-**Status:** Draft (Phase 2 layer doc, 2026-05-05)
+**Status:** Target layer doc with Phase 1 notes (updated 2026-05-17). P1 materializes one per-halo risk class, `custodial-crypto`, whose risk form is the stress-envelope exobook waterfall in [`custodial-crypto-risk-form.md`](custodial-crypto-risk-form.md); the canonical `&core.framework.risk.forms` catalog is a later-phase source.
 
 The Riskbook is the unit of regulation in the risk framework. It's the layer where matched categories produce CRR (Capital Ratio Requirement), where default risk is set entirely, where instrument-to-frame translation happens, and where tactical hedging within a single coherent strategy can earn capital relief.
 
@@ -16,13 +16,13 @@ Companion to:
 ## TL;DR
 
 A Riskbook is:
-- A book matching a registered category in `&core.framework.risk.forms`
+- A book matching a registered risk form in `&core.framework.risk.forms` (target catalog; per-halo copies in P1)
 - The unit at which **default risk** is fully determined
 - The layer where **currency translation** to the Generator's frame happens
 - The boundary at which **bankruptcy remoteness** sits in the Sky stack
 - The natural home for **tactical hedging** within a single coherent strategy (e.g., ABF + CDS-on-same-ABF in one Riskbook)
 
-Riskbooks without a matching category get CRR 100% (default-deny). Halobooks above never modify the Riskbook's default risk; that's structurally enforced (cross-default → Riskbook constraint per `risk-decomposition.md` §5).
+Riskbooks without a matching risk form get CRR 100% (default-deny). Halobooks above never modify the Riskbook's default risk; that's structurally enforced (cross-default → Riskbook constraint per `risk-decomposition.md` §5).
 
 ---
 
@@ -48,11 +48,11 @@ Of the four book types in the synome stack (Riskbook, Halobook, Primebook, Genbo
 
 Why this layer specifically:
 - **Composability requires a unit.** Halos can compose anything they want. The Riskbook is the granularity at which "what is this composition, and how risky is it?" gets answered.
-- **Categories require constraints.** A Riskbook risk form specifies what may be in the Riskbook, with what relationships and proportions. Without a category boundary, "this composition is recognized" has no meaning.
+- **Risk forms require constraints.** A Riskbook risk form specifies what may be in the Riskbook, with what relationships and proportions. Without a form boundary, "this composition is recognized" has no meaning.
 - **Bankruptcy remoteness needs a unit.** Cross-Riskbook netting is forbidden (per §6 below). That makes sense only if the Riskbook is the unit at which fates are linked.
 - **Hedging needs a unit.** Tactical hedges (CDS protecting an ABF claim, perp shorting an ETH spot exposure) only get capital relief when the offsetting positions are in the same Riskbook with a category that recognizes the hedge.
 
-Halos compete on three skills, all rooted in Riskbook composition: **sourcing** (finding good Exobooks to invoke), **composing** (fitting holdings into Riskbook categories with favorable equations), and **innovating** (proposing new Riskbook categories through governance when their strategy doesn't fit existing ones).
+Halos compete on three skills, all rooted in Riskbook composition: **sourcing** (finding good Exobooks to invoke), **composing** (fitting holdings into Riskbook risk forms with favorable equations), and **innovating** (proposing new Riskbook risk forms through governance when their strategy doesn't fit existing ones).
 
 ---
 
@@ -62,13 +62,13 @@ A Riskbook risk form isn't a label — it's a precise specification of what the 
 
 Examples:
 
-| Category | Constraint |
+| Risk form | Constraint |
 |---|---|
 | `pure-eth-holding` | Exactly ETH, nothing else |
 | `delta-neutral-eth-spot-perp` | Long ETH spot AND short ETH perp, balanced within tolerance |
 | `abf-with-cds-cover` | Exactly one ABF claim + one CDS-on-same-ABF + ≥ 90% coverage |
 | `morpho-lending` | Only exo units pointing to Morpho-shape Exobooks |
-| `crypto-collateralized-USD-lending` | Senior tranches of BTC/ETH/stETH-collateralized exobooks; denoms in (USDC, USDT) |
+| `custodial-crypto` | Senior tranches of BTC/ETH/stETH-collateralized fixed-term exobooks; denoms in USDC/USDS/USDT; borrower admitted through disbursement/collateral-account process |
 
 These aren't sanity checks — they're **type constraints**. A Riskbook with the wrong composition fails risk-form match and falls through to CRR 100%.
 
@@ -87,7 +87,7 @@ These aren't sanity checks — they're **type constraints**. A Riskbook with the
    (resolution-tier simulation))
 ```
 
-Default-deny is enforced by absence of match: if no category's `composition-constraints` evaluates True over the Riskbook's contents, no equation runs, and the Riskbook gets CRR 100%.
+Default-deny is enforced by absence of match: if no risk form's `composition-constraints` evaluates True over the Riskbook's contents, no equation runs, and the Riskbook gets CRR 100%.
 
 ---
 
@@ -158,15 +158,15 @@ This is intentional. Halos pay a real capital cost for the structural protection
 The catalog of registered Riskbook categories is **governance's primary risk-shaping tool**. It defines what kinds of strategies the synome recognizes and prices.
 
 What governance can do via the catalog:
-- **Add categories** to recognize new strategies (e.g., a new hedge structure becomes available; governance adds the category)
+- **Add risk forms** to recognize new strategies (e.g., a new hedge structure becomes available; governance adds the form)
 - **Tune equations** to reflect updated stress assumptions
 - **Update composition constraints** as strategies evolve
-- **Deprecate categories** that are no longer aligned with risk appetite
-- **Adjust resolution tier** (math / simulation / heuristic) per category
+- **Deprecate risk forms** that are no longer aligned with risk appetite
+- **Adjust resolution tier** (math / simulation / heuristic) per form
 
 Halos that want a new strategy either:
-- Compose within an existing category
-- Lobby governance to add a new category (governance-paced; slow but durable)
+- Compose within an existing risk form
+- Lobby governance to add a new risk form (governance-paced; slow but durable)
 - Operate without risk-form match (CRR 100%; high capital cost)
 
 The catalog is itself a synart artifact in `&core.framework.risk.forms`. Updates flow through governance crystallization (per the `crystallization-interface` concept). This makes the catalog a governance-paced resource: high-stakes, low-velocity, durable.
@@ -212,32 +212,27 @@ A Riskbook holding only ETH. The math tier resolves trivially: notional × ETH r
 
 The CDS effectively transforms a high-risk credit position (would be ~12% RW unhedged) into a much lower risk position (~4-5% RW). The remaining risk is **counterparty residual** — the risk that the CDS issuer fails to pay. This is what hedge-categorization buys: substantial RW reduction in exchange for accepting a different (much smaller) risk in the form of counterparty residual.
 
-### Crypto-collateralized USD lending (v1 test category)
+### Custodial-crypto fixed-term lending (P1)
 
 ```metta
-(risk-form-def crypto-collateralized-USD-lending
+(risk-form-def custodial-crypto
    (level riskbook)
    (frame usd)
    (composition-constraints
      (and (single-senior-tranche-positions)
           (asset-class-in (eth btc stETH))
-          (denom-in (usdc usdt))))
-   (equation-m2m
+          (denom-in (usdc usds usdt))))
+   (equation-default
      (sum-over (held-senior-tranches)
        (lambda ($pos)
-         (let* (($asset-stress-profile (asset-stress-profile (collateral-of $pos)))
-                ($denom-depeg          (depeg-stress-profile (denom-of $pos)))
-                ($junior-cushion       (junior-tranche-size (exobook-of $pos))))
-           (simulate-across-scenarios m2m-scenarios
+         (simulate-across-scenarios approved-stress-scenarios
              (lambda ($s)
-               (let* (($asset-drop      (apply-scenario $s $asset-stress-profile))
-                      ($depeg-loss      (apply-scenario $s $denom-depeg))
-                      ($effective-loss  (max 0 (- $asset-drop $junior-cushion))))
-                 (+ $effective-loss $depeg-loss))))))))
+               (senior-loss-through-exobook-waterfall $pos $s))
+             (combiner take-worst))))))
    (resolution-tier simulation))
 ```
 
-The standard structured-product capital model — no special "gap risk" treatment needed, because gap risk has unified into asset-liquidity stress through the tranche waterfall (per `tranching.md` §6).
+The P1 form is a stress-envelope waterfall model, not an expected-loss model. Approved scenario atoms are applied to the exobook asset side, stressed assets are pushed through the liability waterfall, and default-CRR is the maximum senior exo-unit loss across approved scenarios. CORE is calibration/reference material for scenario parameters, not a direct CRR engine. Full design: [`custodial-crypto-risk-form.md`](custodial-crypto-risk-form.md).
 
 ---
 

@@ -1,7 +1,7 @@
 # Noemar / Synlang
 
 **Status:** Mostly target architecture; topology + boot model + runtime kernel are design-of-record. Phase 1 builds single-Space, single-gate, single-heartbeat with the thirteen commitments from day 1.
-**Canonical home:** `laniakea-docs/noemar-synlang/`
+**Canonical home:** `lani/noemar-synlang/`
 
 ---
 
@@ -223,9 +223,9 @@ After moving calculation into synart-resolved code that synserv runs, beacons be
 
 Old → new: `lpla-checker` disappears; `lpla-verify` → verifier emb; `lpha-relay` → `relay-{x}` (relay class); `lpha-nfat`/`-lcts`/`-council` → `nfat-{halo}`/`lcts-{x}`/`council-{x}` (relay class, executors); `lpha-halo` → chain-read primitive (chain reads) or `attest-data-{class}` (attestations); `stl-base-{prime}` → `baseline-{prime}` (relay); `stl-warden-{prime}-{op}` → `warden-{prime}-{op}` (relay); `stl-stream-{prime}-{actor}` → `stream-{prime}-{actor}` (sentinel). The LPLA/LPHA/HPLA/HPHA matrix (`macrosynomics/beacon-framework.md`) is **orthogonal**: matrix = authority profile, two-role = work shape.
 
-**In-space calculation** (mechanism deferred to Phase 1): synserv runs synart-resolved calculation that keeps each book's derived state (equity, CRR, matching, breach flags, ER) consistent with current input atoms. Three consequences: full verifiability (wardens re-derive), beacons stay pure I/O, no lag.
+**In-space calculation** (live in Phase 1): synserv runs synart-resolved calculation that keeps each book's derived state (equity, CRR, matching, breach flags, ER) consistent with current input atoms. Three consequences: full verifiability (wardens re-derive), beacons stay pure I/O, no lag.
 
-**Endoscraper vs exoscraper:** the `(chain-read $contract $slot)` runtime primitive (in scope; replaces the retired endoscraper beacon class) reads internal protocol contract state on public blockchains directly from any rule in any Space; verifier embs independently re-evaluate rules over chain reads, with reconciliation atoms triggering escalation on disagreement. Exoscrapers (deferred): external APIs / proprietary feeds delivered through `market-data-beacon` / `attest-data-beacon` channels; insurance + governance review needed.
+**Endoscraper vs exoscraper:** the `(chain-read $contract $slot)` runtime primitive (in scope; replaces the retired endoscraper beacon class) reads internal protocol contract state on public blockchains directly from any rule in any Space; verifier embs independently re-evaluate rules over chain reads, with reconciliation atoms triggering escalation on disagreement. Exoscraper-style inputs are delivered through `market-data-beacon` / `attest-data-beacon` channels; P1 market data lands as market-memory reducer outputs rather than raw historical tapes.
 
 ## §9. Risk-framework synlang shapes; worked examples
 
@@ -288,7 +288,7 @@ Added by self-hosting: (13) loops, gates, recipes are first-class synart content
 | hub atom | Small, ubiquitously-read atom replicated to every cube/node |
 | role-def / role-grant | First-class atoms defining a role's verbs/scope-shape and instantiating it |
 | endoscraper | (Retired beacon class) replaced by `(chain-read $contract $slot)` grounded runtime primitive accessible from any rule |
-| exoscraper | (Deferred) External-API scraper with insurance overhead; future `market-data-beacon` / `attest-data-beacon` channel |
+| exoscraper | External-API/proprietary-feed ingestion pattern delivered through `market-data-beacon` / `attest-data-beacon`; raw market tapes are archive-node material, while synome stores reducer outputs |
 | `attest-data-beacon` | Input beacon class for off-chain claim attestation with slashing liability (replaces retired `attestor`) |
 | double-mesh | Two-grid migration: live + shadow; swap at boundary |
 | `&core.boot` | Synart's own bootloader; runtimes start knowing only how to read this Space |

@@ -1,7 +1,7 @@
 # Synodoxics
 
 **Status:** Architecture mostly target / mixed. Core commitments locked; first running implementations explicitly illustrative (the fork→regress→promote crystallization loop and the LLM-driven Rule-Author Agent are first instances, not canonical). `lift.md` is canonical vocabulary used corpus-wide.
-**Canonical home:** `laniakea-docs/synodoxics/`
+**Canonical home:** `lani/synodoxics/`
 
 ---
 

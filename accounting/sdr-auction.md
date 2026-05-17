@@ -1,13 +1,13 @@
-# Duration Allocation
+# SDR Auction
 
-**Status:** Phase 9+ design. Phase 1 uses manual governance-set allocation (the "fake auction") per [`roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md).
-**Last Updated:** 2026-05-07
+**Status:** Phase 9+ design. Phase 1 uses the synserv-triggered ownership-weighted temporary SDR auction per [`roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md).
+**Last Updated:** 2026-05-17
 
 ---
 
 ## Scope
 
-How structural-demand-matching capacity gets allocated across Primes. The capacity itself is the per-bucket Lindy-measured liability duration distribution, capped by structural maxima — see [`risk-framework/duration-model.md`](../risk-framework/duration-model.md). This doc defines how that capacity flows through governance allocation (Phase 1) and through the **OSRC + Duration auction sequence** including **tug-of-war among existing reservations** (Phase 9+).
+How structural-demand-matching capacity gets allocated across Primes. The capacity itself is effective Structural Demand Resource (SDR): lot-age surface → Lindy SDR bucket capacity → SDR policy overlay → effective SDR bucket capacity — see [`risk-framework/sdr-model.md`](../risk-framework/sdr-model.md). This doc defines how that capacity flows through the temporary P1 SDR auction and through the **OSRC + SDR auction sequence**, including **tug-of-war among existing SDR reservations** (Phase 9+).
 
 The capacity that lands here gets consumed by `structbook` (against structural USDS demand) and `termbook` (against tUSDS YT) per [`risk-framework/primebook-composition.md`](../risk-framework/primebook-composition.md).
 
@@ -19,52 +19,63 @@ Capacity lives in the Generator's entart:
 
 ```
 &entity.generator.usge.root
-  └── &entity.generator.usge.structural-demand
-        ├── &entity.generator.usge.structural-demand.scrapers   ← grounded scraper outputs
-        └── &entity.generator.usge.structural-demand.auction    ← capacity allocation
+  ├── &entity.generator.usge.structural-demand   ← lot-age surface + effective SDR capacity atoms
+  └── &entity.generator.usge.sdr-auction         ← allocation atoms / SDR auction body
 ```
 
 This is the canonical location for:
-- Raw lot-age data (USDS, DAI, sUSDS holders) populated by scraper beacons
-- Lindy + structural-cap math computing per-bucket capacity
-- Per-Prime per-bucket allocation atoms (sudo-set in Phase 1; auction-resolved in Phase 9+)
+- Effective SDR bucket capacity atoms (lot-age surface + Lindy SDR + SDR policy overlay)
+- Per-Prime per-bucket SDR allocation atoms (pro-rata temporary body in Phase 1; auction-resolved in Phase 9+)
+- Later auction infrastructure that changes allocation provenance without moving the consumer read path
 
-Capacity flows out to each Prime's `structbook` (and `termbook` once tUSDS is live) via the matching mechanics in [`risk-framework/matching.md`](../risk-framework/matching.md). The structbook reads its allocation from the auction Space and consumes it across positions per the optimization in [`risk-framework/primebook-composition.md`](../risk-framework/primebook-composition.md) §4.
+Capacity flows out to each Prime's `structbook` (and `termbook` once tUSDS is live) via the matching mechanics in [`risk-framework/matching.md`](../risk-framework/matching.md). The structbook reads its allocation from the `sdr-auction` Space and consumes it across positions per the optimization in [`risk-framework/primebook-composition.md`](../risk-framework/primebook-composition.md) §4.
 
 ---
 
 ## 2. Bucket structure
 
-The Duration Bucket system uses **101 buckets**, each representing **15 days**:
+The SDR Bucket system uses **51 buckets**, each representing **30 days**:
 
 - Bucket 0 = 0 days (immediate liquidity)
-- Bucket N covers `(N-1) × 15` to `N × 15` days
-- Bucket 84 = 1,260 days (JAAA)
-- Bucket 100 = 1,500+ days (structural / permanent base)
+- Bucket N covers `(N-1) × 30` to `N × 30` days
+- Bucket 42 = 1,260 days (JAAA)
+- Bucket 50 = 1,500+ days (structural / permanent base)
 
-For the bucket math, structural-cap formula (double exponential decay calibrated to bank-run research), and Lindy duration measurement, see [`risk-framework/duration-model.md`](../risk-framework/duration-model.md).
+For the bucket math, structural-cap formula (double exponential decay calibrated to bank-run research), and Lindy SDR measurement, see [`risk-framework/sdr-model.md`](../risk-framework/sdr-model.md).
 
-Distance decay in the tug-of-war (§5) is per-bucket: distance 1 = 15 days, distance 5 = 75 days.
+Distance decay in the Phase 9+ tug-of-war (§5) is per-bucket: distance 1 = 30 days, distance 5 = 150 days.
 
 ---
 
-## 3. Phase 1 manual carve-out (the "fake auction")
+## 3. Phase 1 temporary SDR auction
 
-In Phase 1, governance writes per-Prime per-bucket allocations directly into `&entity.generator.usge.structural-demand.auction` at genesis. The format is sudo-set atoms:
+In Phase 1, synserv triggers a temporary ownership-weighted pro-rata SDR auction during the daily DSC processing window. The auction body reads effective SDR bucket capacities from `&entity.generator.usge.structural-demand`, reads Sky token-share facts from `&core.treasury`, reads IJRC from Prime roots, and writes per-Prime per-bucket allocations into `&entity.generator.usge.sdr-auction`:
 
 ```metta
-;; sudo-written at genesis (and at sudo events that re-allocate)
-(structural-demand-allocation $prime $bucket $amount $epoch)
+(sdr-allocation $prime $bucket $amount $epoch)
 ```
 
-Distribution is **equal-split among the active Star Primes** per bucket — no bidding, no matching engine. The Prime's structbook reads its allocation atom and consumes it; the rest of the synlang (sub-book routing, matched/unmatched blending in CRR computation) is unchanged from the auction-mode design.
+The P1 allocator equation:
+
+```text
+sky_effective_ownership(p) = 0.05 + 0.95 * sky_prime_token_share(p)
+ownership_weight(p)        = sky_effective_ownership(p) * prime_ijrc(p)
+allocation(p,bucket,epoch) = effective_sdr_bucket_capacity(bucket,epoch) * ownership_weight(p,epoch) / sum(active_prime_weights(epoch))
+```
+
+The Prime's structbook reads its current-epoch allocation atoms and consumes them; the rest of the synlang (sub-book routing, matched/unmatched blending in CRR computation) is unchanged from the later auction-mode design.
 
 Phase 1 details:
-- 6 Primes deploy into 3 P1 Halos
-- All structural-demand allocation is sudo-set at genesis in the fake auction
-- Lindy measurement and structural caps are governance parameters (no real-time scraper population yet)
+- 7 Primes deploy into 3 P1 Halos
+- All 51 buckets are split across active Primes by ownership weight each DSC epoch
+- Missing, stale, or zero IJRC means zero allocation
+- Unlaunched token shares still count as ownership through supplied treasury facts
+- If there are no active positive weights, allocation rounds to zero; any rounding/dust remainder also rounds to zero
+- Prior epoch allocations are historical; there is no unused-allocation carry-forward
+- There is no P1 reservation market, sticky claim, durable SDR ownership, capacity debt, tug-of-war, or trading/upgrading path
+- Lot-age surface, Lindy SDR, and the SDR policy overlay produce effective SDR bucket capacity in P1; governance sets the overlay, not the ordinary capacity result
 
-Per [`roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md). The architecture is "high-authority action beacon submitting allocation atoms to the Generator's auction Space" — Phase 1 happens to use sudo writes; the substrate is unchanged when real auctions activate.
+Per [`roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md). The architecture is "write allocation atoms to the Generator's `sdr-auction` Space"; Phase 1 uses a simple synserv-run body, and the substrate is unchanged when real SDR auctions activate.
 
 Auction submission is an `auction-{x}` beacon (relay class, per `macrosynomics/beacon-framework.md`). What makes it high-authority is the BEAM hierarchy and auth-scoped operation of the Generator, not the class. Matching itself is synserv-run code, not a beacon class.
 
@@ -77,11 +88,11 @@ When per-Prime baseline-relay beacons (`baseline-{prime}`) deploy, sealed-bid au
 ```
 1.  Pre-auction governance allocation publishing (current state)
 2.  Sealed-bid OSRC auction              ← uniform-price, daily, no multi-day reservations
-3.  Sealed-bid Duration auction          ← multi-epoch reservations allowed
+3.  Sealed-bid SDR auction          ← multi-epoch reservations allowed
 4.  Lindy measurement at lock window
 5.  Tug-of-war among existing reservations    ← Phase 1 of allocation
 6.  Trading among Primes                  ← Phase 2 of allocation, including overreach trades
-7.  Excess capacity → Duration auction
+7.  Excess capacity → SDR auction
 ```
 
 Steps 5–7 run during the processing window (between submission lock and settlement). Step 4 establishes the per-bucket capacity that downstream allocation consumes.
@@ -94,18 +105,18 @@ Sealed-bid, **uniform-price**, **daily-only** (no multi-day reservations). Alloc
 - Old reservations would suppress yields and chase exit
 - Daily auctions provide clean per-day price discovery
 
-### Duration auction
+### SDR auction
 
-Sealed-bid, uniform-price, **multi-epoch reservations allowed**. Allocates Duration capacity reservations to Primes. Multi-epoch is allowed because Duration capacity is about duration matching (longer-term), and reservations don't directly affect other participants' yields the way OSRC reservations would suppress srUSDS yields.
+Sealed-bid, uniform-price, **multi-epoch reservations allowed**. Allocates SDR capacity reservations to Primes. Multi-epoch is allowed because SDR capacity is about sticky demand and hold-to-par matching, and reservations don't directly affect other participants' yields the way OSRC reservations would suppress srUSDS yields.
 
 ### Architectural placement
 
-Both auctions are **high-authority action beacons** submitting allocation atoms into the Generator's `&entity.generator.usge.structural-demand.auction` Space. Bid submissions are signed verb-call shapes gated by `&core.syngate`:
+OSRC auctions and SDR auctions are **high-authority action beacons** submitting allocation atoms into their Generator auction Spaces (`&entity.generator.usge.osrc-auction` for OSRC once added, `&entity.generator.usge.sdr-auction` for SDR). Bid submissions are signed verb-call shapes gated by `&core.syngate`:
 
 ```metta
 ;; sealed-bid submission (synlang verb shape, replacing legacy JSON format)
 (submit-osrc-bid $prime $amount $max-rate $epoch)
-(submit-duration-bid $prime $bucket $amount $max-price $epochs)
+(submit-sdr-bid $prime $bucket $amount $max-price $epochs)
 ```
 
 The matching algorithm itself is **synart-resolved code** (synserv-run) — not a separate beacon class. This is consistent with the in-space calculation pattern (`macrosynomics/beacon-framework.md`): input beacons push data, synserv runs the matching equations, output state lands in the auction Space.
@@ -114,7 +125,7 @@ The matching algorithm itself is **synart-resolved code** (synserv-run) — not 
 
 ## 5. Tug-of-war among existing reservations (Phase 1 of allocation)
 
-When Lindy-measured duration capacity ≠ total reservations, all capacity is allocated through tugging. Existing reservation holders tug on buckets — including their own — to fill their need.
+When Lindy-measured SDR capacity ≠ total reservations, all capacity is allocated through tugging. Existing reservation holders tug on buckets — including their own — to fill their need.
 
 ### Two phases inside allocation
 
@@ -287,9 +298,9 @@ Pareto-improving: one strictly benefits, the other is indifferent.
 
 ---
 
-## 7. Excess capacity → Duration auction
+## 7. Excess capacity → SDR auction
 
-After tug-of-war and trading, calculate remaining capacity per bucket. The excess goes to the **Duration auction**, which allocates it to bidders that didn't have prior reservations.
+After tug-of-war and trading, calculate remaining capacity per bucket. The excess goes to the **SDR auction**, which allocates it to bidders that didn't have prior reservations.
 
 ```
 For each bucket N:
@@ -327,12 +338,12 @@ If Lindy < total reservations for some bucket, excess = 0 (no auction; shortfall
 
 When you pull capacity from another bucket:
 
-| Pull Direction | Capacity Duration |
+| Pull Direction | SDR Bucket Tenor |
 |---|---|
-| **Tug UP** | Retains source bucket duration (beneficial — you get higher-than-needed duration) |
-| **Tug DOWN** | Retains source bucket duration (creates gap — source duration < your bucket; gap capital required) |
+| **Tug UP** | Retains source bucket tenor (beneficial — you get higher-than-needed SDR) |
+| **Tug DOWN** | Retains source bucket tenor (creates gap — source tenor < your bucket; gap capital required) |
 
-**Example.** Prime at bucket 40 tugs DOWN from bucket 30 → gets capacity at bucket 30 duration → 10-bucket gap → gap capital required for this portion.
+**Example.** Prime at bucket 40 tugs DOWN from bucket 30 → gets capacity at bucket 30 tenor → 10-bucket gap → gap capital required for this portion.
 
 ---
 
@@ -352,10 +363,10 @@ Enables price discovery between auctions. Settlement details (exact daily cycle 
 Following the patterns in `noemar-synlang/topology.md` and `macrosynomics/beacon-framework.md`:
 
 - **Submissions** as signed verb invocations through `&core.syngate`:
-  - `(submit-osrc-bid …)`, `(submit-duration-bid …)`, `(release-reservation …)`, `(trade-reservation …)`
-- **Bid atoms** in `&entity.generator.usge.structural-demand.auction` (sealed until processing window opens)
+  - `(submit-osrc-bid …)`, `(submit-sdr-bid …)`, `(release-reservation …)`, `(trade-reservation …)`
+- **Bid atoms** in the relevant Generator auction Space (sealed until processing window opens)
 - **Matching** as synart-resolved code in `&core.loop.synserv` (in-space calculation per `noemar-synlang/listener-loops.md`)
-- **Allocation outputs** as `(structural-demand-allocation $prime $bucket $amount $epoch)` atoms — same shape as Phase 1 sudo-set fake auction; only the source changes (governance → auction)
+- **Allocation outputs** as `(sdr-allocation $prime $bucket $amount $epoch)` atoms for SDR — same shape as the Phase 1 temporary SDR auction; only the body/source changes
 
 Vocabulary: auction submission is an `auction-{x}` beacon (relay class). Pre-synlang docs used the JSON bid-message format; the current form is synlang verb-call shape.
 
@@ -363,12 +374,12 @@ Vocabulary: auction submission is an `auction-{x}` beacon (relay class). Pre-syn
 
 ## 12. Connection to risk framework
 
-Per [`risk-framework/matching.md`](../risk-framework/matching.md), duration matching protects against **credit-spread risk**, not interest-rate risk:
+Per [`risk-framework/matching.md`](../risk-framework/matching.md), hold-to-par matching protects against **credit-spread risk**, not interest-rate risk:
 
 | Sub-book | Covers credit-spread? | Covers rate? | Liability matched against |
 |---|---|---|---|
 | `termbook` | Yes (held to par) | Yes (matched fixed/fixed) | tUSDS-issued YT (Yield Tokens) |
-| `structbook` | Yes (held to par) | No (rate-hedge or v1 carve-out) | Structural USDS demand (Lindy + caps) |
+| `structbook` | Yes (held to par) | Yes for SDR-matched P1 positions; future forms may require explicit rate hedge if the liability match does not cover rate | Structural USDS demand (SDR) |
 
 Once allocated, capacity is consumed by the structbook (and termbook once tUSDS is live) per the matched/unmatched blend in [`risk-framework/primebook-composition.md`](../risk-framework/primebook-composition.md) §4. The blend shifts smoothly: when capacity shrinks, more position size falls into the unmatched portion; when capacity grows, more is matched. Capital requirement updates continuously — no binary "transition" event.
 
@@ -382,7 +393,7 @@ Once allocated, capacity is consumed by the structbook (and termbook once tUSDS 
 - **Cascade depth limits** — should there be a max cascade depth to prevent complexity?
 - **Trading order** — should overreach trades happen before or after cascade trading?
 - **Edge cases** — what happens with extreme Lindy shifts (e.g., all capacity disappears)?
-- **Reservation duration limits** — max duration in epochs (365 days? longer?)
+- **Reservation term limits** — max reservation term in epochs (365 days? longer?)
 - **Secondary market mechanics** — same daily cycle or continuous settlement?
 - **Bid increments / spam control** — minimum bid sizes or rate increments
 
@@ -392,13 +403,13 @@ Once allocated, capacity is consumed by the structbook (and termbook once tUSDS 
 
 | Doc | Relationship |
 |---|---|
-| [`README.md`](laniakea-docs/accounting/README.md) | Accounting directory index |
-| [`settlement-cycle.md`](settlement-cycle.md) | OSRC + Duration submission flow runs on the same daily cadence |
+| [`README.md`](lani/accounting/README.md) | Accounting directory index |
+| [`settlement-cycle.md`](settlement-cycle.md) | OSRC + SDR submission flow runs on the same daily cadence |
 | [`capital-stack.md`](capital-stack.md) | OSRC capacity feeds SRC ingression; SRC ingression depends on the JRC base |
-| [`../risk-framework/duration-model.md`](../risk-framework/duration-model.md) | Lindy + structural caps; bucket structure; v1 manual carve-out; Phase 9+ activation |
+| [`../risk-framework/sdr-model.md`](../risk-framework/sdr-model.md) | Lindy SDR + SDR policy overlay; bucket structure; P1 temporary SDR auction; Phase 9+ activation |
 | [`../risk-framework/matching.md`](../risk-framework/matching.md) | Credit-spread vs rate distinction; termbook vs structbook |
 | [`../risk-framework/primebook-composition.md`](../risk-framework/primebook-composition.md) | structbook / termbook capacity consumption; matched/unmatched blend |
-| [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) | Phase 1 carve-out: sudo-set fake auction in `&entity.generator.usge.structural-demand.auction` |
+| [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) | Phase 1 carve-out: synserv-triggered temporary SDR auction in `&entity.generator.usge.sdr-auction` |
 | [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) | Entart subtree structure for the Generator's structural-demand subtree |
 | [`../macrosynomics/beacon-framework.md`](../macrosynomics/beacon-framework.md) | Auction beacons as relay-class subkind (`auction-{x}` stem); legacy `lpha-auction` glossary entry |
 
@@ -406,4 +417,4 @@ Once allocated, capacity is consumed by the structbook (and termbook once tUSDS 
 
 ## One-line summary
 
-**Duration capacity per bucket is computed by Lindy + structural caps in the Generator's structural-demand subtree, allocated in Phase 1 by sudo-set governance writes (the "fake auction") and from Phase 9+ by sealed-bid OSRC and Duration auctions plus a tug-of-war among existing reservations followed by trading and an excess-capacity auction — with bids as synlang verb calls, matching as synserv-run in-space code, and the same `(structural-demand-allocation …)` atom shape consumed downstream by `structbook` and `termbook` regardless of source.**
+**SDR capacity per bucket is computed by the lot-age surface, Lindy SDR, and the SDR policy overlay in the Generator's structural-demand subtree, allocated in Phase 1 by a synserv-triggered ownership-weighted temporary SDR auction and from Phase 9+ by sealed-bid OSRC and SDR auctions plus a tug-of-war among existing reservations followed by trading and an excess-capacity auction — with bids as synlang verb calls, matching as synserv-run in-space code, and the same `(sdr-allocation …)` atom shape consumed downstream by `structbook` and `termbook` regardless of source.**

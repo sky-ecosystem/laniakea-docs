@@ -147,7 +147,7 @@ A baseline-relay can automate this cycle, optimizing the SKY/growth-assets balan
 
 ## Related
 
-- [`README.md`](laniakea-docs/synomic-entities/README.md) — Rank hierarchy
+- [`README.md`](lani/synomic-entities/README.md) — Rank hierarchy
 - [`prime.md`](prime.md) — Type 1 Restructure target (folio → Prime)
 - [`halo-classes.md`](halo-classes.md) — Halos that folios allocate to
 - [`creation-restructuring.md`](creation-restructuring.md) — Folio auto-accord; Type 1 Restructure

@@ -1,6 +1,6 @@
 # Accounting
 
-> **Migrated to synlang-native (2026-05-07):** Active content lives at [`laniakea-docs/accounting/`](../../../accounting/). Mapping:
+> **Migrated to synlang-native (2026-05-07):** Active content lives at [`lani/accounting/`](../../../accounting/). Mapping:
 > - `books-and-units.md` → absorbed into [`risk-framework/book-primitive.md`](../../../risk-framework/book-primitive.md) + [`noemar-synlang/synlang-patterns.md`](../../../noemar-synlang/synlang-patterns.md) (deleted)
 > - `current-accounting.md` → [`phases/legacy-state.md`](../../../phases/legacy-state.md)
 > - `daily-settlement-cycle.md` → [`accounting/settlement-cycle.md`](../../../accounting/settlement-cycle.md)

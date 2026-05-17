@@ -69,7 +69,7 @@ V1 implementation: Genbook-level only (per the original `correlation-framework.m
 
 ### Categories
 
-A category is an arbitrary governance-defined label used for concentration limits. Examples: "CLOs", "US-based assets", "40-50 month duration", "real estate", "ETH-backed lending".
+A category is an arbitrary governance-defined label used for concentration limits. Examples: "CLOs", "US-based assets", "40-50 month maturity", "real estate", "ETH-backed lending".
 
 Categories are not mutually exclusive. An ETH-backed loan to a US-based borrower might be in three categories: ETH-collateral, USD-denominated, US-jurisdiction.
 
@@ -86,10 +86,10 @@ Categories live in `&core.framework.risk.concentration` (per [`asset-classificat
 
 Caps are measured on a unified "portfolio exposure" basis, but the measurement differs by treatment:
 
-- **Matched exposure** (`structbook` / `termbook` matched portion): measured using notional / duration-value (the "hold-to-maturity" relevant size)
+- **Matched exposure** (`structbook` / `termbook` matched portion): measured using notional / hold-to-maturity value
 - **Unmatched exposure** (`tradingbook` / unmatched portion): measured using market value (MTM)
 
-Interpretation: if an exposure is treated as forced-sale (unmatched), it consumes category capacity by its MTM size; if it is treated as duration-matched, it consumes by notional.
+Interpretation: if an exposure is treated as forced-sale (unmatched), it consumes category capacity by its MTM size; if it is treated as SDR- or term-matched, it consumes by notional.
 
 ### Cap and excess penalty
 
@@ -122,7 +122,7 @@ This allocation changes gradually based on which Primes have been paying the ove
 T = max(asset_SPTP, 3 months)
 ```
 
-Longer-duration assets take longer to normalize; very short durations still have a minimum normalization of 3 months.
+Longer-maturity assets take longer to normalize; very short maturities still have a minimum normalization of 3 months.
 
 **Reallocation rule (daily settlement):**
 - Compute each Prime's category exposure `E[p][c]`

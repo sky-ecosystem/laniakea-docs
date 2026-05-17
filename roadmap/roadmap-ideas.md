@@ -101,7 +101,7 @@ Future use cases the same mechanism supports:
 - What-if queries (synodoxics arguments exercised in shadow before becoming endospells)
 - Major migrations / repartitioning (double-mesh trick)
 
-Phase 1 implementation: deep copy is enough at this scale (~64 Spaces, modest atom count). Copy-on-write becomes valuable later.
+Phase 1 implementation: deep copy is enough at this scale (~66 Spaces, modest atom count). Copy-on-write becomes valuable later.
 
 ---
 
@@ -120,7 +120,7 @@ The Phase 1 deliverables are bounded — only what's needed for the phase to per
 - **Code → synlang.** Every rule, equation, derivation, loop body, predicate. Lifty.
 - **Data → atoms** (sudo-set or derived). Stress scenario parameters, asset stress profiles, capital allocations, governance numbers. Sudo-setting *numbers* in Phase 1 isn't duct tape — it's policy. The equations consuming them are synlang.
 
-A function whose body we don't yet know how to write isn't duct tape either, **as long as the signature is real synlang**. Declare the inputs, declare the output, leave the body deferred. The custodial-crypto risk form (the equation inside each per-halo risk class) is exactly this in v1: real synlang signature consuming `chain-read` + market-data ticks + the boolean attestation gate, returning per-risk-type CRR components; opaque body; no rewrite required when the body matures.
+A function whose body we don't yet know how to write isn't duct tape either, **as long as the signature is real synlang**. Declare the inputs, declare the output, leave the body deferred. The matured P1 `custodial-crypto` direction is no longer opaque: it is a stress-envelope waterfall consuming `chain-read`, market-memory atoms, and attestation gates, returning per-risk-type CRR components. Exact scenario constants remain data atoms, not code.
 
 ### The insyn/exsyn pattern — phasing capabilities into synome
 
@@ -161,9 +161,20 @@ For doesn't-fit cases, black-box deferral (define the function signature, leave 
 
 ### Black-box deferrals — honest scaffolds, not duct tape
 
-When you don't know enough about a domain to model its internals well, define the function signature in synlang and leave the body opaque. The risk framework in v1 collapses to a single risk class (`custodial-crypto`) per halo, each carrying a risk form that consumes `chain-read` + market-data + the boolean attestation gate and returns per-risk-type CRR components; the body is unknown territory; the signature is permanent. When the body matures, fill in the synlang — same signature, same callers, no rewrite. Modeling internals prematurely (stress scenario library, asset stress profile derivation, volatility calibration) would lock in a model that may not survive contact with reality.
+When you don't know enough about a domain to model its internals well, define the function signature in synlang and leave the body opaque. This was the right earlier discipline for the P1 risk-form conversation: lock the `custodial-crypto` signature and do not invent a fake scalar. The current live P1 design has since matured past opacity: the body is a stress-envelope exobook waterfall over `chain-read`, market-memory reducer outputs, and attestation gates. The black-box pattern remains the right tool for future risk classes whose internals are not yet understood.
 
 The discipline: **define the smallest synlang surface** that lets the layer above proceed. Defer everything else to its respective phase boundary.
+
+### Temporary-equation bodies — real-but-provisional computation
+
+Some P1 bodies are not opaque; they are known temporary equations. They are real synlang, run in production, and produce real atoms, but their body is expected to be swapped when the mature mechanism lands. This differs from black-box deferral:
+
+- black-box deferral: signature is real, body is opaque;
+- temporary-equation body: signature and body are real, but the body is intentionally provisional.
+
+The P1 SDR auction is the canonical case. Synserv triggers it during the daily processing window. It reads effective SDR bucket capacities from `&entity.generator.usge.structural-demand`, Sky Prime token-share facts, and per-Prime IJRC, then writes ownership-weighted pro-rata `sdr-allocation` atoms. A later phase replaces the body with real Prime-strategy-driven SDR auction matching. The trigger, read path, atom shape, and structbook consumption site stay fixed.
+
+**Temporary-equation containment:** all temporary logic must live inside the body that will later be swapped. Long-term systems it consumes stay clean. For P1, `&core.treasury` stores raw Sky token-share facts; `&entity.generator.usge.structural-demand` stores the lot-age surface, Lindy SDR output, policy overlay, and effective SDR bucket capacities; the ownership-weight split lives entirely in `&entity.generator.usge.sdr-auction`.
 
 ### Phase-invariant consumption sites — additive-only transitions
 
@@ -171,7 +182,7 @@ The lift principle's third move, alongside insyn/exsyn and black-box deferral. W
 
 The worked case is the risk form. In Phase 1 there is no canonical `&core.framework.risk.forms` Space and no propagation; each halo's risk class Space (`&entity.halo.{id}.custodial-crypto`) holds its own copy of the risk form, sudoed at genesis. The halo factory imports the risk form into each dynamic consumer (riskbook) at creation. synserv reads it purely local. Later, a canonical `&core.framework.risk.forms` source plus a propagation mechanism are added — refreshing the *same* per-halo risk class Spaces that Phase 1 already sudo-populates. The factory is unchanged; synserv's read path is unchanged. The transition is purely **additive**: a new source Space + a new propagation loop, nothing relocated, renamed, or rewired.
 
-The same shape recurs for **loop bodies** (per-entity loop Spaces hold their bodies in P1; canonical templates ship later, propagating into the same per-entity Spaces — entarts can also keep local extensions alongside the propagated body) and for **structural-demand allocations** (the auction Space holds sudo-set allocations in P1; the real Prime-strategy-driven auction later writes the same atom shape into the same Space).
+The same shape recurs for **loop bodies** (per-entity loop Spaces hold their bodies in P1; canonical templates ship later, propagating into the same per-entity Spaces — entarts can also keep local extensions alongside the propagated body) and for **SDR allocations** (`&entity.generator.usge.sdr-auction` holds synserv-written pro-rata SDR allocations in P1; the real Prime-strategy-driven SDR auction later writes the same atom shape into the same Space).
 
 **The invariant:** whoever consumes the thing must read it from the exact same local location in Phase 1 and later. The only thing allowed to change across the transition is the *provenance* of how it got there — sudo-authored → propagated-from-canonical. The read side never sees the difference. Same shape as insyn/exsyn ("the synlang code doesn't change at the migration boundary") — here it is the *read path* that doesn't change.
 
@@ -182,6 +193,31 @@ The same shape recurs for **loop bodies** (per-entity loop Spaces hold their bod
 - The constructor / wiring that imports into dynamic consumers must already be the Phase 1 behavior — so it is literally unchanged at the transition.
 
 **Distinguish the instances from the spec.** Saying a capability "only lives in tests" in Phase 1 is shorthand for *the normative spec* having no Space yet — the binding that says "these copies must be equal and must mean X." The *instances* (the actual equation atoms) do live in real Spaces from day 1; they have to, or the read path cannot be phase-invariant. Tests carry the normative spec until a canonical Space does; their *role* then shifts from binding to conformance-check. That role shift is expected evolution, not debt — debt only ever shows up in topology or read-path.
+
+### DSC — the synomic settlement cadence
+
+The synome only knows the daily synomic settlement cycle (DSC). Legacy monthly settlement is an out-of-band operational shadow, not a set of atoms. As a capability becomes visible to the synome it enters DSC; there is no MSC-inside-synome intermediate state.
+
+P1 uses DSC for structural-demand processing:
+
+- cut: 13:00 UTC;
+- processing window: 13:00-16:00 UTC;
+- processing tasks: treasury refresh, lot-age surface refresh, Lindy SDR, SDR policy overlay, temporary SDR auction;
+- settle / epoch advance: 16:00 UTC;
+- advancement: synserv derives state from wall clock and writes `&core.settlement`, not a sudo loop.
+
+Later settlement closure, TMF, DR/SDRR, and real auctions add more processing tasks to the same cadence.
+
+### Market memory — reducer outputs, not raw history atoms
+
+Market-data beacons should be understood as market-memory beacons. Raw source tapes live in archive nodes. Versioned reducer formulas run over those tapes in two modes:
+
+- replay mode: historical archive range -> backfilled reducer outputs;
+- live-tail mode: new events -> updated reducer outputs.
+
+The same reducer runs in both modes. If fundamental understanding changes, governance approves a new reducer version, archive nodes replay history with the new formula, and once caught up the same reducer continues live. The synome stores reducer outputs and checkpoints, not the full raw tape.
+
+Risk scenarios should minimize arbitrary parameters by referencing reducer outputs wherever possible. Any remaining semantic bridge ("war means this bundle of rate-spike, liquidity-drought, and crypto-risk-off reducer references") must be explicit.
 
 ### Don't rabbit-hole — what to skip
 
@@ -195,89 +231,17 @@ Lifty doesn't mean fanatical. The boundary:
 - ❌ Don't build event-driven derivation when heartbeat sweep suffices
 - ❌ Don't build full multi-Generator architecture when v1 has one Generator
 - ❌ Don't activate concentration excess penalty when v1 has no caps
-- ❌ Don't build asset history derivation when stress profiles are sudo-set
+- ❌ Don't hardcode full causal macro models when scenario atoms can reference market-memory reducer outputs
 
 The test for any deferred component: *would building it now exercise architecture we'll otherwise miss, or would it be speculative scaffolding for a phase that hasn't arrived?* If speculative, defer. If load-bearing for the phase's deliverable, build it lifty.
 
 ---
 
-## Why Phase 1 ended up at the exact scope it did
-
-The conversation iterated through several scopes; v3 (2026-05-15 topology redesign, building on v2 of 2026-05-06) settled on:
-
-1. **Real-time ER per Prime as the single deliverable.** Settlement and penalty action remain manual; the synome publishes ER, governance consumes externally.
-2. **All synlang from day 1**, per the lift principle above. No Python placeholders.
-3. **Risk framework via per-halo risk class** — one risk class (`custodial-crypto`) per halo, each carrying a risk form (real synlang signature, body deferred); no canonical `&core.framework.*` Space in P1.
-4. **Insyn/exsyn split for system-wide quantities** — TRRC = insynTRRC + exsynTRRC; TRC fully insyn (synome-tracked).
-5. **Seven Primes all active**, deploying into 3 P1 Halos. No placeholder Primes.
-6. **Halo class + risk class split per halo** — halo class (`nfat-term`) carries halobook policy + permitted risk classes; risk class (`custodial-crypto`) carries risk form + attestor as sub-Space. Per-halo materialization per the phase-invariant consumption-site principle.
-7. **Root holds registry + constructors only.** Operational logic lives in dedicated sub-Spaces. Universal pattern across every entart type.
-8. **Cert / auth fold into `&core.registry.beacon`.** No standing Guardian root Space in P1; the beacon registry is the authority root.
-
-What's in Phase 1 (v3):
-- **64 fixed Spaces** (4 universal Core + 4 Generator + 3 Oracle + 7 Primes × 5 + 3 Halos × 6)
-- 3 constructors (`create-halobook`, `create-riskbook`, `create-exobook`); constructor-made depth grows per deal flow
-- ~23 beacon identities, all running real synlang loops in Noemar
-- Per-halo halo class + risk class copies (`nfat-term` × `custodial-crypto` in each of the 3 halos); tests bind the per-halo copies until canonical propagation ships later
-- Per-entart `protocol-registry` sub-Spaces (each Prime, Halo, and the Generator owns its own chain-contract refs locally)
-- Synart-native test suite + runtime frame mechanism for clone-and-test isolation
-- Real-time ER per Prime emitted continuously via synlang heartbeat
-- Authority chain rooted in `&core.registry.beacon` (no standing Guardian Space; Guardian's cert content sudoed into the beacon registry at genesis)
-
-What's deferred:
-- Stress scenario library, asset stress profile derivation, asset history (risk framework treated as black box; no `&core.framework.*` Space in P1)
-- Concentration excess penalty (no caps active)
-- Other Primebook sub-books (only `structbook` active)
-- Settlement closure / penalty calculation (Phase 2)
-- LCTS / srUSDS (Phase 4)
-- Factories for new entities (Phases 5-8)
-- Sentinel formations (Phases 9-10)
-- Cross-Prime concentration in Genbook (Genbook itself deferred)
-- Multi-Generator architecture
-- Event-driven derivation (heartbeat sweep is enough)
-- Endoscraper-driven verification — endoscraper is a grounded runtime primitive `(chain-read $contract $slot)`; per-protocol metadata lives in per-entart `protocol-registry` sub-Spaces (each Prime, Halo, and the Generator carries its own contract refs locally), not a single `&core.protocol`
-- `&core.escalation` (status atoms in books are enough)
-- Canonical loop-template propagation (per-entity loop Spaces hold their bodies in P1; templates arrive additively in a later phase)
-- Canonical risk-form source + propagation (per-halo copies in P1; canonical source ships additively later)
-
----
-
 ## Phase doc template (for Phases 2-10)
 
-Each future phase doc should have, in this order:
+Each future phase doc, in order: (1) framing — what changes operationally vs sudo-only; (2) Spaces added at the phase boundary; (3) Spaces modified (new I/O edges or content); (4) new constructors / verbs; (5) new beacon classes + I/O matrix; (6) test additions to `&core.test-suite`; (7) genesis-equivalent sudo sequence for the phase boundary; (8) what carries forward unchanged (important — most substrate doesn't change at most phase boundaries); (9) deferred internals; (10) running totals.
 
-1. **Framing** — what changes operationally vs sudo-only in this phase
-2. **Spaces added** — new Spaces sudo-allocated at the phase boundary
-3. **Spaces modified** — existing Spaces with new I/O edges or new content types
-4. **New constructors / verbs** — anything that allocates Spaces or that's added to the verb whitelist
-5. **New beacon classes** — new identity classes registered, with their I/O matrix
-6. **Test additions** — new test atoms appended to `&core.test-suite`
-7. **Genesis-equivalent sudo sequence** for this phase boundary — exact sequence of sudo writes that constitutes "moving to this phase"
-8. **What carries forward unchanged** — explicit list of Spaces / verbs / archetypes from prior phase that don't change here
-9. **Deferred internals** — what's intentionally not specified yet
-10. **Totals** — running total of fixed Spaces, beacons, constructors, etc.
-
-The "what carries forward unchanged" section is important — it makes the phase boundary's scope visible. Most of the substrate doesn't change at most phase boundaries; the doc should make that explicit.
-
----
-
-## Key design takeaways from the Phase 1 work
-
-A few principles that emerged:
-
-- **The lift principle is the bar.** Synlang-first, production-quality, no Python placeholders that get rewritten. Test: code → synlang, data → atoms. Grounded primitives (ed25519, atom storage, network, math) stay native; everything else is synlang.
-- **Insyn/exsyn split is the generalizable phased-buildout device.** Quantity = insyn (real synlang on what's in synome) + exsyn (oracle gap-filler for what's not yet). As phases progress, insyn coverage grows, exsyn shrinks toward zero. The synlang code doesn't change at the migration boundary. Distinct from endo/exo in synlang substrate vocabulary — different scope, different distinction.
-- **Black-box deferrals are honest scaffolds.** Define synlang function signatures; leave bodies opaque when domain understanding is thin. The risk form inside each per-halo risk class is the v1 example — production signature, deferred internals, no rewrite when matured.
-- **Phase-invariant consumption sites make transitions additive.** Fix where a thing is read from in Phase 1; let its provenance migrate behind it (sudo-authored → propagated-from-canonical). Materialize at the consumption site from day 1 — never cross-space-reference-then-fix-later. Same family as insyn/exsyn and black-box deferral.
-- **Don't rabbit-hole.** Lifty doesn't mean fanatical. Build what's load-bearing for the phase's deliverable; defer speculative scaffolding to its phase boundary.
-- **"Any sudo event is a phase boundary by definition."** Modifying fixed Spaces necessarily means leaving the phase. If you're tempted to sudo during a phase, that's the signal you're starting a new phase.
-- **Real beacons run synlang loops.** Not Python placeholders. Two-step pattern (universal templates + per-entity configs). Phase 1 is when Noemar steps up to production load.
-- **Authority is fully sudo at genesis.** No Core GovOps role in Phase 1; cert + auth content sudoed into `&core.registry.beacon` (no standing Guardian root Space — the beacon registry is the authority root). Simplifies the authority chain dramatically.
-- **Attestation closes the rollup.** One per exobook, signed by class-accordant attestor (the attestor loop lives as a sub-Space of the risk class, making class-accordance structural). Without a fresh accordant `(underwriting pass)`, the exobook doesn't roll up — the riskbook's risk form excludes it (default-deny). Integrity discipline that prevents stale legal/credit facts from poisoning the rollup.
-- **All 7 Primes active.** No placeholder Primes. Each deploys into the 3 P1 Halos (spark-term, grove-term, maple-term). Real ER for everyone from day 1.
-- **Halobooks/riskbooks/exobooks are constructor-made**, not sudo. Deals come in bursts; the substrate accommodates them via 3 factory verbs.
-- **Test halo deleted in favor of shadow frame.** The clone-and-test pattern is cleaner than dedicated test entities + cleanup verbs.
-- **Frames live below synomic surface.** Don't add `&core.frames` Space. The frame mechanism is a runtime feature; from inside synart you can't tell what frame you're in.
+For the Phase 1 instantiation of this template and the canonical scope/carve-out lists, see [`phase-1-spaces.md`](phase-1-spaces.md) and [`v1-principles.md`](v1-principles.md).
 
 ---
 
@@ -285,41 +249,20 @@ A few principles that emerged:
 
 Things noted during the Phase 1 work that don't have settled answers:
 
-- **Exact attestation atom shape** — RESOLVED 2026-05-14 for custodial-crypto: see [`attestor-atom-schema.md`](attestor-atom-schema.md). The boolean reframe (legal/credit/custodian underwriter, no quantitative oracle role) holds for any custodial-crypto-shaped class. Opaque-RWA classes (legacy HVB-style) still need a richer numeric schema — deferred, not a P1 risk class.
 - **Crypto stress scenario calibration** — deferred to governance discussion when CRR values become real
 - **Shadow-test execution mechanism** — same synserv flipping pointer vs separate synserv instance pointed at shadow (Phase 1 doesn't need to settle this; pre-launch testing only needs one)
-- **Pre-synlang → synlang vocabulary mapping** — whether to inline mapping tables in each phase doc or maintain a single shared mapping. Lean: one shared mapping at `roadmap/README.md`.
 - **Whether `&core.spells` should exist in Phase 1** as empty/unused infrastructure that exospells will populate later — currently deferred (no spells in Phase 1)
-- **Generator's place in authority chain** — this came up earlier and was resolved to "USGE direct child of Ozone, peer of Primes" in `topology.md`. Phase 1 follows this.
-
----
-
-## Pre-synlang ↔ synlang vocabulary mapping (partial)
-
-A few translations between the legacy roadmap (`inactive/pre-synlang/roadmap/`) and the synlang-native phase docs:
-
-| Pre-synlang term | Synlang-native equivalent |
-|---|---|
-| Synome-MVP | Universal Spaces (`&core.*`) + per-entity entart subtrees |
-| Halo Books (in Synome-MVP) | Factory-created `&entity.halo.<id>.halobook.<hbk-id>` Spaces |
-| Halo Units | Atoms inside book Spaces (one unit atom per NFAT) |
-| Risk Framework (Synome-MVP entity) | `&core.framework.risk` content |
-| Attestations (Synome-MVP entity) | Atoms inside book Spaces (gated by class-accordant attest-data auth) |
-| Core Halo entries | Atoms in (a future) `&core.registry.corehalo` — Phase 1 collapses these into the existing 3 halos so no separate registry needed |
-| LPLA / LPHA / HPLA / HPHA codes | Two-tier authority + I/O role under it (per `macrosynomics/beacon-framework.md`); legacy `hpla-` prefix survives only on legacy peer-to-peer trade beacon identifiers |
-| `lpla-checker` (legacy beacon class) | Synserv-run in-space calculation (per `noemar-synlang/listener-loops.md`) — no longer a separate beacon |
-
-Worth maintaining a more complete version as later phase docs reference back to roadmap content.
+- **Opaque-RWA risk class attestation schema** — legacy HVB-style classes (no on-chain visibility) need a richer numeric schema beyond the custodial-crypto boolean reframe; deferred, not a P1 risk class
+- **Later-phase Space-name judgment calls** — names chosen during the 2026-05-13 naming sweep but not used in P1: `&core.framework.risk.crash-oracle` (could be `&core.framework.crash-oracle` if not strictly risk), `&core.framework.prime-token-metrics` (could be registry data), and `&core.registry.cross-prime-flows` (compound id pattern is consistent but not yet reserved vocabulary)
 
 ---
 
 ## What might come next
 
-Reasonable next steps from where we are:
+Reasonable next steps:
 
-1. **`phase-0-substrate.md`** — write up the foundational substrate (genesis sudo, gate, identity, authority bootstrap, sudo + audit + failover). This is what every phase rests on.
-2. **`phase-2-spaces.md`** — Phase 2 adds formalized monthly settlement; what Spaces does that introduce (settlement-tracking atoms, in-space settlement verification, prepayment / penalty event records)? Plus the test additions for Phase 2.
+1. **`phase-0-substrate.md`** — foundational substrate (genesis sudo, gate, identity, authority bootstrap, sudo + audit + failover); the irreducible base every phase rests on. Recommended first.
+2. **`phase-2-spaces.md`** — adds formal settlement closure tasks to the daily synomic settlement cycle (in-space settlement verification, prepayment / penalty event records), plus Phase 2 test additions.
 3. **Continue through Phases 3-10** in order, each as a topology delta.
-4. **`roadmap/README.md`** — a directory index + conventions reference + complete vocabulary mapping table.
 
-Recommend starting with Phase 0 doc since it's the substrate every other phase references.
+(Pre-synlang ↔ synlang vocabulary mapping is in [`../roadstart/README.md`](../roadstart/README.md).)

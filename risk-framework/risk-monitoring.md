@@ -96,7 +96,7 @@ Rate of sub-book reclassifications per Prime per epoch. Sudden spikes may indica
 
 | Layer | Components |
 |-------|-----------|
-| **Collection** | On-chain state (chain-read primitive), market-data beacons, attest-data beacons, sentinel reports |
+| **Collection** | On-chain state (chain-read primitive), market-memory reducer outputs, attest-data beacons, sentinel reports |
 | **Processing** | Real-time aggregation, historical comparison, anomaly detection, alert generation |
 | **Visualization** | Role-specific dashboards, real-time status, historical trends, drill-down |
 | **Alerting** | Threshold-based, anomaly-based, escalation triggers |

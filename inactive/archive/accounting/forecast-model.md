@@ -2,7 +2,7 @@
 
 A modular Python forecast model for Sky that calculates monthly results and aggregates to quarters. This tool enables scenario planning, sensitivity analysis, and financial projections for the Sky ecosystem.
 
-**Source:** [Laniakea Forecast Model](https://github.com/sky-ecosystem/laniakea-docs/tree/main/forecast_model)
+**Source:** [Laniakea Forecast Model](https://github.com/sky-ecosystem/lani/tree/main/forecast_model)
 
 ---
 

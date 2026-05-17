@@ -1,7 +1,7 @@
 # Sentinel
 
 **Status:** forward-looking — sentinels are not in Phase 1 scope. P1 has only relays (deterministic, govops-controlled). This summary describes the architecture for when ecosystem actors with proprietary intelligence and folios under principal control come online.
-**Canonical home:** `laniakea-docs/sentinel/`
+**Canonical home:** `lani/sentinel/`
 
 ---
 

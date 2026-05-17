@@ -1,62 +1,5 @@
 # Capital Formula
 
-**Status:** Draft (Phase 3 update, 2026-05-05)
-
-The downstream consumer of the layered risk model. Defines how Riskbook risk-form equations, sub-book composition, hedge accounting, and concentration penalties combine into a single Total Required Risk Capital (TRRC) number per Prime.
-
-Companion to:
-- [`risk-decomposition.md`](risk-decomposition.md) — the five risk types and the coverage matrix
-- [`riskbook-layer.md`](riskbook-layer.md) — Riskbook risk-form match produces per-position CRR
-- [`primebook-composition.md`](primebook-composition.md) — sub-book routing determines which risks are covered
-- [`hedgebook.md`](hedgebook.md) — hedge residuals contribute via the Hedgebook sub-book
-- [`correlation-framework.md`](correlation-framework.md) — concentration penalties (excess CRR 100%) layer on top
-
----
-
-## TL;DR
-
-Per-position computation flow:
-
-```
-1. Look up position's Riskbook risk-form equation
-2. Project asset stress through tranche waterfall (or projection model for non-tranched)
-3. Apply Halobook adjustment if any (P/T declarations affect routing)
-4. Route to Primebook sub-book based on structural eligibility
-5. Sub-book determines which risks are covered vs require capital
-6. Apply concentration excess penalty if applicable
-7. Sum to position capital
-```
-
-Total Required Risk Capital:
-
-```
-TRRC = Σ Position Capital + Concentration Excess Penalties
-```
-
-The blended formula for an optimization-shaped sub-book (`structbook`, `termbook`, `hedgebook`):
-
-```
-Position Capital = matched_or_hedged_portion × covered_treatment_CRR
-                 + unmatched_or_unhedged_portion × forced-loss_CRR
-```
-
-For static-treatment sub-books (`tradingbook`, `ascbook`, unmatched): uniform forced-loss across the position.
-
----
-
-## Section map
-
-| § | Topic |
-|---|---|
-| 1 | The per-position computation flow |
-| 2 | Per-sub-book CRR formulas |
-| 3 | Concentration excess penalty |
-| 4 | TRRC aggregation |
-| 5 | Capital funding |
-| 6 | NFAT book-phase note |
-
----
-
 ## 1. The per-position computation flow
 
 For each position held by a Prime:
@@ -91,8 +34,6 @@ Step 6: Concentration excess
 
 Step 7: Position capital = sum of treatments × position size
 ```
-
----
 
 ## 2. Per-sub-book CRR formulas
 
@@ -130,12 +71,12 @@ Three risks covered (credit-spread, rate, liquidity) on the matched portion. Unm
 Matched Portion = min(Position Size, Available Structural-Demand Capacity)
 Unmatched Portion = Position Size - Matched Portion
 
-Position Capital = Matched Portion × Risk Weight
-                 + Matched Portion × Rate-Hedge Capital   ; v1 carve-out: 0
-                 + Unmatched Portion × max(Risk Weight, Forced-Loss Capital)
+Position Capital = Matched Portion × default-CRR
+                 + Unmatched Portion × max(default-CRR, Forced-Loss Capital)
+                 + Unmatched Portion × rate-CRR
 ```
 
-Credit-spread + liquidity covered on matched portion. Rate-hedge capital required for matched portion (carved out for v1). Unmatched falls through.
+Credit-spread, rate, and liquidity are covered on the SDR-matched portion in P1. The risk form still calculates spread-CRR, rate-CRR, and liquidity-CRR; they become non-binding only to the extent the position is matched. Unmatched falls through to forced-loss plus rate treatment. Default-CRR is always required.
 
 ### `hedgebook` (optimization, hedge residual)
 
@@ -157,8 +98,6 @@ Position Capital = Position Size × max(Risk Weight, Forced-Loss Capital)
 
 Same form as `tradingbook` but without the FRTB-eligibility (no liquid trading expected).
 
----
-
 ## 3. Concentration excess penalty
 
 If a Prime exceeds its in-cap allocation for any category (per [`correlation-framework.md`](correlation-framework.md)), the excess portion gets 100% CRR:
@@ -168,13 +107,11 @@ For category c:
    alloc[p][c] = Prime p's in-cap allocation for category c
    E[p][c]     = Prime p's exposure in category c
    excess[p][c] = max(0, E[p][c] - alloc[p][c])
-   
+
 Excess Capital[p][c] = excess[p][c] × 1.0   ; 100% CRR
 ```
 
 Per the no-stacking rule (per [`correlation-framework.md`](correlation-framework.md) §2): if a position is in multiple categories, the binding category penalty applies (max), not the sum.
-
----
 
 ## 4. TRRC aggregation
 
@@ -193,15 +130,11 @@ ER[p] = TRRC[p] / TRC[p]
 
 Where `TRC[p]` is Total Risk Capital actually held (JRC + EJRC + SRC, per [`../accounting/capital-stack.md`](../accounting/capital-stack.md)). Target: `ER ≤ 0.90`. Breach drives penalties at settlement.
 
----
-
 ## 5. Capital funding
 
 This formula outputs **TRRC** (Total Required Risk Capital). For how TRRC is funded across JRC/SRC tiers with ingression-adjusted recognition, see [`../accounting/capital-stack.md`](../accounting/capital-stack.md).
 
 The ingression mechanism handles the time delay between commitment and recognition of external risk capital. Capital that has committed to back the Prime but hasn't yet ingressed counts at a discount; once ingressed, full notional applies.
-
----
 
 ## 6. NFAT book-phase note
 
@@ -211,22 +144,4 @@ For positions held via Term Halo books (NFATs), CRR varies by book phase:
 - **At Rest** — medium CRR (based on attested risk characteristics)
 - CRR increases if re-attestation is missed
 
-In the new framework, these phase-dependent CRRs are captured via the Riskbook risk form's equation, not as separate state-based CRR atoms. The risk-form equation reads the book's current phase from synart state and applies the appropriate stress treatment per phase. See `smart-contracts/nfats.md` (in `inactive/archive/`) for the qualitative book-phase incentive structure. Numeric CRR calibration values for NFAT book-phases are pending.
-
----
-
-## File map
-
-| Doc | Relationship |
-|---|---|
-| [`risk-decomposition.md`](risk-decomposition.md) | The five risk types and the coverage matrix |
-| [`riskbook-layer.md`](riskbook-layer.md) | Riskbook risk-form match produces per-position CRR |
-| [`primebook-composition.md`](primebook-composition.md) | Sub-book routing determines which risks are covered |
-| [`hedgebook.md`](hedgebook.md) | Hedge residuals via Hedgebook category equation |
-| [`correlation-framework.md`](correlation-framework.md) | Concentration excess penalty |
-| [`matching.md`](matching.md) | Matched/unmatched blend in `termbook`/`structbook` |
-| [`asset-classification.md`](asset-classification.md) | Asset-level stress profiles consumed by stress projection |
-| [`projection-models.md`](projection-models.md) | Projections for non-tranched complex positions |
-| [`asset-type-treatment.md`](asset-type-treatment.md) | Worked treatment per asset class |
-| [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md) | Worked end-to-end TRRC computation in v1 NFAT scenario (see "Worked Example: A Single NFAT Loan") |
-| [`../roadmap/v1-principles.md`](../roadmap/v1-principles.md) | Principles distilled from the v1 carve-outs (matched / unmatched, default-deny, smooth blend) |
+In the new framework, these phase-dependent CRRs are captured via the Riskbook risk form's equation, not as separate state-based CRR atoms. The risk-form equation reads the book's current phase from synart state and applies the appropriate stress treatment per phase. See [`../smart-contracts/nfats.md`](../smart-contracts/nfats.md) for the qualitative book-phase incentive structure. Numeric CRR calibration values for NFAT book-phases are pending.

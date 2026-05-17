@@ -245,11 +245,11 @@ For the synserv heartbeat that runs the per-Prime computations, see [`settlement
 
 | Doc | Relationship |
 |---|---|
-| [`README.md`](laniakea-docs/accounting/README.md) | Accounting directory index |
+| [`README.md`](lani/accounting/README.md) | Accounting directory index |
 | [`settlement-cycle.md`](settlement-cycle.md) | Per-Prime closure produces the Sky Net that the TMF distributes |
 | [`capital-stack.md`](capital-stack.md) | ABC's role in insolvency defense; Genesis Capital structure |
 | [`entity-fees.md`](entity-fees.md) | Synomic Entity fees (creation, upkeep, rebate) — feed Sky's gross revenue before it enters the TMF |
-| [`distribution-rewards.md`](distribution-rewards.md) | Distribution Rewards and Liability Duration Rewards — paid to Primes from Sky's revenue |
+| [`distribution-rewards.md`](distribution-rewards.md) | Distribution Rewards and Structural Demand Resource Rewards — paid to Primes from Sky's revenue |
 | [`../growth-staking/growth-staking.md`](../growth-staking/growth-staking.md) | Forfeited Growth Staking rewards re-enter the TMF aggregation in `&core.settlement` |
 | [`../inactive/pre-synlang/forecast_model/`](../inactive/pre-synlang/forecast_model/) | Forecast model implements a simplified 3-step waterfall version |
 

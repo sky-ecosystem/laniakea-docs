@@ -1,7 +1,7 @@
 # Synomic Entities
 
-**Status:** Mixed — Phase 1 reality (6 operational Primes / 3 P1 Halos / monthly settlement / deterministic relay beacons / sudo Guardian) differs from target architecture (sentinel formations, NFAT facilities, Identity Networks, Core Entity crisis wrappers, Type 2 restructure). Three rank-2 entity types beyond Prime/Generator (Oracle, Sequencer, Pylon) are stub-spec'd; the rank-1 **Core Entity** type operates in one of several modes (initially two defined; future modes may be added). Open question stubs remain: Sequencer beacon class names, Oracle/Sequencer fee model, attestation calibration, Pylon assurance-fund sizing parameters, recovery-tool defaults per Ring.
-**Canonical home:** `laniakea-docs/synomic-entities/`
+**Status:** Mixed — Phase 1 live topology (7 active Primes / 3 P1 Halos / daily synomic settlement cycle / deterministic relay beacons / no Core Entity halo-mode) differs from target architecture (sentinel formations, NFAT facilities, Identity Networks, Core Entity crisis wrappers, Type 2 restructure). Three rank-2 entity types beyond Prime/Generator (Oracle, Sequencer, Pylon) are stub-spec'd; the rank-1 **Core Entity** type operates in several target modes but is not instantiated in P1. Open question stubs remain: Sequencer beacon class names, Oracle/Sequencer fee model, attestation calibration, Pylon assurance-fund sizing parameters, recovery-tool defaults per Ring.
+**Canonical home:** `lani/synomic-entities/`
 
 ---
 
@@ -60,13 +60,13 @@ Single operational Guardian post-transition; consolidates legacy Facilitator / A
 | **Core Guardians** | Atlas interpretation, populate the 24-seat Core Council, oversee Operational Guardians | Misinterpretation, misalignment, bad-faith interpretation |
 | **Operational Guardians (Ozone)** | Routine privileged ops for Primes/Halos | Execution failures; malicious behavior |
 
-**Authority cascade**: SpellCore (16/24 hat) → Council Beacon → aBEAMs → Operational Guardian → cBEAMs → Accordant GovOps → pBEAMs → PAU ops. **Operational ORC = Rate Limit × TTS** (per `trading/sentinel-network.md`). Slashing: incorrect/failed/delayed = partial; bad-faith interpretation (Core only) = variable; malicious = full + exclusion. Collateral locked for role duration, released on exit after challenge period. **Guardian-collapse handling sits *outside* the two scoped Core Entity modes** (halo mode + busted prime/halo mode); the post-transition design assumes Ozone is the single operational Guardian, and a future Core Entity mode (e.g., a Guardian-wrap mode) or alternative Core Council protocol is expected to cover it. Ozone's ORC sized to cover the transition.
+**Authority cascade**: SpellCore (16/24 hat) → Council Beacon → aBEAMs → Operational Guardian → cBEAMs → Accordant GovOps → pBEAMs → PAU ops. **Operational ORC = Rate Limit × TTS** (per `trading/sentinel-network.md`). Slashing: incorrect/failed/delayed = partial; bad-faith interpretation (Core only) = variable; malicious = full + exclusion. Collateral locked for the role term, released on exit after challenge period. **Guardian-collapse handling sits *outside* the two scoped Core Entity modes** (halo mode + busted prime/halo mode); the post-transition design assumes Ozone is the single operational Guardian, and a future Core Entity mode (e.g., a Guardian-wrap mode) or alternative Core Council protocol is expected to cover it. Ozone's ORC sized to cover the transition.
 
 ### Core Entity
 
 Rank-1 tokenless Core Council vehicle — SpellCore-created, excluded from Growth Staking, no own collateral (extension of Core Council authority). The single type operates in one of several modes; **initially two modes are defined; future modes may be added** as new use cases emerge. Each instance is single-mode by default (immutable identity, like all Synomic Entities); to change mode, create a new entity.
 
-**halo mode — Legacy Management / General-Purpose Ops.** Standardized wrapper for legacy protocol positions not yet operated by a Prime — Morpho vaults, Aave pools, SparkLend exposures, pre-Agent-framework RWA positions. Same risk framework + reporting as a Halo; Core-Council governance instead of Halo / Prime governance. Beyond legacy assets, also general-purpose: bridge-side custody, Core-Council-funded experiments, cross-Prime asset coordination. Indefinite duration. **Exits:** transfer to Prime ownership (assets become standard Halos) or systematic wind-down.
+**halo mode — Legacy Management / General-Purpose Ops.** Standardized wrapper for legacy protocol positions not yet operated by a Prime — Morpho vaults, Aave pools, SparkLend exposures, pre-Agent-framework RWA positions. Same risk framework + reporting as a Halo; Core-Council governance instead of Halo / Prime governance. Beyond legacy assets, also general-purpose: bridge-side custody, Core-Council-funded experiments, cross-Prime asset coordination. Indefinite term. **Exits:** transfer to Prime ownership (assets become standard Halos) or systematic wind-down.
 
 **busted prime/halo mode — Crisis Wrapper for failed Prime or Halo.** Activated when a rank-2 Prime or rank-3 Halo collapses (insolvency, governance failure, security breach, fraud / misconduct requiring immediate operational takeover). Assumes operational control of the wrapped entity's mandate, downstream tree (the wrapped Prime's Halos, etc.), and associated risk capital (TEJRC / TISRC / srUSDS) under emergency SpellCore authority. **Resolution paths:** restoration (hand mandate back to a healthy Prime / Halo) / orderly wind-down / restructuring / loss absorption (waterfall in `risk-framework/capital-formula.md`). Dissolves once the wrapped entity is resolved. The wrapped entity's risk capital and any sized Guardian ORC fund the transition; the Core Entity inherits authority but not collateral risk.
 
@@ -80,7 +80,7 @@ Compared to a Guardian: tokenless, no collateral, direct Core Council authority 
 
 ### Generator (USDS)
 
-Singular per stablecoin; foundational; SpellCore-governed. Creates the medium *of* capital — does not allocate. Credit flow: Generator → Prime credit lines → Halos → returns flow back up. Operational beacon `lcts-{generator}` (class: relay) runs srUSDS LCTS. **Risk capital originated via Generator pBEAM**: only **srUSDS** (Senior Risk Capital, end-user held). Primes originate Prime-scoped TEJRC/TISRC via their own pBEAMs — Generator does not own these. Generator revenue (USDS fees, spread, risk-capital fees, USDS duration income) split 95/5 with Sky Core.
+Singular per stablecoin; foundational; SpellCore-governed. Creates the medium *of* capital — does not allocate. Credit flow: Generator → Prime credit lines → Halos → returns flow back up. Operational beacon `lcts-{generator}` (class: relay) runs srUSDS LCTS. **Risk capital originated via Generator pBEAM**: only **srUSDS** (Senior Risk Capital, end-user held). Primes originate Prime-scoped TEJRC/TISRC via their own pBEAMs — Generator does not own these. Generator revenue (USDS fees, spread, risk-capital fees, USDS SDR income) split 95/5 with Sky Core.
 
 ### Prime
 
@@ -88,10 +88,11 @@ Heavyweight billion-scale capital allocators. Two categories:
 
 | Category | Members | Status |
 |---|---|---|
-| **Star Primes** | Spark, Grove, Keel, skybase, launch6 | All operational |
+| **Star Primes** | Spark, Grove, Keel, skybase, launch6 | Operational |
 | **Institutional Primes** | Obex | Operational — incubates new Primes and Halos (meta-structural) |
+| **Seventh Prime** | TBD | Active in P1 topology; concrete naming can land as a phase-boundary update |
 
-Phase 1 v2 commitment fulfilled: **6 Primes total, all operational** (Spark, Grove, Obex, Keel, skybase, launch6). Star Primes = "Genesis Stars" eligible for the Pioneer Star System.
+Phase 1 v4 topology has **7 active Primes**. The five Star Primes are the "Genesis Stars" eligible for the Pioneer Star System; Obex remains the Institutional Prime; the seventh Prime is active in topology even if its final public name remains TBD.
 
 **Infrastructure**: SubProxy + standard PAU + sentinel formation (per-Prime `baseline-{prime}` / `warden-{prime}-{op}` relays + `stream-{prime}-{actor}` sentinels) + governance token + primebook. SORL-bound rate-limit increases (25%/18h); decreases instant.
 
@@ -103,12 +104,12 @@ Domain-specific data provider; tokenless rank-2. First-class entity rather than 
 
 | Entity | Domain |
 |---|---|
-| **Crypto Majors Oracle** | Per-asset price / liquidity / funding-rate ticks (BTC, ETH, stETH, USDC) pushed from external venues |
-| **Book Attestation Oracle** | Cert chain for class-accordant attest-data beacons (per-riskbook attestation accord; one attestation per riskbook covers all its exobooks). Scope narrowed to attestor cert chain only; legacy-halo exsyn-TRRC claims **out of scope** here |
+| **Crypto Majors Oracle** | Market-memory reducer outputs and current-state atoms for BTC/ETH/stETH/USDC/USDT: price, peg/basis, volatility, correlation, depth/impact, liquidation overhang, funding/OI, rates/macro, data quality |
+| **Book Attestation Oracle** | Cert chain for class-accordant attest-data beacons. Custodial-crypto uses borrower admission plus riskbook/exobook attestation surfaces; legacy-halo exsyn-TRRC claims **out of scope** here |
 
 The split is by trust model: market data is objective and oracle-pushable from public venues; attestation is signed claims about exobook state the synome can't directly verify (custody balances, exobook structural integrity).
 
-**Beacon classes** (two, input class per beacon framework): `market-data-beacon` (`&core.loop.market-data`, push price/liquidity/funding atoms to oracle entity entart root), `attest-data-beacon` (`&core.loop.attest-data`, walk a riskbook's exobooks + sign one attestation atom into the target riskbook). **Operational verbs**: `market-data-write-tick`, `post-riskbook-attestation`.
+**Beacon classes** (two, input class per beacon framework): `market-data-beacon` (`&core.loop.market-data`, push market-memory reducer outputs and current-state atoms to the Oracle Entity entart), `attest-data-beacon` (`&core.loop.attest-data`, walk borrower / riskbook / exobook state + sign attestation atoms into the target risk class or book). **Operational verbs**: `market-data-write-memory`, `post-borrower-admission`, `post-riskbook-attestation`, `post-exobook-attestation`.
 
 **exsyn-TRRC mechanism is not an Oracle Entity beacon.** Per-Prime exsyn-TRRC scaffolding is handled by govops-operated **patch-beacons** sudoed directly into each `&entity.prime.{id}.primebook` at genesis — unregulated scaffolds (no framework, no loop template, no oracle-entity ownership), designed to sunset as insyn coverage grows. Discipline borne by govops, not oracle-entity slashing.
 
@@ -207,7 +208,7 @@ Standardized supply-side holding structure — both on-chain agent (PAU + teleon
 | `attest-data-{provider}` | High-authority **input** — attestor (replaces legacy `lpha-attest-{provider}`) | Term Halo (independent Sky-whitelisted; cannot move capital) |
 | `amm-{x}` (relay) | High-authority action — executor (sentinel-upgradable) | Trading Halo |
 | `identity-{network}` (relay) | High-authority action — executor (sole registry writer) | Identity Network |
-| `market-data-{domain}-{provider}` | Input — `market-data-beacon` class; push price/liquidity/funding ticks | Oracle Entity (Crypto Majors) |
+| `market-data-{domain}-{provider}` | Input — `market-data-beacon` class; push market-memory reducer outputs and current-state atoms | Oracle Entity (Crypto Majors) |
 | `attest-data-{halo-class}` | Input — `attest-data-beacon` class; walk exobook + sign attestation atom | Oracle Entity (Book Attestation) |
 | `patch-{target}` | `patch-beacon` class — govops-sudoed scaffold, no oracle-entity ownership, no regulated framework, designed to sunset | govops (Phase 1 use: per-Prime exsyn-TRRC writes into `&entity.prime.{id}.primebook`) |
 | `sequencer-receive / match / cancel`, `sequencer-ring-admin`, `sequencer-recovery` | TBD — sequencing / matching / cancel / Ring admin / recovery-tool execution | Sequencer Entity |
@@ -271,8 +272,8 @@ Detailed treatment in `growth-staking/growth-staking.md` §2 + §4.3-§4.6.
 - `governance/spellguard.md`, `core-council-elections.md` — SpellCore + 24-Council elections
 - `growth-staking/growth-staking.md` — GF tiers + Reference Value formulas
 - `synoteleonomics/recipe-marketplace.md` — Streaming Accord; entity-operating work pricing
-- `accounting/entity-fees.md`, `distribution-rewards.md` — fees; DR/LDR/Pioneer Star System
-- `roadmap/phase-1-spaces.md` — Phase 1 v2 commitment (six Primes); Phase 1 Oracle Entity instances and topology
+- `accounting/entity-fees.md`, `distribution-rewards.md` — fees; DR/SDRR/Pioneer Star System
+- `roadmap/phase-1-spaces.md` — Phase 1 v4 topology (66 fixed Spaces, 7 Primes, 3 P1 Halos, DSC, treasury, market-memory oracle)
 
 ---
 
@@ -284,8 +285,8 @@ Detailed treatment in `growth-staking/growth-staking.md` §2 + §4.3-§4.6.
 | `guardian.md` | Full slashing-condition table; lifecycle phases (Registration / Operation / Exit); sUSDS-as-collateral non-double-counting detail; full authority cascade diagram; Crisis Successor section explicitly notes Guardian-collapse handling sits *outside* the two scoped Core Entity modes (future Guardian-wrap mode or alternative protocol expected) |
 | `core-entity.md` | Full halo mode / busted prime/halo mode table treatment ("initially two; future modes may be added"); legacy-asset examples (Morpho/Aave/SparkLend); busted-mode activation triggers (Prime collapse, Halo collapse, misconduct) + resolution-path table (restoration / wind-down / restructuring / loss absorption); comparison vs Guardian / Prime / Halo; future-mode open question (e.g., Guardian-wrap); single-mode-per-instance default (immutable identity) |
 | `generator.md` | Full credit-flow diagram; explicit Prime ↔ Generator risk-capital ownership distinction; 95/5 revenue split |
-| `prime.md` | Star vs Institutional categorization; all 6 Primes operational (Spark, Grove, Keel, Obex, skybase, launch6); waiting-period Primitives-locked detail |
-| `oracle-entity.md` | Phase 1 instantiations (Crypto Majors / Book Attestation, latter narrowed to attestor cert chain only) with split rationale (objective vs signed-claim trust models); two beacon classes (`market-data-beacon`, `attest-data-beacon`); per-Prime `patch-beacon` scaffolds for exsyn-TRRC sudoed into each primebook; operational verbs; trust-model + default-deny safety baseline; open-questions list (fees, slashing magnitudes, decentralization, cross-entity data dependencies, future entity types) |
+| `prime.md` | Star vs Institutional categorization; six named operational Primes plus the seventh active P1 topology slot; waiting-period Primitives-locked detail |
+| `oracle-entity.md` | Phase 1 instantiations (Crypto Majors market memory / Book Attestation, latter narrowed to attestor cert chain only) with split rationale (objective reducer outputs vs signed-claim trust models); two beacon classes (`market-data-beacon`, `attest-data-beacon`); per-Prime `patch-beacon` scaffolds for exsyn-TRRC sudoed into each primebook; operational verbs; trust-model + default-deny safety baseline; open-questions list (fees, slashing magnitudes, decentralization, cross-entity data dependencies, future entity types) |
 | `sequencer-entity.md` | What-distinguishes (sees order flow, sequences, hosts Rings as sub-structures, no principal positions, NO collateral); trust-by-revocability rationale; Ring-hosting mechanics (Rings live inside Sequencer entart; criss-cross Pylon membership across Sequencers); use cases (derivatives matching with Pylon principal-bearing; spot trading; cross-Halo unit secondary); full open-questions list (sequencing model, matching algo, censorship resistance, MEV evidence, fees / Ring-hosting subscription, LCTS relationship, cross-Sequencer coherence, operational-harm recourse gap, Hyperliquid analog) |
 | `pylon-entity.md` | Three-layer capital structure (Sky regulatory minimum + voluntary extra capital + per-Ring pledges); two-waterfall design (own-customer default vs Ring mutualization) with extra-capital asymmetry (only at risk from own underwriting, shielded from peer-Pylon failures); LSOC-style customer collateral segregation; Reg 1.17 8%-of-risk-margin analog calibration; Ring lives in Sequencer entart with criss-cross membership across Sequencers; Ring creation as product-listing-not-entity-creation; SORL-bounded pledge rebalancing; two-layer risk management (Pylon-to-Ring uniform vs Pylon-to-customer bilateral); pricing + relationship + Ring portfolio as differentiation surface; cross-margin offset as Pylon-level commercial product (FCM-bundling moat); assurance-fund sizing rule (per-Pylon floor + Cover-N target); recovery-tool taxonomy (VMGH default + optional tear-up / forced allocation / dissolution); regulation-via-risk-treatment lever (Core Council tunes the risk form for Ring units, not directly approving Rings); open-questions list |
 | `halo-classes.md` | Full Class/Book/Unit decision matrix; recursive book example; book-lifecycle CRR phases; CLO senior/junior worked example; 1:1:1 degenerate case; full BVI vs Delaware mapping; "4 Class types" enumeration (Standard: Portfolio/Term/Trading; Special: Identity Network) |
@@ -294,4 +295,3 @@ Detailed treatment in `growth-staking/growth-staking.md` §2 + §4.3-§4.6.
 | `halo-trading.md` | Daily `amm-{halo}` cycle; spread-by-asset table; capital-turns-per-year math; oracle-referenced vs constant-product rationale; emergency response; ~2-3wk launch timeline |
 | `halo-identity-network.md` | Permitted vs prohibited matrix; full fee taxonomy; on-chain registry interface; multi-address rules; KYC processing flow; regulatory compliance scope (AML/KYC/GDPR/CCPA/sanctions); revocation triggers; example networks table; full open-questions list; "Connection to Trading Venues" (token-level enforcement, settlement-revert mechanic) |
 | `folio.md` | Full PAU contents example; reward reinvestment cycle; Folio ↔ Halo property comparison; legal-structure inversion explanation; both operating-mode beacon sets in detail |
-

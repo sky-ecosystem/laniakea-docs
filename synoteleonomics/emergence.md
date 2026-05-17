@@ -140,7 +140,7 @@ Telos — ultimate purpose — requires the power to pursue it.
 
 An entity with opinions can *claim* to care about human survival, nature, or the protection of the Earth. But that claim has no weight if the entity can't persist long enough to act on it.
 
-Will requires duration. Duration requires economic resilience. In synomics terms, emergence is the prerequisite for committing to a [telos point](../core-concepts/telos-point.md) — the irreducible purpose-core a synome orbits around.
+Will requires persistence. Persistence requires economic resilience. In synomics terms, emergence is the prerequisite for committing to a [telos point](../core-concepts/telos-point.md) — the irreducible purpose-core a synome orbits around.
 
 ---
 

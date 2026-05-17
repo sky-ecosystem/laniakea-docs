@@ -184,7 +184,7 @@ A Prime is not just a tool for token holders. It is an entity in its own right, 
 Halos are general-purpose Synomic Entities that proliferate to meet demand. They are organized in a three-layer hierarchy:
 
 - **Class** — The Halo type (e.g., Portfolio Halo, Term Halo, Trading Halo)
-- **Book** — A balanced ledger (assets = liabilities) within a class (e.g., a specific book backing short-duration RWA positions)
+- **Book** — A balanced ledger (assets = liabilities) within a class (e.g., a specific book backing short-maturity RWA positions)
 - **Unit** — A cross-book link connecting one agent's book to another's
 
 See [`../synomic-entities/halo-classes.md`](../synomic-entities/halo-classes.md) and [`../inactive/pre-synlang/whitepaper/appendix-b-agent-types.md`](../inactive/pre-synlang/whitepaper/appendix-b-agent-types.md) for the complete hierarchy (whitepaper rewrite pending).

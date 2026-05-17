@@ -47,7 +47,7 @@ Earlier framing treated the Halobook as "applies a liquidity downgrade to Riskbo
 > The Halobook category declares the bundle's **exposure structure** — what happens to per-position risks over the bundle's lifetime, given the bundle's terms (rollovers, lockups, transferability, embedded options, etc.). This affects ANY risk type via the exposure structure, not just liquidity.
 
 Architectural division of labor:
-- **Riskbook output:** per-position snapshot risk vector at one moment (default, spread-sensitivity, rate-duration, U)
+- **Riskbook output:** per-position snapshot risk vector at one moment (default, spread-sensitivity, interest-rate duration, U)
 - **Halobook category:** declares exposure structure — how those per-position risks compound/aggregate over the bundle lifetime
 - **Halobook output:** bundle-level risk vector that's the composition of per-position risks × exposure structure
 
@@ -95,7 +95,7 @@ A Halobook category declaration shapes upstream consumption in several ways. The
 
 | Halobook structural feature | Spread | Rate | Liquidity |
 |---|---|---|---|
-| Rollover (any flavor) | Compounds spread duration if held to par | Compounds rate duration unless reset | Worsens P |
+| Rollover (any flavor) | Extends spread pull-to-par horizon if held to par | Compounds interest-rate duration unless reset | Worsens P |
 | Lockup, no transfer | Same | Same | Worsens P |
 | Prepayment option (issuer-held) | Negative convexity | Negative convexity | Same |
 | Embedded options | Variable, depends on option | Variable | Variable |
@@ -173,13 +173,13 @@ The Primebook sub-book router consumes the U/P/T declarations to decide which su
 
 ## 7. The v1 Halobook category catalog
 
-V1 has a minimal Halobook catalog. The crypto-collateralized lending test uses one category:
+V1 has a minimal Halobook catalog. The custodial-crypto lending test uses one category:
 
 ```metta
 (book-category-def nfat-crypto-lending-fixed-term
    (frame usd)
    (composition-constraints
-      (units-pointing-to-fixed-term-crypto-collateralized-riskbooks))
+      (units-pointing-to-fixed-term-custodial-crypto-riskbooks))
    (exposure-structure
       (rollover none)
       (lockup until-maturity)

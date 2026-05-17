@@ -21,7 +21,7 @@ Each asset class has a structural shape (direct holding, tranched exobook, proje
 |---|---|---|---|
 | Direct ETH/BTC | Terminal exoasset | `tradingbook` if liquid, else unmatched | No SPTP, no tranche structure |
 | Sparklend (overcollateralized lending) | Senior tranche of perpetual ETH-collateralized exobook | `tradingbook` if liquid, else unmatched | No SPTP (perpetual); standard tranche math |
-| NFAT (crypto-collateralized) | Senior tranche of fixed-term exobook | `structbook` (matched) | Rate-hedge capital required (Phase 1 carve-out per [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md)) |
+| NFAT (custodial-crypto) | Senior tranche of fixed-term exobook | `structbook` (matched) | Risk form computes all four CRR components; SDR matching makes spread/rate/liquidity non-binding for the matched portion |
 | JAAA (CLO AAA) | Senior tranche of CLO exobook | `termbook`/`structbook` matched, with FRTB drawdown for tradeable secondary market | Standard tranche math + secondary market liquidity |
 | Liquid TradFi (T-bills, MMF) | Direct holding, short SPTP | `termbook`/`structbook`/`tradingbook` | SPTP enables matching |
 | Vanilla options | Position with projection model (Black-Scholes) | Riskbook → sub-book per nature | Projection-model risk haircut |
@@ -68,7 +68,7 @@ Exobook (per-loan):
 
 Senior's risk = ETH liquidity stress, propagated through the junior cushion. Standard structured-product capital model — no special "gap risk" treatment (per `tranching.md` §6).
 
-## NFAT (crypto-collateralized fixed-term)
+## NFAT (custodial-crypto fixed-term)
 
 | Component | Treatment |
 |---|---|
@@ -78,28 +78,25 @@ Senior's risk = ETH liquidity stress, propagated through the junior cushion. Sta
 | SPTP | Remaining contractual term (no stress modifier for v1) |
 | Matching | Eligible for `structbook` |
 | Routing | `structbook` (active for v1 test) |
-| **Capital** | `Matched × RW + Unmatched × max(RW, Forced-Loss)` per [`capital-formula.md`](capital-formula.md) |
+| **Capital** | `Matched × default-CRR + Unmatched × max(default-CRR, Forced-Loss) + Unmatched × rate-CRR` per [`capital-formula.md`](capital-formula.md) |
 
-For Phase 1 carve-out (no rate-hedge capital required for matched portion), see [`../roadmap/phase-1-spaces.md`](../roadmap/phase-1-spaces.md).
+For the Phase 1 `custodial-crypto` stress-envelope risk form, see [`custodial-crypto-risk-form.md`](custodial-crypto-risk-form.md). The older CORE-direct sketch is superseded: CORE is calibration/reference material; the binding P1 risk form is maximum approved scenario senior loss through the exobook waterfall.
 
-V1 test `crypto-collateralized-USD-lending` Riskbook risk form sketch:
+V1 `custodial-crypto` Riskbook risk form sketch:
 ```metta
-(book-category-def crypto-collateralized-USD-lending
+(risk-form-def custodial-crypto
    (frame usd)
    (composition-constraints
      (and (single-senior-tranche-positions)
           (asset-class-in (eth btc stETH))
-          (denom-in (usdc usdt))))
-   (equation-m2m
+          (denom-in (usdc usds usdt))))
+   (equation-default
      (sum-over (held-senior-tranches)
        (lambda ($pos)
-         (let* (($asset-stress  (asset-stress-profile (collateral-of $pos)))
-                ($denom-depeg   (depeg-stress-profile (denom-of $pos)))
-                ($junior-cushion (junior-tranche-size (exobook-of $pos))))
-           (simulate-across-scenarios m2m-scenarios
+         (simulate-across-scenarios approved-stress-scenarios
              (lambda ($s)
-               (+ (max 0 (- (apply-scenario $s $asset-stress) $junior-cushion))
-                  (apply-scenario $s $denom-depeg)))))))))
+               (senior-loss-through-exobook-waterfall $pos $s))
+             (combiner take-worst))))))
 ```
 
 ## JAAA / CLO AAA
@@ -109,8 +106,8 @@ V1 test `crypto-collateralized-USD-lending` Riskbook risk form sketch:
 | Structural shape | Senior tranche of CLO exobook with deep junior cushion |
 | Fundamental risk | Credit risk of underlying loans |
 | Drawdown | Stressed loss waterfall + secondary-market liquidity stress |
-| SPTP | ~3.5 years (~1,260 days) — credit-spread duration; same for rate duration |
-| Matching | Eligible for `termbook`/`structbook` (bucket 84) |
+| SPTP | ~3.5 years (~1,260 days) — credit-spread pull-to-par horizon; same for interest-rate duration |
+| Matching | Eligible for `termbook`/`structbook` (bucket 42 under the 30-day bucket system) |
 | Routing | Matched portion → `termbook`/`structbook`; unmatched → `tradingbook` (FRTB drawdown applies) |
 | **Capital** | `Matched × RW + Unmatched × max(RW, FRTB)` per [`capital-formula.md`](capital-formula.md) |
 
@@ -128,7 +125,7 @@ Note: JAAA modeling is **deferred for v1** due to recursive complexity (CLO of l
 | Routing | Per matching availability |
 | **Capital** | `Matched × RW + Unmatched × max(RW, FRTB)` |
 
-Short-duration T-bills have minimal rate risk and route to short-bucket matched treatment efficiently. Money market ETFs have near-zero SPTP and can match against the shortest buckets or trade directly.
+Short-TTM T-bills have minimal rate risk and route to short-bucket matched treatment efficiently. Money market ETFs have near-zero SPTP and can match against the shortest buckets or trade directly.
 
 ## Vanilla options
 

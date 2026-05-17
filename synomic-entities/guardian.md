@@ -45,7 +45,7 @@ Core Guardians shape the constitution and governance. Operational Guardians (Ozo
 |---|---|
 | Posted | Before receiving authority |
 | Sized | Proportional to operation risk; Operational Guardians' ORC sized as Rate Limit × TTS (see [`../sentinel/sentinel-network.md`](../sentinel/sentinel-network.md) for TTS economics) |
-| Locked | For the duration of the role |
+| Locked | For the role term |
 | Released | On successful completion or role exit, after challenge period |
 
 ### Slashing conditions
@@ -118,7 +118,7 @@ For Growth Staking purposes, a Guardian is valued at `(Accord Fee Income × Actu
 
 ## Related
 
-- [`README.md`](laniakea-docs/synomic-entities/README.md) — Rank hierarchy and entity index
+- [`README.md`](lani/synomic-entities/README.md) — Rank hierarchy and entity index
 - [`core-entity.md`](core-entity.md) — Core Council operational vehicle; Guardian-collapse handling is outside the initial two modes (halo mode, busted prime/halo mode)
 - [`prime.md`](prime.md), [`halo-classes.md`](halo-classes.md) — Entities that are accordant to a Guardian
 - [`../governance/core-council-elections.md`](../governance/core-council-elections.md) — How the 24 Council Guardians are elected

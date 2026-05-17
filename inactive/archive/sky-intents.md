@@ -289,7 +289,7 @@ Multiple Exchange Halos can operate simultaneously:
 
 ### Overview
 
-**lpha-exchange** is the operational identifier for the high-authority action beacon (executor class) that operates the off-chain orderbook and matching engine for an Exchange Halo. Like other `lpha-*` beacons, it executes deterministic rules on behalf of a Synomic Agent. See [`../macrosynomics/beacon-framework.md`](laniakea-docs/macrosynomics/beacon-framework.md) for the full beacon taxonomy and [`../synoteleonomics/recipe-marketplace.md`](recipe-marketplace.md) for the marketplace surface that prices the work.
+**lpha-exchange** is the operational identifier for the high-authority action beacon (executor class) that operates the off-chain orderbook and matching engine for an Exchange Halo. Like other `lpha-*` beacons, it executes deterministic rules on behalf of a Synomic Agent. See [`../macrosynomics/beacon-framework.md`](lani/macrosynomics/beacon-framework.md) for the full beacon taxonomy and [`../synoteleonomics/recipe-marketplace.md`](recipe-marketplace.md) for the marketplace surface that prices the work.
 
 **Level:** Per Exchange Halo
 **Operator:** Exchange Halo GovOps
@@ -875,7 +875,7 @@ This principle ensures the intent specification is **minimal yet complete** for 
 |----------|--------------|
 | [`../synomic-entities/halo-identity-network.md`](halo-identity-network.md) | Identity Networks enable token-level transfer restrictions |
 | [`../synomic-entities/halo-exchange.md`](halo-exchange.md) | Exchange Halo entity spec; recipe-marketplace instance |
-| [`../macrosynomics/beacon-framework.md`](laniakea-docs/macrosynomics/beacon-framework.md) | lpha-exchange as a high-authority action beacon (executor) |
+| [`../macrosynomics/beacon-framework.md`](lani/macrosynomics/beacon-framework.md) | lpha-exchange as a high-authority action beacon (executor) |
 | [`../synoteleonomics/recipe-marketplace.md`](recipe-marketplace.md) | Exchange Halo as recipe instance |
 | `risk-framework/README.md` | Risk framework governs Prime trading bounds |
 | `../risk-framework/asc.md` | Sky Intents may serve as the execution mechanism for ASC peg defense obligations |

@@ -23,7 +23,7 @@ For readers coming from pre-synlang material in `inactive/archive/growth-staking
 | sSGA | sUSDS | Savings token |
 | srSGA, ESRC | srUSDS | Generator senior risk capital (merged naming) |
 | stSCST | stUSDS | The lending product, re-specified per §5 below |
-| SCST spread / duration / risk-fee | Sky Core revenue (Generator pass-through + stUSDS spread) | See §4.2 |
+| SCST spread / SDR / risk-fee | Sky Core revenue (Generator pass-through + stUSDS spread) | See §4.2 |
 | Folio Agent | Folio | Already migrated — see [`../synomic-entities/folio.md`](../synomic-entities/folio.md) |
 | Sky Agents | Synomic Entities | See [`../synomic-entities/`](../synomic-entities/) |
 
@@ -183,7 +183,7 @@ SKY Reference Value = (SKY Core Revenue × Actual P/E
 - **stUSDS spread** — 10% of borrower spread above base rate (per §5)
 - Entity upkeep (50 bps/year on entity token supply; see [`../accounting/entity-fees.md`](../accounting/entity-fees.md))
 - Guardian accord fees
-- USDS duration income (duration matching revenue)
+- USDS SDR income (SDR matching revenue)
 - 5% share of Generator revenue
 
 **SKY special revenue** (separate Modifier / Variance — typically discounted):
@@ -208,7 +208,7 @@ Generator Reference Value = (Generator Revenue × Actual P/E + ISRC Book Value)
 - USDS fees (on USDS and other Generator-issued asset transactions)
 - USDS spread (interest rate margin on Generator-issued assets)
 - USDS risk capital fees (fees on srUSDS, TISRC, TEJRC)
-- USDS duration income (duration matching revenue)
+- USDS SDR income (SDR matching revenue)
 
 **Generator book value:**
 - ISRC holdings (stability capital overflow, SBE dry powder)
@@ -420,7 +420,7 @@ The same monitoring applies to potentially hollow TEJRC positions.
 
 ## 10. Synlang Form
 
-Following the patterns in [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) §6 (synome-root layers) and the synlang-form template in [`../accounting/duration-allocation.md`](../accounting/duration-allocation.md) §11.
+Following the patterns in [`../noemar-synlang/topology.md`](../noemar-synlang/topology.md) §6 (synome-root layers) and the synlang-form template in [`../accounting/sdr-auction.md`](../accounting/sdr-auction.md) §11.
 
 ### Where parameters live
 
@@ -504,7 +504,7 @@ These remain open for the next governance pass; they don't block the spec.
 
 | Doc | Relationship |
 |---|---|
-| [`README.md`](laniakea-docs/growth-staking/README.md) | Growth Staking directory index |
+| [`README.md`](lani/growth-staking/README.md) | Growth Staking directory index |
 | [`../synomic-entities/folio.md`](../synomic-entities/folio.md) | Folio — required vehicle for Growth Staking participation |
 | [`../synomic-entities/prime.md`](../synomic-entities/prime.md) | Prime Reference Value (§4.5) |
 | [`../synomic-entities/generator.md`](../synomic-entities/generator.md) | Generator Reference Value (§4.3); USDS / srUSDS naming |

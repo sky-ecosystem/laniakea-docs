@@ -149,7 +149,7 @@ The U/P/T liquidity decomposition from `risk-decomposition.md` cashes out at the
    (liquidation-acceleration (on-health-factor-breach)))
 ```
 
-For v1 crypto-collateralized NFATs: redemption only at maturity OR on health-factor breach, no transferability. So P and T are both restrictive; the position routes to `structbook` (no-liquidity-needed) sub-book.
+For v1 custodial-crypto NFATs: redemption only at maturity OR on health-factor breach, no transferability. So P and T are both restrictive; the position routes to `structbook` (no-liquidity-needed) sub-book.
 
 ---
 

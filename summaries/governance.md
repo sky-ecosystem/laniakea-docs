@@ -1,7 +1,7 @@
 # Governance
 
 **Status:** mostly target — SpellCore + SpellGuard layered model is the post-transition design. Phase 1 v2 reality has authority fully sudo at genesis (no Core GovOps role yet, Guardian holds everything), so the dual-key cascade and SKY freeze/override surfaces described here activate as governance hands off from sudo. Quarterly Council rotation, incentive-enforced passthrough voting, and BEAM-level freeze are constitutional design.
-**Canonical home:** `laniakea-docs/governance/`
+**Canonical home:** `lani/governance/`
 
 ---
 
