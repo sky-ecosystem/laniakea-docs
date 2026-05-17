@@ -30,7 +30,7 @@ This is a companion to the worked NFAT example in [`phase-1-spaces.md`](phase-1-
 
 ## 1. Constructor and operational writes
 
-These are gate-mediated operational writes, not sudo. The constructors are run by `govops-halo-spark-term`; NFAT deployment is run by `govops-prime-spark`.
+These are gate-mediated operational writes, not sudo. The constructors are run by `relay-halo-spark-term`; NFAT deployment is run by `relay-prime-spark`. The borrower readiness / Core inclusion / final admission path precedes this trace: `synops-halo-spark-term` records the proposed setup and request, `relay-core-govops` records Configurator inclusion, and `attest-data-spark-term` certifies the non-derivable legal / operational / credit claims.
 
 ### 1.1 Halobook
 
@@ -74,7 +74,7 @@ These are gate-mediated operational writes, not sudo. The constructors are run b
 
 ### 1.3 Exobook
 
-`create-exobook` creates the borrower loan object in staged/pre-send state. Before funding confirms, this is reserved PAU cash, not funded borrower exposure and not SDR-matchable.
+`create-exobook` creates the borrower loan object in `ready-empty` state. Before funds are assigned and funding confirms, this is not funded borrower exposure and not SDR-matchable.
 
 ```metta
 ;; in &entity.halo.spark-term.root
@@ -107,7 +107,7 @@ These are gate-mediated operational writes, not sudo. The constructors are run b
    (maturity-T {maturity-T})
    (ttm-days-intended 180))
 
-(lifecycle spark-term-loan-001 staged-pre-send {T_stage})
+(lifecycle spark-term-loan-001 ready-empty {T_stage})
 (reserved-principal spark-term-loan-001 usdc 750000 {T_stage})
 ```
 
@@ -156,7 +156,8 @@ The class-accordant `attest-data-spark-term` beacon writes three boolean surface
       (term-enforceable true)
       (maturity-T {maturity-T})
       (ttm-days-at-funding 180)
-      (cash-conversion-path-valid true))
+      (cash-conversion-path-valid true)
+      (disbursement-readiness true))
    (scope-ref {exobook-term-config-hash})
    (sig "..."))
 ```
@@ -291,7 +292,7 @@ Derived output:
    (bucket 6))
 ```
 
-If the exobook is still `staged-pre-send`, synserv can derive staged cash state, but it does not emit SDR-matchable term exposure.
+If the exobook is still `ready-empty`, synserv can derive setup state, but it does not emit SDR-matchable term exposure.
 
 ### 3.2 Riskbook gates and risk-form execution
 
@@ -490,7 +491,7 @@ Derived output:
 | Missing / stale / failed riskbook attestation | Riskbook and all child exobooks are excluded. |
 | Missing / stale / failed exobook term attestation | That exobook is excluded; no SDR-matchable term exposure. |
 | Scope mismatch on any attestation | Same as missing; the boolean no longer binds the current structure. |
-| Exobook still staged/pre-send | Staged PAU cash can be tracked, but it is not funded exposure and not SDR-matchable. |
+| Exobook still `ready-empty` | Setup state can be tracked, but it is not funded exposure and not SDR-matchable. |
 | Composition does not match `custodial-crypto` | CRR 100% default-deny if still admitted into a book; ordinary P1 constructors should reject it first. |
 | Market memory stale / divergent beyond risk-form tolerance | Risk form haircuts or default-denies according to its data-quality rule. |
 | No current SDR allocation | Matched portion is zero; position remains in `structbook` but capitalizes as unmatched. |

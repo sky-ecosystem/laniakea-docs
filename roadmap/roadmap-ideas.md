@@ -101,7 +101,7 @@ Future use cases the same mechanism supports:
 - What-if queries (synodoxics arguments exercised in shadow before becoming endospells)
 - Major migrations / repartitioning (double-mesh trick)
 
-Phase 1 implementation: deep copy is enough at this scale (~66 Spaces, modest atom count). Copy-on-write becomes valuable later.
+Phase 1 implementation: deep copy is enough at this scale (~72 Spaces, modest atom count). Copy-on-write becomes valuable later.
 
 ---
 

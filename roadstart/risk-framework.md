@@ -4,13 +4,13 @@ Just the risk-framework concepts the roadmap assumes but doesn't define. Drop-in
 
 ## Five risk types
 
-| Type | Time signature | Coverage |
-|---|---|---|
-| **Default / fundamental** | Permanent | Capital always required (irreducible floor) |
-| **Credit-spread MTM** | Mean-reverting | Held-to-par via SDR / term matching |
-| **Rate cash-flow drag** | Permanent until rates revert / asset matures | Match (fixed/fixed), hedge, or rate-CRR capital |
-| **Liquidity / fire-sale** | Crystallizes only on forced sale | Held-to-par or transferability |
-| **Concentration amplification** | Portfolio-level | Category caps + 100% CRR on excess |
+| Type                            | Time signature                               | Coverage                                        |
+| ------------------------------- | -------------------------------------------- | ----------------------------------------------- |
+| **Default / fundamental**       | Permanent                                    | Capital always required (irreducible floor)     |
+| **Credit-spread MTM**           | Mean-reverting                               | Held-to-par via SDR / term matching             |
+| **Rate cash-flow drag**         | Permanent until rates revert / asset matures | Match (fixed/fixed), hedge, or rate-CRR capital |
+| **Liquidity / fire-sale**       | Crystallizes only on forced sale             | Held-to-par or transferability                  |
+| **Concentration amplification** | Portfolio-level                              | Category caps + 100% CRR on excess              |
 
 Default capital is always required. Sub-books only modify the other four. ASC (peg-defense liquidity) and ORC (operator-posted capital) are **parallel tracks**, not folded into TRRC.
 

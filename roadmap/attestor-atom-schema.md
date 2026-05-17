@@ -2,7 +2,7 @@
 
 **Status:** Resolved for the Phase 1 `custodial-crypto` risk class (updated 2026-05-17).
 
-**Scope:** Custodial-crypto borrower admission, riskbook admission, and individual exobook term verification. Opaque-RWA risk classes (legacy HVB-style, no on-chain visibility) need a richer numeric attestation schema and are out of scope here.
+**Scope:** Custodial-crypto borrower readiness, borrower admission, riskbook admission, and individual exobook term verification. Opaque-RWA risk classes (legacy HVB-style, no on-chain visibility) need a richer numeric attestation schema and are out of scope here.
 
 ---
 
@@ -16,7 +16,7 @@ For custodial-crypto, every quantitative CRR input is **insyn**:
 | Debt outstanding, LT, liquidation bonus, derived LTV | `chain-read` on the loan/configurator contracts |
 | Price, liquidity, volatility, impact, liquidation-overhang history | Crypto Majors market-memory oracle |
 
-The attestor is therefore not an oracle of loan facts. It is a legal / operational / credit underwriter of what the chain cannot show — its output is admission/term verification: borrower setup (disbursement + collateral account, custody, legal framework) acceptable, Configurator / aBEAM whitelist path completed, riskbook shared structure underwritten, exobook maturity / TTM and cash-conversion terms enforceable.
+The attestor is therefore not an oracle of loan facts. It is a legal / operational / credit underwriter of what the chain cannot show — its output is readiness/admission/term verification: borrower setup (disbursement + collateral account, custody, legal framework) acceptable before Core Council inclusion, Configurator / aBEAM whitelist path completed for final admission, riskbook shared structure underwritten, exobook maturity / TTM and cash-conversion terms enforceable.
 
 No `assets-attested`, no `debt-outstanding`, no 24h market refresh — those fields are insyn or irrelevant to the attestor cadence.
 
@@ -35,9 +35,45 @@ Disbursement-account onboarding matches onboarding into the Configurator smart c
 
 ---
 
-## 3. Borrower Admission
+## 3. Borrower Readiness and Admission
 
-Borrower admission lives at the per-halo risk-class level (class-specific permission to do custodial-crypto business with this borrower). The Halo relay handles pBEAM/cBEAM PAU execution but cannot whitelist a new borrower alone — Halo govops coordinates with Core Council so the aBEAM/configurator path admits the borrower/account setup, then the class-accordant attestor posts the first-contact attestation.
+Borrower onboarding has two boolean steps because Core Council / Configurator inclusion cannot be attested as current before it happens.
+
+1. `synops-halo-{id}` writes a proposed borrower setup into the per-halo risk-class Space and submits a Core Council request only after the class-accordant attestor says the setup is ready for inclusion.
+2. Core Council / Configurator inclusion is recorded through `relay-core-govops`.
+3. The class-accordant `attest-data-{halo-id}` beacon then posts final borrower admission with `configurator-whitelist-current true`.
+
+The final borrower admission is the rollup gate. Readiness is the gate for requesting Configurator inclusion, not for rolling up exposure.
+
+```metta
+;; in &entity.halo.{halo-id}.custodial-crypto
+(proposed-borrower-setup {borrower-id}
+   (proposed-by           {synops-halo-{halo-id}-id})
+   (timestamp             T)
+   (disbursement-account  ethereum {addr})
+   (collateral-account    ethereum {addr})
+   (custodian             {custodian-id})
+   (legal-framework-ref   {legal-ref})
+   (scope-ref             {borrower-setup-hash}))
+```
+
+```metta
+;; in &entity.halo.{halo-id}.custodial-crypto
+(borrower-readiness-attestation {borrower-id}
+   (attestor              {attest-data-{halo-id}-id})
+   (timestamp             T)
+   (refresh-due           T+{readiness-review-cadence})
+   (readiness             pass)                  ; pass | fail
+   (claims
+      (legal-framework-enforceable    true)
+      (account-binding-valid          true)
+      (custody-setup-current          true)
+      (borrower-credit-standing       normal))   ; normal | watch | impaired
+   (scope-ref             {borrower-setup-hash})
+   (sig                   "..."))
+```
+
+The readiness claims are suitable evidence for `request-borrower-inclusion`; they deliberately do not claim that the Configurator whitelist is already current.
 
 ```metta
 ;; in &entity.halo.{halo-id}.custodial-crypto
@@ -92,27 +128,29 @@ The riskbook attestation gates shared legal / custody / credit structure for a h
       (term-enforceable           true)
       (maturity-T                 {maturity-T})
       (ttm-days-at-funding        {ttm-days})
-      (cash-conversion-path-valid true))
+      (cash-conversion-path-valid true)
+      (disbursement-readiness     true))
    (scope-ref     {exobook-term-config-hash})
    (sig           "..."))
 ```
 
-`scope-ref` binds the riskbook attestation to shared structural config: borrower identity, disbursement/collateral accounts, custodian, collateral asset type, and legal setup. `exobook-term-attestation.scope-ref` binds the per-exobook term, maturity, funding path, and cash-conversion path. Market state is not part of either scope-ref.
+`scope-ref` binds the riskbook attestation to shared structural config: borrower identity, disbursement/collateral accounts, custodian, collateral asset type, and legal setup. `exobook-term-attestation.scope-ref` binds the per-exobook term, maturity, funding path, cash-conversion path, and disbursement readiness. Market state is not part of either scope-ref.
 
 ---
 
 ## 5. Exobook Staged Lifecycle
 
-The exobook and exo units can be created before funds are sent. In this staged/pre-send state, the exobook contains reserved USDC / USDS / USDT still sitting in the Halo PAU. The money is operationally on the way out under the relay's strategy, but it is not yet a funded borrower exposure and not yet SDR-matchable term exposure.
+The exobook and exo units can be created before funds are sent. In the `ready-empty` state, the borrower, collateral account, term intent, and tranche skeleton are recorded, but no assets have been assigned. After queue claim and conversion, `synops-halo-{id}` can assign USDC accounting into the riskbook/exobook path without moving chain funds. The money is operationally on the way out under the relay's strategy, but it is not yet a funded borrower exposure and not yet SDR-matchable term exposure.
 
 ```text
 borrower admission ok
-  -> create exobook + exo units in staged/pre-send state
-  -> reserve PAU cash
+  -> create exobook + exo units in ready-empty state
+  -> relay claims queued Prime funds and converts into USDC
+  -> synops assigns book assets into riskbook/exobook accounting
   -> term attestation verifies intended maturity / TTM
   -> relay sends funds to disbursement account
   -> funding tx confirms
-  -> exobook state becomes funded/active
+  -> exobook state becomes funded-active
   -> certified maturity/TTM becomes official for risk and SDR matching
 ```
 

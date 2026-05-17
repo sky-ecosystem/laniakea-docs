@@ -37,20 +37,21 @@ Out of P1: Core Entity (legacy/crisis-wrapper umbrella), Sequencer/Pylon/Ring (d
 
 ## Beacon taxonomy
 
-6 classes + synserv (canonical: `macrosynomics/beacon-framework.md`):
+6 beacon classes + synserv (canonical: `macrosynomics/beacon-framework.md`):
 
 | Class | I/O | What it does |
 |---|---|---|
 | `market-data-beacon` | input | Pushes market-memory reducer outputs + current-state atoms (Oracle-Entity-admin'd). |
 | `attest-data-beacon` | input | Signed boolean claims (borrower admission, riskbook / exobook attestation). |
 | `patch-beacon` | input | Govops-sudoed scaffold for exsyn coverage gaps. **No regulated framework.** Designed to sunset. |
-| `relay` | action | Deterministic per-target action (executor/keeper). Synart-resolved loop body. |
+| `synops-beacon` | action | In-synome operational mutation only; no external/mainnet actuation authority. P1 use: Halo borrower-inclusion / class-modification requests to Core govops and book-accounting assignment after relay receipts exist. |
+| `relay` | action | External/onchain actuation + the corresponding in-synome operational record. Synart-resolved loop body; operated by the relevant govops. |
 | `sentinel` | action | Cognitive call-out density into operator telart. Variants `stream-{x}` (proposes intent to baseline-relay) and `principal-{owner}` (direct PAU control with own cognition). Phase 9+. |
-| `synserv` | special | Sole sequencer of synart writes. Singleton with hot standby. Runs `&core.loop.synserv` heartbeat. |
+| `synserv` | special | Central synomic node operated by Core Council govops. Sole canonical sequencer of accepted synart writes; runs `&core.loop.synserv` heartbeat with hot standby. |
 
-`endoscraper` is **not** a beacon class — it's a grounded runtime primitive `(chain-read $contract $slot)` accessible from any rule. Per-protocol chain-contract metadata lives in per-entart `protocol-registry` sub-Spaces (each Prime, Halo, and the Generator owns its own).
+`endoscraper` is **not** a beacon class — it's a grounded runtime primitive `(chain-read $contract $slot)` accessible from any rule. Global protocol refs such as Configurator Unit addresses live in `&core.registry.protocol`; per-entity chain-contract metadata lives in per-entart `protocol-registry` sub-Spaces (each Prime, Halo, and the Generator owns its own local PAU / protocol refs).
 
-P1 beacons are deterministic programs operated by govops; sentinel formations (baseline-relay + warden-relay + stream-sentinel for Primes) activate Phase 9–10.
+P1 beacons are deterministic programs operated by govops. `relay` is reserved for coupled external action + synome-recording authority: a relay may write operational atoms, but those writes must be tied to a planned, executing, or confirmed external action or to a lifecycle transition required to execute or record it. Pure synome-only administration uses `synops-beacon`, not relay; in P1 this covers `synops-halo-{id}` borrower-inclusion requests, class-modification requests, and in-synome book-accounting assignments that rely on existing relay receipts. Sentinel formations (baseline-relay + warden-relay + stream-sentinel for Primes) activate Phase 9–10.
 
 ## Smart-contract layer (chain side)
 
@@ -76,7 +77,7 @@ P1 beacons are deterministic programs operated by govops; sentinel formations (b
 
 **Synart is the program.** Runtimes (Noemar is one implementation) are interpreters. **Identity-driven boot:** `noemar boot --identity=X` resolves a loop Space pointer in `&core.registry.beacon` and evaluates `(run-forever)` with that Space as `&self`. Boot procedure itself lives in synart at `&core.boot`.
 
-**Topology:** tree of entarts (one per Synomic Entity, rooted at one root Space) plus universal `&core.*` Spaces. Six-layer synome root: **constitutional** (`&core.root`, `&core.telos`, `&core.governance`) / **framework** (`&core.framework.*` — empty in P1) / **registry** (`&core.registry.*`) / **aggregation** (`&core.settlement`) / **executable** (`&core.syngate`, `&core.loop.*`, `&core.recipe.*`) / **library** (`&core.library.*`).
+**Topology:** tree of entarts (one per Synomic Entity, rooted at one root Space) plus universal `&core.*` Spaces. Six-layer synome root: **constitutional** (`&core.root`, `&core.telos`, `&core.governance`, with P1 request intake at `&core.governance.requests`) / **framework** (`&core.framework.*` — empty in P1) / **registry** (`&core.registry.*`, including `&core.registry.beacon` and `&core.registry.protocol`) / **aggregation** (`&core.settlement`) / **executable** (`&core.syngate`, `&core.loop.*`, `&core.relay.govops`, `&core.recipe.*`) / **library** (`&core.library.*`).
 
 **Naming convention:**
 
@@ -120,7 +121,7 @@ P1 beacons are deterministic programs operated by govops; sentinel formations (b
 
 ## Governance (P1 is fully sudo at genesis)
 
-P1 reality: **Guardian holds all sudo authority; no Core GovOps role at genesis.** Cert + auth content sudoed into `&core.registry.beacon`. No standing Guardian entart Space. The post-transition forward-looking design (SpellCore + dual-key SpellGuards, quarterly Council rotation, SKY freeze/override) is described in `summaries/governance.md` and activates after genesis hand-off — not load-bearing for P1 substrate work.
+P1 reality: **Guardian holds all sudo authority; no separate Core GovOps authority role exists inside synart at genesis.** Core Council govops can operate `synserv-canonical`, but that is node operation, not a distinct sudo/auth authority. Cert + auth content sudoed into `&core.registry.beacon`. No standing Guardian entart Space. The post-transition forward-looking design (SpellCore + dual-key SpellGuards, quarterly Council rotation, SKY freeze/override) is described in `summaries/governance.md` and activates after genesis hand-off — not load-bearing for P1 substrate work.
 
 ## Accounting (P1-relevant only)
 
