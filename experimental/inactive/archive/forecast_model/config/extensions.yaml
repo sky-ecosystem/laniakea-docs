@@ -1,0 +1,77 @@
+# Extensions configuration for Sky Forecast Model
+# Month numbering: M1=Apr 2026, M2=May, M3=Jun, M4=Jul, M5=Aug, M6=Sep,
+#                  M7=Oct, M8=Nov, M9=Dec, M10=Jan'27, M11=Feb'27, M12=Mar'27
+# Negative months = before model start (Jan 2026 = M-2, Feb 2026 = M-1)
+
+psm_exposure:
+  enabled: true
+  pct: "0.40"             # default; scenario overrides to 0.30 from M1
+  spread: "-0.0030"       # -30bps vs SOFR
+
+subsidized_borrow:
+  enabled: true
+  total_amount: 2000000000    # $2B total (1B Spark + 1B Grove)
+  start_month: -2             # Jan 2026 = 3 months before model start
+  duration_months: 24         # 2 years from Jan 2026
+
+srusds_cost:
+  enabled: true
+  annual_cost: 5000000           # $5M/year (constant)
+
+token_farming:
+  enabled: true
+  distribution_rate: "0.175"     # 17.5% per year (25% × 0.7)
+  farm_yield_spread: "0.0010"    # 10bps above SSR
+  duration_months: 24            # 2 years
+  stars:
+    spark:
+      market_cap: 200000000
+      ownership: "0.65"
+      launch_month: 1            # Apr 2026 (already running since Jan, duration fine)
+    grove:
+      market_cap_pct: "0.60"    # 60% of Spark MC
+      ownership: "0.70"
+      launch_month: 3            # Jun 2026
+    keel:
+      market_cap_pct: "0.25"    # 25% of Spark MC
+      ownership: "0.70"
+      launch_month: 6            # Sep 2026
+    star4:
+      market_cap_pct: "0.25"    # 25% of Spark MC
+      ownership: "0.32"
+      launch_month: 5            # Aug 2026
+    star5:
+      market_cap_pct: "0.25"    # 25% of Spark MC
+      ownership: "0.80"
+      launch_month: 7            # Oct 2026
+
+usdt_subsidy:
+  enabled: true
+  amount: 150000000      # $150M USDT exposure
+  psm_spread: "-0.0030"  # Same as PSM spread
+  rate_factor: "0.50"    # USDT earns 50% of SSR
+
+genesis_prime:
+  enabled: true
+  sell_rate: "0.175"       # 17.5% per year (25% × 0.7)
+  primes:
+    obex:
+      market_cap_pct: "0.60"  # 60% of Spark MC
+      ownership: "0.50"
+      launch_month: 8          # Nov 2026
+
+core_vaults:
+  enabled: true
+  debt: 500000000          # $500M fixed debt
+  rate: "0.08"             # 8% fixed rate (higher than GRR)
+
+agent_creation_fee:
+  enabled: true
+  sell_rate_annual: "0.01"   # 1% of market cap per year
+  agents:
+    large_agent_1:
+      type: large            # 150M market cap
+      launch_month: 9        # Dec 2026
+    small_agent_1:
+      type: small            # 50M market cap
+      launch_month: 9        # Dec 2026

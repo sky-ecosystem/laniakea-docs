@@ -1,0 +1,624 @@
+---
+concepts:
+  defines:
+    - atlas-synome-separation
+    - governance-window
+  references:
+    - five-layer-architecture
+    - beacon-framework
+    - language-intent
+    - cancer-logic
+    - synomic-inertia
+---
+
+# Atlas/Synome Separation
+
+## The Problem
+
+The Atlas was originally envisioned as the complete, immutable knowledge base of all Sky data, algorithms, and intelligence. The Endgame State would lock this comprehensive documentation forever.
+
+But this vision contains a fundamental contradiction:
+
+1. **Comprehensive documentation** must cover every operational detail, algorithm, configuration, and edge case
+2. **Machine-readable structure** is required for autonomous systems (beacons, sentinels) to consume and act on this data
+3. **Human readability** is required for democratic legitimacy—stakeholders must understand what they're governing
+
+These requirements conflict. The current Atlas (~364,000 words across 7 scope documents) attempts to be both, resulting in:
+- Dense, legalistic language mixing human explanations with machine-precise specifications
+- Agent Artifacts (A.6) alone comprising 26,838 lines of Instance Configuration Documents, rate limits, and operational parameters
+- Neither fully readable by humans nor fully parseable by machines
+
+---
+
+## The Solution: Two Layers
+
+Split into two complementary components that serve different audiences:
+
+### Atlas (Human Layer)
+
+A constitutional document that exists as a single root node within the Synome.
+
+**What Stays in Atlas:**
+- Spirit of the Atlas / Universal Alignment principles (A.0)
+- Governance structure and decision processes (A.1)
+- Sky Primitive definitions and lifecycle rules (A.2)
+- Risk Capital Framework principles—JRC/SRC seniority, encumbrance ratio target (A.3)
+- Token architecture and reward mechanisms (A.4)
+- Geographic access controls and compliance philosophy (A.5)
+- Agent type definitions and transformation rules (A.6 introduction)
+
+**Characteristics:**
+- Short enough to be readable by any stakeholder (~10-20 pages target)
+- Written in plain language (not legalese, not code)
+- Describes WHAT must be true, not HOW it's implemented
+- Verification assertions that the Synome must satisfy
+
+### Synome (Machine Layer)
+
+A graph database containing ALL operational data, structured for machine consumption.
+
+**What Moves to Synome:**
+
+| Current Atlas Location | Synome Destination | Notes |
+|------------------------|-------------------|-------|
+| Agent Artifacts (A.6.1-A.6.6) | Agent Nodes | Complete specs for all 6 Primes (5 Stars + 1 Institutional) |
+| Instance Configuration Documents | Instance Nodes | Contract addresses, rate limits, parameters |
+| Active Data Documents (A.1) | State Nodes | Modifiable outside governance cycles |
+| Budget Documents | Budget Nodes | Rates, allocations, disbursement rules |
+| Precedents & Action Tenets | Precedent Nodes | Historical decisions and interpretations |
+| BEAM Parameters (A.4) | Config Nodes | min/max/step/tau for each controlled parameter |
+| Settlement Calculations | Algorithm Nodes | P&L formulas, waterfall logic, penalty calculations |
+| Rate Limits per Instance | RateLimit Nodes | maxAmount, slope, current capacity |
+
+**Current Examples from Atlas:**
+
+From A.6 (Agent Scope): Prime SubProxy addresses, Core Operator Relayer multisigs, rate-limit type enumerations, and per-chain deployment lists currently sit as prose blocks inside the Atlas.
+→ All moves to Synome as structured Agent Artifact nodes.
+
+From A.4 (Protocol Scope):
+```
+stUSDS BEAM Controls:
+| str | stUSDS rate | 200bp | 5000bp | 500bp | 16h |
+| duty | SKY borrow rate | 210bp | 5000bp | 500bp | 16h |
+```
+→ Moves to Synome as BEAM Config node with typed fields.
+
+From A.3 (Stability Scope):
+```
+Encumbrance Breach Severities:
+  Low:  100% ≤ ER < 103%
+  High: ER ≥ 103%
+
+Penalty Schedule (Low Severity):
+  0-30 min:  500% APY on shortfall
+  30-60 min: 1,000% APY on shortfall
+  60+ min:   1,500% APY on shortfall
+
+Penalty Schedule (High Severity):
+  0-15 min:  1,500% APY on shortfall
+  15-30 min: 2,000% APY on shortfall
+  30-60 min: 2,500% APY on shortfall
+  60+ min:   3,000% APY on shortfall
+
+Risk Capital Ratios:
+  EPI (External Per Internal) = 1.00
+  First Loss Capital = 10% of Total JRC (Prime's IJRC only)
+  ESRC Earnings Fee = 5%
+```
+→ All move to Synome as Config/Algorithm nodes.
+
+From A.2 (Support Scope):
+```
+Monthly Settlement Cycle Timeline:
+  End of month:     Core GovOps creates MSC Post
+  +7 days:          Initial Calculation (OEA) + Independent Calculation (CCRA)
+  +12 days:         Final Calculation (resolve disputes)
+  Next Executive:   Include payments in Sky Core Executive Vote
+
+Calculation Tolerance: 1% deviation = Agreed, >1% = Disputed
+
+Treasury Waterfall (5-step sequential, % of Net Revenue):
+  Step 1: Security & Maintenance (21% Genesis / 4-10% Post-Genesis)
+  Step 2: Aggregate Backstop Capital (variable, target 1.5% of total supply)
+  Step 3: Fortification Conserver (20% × Net Revenue Ratio)
+  Step 4: Smart Burn Engine (20% × Net Revenue Ratio)
+  Step 5: Staking Rewards (100% of remainder)
+
+Ecosystem Upkeep:
+  Distribution Requirement: 0.25% of token supply annually
+  Market Cap Fee: 0.30% of market cap annually
+```
+→ All move to Synome as Settlement Algorithm and Config nodes.
+
+---
+
+## Document Type Mapping
+
+The existing Atlas hierarchy already hints at the split:
+
+| Current Type | Destination | Rationale |
+|--------------|-------------|-----------|
+| **Immutable Documents** (Scopes, Articles, Sections) | Atlas | Constitutional principles |
+| **Primary Documents** | Atlas | Core rules that operationalize the Spirit |
+| **Supporting Documents** | Bridge | Some stay (explanatory), some move (data) |
+| **Active Data Documents** | Synome | Modifiable state = machine territory |
+| **Budget Documents** | Synome | Rates and allocations = machine territory |
+| **Instance Configuration Documents** | Synome | Per-deployment parameters = machine territory |
+| **Precedents** | Synome | Historical decisions for pattern recognition |
+| **Accessory Documents** | Atlas | Translations, archives (for humans) |
+
+---
+
+## The Relationship
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                            SYNOME                                    │
+│  (Graph database - all operational data)                             │
+│                                                                      │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                         ATLAS                                  │  │
+│  │  (Root node - human-readable constitution)                     │  │
+│  │                                                                │  │
+│  │  A.0 Spirit of the Atlas                                       │  │
+│  │  A.1 Governance (who decides, how)                             │  │
+│  │  A.2 Primitives (what building blocks exist)                   │  │
+│  │  A.3 Risk Framework (seniority, encumbrance principles)        │  │
+│  │  A.4 Protocol (tokens, rewards, BEAM pattern)                  │  │
+│  │  A.5 Accessibility (compliance philosophy)                     │  │
+│  │  A.6 Agent Types (what Primes and Guardians are)              │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                              │                                       │
+│           ┌──────────────────┼──────────────────┐                   │
+│           ▼                  ▼                  ▼                   │
+│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐            │
+│  │ Spark Agent  │   │ Grove Agent  │   │ Keel Agent   │  ...       │
+│  │   Artifact   │   │   Artifact   │   │   Artifact   │            │
+│  ├──────────────┤   ├──────────────┤   ├──────────────┤            │
+│  │ SubProxy     │   │ SubProxy     │   │ SubProxy     │            │
+│  │ Rate Limits  │   │ Rate Limits  │   │ Rate Limits  │            │
+│  │ Instances[]  │   │ Instances[]  │   │ Instances[]  │            │
+│  │ ICDs[]       │   │ ICDs[]       │   │ ICDs[]       │            │
+│  └──────────────┘   └──────────────┘   └──────────────┘            │
+│           │                  │                  │                   │
+│           ▼                  ▼                  ▼                   │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │                    Instance Nodes                             │  │
+│  │  Morpho USDS, Aave USDC, Curve USDS-USDC, Treasury Bills...  │  │
+│  │  Each with: addresses, rate limits, operational procedures   │  │
+│  └──────────────────────────────────────────────────────────────┘  │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │                    Config Nodes                               │  │
+│  │  BEAM parameters, Penalty schedules, Settlement formulas      │  │
+│  └──────────────────────────────────────────────────────────────┘  │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │                   Transaction Logs                            │  │
+│  │  All Sentinel actions, settlements, state changes, precedents │  │
+│  └──────────────────────────────────────────────────────────────┘  │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+The Atlas is embedded IN the Synome, not separate from it. It's the human-interpretable entry point to a machine-readable system.
+
+---
+
+## Synomic Entities: Autonomous Entities Tethered to the Synome
+
+The Synome structure enables a crucial property: **Synomic Entities can be fully autonomous**.
+
+**Analogy:** Synomic Entities correspond to **regulated businesses or joint-stock companies** — conservative, auditable, and designed to scale trustlessly. They are highly scalable because cooperation naturally converges on them as institutional shells.
+
+### What Makes This Possible
+
+A Synomic Entity (Prime, Halo, Generator, Guardian) exists entirely within the Synome:
+
+| Property | Implication |
+|----------|-------------|
+| Identity is Synome-native | SubProxy address, token — cannot exist outside |
+| Assets are Synome-controlled | TRC, credit lines governed by Synome rules |
+| Actions are Synome-bounded | Rate limits, encumbrance ratios enforced by code |
+| Accountability is structural | Penalties accrue automatically, conservatorship triggers automatically |
+
+Because the agent cannot escape its constraints, it can operate without human oversight for individual decisions. No one can lobby, bribe, or override it — the rules hold unconditionally.
+
+### Why Autonomy Matters
+
+**1. Protecting Humans from Each Other**
+
+Without autonomous Synomic Entities, rules hold only until someone powerful enough lobbies to break them. With autonomous agents:
+- Encumbrance penalties apply regardless of who wants an exception
+- Settlement happens regardless of who benefits or loses
+- Rate limits hold regardless of market pressure
+
+The agent isn't protecting humans because it's benevolent — it's protecting them because it literally cannot deviate.
+
+**2. Enabling Cooperation Without Trust**
+
+Multiple parties (opaque to each other, potentially competing) can coordinate through Synomic Entities:
+
+```
+Party A ──┐
+          ├───► Synomic Entity ◄───► Synome constraints
+Party B ──┘     (neutral arbiter)
+```
+
+- A cannot read B's strategy
+- B cannot read A's strategy
+- Both can verify the Synomic Entity follows rules
+- Both can trust outcomes without trusting each other
+
+This enables: sealed-bid auctions, multi-party settlement, cross-jurisdictional capital flows.
+
+### Agent Types and Rank Hierarchy
+
+Agents are organized into four ranks based on their governance relationship to the Core Council:
+
+| Rank | Agent Types | Governance Relationship |
+|------|-------------|------------------------|
+| **0** | Core Council | Sovereign |
+| **1** | Guardians, Core Entities | Directly regulated by Core Council |
+| **2** | Primes, Generators, Oracle Entities, Sequencer Entities, Pylon Entities | Accordant to Ozone (the single operational Guardian) |
+| **3** | Halos, Folio Agents | Administered by a Prime |
+
+**Primes** (Rank 2) — Specialized, heavyweight Synomic Entities. Two subtypes: Star Primes (5: Spark, Grove, Keel, skybase, launch6) and Institutional Primes (1: Obex). Require transformation primitives, foundations, nested contributors.
+
+**Halos** (Rank 3) — General-purpose Synomic Entities. Can wrap any value and give it agency. Organized into **Halo Classes** (shared SC + legal infra) containing **Halo Units** (individual products). Three standard class types: Portfolio (LCTS), Term (NFAT), Trading (AMM). Examples: tranched Portfolio Halo (senior/junior sharing one PAU), NFAT Facility (same buybox, varying term/size). Halos are the fractal layer — they proliferate.
+
+**Guardians** (Rank 1) — Perform privileged operations with collateral backing. Post escrow, face slashing for failures. Consolidate interpretation, governance participation, and operational execution. Operationally, **Ozone** is currently the single Guardian; USGE Generator and all Primes are direct children of Ozone, with separate GovOps teams administering each entity.
+
+**Core Entities** (Rank 1) — Tokenless agents directly administered by the Core Council. A single umbrella type covering both legacy-asset management (general-purpose operational vehicles for legacy protocol positions: Morpho, Aave, SparkLend) and crisis-wrapper roles (temporary takeover when a Guardian collapses, dissolved after resolution).
+
+**Oracle Entities** (Rank 2) — Operate price/data feeds and admin oracle beacons. Accordant to Ozone.
+
+**Sequencer Entities** (Rank 2) — Run orderbook matching as regulated venues and host Rings as sub-structures inside their entart. Tokenless or limited-token; no collateral and no participation in any loss waterfall; trust enforced by revocability rather than slashing. Accordant to Ozone.
+
+**Pylon Entities** (Rank 2) — Take principal positions in derivatives, face Primes/Folios as customers, and contribute to per-Ring assurance funds for mutualized peer-default risk. Three-layer capital (regulatory minimum + voluntary extra capital + per-Ring pledges); tokenized with capital-weighted governance. Accordant to Ozone.
+
+**Folio Agents** (Rank 3) — Standardized supply-side holding structures controlled by a single principal. Operated via sentinel formations (automated) or directly by the principal (principal sentinel). Tokenless.
+
+### Escalation to Human Reasonableness
+
+The Synome provides what traditional smart contracts lack: **a path to human judgment for edge cases**.
+
+Regular smart contracts are "code is law" — no appeal, no reasonableness check. If the code produces an absurd outcome, too bad. Synomic Entities are different:
+
+```
+99% of cases              1% edge cases
+─────────────────         ─────────────────
+Automated                 Escalates to governance
+Cheap (gas only)          Expensive (time, attention, voting)
+Code resolves             Humans resolve
+No human involvement      Sky ensures reasonable outcome
+```
+
+**Example: Escrow Synomic Entity**
+
+A dispute arises that the code can't resolve cleanly. Instead of defaulting to an arbitrary outcome:
+1. Agent flags the dispute
+2. Escalates through governance layers
+3. If necessary, reaches Sky Core governance
+4. Humans apply reasonableness — "what would a sensible person conclude?"
+5. Resolution flows back down
+
+The escalation is expensive by design. This creates incentive to:
+- Write better code that handles more cases automatically
+- Resolve disputes at the lowest possible level
+- Only escalate genuinely hard cases
+
+But the path exists. Any edge case can ultimately reach human judgment.
+
+**This is what makes Synomic Entities "smart contracts with a backstop":**
+- The code handles the predictable
+- The Synome guarantees alignment with human values when the unpredictable happens
+- No outcome is ever truly "code said so, deal with it"
+
+### The Trust Equation
+
+Traditional smart contracts: `Trust = Code (no recourse)`
+
+Synomic systems: `Trust = Code × Synome Constraints × Human Escalation Path`
+
+The second is stronger because it combines automation efficiency with human reasonableness. The agent handles 99% cheaply; the Synome guarantees the 1% gets a sensible outcome.
+
+---
+
+## Mini-Atlases: The Fractal Pattern
+
+Every level of the Synome with human stakeholders should have a human-readable summary.
+
+### Prime Mini-Atlases
+
+Each Prime creates their own "mini-Atlas" to explain their Agent Artifact:
+
+**Audience:** Prime token holders, users of Prime services
+
+**Contents (derived from Agent Artifact):**
+- What the Prime does (strategic overview from A.6 introduction sections)
+- Key parameters explained in plain language
+- Risk disclosures without full Risk Framework formulas
+- Governance processes for the Prime (Root Edit Primitive configuration)
+- How to participate (staking, using services)
+
+**Root Edit Governance (Standard across Primes):**
+- **Who can propose:** 1% token holders (Nested Contributors exempt)
+- **Review period:** 7-day Operational Facilitator alignment review
+- **Voting period:** 3-day Snapshot poll
+- **Quorum:** 10% of token supply
+- **Approval threshold:** >50%
+- **"Publicly Held" gate:** Root Edit not operational until 2,000+ holders own 10%+ of genesis supply
+
+**Current Primes needing Mini-Atlases:**
+
+*Star Primes:* Spark, Grove, Keel, skybase, launch6.
+
+*Institutional Primes:* Obex.
+
+### Halo Mini-Atlases
+
+For Halos with external participants (like Portfolio Halos with institutional investors):
+
+**Audience:** Institutional investors, regulatory bodies
+
+**Contents:**
+- Investment strategy and expected returns
+- Risk factors in compliance-suitable language
+- Legal structure and regulatory status
+- Reporting cadence and metrics
+
+### The Pattern
+
+```
+Sky Atlas                    → Describes Sky Core (A.0-A.5 + A.6 intro)
+  ├─ Prime Mini-Atlas        → Describes Prime Agent Artifact node
+  │    ├─ Instance docs      → Describe Instance nodes operated by the Prime
+  │    └─ Halo docs          → Describe Halo nodes administered by the Prime
+  │         └─ Halo Class    → Shared PAU + sentinel + legal
+  │              ├─ Unit 1   → Senior tranche
+  │              └─ Unit 2   → Junior tranche
+  ├─ Prime Mini-Atlas        → Describes another Prime Agent Artifact node
+  │    └─ Halo docs          → Describes a Term-Halo node (NFAT Facility)
+  │         └─ Halo Class    → Shared buybox + nfat-{halo}
+  │              ├─ NFAT 1   → Term + size per facility
+  │              └─ NFAT 2   → Term + size per facility
+  └─ ...
+```
+
+Every node with human stakeholders gets a human summary. The Synome can grow arbitrarily complex; the human layer stays manageable.
+
+---
+
+## Verification Model
+
+The Atlas/Synome split enables a clear verification model:
+
+### Human Verification (Atlas)
+
+Humans verify that the Atlas:
+- Reflects their values and intentions
+- Contains sensible, non-contradictory principles
+- Adequately protects their interests
+- Is understandable without technical expertise
+
+This happens through:
+- Governance Polls and Executive Votes (A.1)
+- Aligned Delegate review
+- Public debate on Sky Forum
+
+### Machine Verification (Synome → Atlas)
+
+Machines verify that the Synome:
+- Conforms to Atlas constraints
+- Maintains internal consistency
+- Produces valid state transitions
+- Satisfies formal invariants
+
+This happens through:
+- Sentinel constraint checking before actions
+- Monthly/Daily Settlement Cycle validation (A.2, A.3)
+- Independent Calculation vs Initial Calculation comparison
+  - ≤1% deviation = **Agreed Amount** (auto-approved)
+  - >1% deviation = **Disputed Amount** (requires Core GovOps resolution)
+  - Prime can post Dispute Notice within 5 days of calculation posting
+
+### The Bridge: Atlas Assertions → Synome Constraints
+
+| Atlas Statement | Synome Constraint |
+|-----------------|-------------------|
+| "Encumbrance ratio target ≤90%" | `∀ prime: prime.RRC / prime.TRC ≤ 0.90` |
+| "JRC absorbs losses before SRC" | `loss_order = [tip_jrc, remaining_jrc, src, backstop]` |
+| "Rate changes limited by BEAM tau" | `∀ param: time_since_last_change(param) ≥ param.tau` |
+| "srUSDS queues process at Settlement" | `∀ queue: process_on(queue) = settlement_timestamp` |
+| "Penalty escalates with shortfall age" | `penalty_rate = f(shortfall_period)` per schedule |
+
+The Atlas describes intent; the Synome encodes implementation.
+
+---
+
+## Synome Structure for Laniakea
+
+### How Beacons Use Synome
+
+Beacons operate on Synome data, not Atlas text:
+
+| Beacon | Synome Data Consumed | Synome Data Written |
+|--------|---------------------|---------------------|
+| baseline-{prime} | Prime pBEAM permissions, rate limits | Bid submissions, capacity requests |
+| lcts-{halo} | LCTS config, queue state, Halo parameters | Settlement transactions, exchange rates, status updates |
+| auction-{x} | Governance-set allocations (pre-auction) or bid submissions (auction mode); capacity pools | Allocations; clearing prices (auction mode) |
+| synserv verification (in-space) | All above (read-only) | Verification attestations — runs as synart-resolved code, not a beacon |
+
+### BEAM Hierarchy in Synome
+
+```
+pBEAM Node (Prime-level)
+├── Controlled Parameters[]
+│   ├── OSRC_capacity: {min, max, step, tau, current_value}
+│   ├── Interest_rate: {min, max, step, tau, current_value}
+│   └── ...
+├── Authorized Operators[]
+│   ├── baseline-{prime} (automated)
+│   └── Prime Multisig (manual)
+└── Last Update Timestamps{}
+
+cBEAM Node (Core-level guardrails)
+├── Global Limits{}
+│   ├── max_total_allocation
+│   ├── max_single_prime_exposure
+│   └── ...
+└── Override Permissions
+    └── Core Council multisig
+
+aBEAM Node (Emergency controls)
+├── Freeze Permissions[]
+├── Recovery Procedures[]
+└── Emergency Contact Info[]
+```
+
+### Transaction Log Structure
+
+All Sentinel actions create Synome transaction log entries:
+
+```
+Transaction {
+  id: bytes32
+  timestamp: uint256
+  sentinel: address
+  action_type: enum
+  target_node: bytes32
+  parameters: bytes
+  result: enum
+  verification_hash: bytes32
+}
+```
+
+This enables:
+- Audit trail for all autonomous actions
+- Pattern recognition for anomaly detection
+- Precedent lookup for similar situations
+- Continuous improvement via post-hoc analysis
+
+---
+
+## Migration Path
+
+### Phase 1: Extraction
+
+Extract machine data from current Atlas into structured format:
+- Parse A.6 Agent Artifacts → Agent nodes
+- Parse Instance Configuration Documents → Instance nodes
+- Parse BEAM tables (A.4) → Config nodes
+- Parse penalty schedules (A.3) → Algorithm nodes
+- Parse Active Data references → State node templates
+
+### Phase 2: Distillation
+
+Condense Atlas to constitutional core:
+- Keep principles, remove parameters
+- Keep definitions, remove instances
+- Keep rules, remove implementation details
+- Target: ~10-20 page document
+
+### Phase 3: Verification Mapping
+
+Create formal links between Atlas assertions and Synome constraints:
+- Each Atlas rule → one or more Synome invariants
+- Invariants checked by beacons continuously
+- Violations trigger alerts/actions per cBEAM/aBEAM
+
+### Phase 4: Beacon Integration
+
+Build beacon interfaces to Synome:
+- Read APIs for configuration retrieval
+- Write APIs for transaction logging
+- Query APIs for state inspection
+- Subscription APIs for real-time updates
+
+---
+
+## The Governance Window
+
+The Atlas/Synome separation is not just an architectural convenience — it's urgent.
+
+Teleonomes will eventually become vastly more intelligent than humans. At that point, human governance becomes either a bottleneck or a ceremony. The current period — while humans can still meaningfully understand and shape the system — is the most critical window in the entire timeline. Not just the most important design phase in Sky's history, but a critical window for getting values right.
+
+This is an attempt at **Coherent Extrapolated Volition (CEV)** to the best of our ability while the human governance window exists: lock in values now, while humans can still participate, because after a certain capability threshold humans won't be able to correct course. The Atlas is the vessel for these values — the human-readable constitutional anchor that captures what matters before the system outgrows human oversight.
+
+### Why This Window Closes
+
+As AI systems become more capable, human governance transitions through distinct regimes:
+
+1. **Meaningful participation** (now) — Humans can read, debate, and shape the Atlas. They understand the implications of what they're encoding.
+2. **Informed oversight** — Humans can still verify outputs and correct course, but the system's internal reasoning exceeds human comprehension in detail.
+3. **Ceremonial governance** — Humans vote on proposals they can no longer fully evaluate. Governance becomes a ritual rather than a check.
+4. **Beneficiary status** — The system maintains the habitat; humans live inside it.
+
+The transition between (1) and (2) is where course correction becomes difficult. The transition between (2) and (3) is where it becomes effectively impossible. We are in regime (1). Every governance cycle spent here — where humans can genuinely read the Atlas, understand its implications, and refine its values — is irreplaceable.
+
+### What "Governance" Actually Is
+
+The governance window framing can mislead if "humans governing" is read as a town hall of humans deliberating. Even now, SKY governance is not naive human judgment. It is capital-weighted decisions by token holders — teleonomes, synomic entities, and humans — operating through structured processes (Executive Votes, Governance Polls, Aligned Delegate review). As the system matures, the entities participating in governance become increasingly capable, and the governance processes themselves become increasingly synomically structured.
+
+What makes the current window special is not that humans are the only decision-makers — they aren't — but that humans can still meaningfully *read* the Atlas, *understand* its implications, and *verify* that it reflects their values. This is the capability that diminishes: not the ability to vote, but the ability to evaluate what you're voting on.
+
+The Atlas is the vessel for locking in human values while humans can still meaningfully participate. The Synome is what "becomes the adult" — the system that eventually governs even when human oversight is no longer meaningful. Getting the separation right determines whether the adult inherits coherent values or a contradictory mess of operational parameters mixed with constitutional principles.
+
+### Why the Atlas Must Be Right Now
+
+| Phase | Human Role | Atlas Function |
+|-------|-----------|----------------|
+| **Current** | Active governance — humans understand, debate, vote | Values being encoded |
+| **Near-term** | Oversight — humans can still verify and correct | Values being tested |
+| **Long-term** | Beneficiaries — the system maintains the habitat | Values locked in, system executes |
+
+Over long timescales, the system cannot be governed by any particular version of humanity. It must become the adult maintaining conditions for the living things inside it.
+
+### The System as Adult
+
+The system has to be the adult — maintaining fair conditions for living things inside it, not serving any one faction.
+
+The Atlas captures the values that define what "fair conditions" means. The Synome operationalizes them — translating constitutional principles into enforceable constraints, rate limits, penalty schedules, and settlement logic. Over time, the Synome's continuous self-analysis capability (see [`security-and-resources.md`](../synodoxics/security-and-resources.md)) and [synomic inertia](../core-concepts/synomic-inertia.md) — high-confidence patterns that resist noise and require governance-level intervention to change — ensure the values persist even when no human can meaningfully oversee the system.
+
+But it means the Atlas must capture values comprehensively and correctly BEFORE the transition, because afterward the opportunity to course-correct diminishes asymptotically. Every governance cycle where the Atlas is refined is irreplaceable.
+
+This urgency directly motivates the Atlas/Synome split: distill the Atlas to its constitutional essence now, while humans can still read and govern it. The Synome can grow arbitrarily complex; the Atlas must remain the stable, human-readable anchor that carries the system's commitments through the transition.
+
+---
+
+## Open Questions
+
+1. **Synome implementation** — What graph database or data structure? On-chain (expensive), off-chain (trust), or hybrid (anchored)?
+
+2. **Atlas constraint language** — How to express assertions in a way that's both human-readable AND machine-checkable? Natural language + formal spec?
+
+3. **Mini-Atlas governance** — Are mini-Atlases required or optional? What minimum contents? Who verifies accuracy?
+
+4. **Migration governance** — How to govern the transition from current Atlas to Atlas/Synome split? Phased rollout?
+
+5. **Versioning** — How to version Synome nodes? How to handle backwards compatibility when constraints change?
+
+6. **Access control** — Who can read/write which Synome nodes? How does this map to current role structure (Guardians, GovOps)?
+
+---
+
+## Summary
+
+The Atlas/Synome separation resolves the fundamental tension between comprehensive machine-readable documentation and human-readable governance:
+
+| Aspect | Atlas | Synome |
+|--------|-------|--------|
+| **Audience** | Humans | Machines (beacons, sentinels) |
+| **Size** | Compact (~10-20 pages) | Unlimited |
+| **Language** | Natural language | Structured/typed data |
+| **Content** | Principles, rules, definitions | Parameters, state, transactions |
+| **Modification** | Governance votes | Via Atlas-conforming operations |
+| **Verification** | Human review | Automated checking |
+| **Examples** | Spirit of Atlas, JRC/SRC seniority | Spark SubProxy address, LIMIT_USDS_MINT |
+
+The Atlas becomes the human-interpretable window into an arbitrarily complex machine-readable system. Every stakeholder can understand their rights and the system's principles without needing to parse operational specifications.
+
+**Key Insight:** Agent Artifacts are already structured for machines (addresses, rate limits, ICDs). The Atlas/Synome split formalizes what's implicit: A.0-A.5 + A.6 intro are the Atlas; A.6.1-A.6.5 details are the Synome.
+
+**Key Urgency:** The current period — while humans can still meaningfully participate in governance — is the critical window for getting the Atlas right. Our best attempt at CEV means locking in values while the governance window exists, before the system outgrows human oversight. The Synome eventually becomes the adult maintaining the habitat; the Atlas is what ensures that adult carries the right values.

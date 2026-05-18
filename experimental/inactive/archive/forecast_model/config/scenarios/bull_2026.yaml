@@ -1,0 +1,13 @@
+# Bull case - extends base scenario
+name: "Bull 2026"
+description: "Optimistic projection with higher market cap and faster growth"
+extends: base_2026
+
+# Override trajectories
+trajectories:
+  base_usds:
+    points:
+      1: 10000000000
+      12: 20000000000
+    mode: linear
+

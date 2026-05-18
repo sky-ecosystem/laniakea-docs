@@ -1,0 +1,72 @@
+# Example scenario - placeholder values
+# Replace with actual numbers for your forecast
+
+name: "Example Forecast"
+description: "Placeholder scenario for testing"
+
+periods:
+  h1:
+    label: "H1"
+    months: 6
+
+    avg_inputs:
+      spark_market_cap: 350000000
+      base_usds: 9650000000
+      unrewarded_usds_user: 3700000000
+      sofr: "0.0370"
+      savings_rate_spread: "0.0030"
+      gross_revenue_rate_spread: "0.0030"
+      farm_yield_spread: "0.0040"
+      sell_token_rate: "0.25"
+      security_rate: "0.21"
+      subsidized_borrow: -7875000
+      srusds_cost: -2500000
+      backstop_exogenous_modifier: -25000000
+
+    agent_launches:
+      spark: 1
+      grove: 4
+      keel: 6
+      star4: 0
+      star5: 0
+      astraius: 0
+      oea1: 0
+      oea2: 0
+      obex: 0
+      iprime2: 0
+
+    end_inputs:
+      base_usds: 11150000000
+
+  h2:
+    label: "H2"
+    months: 6
+
+    avg_inputs:
+      spark_market_cap: 450000000
+      base_usds: 13650000000
+      unrewarded_usds_user: 3600000000
+      sofr: "0.0350"
+      savings_rate_spread: "0.0040"
+      gross_revenue_rate_spread: "0.0030"
+      farm_yield_spread: "0.0040"
+      sell_token_rate: "0.25"
+      security_rate: "0.11"
+      subsidized_borrow: -5625000
+      srusds_cost: -5000000
+      backstop_exogenous_modifier: -25000000
+
+    agent_launches:
+      spark: 1
+      grove: 1
+      keel: 1
+      star4: 3
+      star5: 6
+      astraius: 4
+      oea1: 4
+      oea2: 4
+      obex: 6
+      iprime2: 6
+
+    end_inputs:
+      base_usds: 16150000000
