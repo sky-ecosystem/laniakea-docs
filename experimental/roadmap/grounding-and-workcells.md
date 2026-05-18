@@ -3,33 +3,37 @@
 **Status:** P1 substrate companion.
 **Scope:** The grounded execution model Noemar needs for Phase 1: literals, special forms, sigils, bindings, implements, implement code blobs, workcells, installer boot, and `&core.bootstrap`.
 
-This doc does not add an ongoing sigil / binding / workcell registry. P1 has one boot Space, `&core.bootstrap`, that materializes the runtime call surface and then becomes inert. Ordinary loops only use already-bound sigils.
+This doc does not add an ongoing sigil / binding / workcell registry. P1 has one boot Space, `&core.bootstrap`, that materializes the runtime call surface and then becomes inert. Ordinary loops only use already-bound sigils. The complete P1 callable/workcell inventory lives in [`sigils-and-workcells.md`](sigils-and-workcells.md).
 
 ---
 
-## 1. Grounded atom split
+## 1. Grounded callable split
 
-The old term `grounded atom` is too broad. For P1, split it into three cases:
+The old term `grounded atom` is too broad. For P1, split callable and evaluator surface into five cases:
 
 | Term | Meaning | Examples |
 |---|---|---|
 | **literal** | Built-in value atom | `42`, `3.14`, `"hello"`, `true` |
-| **special form** | Evaluator-native control form | `IF`, `LET`, `MATCH`, `QUOTE` |
-| **sigil** | Grounded callable atom | `ADD`, `SHA256`, `CHAINREAD` |
+| **special form** | Evaluator-native control form | `if`, `let`, `match`, `quote` |
+| **stdlib pure** | Deterministic local function | `+`, `sha256`, `min`, `=` |
+| **native stdlib sigil** | Runtime-grounded callable with no workcell | `NOW` |
+| **workcell-backed sigil** | Grounded callable that reaches a bounded operational setup | `CHAINREAD`, `SYNGATE-READ` |
 
 Rule of thumb:
 
 ```text
 literals are values
 special forms govern evaluation
-sigils compute or reach power
+stdlib pure functions compute
+native sigils read runtime-controlled context
+workcell-backed sigils reach bounded external power
 ```
 
 Syntax convention:
 
 ```text
-lowercase = ordinary symbolic meaning
-ALL CAPS  = special/executable atom
+lowercase / symbols = ordinary symbolic meaning and stdlib
+ALL CAPS            = native or workcell-backed sigil
 $         = variable
 &         = Space
 numbers   = literals
@@ -42,19 +46,20 @@ $borrower
 &entity.halo.spark-term
 loan-health
 42
-ADD
++
+NOW
 CHAINREAD
 ```
 
-Special forms are Noemar evaluator law. A normal callable cannot implement `IF` or `QUOTE` cleanly because those forms change which arguments evaluate.
+Special forms are Noemar evaluator law. A normal callable cannot implement `if` or `quote` cleanly because those forms change which arguments evaluate.
 
-Sigils are open-ended. Adding a new literal type changes the language; adding a new special form changes the evaluator; adding a new sigil changes the boot/binding surface.
+Adding a new literal type changes the language; adding a new special form changes the evaluator; adding a pure stdlib function changes the library; adding a native or workcell-backed sigil changes the boot/binding surface.
 
 ---
 
-## 2. Sigil stack
+## 2. Workcell-backed sigil stack
 
-A sigil is not the program itself. It is the synlang-side callable name. The P1 stack is:
+A workcell-backed sigil is not the program itself. It is the synlang-side callable name. The P1 stack is:
 
 ```text
 sigil
@@ -69,8 +74,8 @@ Definitions:
 
 | Term | Meaning |
 |---|---|
-| **sigil** | ALL CAPS callable symbol in synlang. |
-| **binding** | Versioned wiring from sigil to an implement method, including type, auth, determinism/effect, and verification policy. |
+| **sigil** | Capability-bearing callable symbol in synlang. P1 native/workcell sigils use ALL CAPS. |
+| **binding** | Versioned wiring from a workcell-backed sigil to an implement method, including type, auth, determinism/effect, and verification policy. |
 | **implement** | Controlled executable adapter/service Noemar can call. |
 | **implement method** | Specific callable method on an implement. |
 | **implement code blob** | Concrete source/package/blob that bootstrap materializes and verifies. |
@@ -86,25 +91,24 @@ CHAINREAD
 chainread-eth-mainnet-v1
   binding
 
-eth-mainnet-connector.read-slot.v1
+eth-mainnet-connector.read.v1
   implement method
 
 eth-mainnet-connector-v1.py
   implement code blob
 
-eth-mainnet-workcell-hub
+eth-mainnet-read-workcell-hub
   workcell hub
 
 full node / archive node / RPC endpoint
   workcell components
 ```
 
-Multiple sigils can share one implement and one workcell:
+P1 uses one broad `CHAINREAD` sigil rather than separate chain-log or balance sigils:
 
 ```text
-CHAINREAD    -> eth-mainnet-connector.read-slot.v1
-CHAINLOGS    -> eth-mainnet-connector.get-logs.v1
-CHAINBALANCE -> eth-mainnet-connector.balance-of.v1
+CHAINREAD -> eth-mainnet-connector.read.v1
+  query families: balance, contract read/storage, event/log range, transaction receipt
 ```
 
 P1 binding shape:
@@ -113,13 +117,15 @@ P1 binding shape:
 sigil: CHAINREAD
 binding-id: chainread-eth-mainnet-v1
 implement: eth-mainnet-connector
-method: read-slot
+method: read
 version: v1
 mode: exo-implement
 traits: [read-only, consensus-backed]
 determinism: deterministic-at-block
 verification: block-ref + proof/provenance policy
 ```
+
+Native stdlib sigils such as `NOW` have no workcell stack. Pure stdlib functions such as `+` and `sha256` have neither binding nor workcell.
 
 ---
 
@@ -138,10 +144,10 @@ P1 uses the same abstraction for grounded execution:
 | **workcell hub** | Strict service implements call into. |
 | **workcell component** | Concrete piece the operator provides. |
 
-Ethereum example:
+Ethereum read example:
 
 ```text
-eth-mainnet-workcell
+eth-mainnet-read-workcell
   spec:
     archive-capable reads
     explicit block references
@@ -149,13 +155,28 @@ eth-mainnet-workcell
     health/provenance reports
 
   hub:
-    eth-mainnet-workcell-hub
+    eth-mainnet-read-workcell-hub
 
   components:
     full node
     archive node
     RPC endpoint
     signer/HSM if effectful methods are enabled
+```
+
+Syngate intake example:
+
+```text
+syngate-intake-workcell
+  spec:
+    signed envelope queue
+    registered-beacon pubkey snapshot
+    signature verification
+    basic nonce / rate-limit / spam prefiltering
+    replayable cursor batches
+
+  hub:
+    syngate-intake-workcell-hub
 ```
 
 P1 boundary:
@@ -244,10 +265,15 @@ boot-manifest:
     eth-mainnet-connector-v1:
       source-hash: sha256:...
       materialized-path: /opt/noemar/implements/...
+    syngate-intake-connector-v1:
+      source-hash: sha256:...
+      materialized-path: /opt/noemar/implements/...
 
   workcell-hubs:
-    eth-mainnet-workcell:
+    eth-mainnet-read-workcell:
       endpoint: http://127.0.0.1:8547
+    syngate-intake-workcell:
+      endpoint: unix:/run/noemar/syngate-intake.sock
 
   test-forks:
     synome-shadow: enabled
@@ -258,10 +284,12 @@ After canonical genesis, bootstrap creates a shadow synome frame and points its 
 
 ```text
 production frame:
-  CHAINREAD -> eth-mainnet-workcell-hub
+  CHAINREAD    -> eth-mainnet-read-workcell-hub
+  SYNGATE-READ -> syngate-intake-workcell-hub
 
 shadow frame:
-  CHAINREAD -> eth-mainnet-fork-workcell-hub
+  CHAINREAD    -> eth-mainnet-fork-workcell-hub
+  SYNGATE-READ -> syngate-test-intake-workcell-hub
 ```
 
 The same synlang can then run against production reality or forked test reality.
@@ -273,42 +301,42 @@ The same synlang can then run against production reality or forked test reality.
 Loops declare the grounded powers they need:
 
 ```text
-(loop-requires relay-halo-spark-term
-   (sigils [CHAINREAD SHA256 ADD EQ])
-   (bindings [chainread-eth-mainnet-v1])
-   (workcells [eth-mainnet-workcell])
-   (tests [chainread-conformance-v1]))
+(loop-requires synserv-canonical
+   (stdlib [core-special-forms-v1 core-stdlib-v1])
+   (native-sigils [NOW])
+   (sigils [SYNGATE-READ CHAINREAD])
+   (bindings [syngate-read-v1 chainread-eth-mainnet-v1])
+   (workcells [syngate-intake-workcell eth-mainnet-read-workcell])
+   (tests [syngate-read-conformance-v1 chainread-conformance-v1]))
 ```
 
-Bootstrap refuses to enable a loop if its requirements are not satisfied. Once enabled, the loop can only call its already-bound sigils through the normal evaluator.
+Bootstrap refuses to enable a loop if its requirements are not satisfied. Once enabled, the loop can only call declared stdlib/native surface and already-bound workcell sigils through the normal evaluator.
 
 ---
 
-## 7. P1 baseline sigils
+## 7. P1 callable inventory
 
-P1 should keep the sigil set small.
+P1 keeps the workcell-backed sigil set small. The canonical list is [`sigils-and-workcells.md`](sigils-and-workcells.md).
 
-Native deterministic examples:
+Pure stdlib:
 
 ```text
-ADD
-SUB
-MUL
-DIV
-MIN
-MAX
-SUM
-EQ
-LT
-LTE
-GT
-GTE
-SHA256
++ - * /
+min max sum
+= < <= > >=
+sha256
 ```
 
-Read-only exo example:
+Native stdlib sigil:
 
 ```text
+NOW
+```
+
+Workcell-backed sigils:
+
+```text
+SYNGATE-READ
 CHAINREAD
 ```
 
@@ -321,4 +349,3 @@ randomness / stochastic sigils
 ```
 
 P1 relays can record transaction receipts and lifecycle atoms, but ordinary synlang loops do not directly send transactions through `SENDTX`. Later phases can add effectful and stochastic sigils with explicit auth, determinism, and verification policies.
-

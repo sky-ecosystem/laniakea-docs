@@ -18,9 +18,10 @@ The roadmap dir carries **lean P1-scoped versions** of four risk-framework files
 10. `../roadmap/market-memory-oracle.md` — lean: oracle inputs the risk form consumes
 11. `../roadmap/roadmap-ideas.md` — design patterns (lift, insyn/exsyn, sudo staircase, phase-invariant)
 12. `../roadmap/grounding-and-workcells.md` — P1 grounded execution: literals, special forms, sigils, bindings, implements, workcells, bootstrap
-13. `../roadmap/p1-nfat-atom-trace.md` — resolved atom-level NFAT heartbeat trace
-14. `../roadmap/p1-borrower-nfat-user-scenario.md` — narrative borrower-to-ER scenario
-15. `../roadmap/asc-transition.md` — ASC/DAB details (parallel track to TRRC)
+13. `../roadmap/sigils-and-workcells.md` — canonical P1 callable/workcell inventory
+14. `../roadmap/p1-nfat-atom-trace.md` — resolved atom-level NFAT heartbeat trace
+15. `../roadmap/p1-borrower-nfat-user-scenario.md` — narrative borrower-to-ER scenario
+16. `../roadmap/asc-transition.md` — ASC/DAB details (parallel track to TRRC)
 
 ## File map
 
@@ -38,6 +39,7 @@ The roadmap dir carries **lean P1-scoped versions** of four risk-framework files
 | `../roadmap/market-memory-oracle.md` | **Lean** — reducer concept, P1 output families catalog, scenario interface |
 | `../roadmap/roadmap-ideas.md` | Sudo staircase, frame mechanism, lift principle and its sub-patterns (code/data, insyn/exsyn, black-box, temporary-equation, phase-invariant), DSC, market-memory, don't-rabbit-hole |
 | `../roadmap/grounding-and-workcells.md` | P1 grounded execution stack: literals, special forms, sigils, bindings, implements, implement code blobs, workcells, installer, `&core.bootstrap` |
+| `../roadmap/sigils-and-workcells.md` | Complete P1 callable/workcell inventory: stdlib pure functions, `NOW`, `SYNGATE-READ`, `CHAINREAD`, workcells, Space feed map |
 | `../roadmap/p1-nfat-atom-trace.md` | Atom-level NFAT trace: constructor writes, attestor gates, risk-form execution, structbook matching, TRRC / ER rollup |
 | `../roadmap/p1-borrower-nfat-user-scenario.md` | User/operator scenario: borrower readiness → Core inclusion → ready-empty books → queue claim / NFAT mint → disbursement → zero-SDR ER update |
 | `../roadmap/asc-transition.md` | ASC/DAB/peg-defense detailed mechanics, PSM transition to Grove |

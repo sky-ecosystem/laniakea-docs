@@ -26,7 +26,7 @@ This phase doc answers four questions: (1) what Spaces exist after genesis, (2) 
 
 ## Vocabulary refresher
 
-General terms (sudo, gate-mediated write, DSC, market memory, phase-invariant consumption site) are defined in [`../roadstart/big-picture.md`](../roadstart/big-picture.md) and [`roadmap-ideas.md`](roadmap-ideas.md). Grounded execution terms (literal, special form, sigil, binding, implement, implement code blob, workcell, workcell hub) are defined in [`grounding-and-workcells.md`](grounding-and-workcells.md). P1-specific terms:
+General terms (sudo, gate-mediated write, DSC, market memory, phase-invariant consumption site) are defined in [`../roadstart/big-picture.md`](../roadstart/big-picture.md) and [`roadmap-ideas.md`](roadmap-ideas.md). Grounded execution terms (literal, special form, sigil, binding, implement, implement code blob, workcell, workcell hub) are defined in [`grounding-and-workcells.md`](grounding-and-workcells.md); the complete P1 callable/workcell list is in [`sigils-and-workcells.md`](sigils-and-workcells.md). P1-specific terms:
 
 | Term | Meaning |
 |---|---|
@@ -301,7 +301,7 @@ Patch-beacons remain the one beacon class without a regulated framework — Guar
 | `relay-core-govops` | `&core.governance.requests`, `&core.registry.protocol`, Core Council / Configurator operational queue, external tx receipts | request status atoms in `&core.governance.requests`; core-action receipt atoms in `&core.relay.govops`; external Configurator / aBEAM action records |
 | `relay-halo-{id}` | halo root config, halo class, risk class, deal queue, planned / executing / confirmed external actions | new halobook/riskbook/exobook Spaces, lifecycle atoms, queue-claim / conversion / funding confirmations, tx receipts, NFAT issuance records |
 | `relay-prime-{id}` | Prime root config, NFAT availability via cross-book duality, deploy schedule, planned / executing / confirmed external allocation actions | NFAT-holding updates in halobooks; capital allocation and tx-confirmation atoms in Prime root / relay-adjacent Spaces |
-| `synserv-canonical` | all input atoms across the entart tree; chain state via `(CHAINREAD …)`; wall clock for DSC | derived state atoms in book Spaces; `&core.settlement` epoch/processing atoms; `&core.treasury` refresh writes; lot-age surface / Lindy SDR / SDR auction dispatch; `(prime-er _)` atoms in primebooks |
+| `synserv-canonical` | syngate intake via `(SYNGATE-READ …)`; all accepted input atoms across the entart tree; chain state via `(CHAINREAD …)`; heartbeat time via `(NOW)` | derived state atoms in book Spaces; `&core.settlement` epoch/processing atoms; `&core.treasury` refresh writes; lot-age surface / Lindy SDR / SDR auction dispatch; `(prime-er _)` atoms in primebooks |
 | `test-runner` | (shadow only) | test results within `&core.test-suite` (shadow only) |
 
 The pattern: input beacons (market-data, attest-data, patch) write into their target Spaces; relay beacons run external-action-coupled constructors, lifecycle transitions, and capital flows; synserv runs the synlang heartbeat that drives all derived state and emits real-time ER.
@@ -378,7 +378,7 @@ Test categories for v4:
 | Category | Verifies |
 |---|---|
 | **Topology** | All 73 fixed Spaces exist; sub-entart and sub-space registries point correctly; per-entart root contents present (TRC atom in prime roots, etc.) |
-| **Bootstrap / grounding** | `&core.bootstrap` content present; literal / special form / sigil classification; binding resolution; implement code blob hash checks; workcell hub registration; shadow-frame binding to test workcells |
+| **Bootstrap / grounding** | `&core.bootstrap` content present; literal / special form / stdlib / sigil classification; binding resolution; implement code blob hash checks; workcell hub registration; shadow-frame binding to test workcells |
 | **Auth atoms** | Each operational verb has correctly-placed auth atoms in `&core.registry.beacon`; counts match expected per Prime / Halo |
 | **Beacon registry** | All ~27 identities present, status active, class atoms set, cert chains rooted |
 | **Halo class / risk class** | All 3 halo entarts carry their `nfat-term` halo class and `custodial-crypto` risk class with the right shape; the attestor sub-Space is present and accordant |
@@ -601,6 +601,7 @@ Full focused-mode file map: [`../roadstart/README.md`](../roadstart/README.md). 
 - [`attestor-atom-schema.md`](attestor-atom-schema.md) — boolean attestation schemas referenced from "Attestation model"
 - [`custodial-crypto-risk-form.md`](custodial-crypto-risk-form.md) — P1 lean risk-form body (full body at `../risk-framework/custodial-crypto-risk-form.md`)
 - [`grounding-and-workcells.md`](grounding-and-workcells.md) — grounded execution / sigil / workcell / bootstrap model
+- [`sigils-and-workcells.md`](sigils-and-workcells.md) — complete P1 callable/workcell inventory
 - [`roadmap-ideas.md`](roadmap-ideas.md) — patterns this doc instantiates (lift, insyn/exsyn, phase-invariant)
 - [`v1-principles.md`](v1-principles.md) — invariants distilled from the carve-outs section
 - [`p1-nfat-atom-trace.md`](p1-nfat-atom-trace.md) — atom-level companion to the worked NFAT example
