@@ -112,4 +112,4 @@ Discipline: minimize free parameters; maximize references to reducer outputs; ma
 
 ## 5. What does NOT belong here
 
-Loan facts — collateral amount, debt outstanding, LT, liquidation bonus, maturity/TTM, borrower identity, disbursement account, collateral account, configurator whitelist. Those are exobook / `protocol-registry` / `chain-read` / attestor-gated facts (see [`attestor-atom-schema.md`](attestor-atom-schema.md)).
+Loan facts — collateral amount, debt outstanding, LT, liquidation bonus, maturity/TTM, borrower identity, disbursement account, collateral account, configurator whitelist. Those are exobook / `protocol-registry` / `CHAINREAD` / attestor-gated facts (see [`attestor-atom-schema.md`](attestor-atom-schema.md)).

@@ -9,7 +9,7 @@ This is a companion to the worked NFAT example in [`phase-1-spaces.md`](phase-1-
 
 - Every atom below lives in the Space shown above it. Cross-Space reads happen only through known registries, cross-book duality, or the explicit P1 exceptions already in the Space spec.
 - Attestor atoms are boolean gates. They never supply collateral, debt, price, LTV, or CRR numbers.
-- Market facts come from `&entity.oracle.crypto-majors.ticks`; loan facts come from exobook atoms plus `chain-read`.
+- Market facts come from `&entity.oracle.crypto-majors.ticks`; loan facts come from exobook atoms plus the `CHAINREAD` sigil.
 - Synserv may emit derived atoms as cache/output, but authority comes from deterministic re-derivation from source atoms each heartbeat.
 - `patch-{prime}` enters only at the Prime primebook as `exsynTRRC`; it never affects the insyn NFAT trace.
 
@@ -256,7 +256,7 @@ If the heartbeat is inside the 13:00-16:00 UTC processing window, synserv first 
 
 ### 3.1 Exobook derivation
 
-Synserv reads exobook source atoms, term attestation, and chain state. The `chain-read` calls are grounded primitives, not beacon writes.
+Synserv reads exobook source atoms, term attestation, and chain state. The `CHAINREAD` calls are sigil calls resolved through the grounding/workcell stack, not beacon writes.
 
 ```metta
 ;; reads from &entity.halo.spark-term.exobook.spark-term-loan-001
@@ -266,11 +266,11 @@ Synserv reads exobook source atoms, term attestation, and chain state. The `chai
 (ttm-days-official spark-term-loan-001 180)
 (exobook-term-attestation spark-term-loan-001 ...)
 
-;; grounded reads
-(chain-read ethereum collateral-account-001 (balance btc) {block-H})
-(chain-read ethereum {loan-contract} (debt-outstanding spark-term-loan-001) {block-H})
-(chain-read ethereum {loan-contract} (liquidation-threshold spark-term-loan-001) {block-H})
-(chain-read ethereum {loan-contract} (liquidation-bonus spark-term-loan-001) {block-H})
+;; CHAINREAD sigil calls
+(CHAINREAD ethereum collateral-account-001 (balance btc) {block-H})
+(CHAINREAD ethereum {loan-contract} (debt-outstanding spark-term-loan-001) {block-H})
+(CHAINREAD ethereum {loan-contract} (liquidation-threshold spark-term-loan-001) {block-H})
+(CHAINREAD ethereum {loan-contract} (liquidation-bonus spark-term-loan-001) {block-H})
 ```
 
 Derived output:
@@ -352,7 +352,7 @@ Risk form execution is scenario-synchronous. It computes each exobook's senior l
 (riskbook-default-crr rbk-001 H {riskbook-default-crr})
 ```
 
-The attestor has no path to influence `{default-crr}` except by pass/fail inclusion. Quantitative values are from exobook state, `chain-read`, market memory, and risk-form data atoms.
+The attestor has no path to influence `{default-crr}` except by pass/fail inclusion. Quantitative values are from exobook state, `CHAINREAD`, market memory, and risk-form data atoms.
 
 ### 3.3 Halobook projection
 
@@ -502,7 +502,7 @@ The trace pins down the end-to-end reads and writes that were the final Phase 1 
 
 - constructor writes for halobook, riskbook, exobook, and NFAT unit;
 - boolean attestor gates and their exact downstream role;
-- risk-form composition from exobook state, `chain-read`, market memory, and scenarios;
+- risk-form composition from exobook state, `CHAINREAD`, market memory, and scenarios;
 - concrete `structbook` matching against `sdr-allocation` atoms;
 - upward rollup from exobook derivation to riskbook CRR, halobook projection, Prime structbook capital, `insynTRRC + exsynTRRC`, and final `prime-er`.
 

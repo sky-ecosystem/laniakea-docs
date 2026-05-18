@@ -30,7 +30,7 @@ Illustrative numbers are deliberately simple. The CRR values are assumed outputs
 - The NFATS queue is chain-side Halo Facility infrastructure. The synome sees queue deposits, queue claims, conversions, and mints through relay receipts and halobook liability atoms.
 - `relay-prime-spark` and `relay-halo-spark-term` record chain-coupled actions. `synops-halo-spark-term` records in-synome borrower requests and book-accounting assignments only.
 - `attest-data-spark-term` writes boolean gates. It never supplies collateral, debt, price, LTV, or CRR numbers.
-- `synserv-canonical` derives risk, matching, TRRC, and ER from atoms plus grounded reads.
+- `synserv-canonical` derives risk, matching, TRRC, and ER from atoms plus `CHAINREAD` sigil calls.
 
 ## 1. Borrower proposed to the risk class
 
@@ -304,10 +304,10 @@ Before disbursement, current market and collateral facts are already available t
    T_market)
 (market-data-freshness btc 30 T_market)
 
-;; grounded reads available to synserv
-(chain-read ethereum collateral-account-001 (balance btc) block-H)
-(chain-read ethereum loan-contract-001 (liquidation-threshold spark-term-loan-001) block-H)
-(chain-read ethereum loan-contract-001 (liquidation-bonus spark-term-loan-001) block-H)
+;; CHAINREAD sigil calls available to synserv
+(CHAINREAD ethereum collateral-account-001 (balance btc) block-H)
+(CHAINREAD ethereum loan-contract-001 (liquidation-threshold spark-term-loan-001) block-H)
+(CHAINREAD ethereum loan-contract-001 (liquidation-bonus spark-term-loan-001) block-H)
 ```
 
 `relay-halo-spark-term` sends USDC to the borrower and records the funding confirmation. The exobook becomes funded exposure only now.
@@ -326,7 +326,7 @@ Before disbursement, current market and collateral facts are already available t
 
 ## 9. Risk form emits CRR components
 
-On the next heartbeat, synserv reads the borrower admission, riskbook attestation, refreshed exobook term attestation, exobook state, grounded chain data, and market memory. The P1 risk form emits assumed CRR components.
+On the next heartbeat, synserv reads the borrower admission, riskbook attestation, refreshed exobook term attestation, exobook state, `CHAINREAD` chain data, and market memory. The P1 risk form emits assumed CRR components.
 
 ```metta
 ;; in &entity.halo.spark-term.riskbook.rbk-001

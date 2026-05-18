@@ -49,7 +49,7 @@ Out of P1: Core Entity (legacy/crisis-wrapper umbrella), Sequencer/Pylon/Ring (d
 | `sentinel` | action | Cognitive call-out density into operator telart. Variants `stream-{x}` (proposes intent to baseline-relay) and `principal-{owner}` (direct PAU control with own cognition). Phase 9+. |
 | `synserv` | special | Central synomic node operated by Core Council govops. Sole canonical sequencer of accepted synart writes; runs `&core.loop.synserv` heartbeat with hot standby. |
 
-`endoscraper` is **not** a beacon class — it's a grounded runtime primitive `(chain-read $contract $slot)` accessible from any rule. Global protocol refs such as Configurator Unit addresses live in `&core.registry.protocol`; per-entity chain-contract metadata lives in per-entart `protocol-registry` sub-Spaces (each Prime, Halo, and the Generator owns its own local PAU / protocol refs).
+`endoscraper` is **not** a beacon class — chain reads are grounded execution through the `CHAINREAD` sigil, resolved by Noemar through a binding to an implement backed by a workcell. Global protocol refs such as Configurator Unit addresses live in `&core.registry.protocol`; per-entity chain-contract metadata lives in per-entart `protocol-registry` sub-Spaces (each Prime, Halo, and the Generator owns its own local PAU / protocol refs).
 
 P1 beacons are deterministic programs operated by govops. `relay` is reserved for coupled external action + synome-recording authority: a relay may write operational atoms, but those writes must be tied to a planned, executing, or confirmed external action or to a lifecycle transition required to execute or record it. Pure synome-only administration uses `synops-beacon`, not relay; in P1 this covers `synops-halo-{id}` borrower-inclusion requests, class-modification requests, and in-synome book-accounting assignments that rely on existing relay receipts. Sentinel formations (baseline-relay + warden-relay + stream-sentinel for Primes) activate Phase 9–10.
 
@@ -75,9 +75,9 @@ P1 beacons are deterministic programs operated by govops. `relay` is reserved fo
 
 ## Noemar / synlang substrate
 
-**Synart is the program.** Runtimes (Noemar is one implementation) are interpreters. **Identity-driven boot:** `noemar boot --identity=X` resolves a loop Space pointer in `&core.registry.beacon` and evaluates `(run-forever)` with that Space as `&self`. Boot procedure itself lives in synart at `&core.boot`.
+**Synart is the program.** Runtimes (Noemar is one implementation) are interpreters. **Identity-driven boot:** `noemar boot --identity=X` resolves a loop Space pointer in `&core.registry.beacon` and evaluates `(run-forever)` with that Space as `&self`. P1 bootstrap lives at `&core.bootstrap`: a one-shot boot Space that materializes implement code blobs, binds sigils, registers workcell hubs from the installer manifest, emits boot receipts, and then becomes inert.
 
-**Topology:** tree of entarts (one per Synomic Entity, rooted at one root Space) plus universal `&core.*` Spaces. Six-layer synome root: **constitutional** (`&core.root`, `&core.telos`, `&core.governance`, with P1 request intake at `&core.governance.requests`) / **framework** (`&core.framework.*` — empty in P1) / **registry** (`&core.registry.*`, including `&core.registry.beacon` and `&core.registry.protocol`) / **aggregation** (`&core.settlement`) / **executable** (`&core.syngate`, `&core.loop.*`, `&core.relay.govops`, `&core.recipe.*`) / **library** (`&core.library.*`).
+**Topology:** tree of entarts (one per Synomic Entity, rooted at one root Space) plus universal `&core.*` Spaces. Six-layer synome root: **constitutional** (`&core.root`, `&core.telos`, `&core.governance`, with P1 request intake at `&core.governance.requests`) / **framework** (`&core.framework.*` — empty in P1) / **registry** (`&core.registry.*`, including `&core.registry.beacon` and `&core.registry.protocol`) / **aggregation** (`&core.settlement`) / **executable** (`&core.bootstrap`, `&core.syngate`, `&core.loop.*`, `&core.relay.govops`, `&core.recipe.*`) / **library** (`&core.library.*`).
 
 **Naming convention:**
 
@@ -87,7 +87,7 @@ P1 beacons are deterministic programs operated by govops. `relay` is reserved fo
 ```
 
 - `.` between Space hierarchy segments; `-` for compounds within one segment (`spark-term`, `crypto-majors` stay joined).
-- Sigil `&` on Space refs only; non-Space identifiers (beacons, verbs) are dash-only, no sigil.
+- Prefix `&` on Space refs only; non-Space identifiers (beacons, verbs) are dash-only.
 - Sub-ids as new levels (`&entity.halo.spark-term.book.A1`, not `book-A1`).
 - Names encode entity + sub-kind, not parent chain; structural relationships live in registry atoms (`(sub-entart …)`, `(sub-space …)`).
 
@@ -114,6 +114,8 @@ P1 beacons are deterministic programs operated by govops. `relay` is reserved fo
 11. Global rules carry publication metadata
 12. Synart is a tree of entarts (parent → child only; only synents own entarts)
 13. Loops, gates, recipes are first-class synart content
+
+**Grounded execution** in P1 splits the old "grounded atom" bucket into literals (values), special forms (evaluator control), and sigils (ALL CAPS callable powers). Sigils resolve through bindings to implement methods; implement code blobs are materialized at bootstrap; implements call workcell hubs; hubs route to human/installer-provided workcell components. There is no ongoing P1 sigil registry Space. Canonical P1 details: `../roadmap/grounding-and-workcells.md`.
 
 **Frame mechanism** (runtime feature, below synomic surface): runtime can hold multiple complete synome-state instances (canonical + shadow). Operations `fork` / `switch` / `discard` / `diff`. P1 uses it for genesis-test isolation (genesis → fork shadow → run suite → discard → production starts after validation). Future uses: sudo-event safety, forecasting, what-if queries, major migrations (double-mesh trick).
 

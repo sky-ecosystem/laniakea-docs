@@ -22,7 +22,7 @@ Every book is a 6-tuple `(assets, tranches, equity-tranche, rules, state, frame)
 
 - Exactly one designated **equity tranche** (most-junior, first-loss).
 - Solvent iff equity > 0; equity → 0 triggers a defined unwind.
-- **Real-time equity recomputation** required — every book class declares an equity-feed mechanism at onboarding (`chain-read` primitive, `attest-data` beacon, or synserv-derived).
+- **Real-time equity recomputation** required — every book class declares an equity-feed mechanism at onboarding (`CHAINREAD` sigil, `attest-data` beacon, or synserv-derived).
 - Bankruptcy remoteness lives at the **Riskbook** level; no netting across Riskbooks.
 
 Rules execute as synart-resolved code that synserv runs in-space against current input atoms. Any warden re-runs them and gets the same answer.
@@ -142,7 +142,7 @@ default-CRR(e)            = max_s senior_loss(e,s) / senior_notional
 Output four components: `default-CRR`, `spread-CRR`, `rate-CRR`, `liquidity-CRR` plus `binding-scenario`. SDR matching at the Prime layer can make spread/rate/liquidity non-binding for the matched portion; **it never removes default-CRR**.
 
 Inputs:
-- exobook state (collateral, debt, LT, liquidation bonus, current LTV, maturity, funding-confirmation) via `chain-read`
+- exobook state (collateral, debt, LT, liquidation bonus, current LTV, maturity, funding-confirmation) via `CHAINREAD`
 - borrower-admission + exobook-term attestation gates (default-deny if missing/stale/fail)
 - market-memory from `&entity.oracle.crypto-majors.ticks` (price/peg, vol, correlation, depth/impact, liquidation overhang, funding/OI, rates/macro, data-quality)
 - approved scenario library (worst-historical-crash, exchange-hack, stETH-basis-break, depeg, war/rate-spike, etc.) — scenarios reference reducer outputs wherever possible; semantic bridges explicit

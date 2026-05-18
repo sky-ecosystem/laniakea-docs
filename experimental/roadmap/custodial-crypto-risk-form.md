@@ -37,7 +37,7 @@ No mezzanine / equity tranche holdings in P1. Anything outside the form falls th
 
 ## 2. Inputs
 
-- **Exobook state** via `chain-read` and exobook atoms: collateral asset+amount, collateral account, senior notional+denom, borrower junior cushion, LT/liquidation bonus/current LTV, maturity/TTM, lifecycle state. Staged loans (funds still in PAU) are not yet funded exposure; term recognition starts at funding confirmation unless the legal term is an absolute date.
+- **Exobook state** via `CHAINREAD` and exobook atoms: collateral asset+amount, collateral account, senior notional+denom, borrower junior cushion, LT/liquidation bonus/current LTV, maturity/TTM, lifecycle state. Staged loans (funds still in PAU) are not yet funded exposure; term recognition starts at funding confirmation unless the legal term is an absolute date.
 - **Attestation gates** (boolean admission-only — see [`attestor-atom-schema.md`](attestor-atom-schema.md)): borrower admission + exobook term attestation. Default-deny on missing/stale/fail. The attestor provides no quantitative inputs.
 - **Market memory** from `&entity.oracle.crypto-majors.ticks` (full catalog in [`market-memory-oracle.md`](market-memory-oracle.md)): prices, pegs, vol, correlation, basis, depth/impact curves, liquidation overhang, funding/OI, rates/macro, data quality.
 - **Scenario library** — named stress envelopes, ideally referencing market-memory reducer outputs:

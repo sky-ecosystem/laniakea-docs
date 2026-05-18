@@ -101,7 +101,7 @@ Future use cases the same mechanism supports:
 - What-if queries (synodoxics arguments exercised in shadow before becoming endospells)
 - Major migrations / repartitioning (double-mesh trick)
 
-Phase 1 implementation: deep copy is enough at this scale (~72 Spaces, modest atom count). Copy-on-write becomes valuable later.
+Phase 1 implementation: deep copy is enough at this scale (~73 Spaces, modest atom count). Copy-on-write becomes valuable later.
 
 ---
 
@@ -111,7 +111,7 @@ Phase 1 is not just "the simplest thing that works." It's an exercise in buildin
 
 > If we'd build it in Python now and rewrite it in synlang later, build it in synlang now.
 
-The Phase 1 deliverables are bounded — only what's needed for the phase to perform — but within that scope, the synlang is the long-term shape. CRR equations, risk-form match, sub-book routing, ER, equity invariants, health factors, loop bodies — all production synlang evaluated by Noemar from day 1. Python remains for **grounded primitives** the runtime calls into (ed25519 verification, atom storage, network I/O, basic numeric ops); these don't get replaced by synlang later because they can't be.
+The Phase 1 deliverables are bounded — only what's needed for the phase to perform — but within that scope, the synlang is the long-term shape. CRR equations, risk-form match, sub-book routing, ER, equity invariants, health factors, loop bodies — all production synlang evaluated by Noemar from day 1. Python remains for **implement code blobs behind sigils** and runtime-native substrate tasks (ed25519 verification, atom storage, network I/O, basic numeric ops); these don't get replaced by synlang later because they can't be.
 
 "Lift" at this stage just means high-quality synlang. Probmesh, dense comments, formal proofs are not yet load-bearing. The bar is: the synlang you write now is the synlang the system runs on indefinitely.
 
@@ -120,7 +120,7 @@ The Phase 1 deliverables are bounded — only what's needed for the phase to per
 - **Code → synlang.** Every rule, equation, derivation, loop body, predicate. Lifty.
 - **Data → atoms** (sudo-set or derived). Stress scenario parameters, asset stress profiles, capital allocations, governance numbers. Sudo-setting *numbers* in Phase 1 isn't duct tape — it's policy. The equations consuming them are synlang.
 
-A function whose body we don't yet know how to write isn't duct tape either, **as long as the signature is real synlang**. Declare the inputs, declare the output, leave the body deferred. The matured P1 `custodial-crypto` direction is no longer opaque: it is a stress-envelope waterfall consuming `chain-read`, market-memory atoms, and attestation gates, returning per-risk-type CRR components. Exact scenario constants remain data atoms, not code.
+A function whose body we don't yet know how to write isn't duct tape either, **as long as the signature is real synlang**. Declare the inputs, declare the output, leave the body deferred. The matured P1 `custodial-crypto` direction is no longer opaque: it is a stress-envelope waterfall consuming `CHAINREAD`, market-memory atoms, and attestation gates, returning per-risk-type CRR components. Exact scenario constants remain data atoms, not code.
 
 ### The insyn/exsyn pattern — phasing capabilities into synome
 
@@ -161,7 +161,7 @@ For doesn't-fit cases, black-box deferral (define the function signature, leave 
 
 ### Black-box deferrals — honest scaffolds, not duct tape
 
-When you don't know enough about a domain to model its internals well, define the function signature in synlang and leave the body opaque. This was the right earlier discipline for the P1 risk-form conversation: lock the `custodial-crypto` signature and do not invent a fake scalar. The current live P1 design has since matured past opacity: the body is a stress-envelope exobook waterfall over `chain-read`, market-memory reducer outputs, and attestation gates. The black-box pattern remains the right tool for future risk classes whose internals are not yet understood.
+When you don't know enough about a domain to model its internals well, define the function signature in synlang and leave the body opaque. This was the right earlier discipline for the P1 risk-form conversation: lock the `custodial-crypto` signature and do not invent a fake scalar. The current live P1 design has since matured past opacity: the body is a stress-envelope exobook waterfall over `CHAINREAD`, market-memory reducer outputs, and attestation gates. The black-box pattern remains the right tool for future risk classes whose internals are not yet understood.
 
 The discipline: **define the smallest synlang surface** that lets the layer above proceed. Defer everything else to its respective phase boundary.
 

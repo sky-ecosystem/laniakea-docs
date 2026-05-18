@@ -17,9 +17,10 @@ The roadmap dir carries **lean P1-scoped versions** of four risk-framework files
 9. `../roadmap/capital-formula.md` — lean: per-position formulas + TRRC + ER
 10. `../roadmap/market-memory-oracle.md` — lean: oracle inputs the risk form consumes
 11. `../roadmap/roadmap-ideas.md` — design patterns (lift, insyn/exsyn, sudo staircase, phase-invariant)
-12. `../roadmap/p1-nfat-atom-trace.md` — resolved atom-level NFAT heartbeat trace
-13. `../roadmap/p1-borrower-nfat-user-scenario.md` — narrative borrower-to-ER scenario
-14. `../roadmap/asc-transition.md` — ASC/DAB details (parallel track to TRRC)
+12. `../roadmap/grounding-and-workcells.md` — P1 grounded execution: literals, special forms, sigils, bindings, implements, workcells, bootstrap
+13. `../roadmap/p1-nfat-atom-trace.md` — resolved atom-level NFAT heartbeat trace
+14. `../roadmap/p1-borrower-nfat-user-scenario.md` — narrative borrower-to-ER scenario
+15. `../roadmap/asc-transition.md` — ASC/DAB details (parallel track to TRRC)
 
 ## File map
 
@@ -28,7 +29,7 @@ The roadmap dir carries **lean P1-scoped versions** of four risk-framework files
 | `big-picture.md` | 5-layer arch, beacon taxonomy, smart contracts (PAU/Configurator/LCTS/NFATS), Noemar substrate, governance, accounting/DSC, phase ladder |
 | `risk-framework.md` | 5 risk types, book primitive, tranching + waterfall, currency frame, sub-book taxonomy, default-deny, capital formula, custodial-crypto form body, SDR model, asset risk-type tuple |
 | `../roadmap/phase-1-overview.md` | Fronts orientation (structural + operator) above the canonical Space spec |
-| `../roadmap/phase-1-spaces.md` | Canonical Phase 1 v4: 72 Spaces, halo class/risk class, constructors, beacons, verbs, ER data flow, genesis sudo sequence, worked NFAT example, V1 carve-outs |
+| `../roadmap/phase-1-spaces.md` | Canonical Phase 1 v4: 73 Spaces, halo class/risk class, constructors, beacons, verbs, ER data flow, genesis sudo sequence, worked NFAT example, V1 carve-outs |
 | `../roadmap/v1-principles.md` | 16 invariants distilled from P1 design |
 | `../roadmap/attestor-atom-schema.md` | Borrower readiness/admission + riskbook/exobook attestation schemas, ready-empty/funded-active lifecycle, default-deny gate, slashing surface |
 | `../roadmap/custodial-crypto-risk-form.md` | **Lean** — P1 binding risk-form body: composition scope, exobook waterfall, CRR component outputs, riskbook aggregation, structbook consumption |
@@ -36,6 +37,7 @@ The roadmap dir carries **lean P1-scoped versions** of four risk-framework files
 | `../roadmap/capital-formula.md` | **Lean** — per-position flow, structbook formula (only P1-active), TRRC aggregation, ER target |
 | `../roadmap/market-memory-oracle.md` | **Lean** — reducer concept, P1 output families catalog, scenario interface |
 | `../roadmap/roadmap-ideas.md` | Sudo staircase, frame mechanism, lift principle and its sub-patterns (code/data, insyn/exsyn, black-box, temporary-equation, phase-invariant), DSC, market-memory, don't-rabbit-hole |
+| `../roadmap/grounding-and-workcells.md` | P1 grounded execution stack: literals, special forms, sigils, bindings, implements, implement code blobs, workcells, installer, `&core.bootstrap` |
 | `../roadmap/p1-nfat-atom-trace.md` | Atom-level NFAT trace: constructor writes, attestor gates, risk-form execution, structbook matching, TRRC / ER rollup |
 | `../roadmap/p1-borrower-nfat-user-scenario.md` | User/operator scenario: borrower readiness → Core inclusion → ready-empty books → queue claim / NFAT mint → disbursement → zero-SDR ER update |
 | `../roadmap/asc-transition.md` | ASC/DAB/peg-defense detailed mechanics, PSM transition to Grove |

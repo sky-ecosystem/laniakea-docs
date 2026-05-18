@@ -12,8 +12,8 @@ For custodial-crypto, every quantitative CRR input is **insyn**:
 
 | Input | Source |
 |---|---|
-| Collateral asset + amount | `chain-read` on the borrower's collateral account |
-| Debt outstanding, LT, liquidation bonus, derived LTV | `chain-read` on the loan/configurator contracts |
+| Collateral asset + amount | `CHAINREAD` on the borrower's collateral account |
+| Debt outstanding, LT, liquidation bonus, derived LTV | `CHAINREAD` on the loan/configurator contracts |
 | Price, liquidity, volatility, impact, liquidation-overhang history | Crypto Majors market-memory oracle |
 
 The attestor is therefore not an oracle of loan facts. It is a legal / operational / credit underwriter of what the chain cannot show — its output is readiness/admission/term verification: borrower setup (disbursement + collateral account, custody, legal framework) acceptable before Core Council inclusion, Configurator / aBEAM whitelist path completed for final admission, riskbook shared structure underwritten, exobook maturity / TTM and cash-conversion terms enforceable.
@@ -179,7 +179,7 @@ The `claims` blocks are the slashing surface. The synome cannot directly verify 
 
 ## 8. Downstream Consequences
 
-The risk form's inputs are `chain-read` + market-memory atoms + these boolean gates — it never reads loan numbers out of attestations. CORE (calibration/reference) is also entirely insyn-fed, zero attestor dependency. Binding P1 risk form: [`custodial-crypto-risk-form.md`](custodial-crypto-risk-form.md).
+The risk form's inputs are `CHAINREAD` + market-memory atoms + these boolean gates — it never reads loan numbers out of attestations. CORE (calibration/reference) is also entirely insyn-fed, zero attestor dependency. Binding P1 risk form: [`custodial-crypto-risk-form.md`](custodial-crypto-risk-form.md).
 
 ---
 
